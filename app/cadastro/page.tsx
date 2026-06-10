@@ -2,25 +2,68 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { supabase } from "@/lib/supabase";
 
 export default function Cadastro() {
   const [tipo, setTipo] = useState<"comprador" | "lojista">("comprador");
   const [form, setForm] = useState({ nome: "", email: "", telefone: "", senha: "", confirmarSenha: "", loja: "", cidade: "" });
-  const [enviado, setEnviado] = useState(false);
+  const [erro, setErro] = useState("");
+  const [sucesso, setSucesso] = useState(false);
+  const [carregando, setCarregando] = useState(false);
 
-  function handleSubmit() {
-    if (!form.nome || !form.email || !form.senha) return alert("Preencha todos os campos obrigatórios.");
-    if (form.senha !== form.confirmarSenha) return alert("As senhas não coincidem.");
-    setEnviado(true);
+  async function handleSubmit() {
+    setErro("");
+
+    if (!form.nome || !form.email || !form.senha) return setErro("Preencha todos os campos obrigatórios.");
+    if (form.senha.length < 8) return setErro("A senha deve ter pelo menos 8 caracteres.");
+    if (form.senha !== form.confirmarSenha) return setErro("As senhas não coincidem.");
+    if (tipo === "lojista" && (!form.loja || !form.cidade)) return setErro("Preencha o nome da loja e a cidade.");
+
+    setCarregando(true);
+
+    // 1. Criar usuário no Supabase Auth
+    const { data, error } = await supabase.auth.signUp({
+      email: form.email,
+      password: form.senha,
+      options: {
+        data: {
+          nome: form.nome,
+          telefone: form.telefone,
+          tipo,
+        }
+      }
+    });
+
+    if (error) {
+      setCarregando(false);
+      if (error.message.includes("already registered")) {
+        return setErro("Este e-mail já está cadastrado. Tente fazer login.");
+      }
+      return setErro("Erro ao criar conta. Tente novamente.");
+    }
+
+    // 2. Se for lojista, criar registro na tabela lojas
+    if (tipo === "lojista" && data.user) {
+      await supabase.from("lojas").insert({
+        nome: form.loja,
+        cidade: form.cidade,
+        telefone: form.telefone,
+        usuario_id: data.user.id,
+      });
+    }
+
+    setCarregando(false);
+    setSucesso(true);
   }
 
-  if (enviado) return (
+  if (sucesso) return (
     <main style={{ fontFamily: "'DM Sans', sans-serif", background: "#F7F6F3", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
       <div style={{ textAlign: "center", padding: 40 }}>
         <div style={{ fontSize: 64, marginBottom: 16 }}>🎉</div>
         <div style={{ fontFamily: "Georgia, serif", fontSize: 26, fontWeight: 800, color: "#1A1917", marginBottom: 8 }}>Cadastro realizado!</div>
-        <p style={{ fontSize: 15, color: "#7A7670", marginBottom: 24 }}>Bem-vindo ao AutoRegião, {form.nome.split(" ")[0]}!</p>
-        <Link href="/" style={{ padding: "10px 28px", background: "#E85D26", color: "#fff", borderRadius: 8, textDecoration: "none", fontWeight: 600, fontSize: 14 }}>Ir para o site</Link>
+        <p style={{ fontSize: 15, color: "#7A7670", marginBottom: 8 }}>Bem-vindo ao AutoRegião, {form.nome.split(" ")[0]}!</p>
+        <p style={{ fontSize: 13, color: "#7A7670", marginBottom: 24 }}>Verifique seu e-mail para confirmar a conta.</p>
+        <Link href="/login" style={{ padding: "10px 28px", background: "#E85D26", color: "#fff", borderRadius: 8, textDecoration: "none", fontWeight: 600, fontSize: 14 }}>Ir para o login</Link>
       </div>
     </main>
   );
@@ -46,13 +89,11 @@ export default function Cadastro() {
       <div style={{ paddingTop: 90, paddingBottom: 60, display: "flex", justifyContent: "center", padding: "90px 24px 60px" }}>
         <div style={{ width: "100%", maxWidth: 480 }}>
 
-          {/* TÍTULO */}
           <div style={{ textAlign: "center", marginBottom: 28 }}>
             <div style={{ fontFamily: "Georgia, serif", fontSize: 26, fontWeight: 800, color: "#1A1917", marginBottom: 6 }}>Criar conta</div>
             <p style={{ fontSize: 14, color: "#7A7670" }}>Encontre o carro certo perto de você</p>
           </div>
 
-          {/* CARD */}
           <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 14, padding: "28px 28px" }}>
 
             {/* TIPO DE CONTA */}
@@ -67,6 +108,13 @@ export default function Cadastro() {
                 ))}
               </div>
             </div>
+
+            {/* ERRO */}
+            {erro && (
+              <div style={{ background: "#FEE2E2", border: "1.5px solid #FCA5A5", borderRadius: 8, padding: "12px 14px", marginBottom: 16, fontSize: 13, color: "#991B1B", fontWeight: 500 }}>
+                ⚠️ {erro}
+              </div>
+            )}
 
             {/* CAMPOS */}
             {[
@@ -115,34 +163,29 @@ export default function Cadastro() {
               </div>
             ))}
 
-            {/* TERMOS */}
             <div style={{ fontSize: 12, color: "#7A7670", marginBottom: 20, lineHeight: 1.5 }}>
               Ao criar sua conta você concorda com os{" "}
               <a href="#" style={{ color: "#E85D26", textDecoration: "none" }}>Termos de uso</a>{" "}e a{" "}
               <a href="#" style={{ color: "#E85D26", textDecoration: "none" }}>Política de privacidade</a>.
             </div>
 
-            {/* BOTÃO */}
-            <button onClick={handleSubmit}
-              style={{ width: "100%", padding: "11px", background: "#E85D26", color: "#fff", border: "none", borderRadius: 8, fontFamily: "Georgia, serif", fontSize: 15, fontWeight: 700, cursor: "pointer" }}>
-              Criar minha conta
+            <button onClick={handleSubmit} disabled={carregando}
+              style={{ width: "100%", padding: "11px", background: carregando ? "#C44818" : "#E85D26", color: "#fff", border: "none", borderRadius: 8, fontFamily: "Georgia, serif", fontSize: 15, fontWeight: 700, cursor: carregando ? "not-allowed" : "pointer", opacity: carregando ? 0.8 : 1 }}>
+              {carregando ? "Criando conta..." : "Criar minha conta"}
             </button>
 
-            {/* DIVIDER */}
             <div style={{ display: "flex", alignItems: "center", gap: 10, margin: "18px 0" }}>
               <div style={{ flex: 1, height: 1, background: "#E8E6E1" }}></div>
               <span style={{ fontSize: 12, color: "#7A7670" }}>ou</span>
               <div style={{ flex: 1, height: 1, background: "#E8E6E1" }}></div>
             </div>
 
-            {/* LOGIN */}
             <div style={{ textAlign: "center", fontSize: 13, color: "#7A7670" }}>
               Já tem conta?{" "}
               <Link href="/login" style={{ color: "#E85D26", fontWeight: 600, textDecoration: "none" }}>Entrar agora</Link>
             </div>
           </div>
 
-          {/* LOJISTA BANNER */}
           {tipo === "lojista" && (
             <div style={{ marginTop: 16, background: "#1A1917", borderRadius: 12, padding: "16px 20px", display: "flex", alignItems: "center", gap: 14 }}>
               <div style={{ fontSize: 28 }}>🎁</div>
@@ -156,4 +199,4 @@ export default function Cadastro() {
       </div>
     </main>
   );
-}
+} 

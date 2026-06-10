@@ -90,7 +90,7 @@ export default function Painel() {
             <div style={{ fontSize: 11, color: "#7A7670", marginTop: 1 }}>Terça-feira, 09 de junho de 2026</div>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <button style={{ padding: "7px 16px", background: "#E85D26", border: "none", borderRadius: 7, fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, color: "#fff", cursor: "pointer" }}>+ Novo Anúncio</button>
+            <Link href="/painel/novo-anuncio" style={{ padding: "7px 16px", background: "#E85D26", borderRadius: 7, fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, color: "#fff", textDecoration: "none", display: "inline-flex", alignItems: "center" }}>+ Novo Anúncio</Link>
             <div style={{ width: 34, height: 34, border: "1.5px solid #E8E6E1", borderRadius: 8, background: "#F7F6F3", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: 15, position: "relative" }}>
               🔔<span style={{ position: "absolute", top: 5, right: 5, width: 7, height: 7, background: "#E85D26", borderRadius: "50%", border: "1.5px solid #fff" }}></span>
             </div>

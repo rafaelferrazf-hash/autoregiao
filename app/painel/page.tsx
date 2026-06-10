@@ -52,7 +52,7 @@ export default function Painel() {
           {[
             { id: "dashboard", icon: "📊", label: "Dashboard" },
             { id: "anuncios", icon: "🚗", label: "Meus Anúncios", badge: "18" },
-            { id: "novo", icon: "➕", label: "Novo Anúncio" },
+            { id: "novo", icon: "➕", label: "Novo Anúncio", href: "/painel/novo-anuncio" },
             { id: "mensagens", icon: "💬", label: "Mensagens", badge: "5" },
             { id: "avaliacoes", icon: "⭐", label: "Avaliações" },
             { id: "estatisticas", icon: "📈", label: "Estatísticas" },
@@ -60,7 +60,7 @@ export default function Painel() {
             { id: "perfil", icon: "🏪", label: "Perfil da Loja" },
             { id: "config", icon: "⚙️", label: "Configurações" },
           ].map(item => (
-            <button key={item.id} onClick={() => setAbaAtiva(item.id)} style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 10px", borderRadius: 8, border: "none", background: abaAtiva === item.id ? "#E85D26" : "transparent", color: abaAtiva === item.id ? "#fff" : "rgba(255,255,255,0.5)", fontSize: 13.5, fontWeight: 500, cursor: "pointer", width: "100%", textAlign: "left", fontFamily: "'DM Sans', sans-serif" }}>
+            <button key={item.id} onClick={() => item.href ? window.location.href = item.href : setAbaAtiva(item.id)} style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 10px", borderRadius: 8, border: "none", background: abaAtiva === item.id ? "#E85D26" : "transparent", color: abaAtiva === item.id ? "#fff" : "rgba(255,255,255,0.5)", fontSize: 13.5, fontWeight: 500, cursor: "pointer", width: "100%", textAlign: "left", fontFamily: "'DM Sans', sans-serif" }}>
               <span style={{ fontSize: 15, width: 20, textAlign: "center", flexShrink: 0 }}>{item.icon}</span>
               <span style={{ flex: 1 }}>{item.label}</span>
               {item.badge && <span style={{ background: abaAtiva === item.id ? "rgba(255,255,255,0.25)" : "#E85D26", color: "#fff", fontSize: 10, fontWeight: 700, padding: "1px 6px", borderRadius: 10 }}>{item.badge}</span>}

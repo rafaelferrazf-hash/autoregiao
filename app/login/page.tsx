@@ -1,7 +1,38 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
+import { supabase } from "@/lib/supabase";
 
 export default function Login() {
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+  const [lembrar, setLembrar] = useState(false);
+  const [erro, setErro] = useState("");
+  const [carregando, setCarregando] = useState(false);
+  const [sucesso, setSucesso] = useState(false);
+
+  async function handleLogin() {
+    if (!email || !senha) return setErro("Preencha e-mail e senha.");
+    setErro("");
+    setCarregando(true);
+
+    const { error } = await supabase.auth.signInWithPassword({ email, password: senha });
+
+    setCarregando(false);
+
+    if (error) {
+      if (error.message.includes("Invalid login")) {
+        setErro("E-mail ou senha incorretos.");
+      } else {
+        setErro("Erro ao entrar. Tente novamente.");
+      }
+    } else {
+      setSucesso(true);
+      setTimeout(() => { window.location.href = "/painel"; }, 1500);
+    }
+  }
+
   return (
     <main style={{ fontFamily: "'DM Sans', sans-serif", background: "#F7F6F3", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
 
@@ -35,27 +66,57 @@ export default function Login() {
               <Link href="/cadastro" style={{ flex: 1, padding: "8px 0", borderRadius: 6, border: "none", background: "transparent", fontSize: 13.5, fontWeight: 500, color: "#7A7670", cursor: "pointer", textDecoration: "none", textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center" }}>Cadastrar</Link>
             </div>
 
+            {/* MENSAGEM DE SUCESSO */}
+            {sucesso && (
+              <div style={{ background: "#D1FAE5", border: "1.5px solid #6EE7B7", borderRadius: 8, padding: "12px 14px", marginBottom: 16, fontSize: 13, color: "#065F46", fontWeight: 500 }}>
+                ✅ Login realizado! Redirecionando...
+              </div>
+            )}
+
+            {/* MENSAGEM DE ERRO */}
+            {erro && (
+              <div style={{ background: "#FEE2E2", border: "1.5px solid #FCA5A5", borderRadius: 8, padding: "12px 14px", marginBottom: 16, fontSize: 13, color: "#991B1B", fontWeight: 500 }}>
+                ⚠️ {erro}
+              </div>
+            )}
+
             {/* FORM */}
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               <div>
                 <label style={{ display: "block", fontSize: 11, fontWeight: 600, color: "#7A7670", letterSpacing: 0.5, textTransform: "uppercase", marginBottom: 6 }}>E-mail</label>
-                <input type="email" placeholder="seu@email.com.br" style={{ width: "100%", padding: "11px 14px", border: "1.5px solid #E8E6E1", borderRadius: 8, fontSize: 14, color: "#1A1917", background: "#F7F6F3", outline: "none", boxSizing: "border-box" }} />
+                <input
+                  type="email"
+                  placeholder="seu@email.com.br"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  style={{ width: "100%", padding: "11px 14px", border: "1.5px solid #E8E6E1", borderRadius: 8, fontSize: 14, color: "#1A1917", background: "#F7F6F3", outline: "none", boxSizing: "border-box" }}
+                />
               </div>
               <div>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
                   <label style={{ fontSize: 11, fontWeight: 600, color: "#7A7670", letterSpacing: 0.5, textTransform: "uppercase" }}>Senha</label>
                   <a href="#" style={{ fontSize: 12, color: "#E85D26", textDecoration: "none", fontWeight: 500 }}>Esqueci minha senha</a>
                 </div>
-                <input type="password" placeholder="••••••••" style={{ width: "100%", padding: "11px 14px", border: "1.5px solid #E8E6E1", borderRadius: 8, fontSize: 14, color: "#1A1917", background: "#F7F6F3", outline: "none", boxSizing: "border-box" }} />
+                <input
+                  type="password"
+                  placeholder="••••••••"
+                  value={senha}
+                  onChange={e => setSenha(e.target.value)}
+                  onKeyDown={e => e.key === "Enter" && handleLogin()}
+                  style={{ width: "100%", padding: "11px 14px", border: "1.5px solid #E8E6E1", borderRadius: 8, fontSize: 14, color: "#1A1917", background: "#F7F6F3", outline: "none", boxSizing: "border-box" }}
+                />
               </div>
 
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <input type="checkbox" id="lembrar" style={{ width: 16, height: 16, accentColor: "#E85D26", cursor: "pointer" }} />
+                <input type="checkbox" id="lembrar" checked={lembrar} onChange={e => setLembrar(e.target.checked)} style={{ width: 16, height: 16, accentColor: "#E85D26", cursor: "pointer" }} />
                 <label htmlFor="lembrar" style={{ fontSize: 13, color: "#7A7670", cursor: "pointer" }}>Lembrar de mim</label>
               </div>
 
-              <button style={{ width: "100%", padding: "13px", background: "#E85D26", color: "#fff", border: "none", borderRadius: 9, fontFamily: "Georgia, serif", fontSize: 15, fontWeight: 700, cursor: "pointer", marginTop: 4 }}>
-                Entrar na minha conta
+              <button
+                onClick={handleLogin}
+                disabled={carregando}
+                style={{ width: "100%", padding: "13px", background: carregando ? "#C44818" : "#E85D26", color: "#fff", border: "none", borderRadius: 9, fontFamily: "Georgia, serif", fontSize: 15, fontWeight: 700, cursor: carregando ? "not-allowed" : "pointer", marginTop: 4, opacity: carregando ? 0.8 : 1 }}>
+                {carregando ? "Entrando..." : "Entrar na minha conta"}
               </button>
             </div>
 
@@ -103,7 +164,7 @@ export default function Login() {
 
               <div style={{ marginTop: 32, paddingTop: 24, borderTop: "1px solid rgba(255,255,255,0.08)" }}>
                 <div style={{ fontSize: 12, color: "#7A7670", marginBottom: 8 }}>Ainda não tem conta?</div>
-                <Link href="/cadastro" style={{ display: "inline-block", padding: "10px 24px", background: "transparent", border: "1.5px solid rgba(255,255,255,0.2)", borderRadius: 8, color: "#fff", fontSize: 13, fontWeight: 600, textDecoration: "none", transition: "all 0.2s" }}>
+                <Link href="/cadastro" style={{ display: "inline-block", padding: "10px 24px", background: "transparent", border: "1.5px solid rgba(255,255,255,0.2)", borderRadius: 8, color: "#fff", fontSize: 13, fontWeight: 600, textDecoration: "none" }}>
                   Criar conta grátis →
                 </Link>
               </div>
@@ -113,9 +174,9 @@ export default function Login() {
         </div>
       </div>
 
-      {/* FOOTER SIMPLES */}
+      {/* FOOTER */}
       <div style={{ padding: "16px 24px", textAlign: "center", borderTop: "1px solid #E8E6E1" }}>
-        <p style={{ fontSize: 12, color: "#7A7670" }}>© 2025 <span style={{ color: "#E85D26" }}>AutoRegião</span> · <a href="#" style={{ color: "#7A7670", textDecoration: "none" }}>Termos de uso</a> · <a href="#" style={{ color: "#7A7670", textDecoration: "none" }}>Privacidade</a></p>
+        <p style={{ fontSize: 12, color: "#7A7670" }}>© 2026 <span style={{ color: "#E85D26" }}>AutoRegião</span> · <a href="#" style={{ color: "#7A7670", textDecoration: "none" }}>Termos de uso</a> · <a href="#" style={{ color: "#7A7670", textDecoration: "none" }}>Privacidade</a></p>
       </div>
 
     </main>

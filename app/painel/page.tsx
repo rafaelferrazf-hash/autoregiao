@@ -60,7 +60,12 @@ export default function Painel() {
             { id: "perfil", icon: "🏪", label: "Perfil da Loja" },
             { id: "config", icon: "⚙️", label: "Configurações" },
           ].map(item => (
-            <button key={item.id} onClick={() => item.id === "novo" ? window.location.href = "/painel/novo-anuncio" : setAbaAtiva(item.id)} style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 10px", borderRadius: 8, border: "none", background: abaAtiva === item.id ? "#E85D26" : "transparent", color: abaAtiva === item.id ? "#fff" : "rgba(255,255,255,0.5)", fontSize: 13.5, fontWeight: 500, cursor: "pointer", width: "100%", textAlign: "left", fontFamily: "'DM Sans', sans-serif" }}>
+            item.id === "novo"
+              ? <Link key={item.id} href="/painel/novo-anuncio" style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 10px", borderRadius: 8, background: "transparent", color: "rgba(255,255,255,0.5)", fontSize: 13.5, fontWeight: 500, textDecoration: "none", width: "100%" }}>
+                  <span style={{ fontSize: 15, width: 20, textAlign: "center", flexShrink: 0 }}>➕</span>
+                  <span>Novo Anúncio</span>
+                </Link>
+              : <button key={item.id} onClick={() => setAbaAtiva(item.id)} style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 10px", borderRadius: 8, border: "none", background: abaAtiva === item.id ? "#E85D26" : "transparent", color: abaAtiva === item.id ? "#fff" : "rgba(255,255,255,0.5)", fontSize: 13.5, fontWeight: 500, cursor: "pointer", width: "100%", textAlign: "left", fontFamily: "'DM Sans', sans-serif" }}>
               <span style={{ fontSize: 15, width: 20, textAlign: "center", flexShrink: 0 }}>{item.icon}</span>
               <span style={{ flex: 1 }}>{item.label}</span>
               {item.badge && <span style={{ background: abaAtiva === item.id ? "rgba(255,255,255,0.25)" : "#E85D26", color: "#fff", fontSize: 10, fontWeight: 700, padding: "1px 6px", borderRadius: 10 }}>{item.badge}</span>}

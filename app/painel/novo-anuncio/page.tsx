@@ -2,9 +2,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { supabase } from "@/lib/supabase";
 
 export default function NovoAnuncio() {
   const [etapa, setEtapa] = useState(1);
+  const [erro, setErro] = useState("");
+  const [carregando, setCarregando] = useState(false);
   const [form, setForm] = useState({
     tipo: "carro",
     marca: "", modelo: "", versao: "", ano: "", km: "",
@@ -41,6 +44,71 @@ export default function NovoAnuncio() {
 
   const labelStyle = { fontSize: 12, fontWeight: 500 as const, color: "#1A1917", marginBottom: 5, display: "block" as const };
 
+  function validarEtapa() {
+    if (etapa === 1) {
+      if (!form.marca || !form.modelo) { setErro("Preencha a marca e o modelo."); return false; }
+      if (!form.ano || !form.km) { setErro("Preencha o ano e a KM."); return false; }
+      if (!form.preco) { setErro("Preencha o preço."); return false; }
+    }
+    if (etapa === 3) {
+      if (!form.nome || !form.telefone || !form.cidade) { setErro("Preencha todos os campos de contato."); return false; }
+    }
+    setErro("");
+    return true;
+  }
+
+  async function publicar() {
+    if (!validarEtapa()) return;
+    setCarregando(true);
+    setErro("");
+
+    // Pegar usuário logado
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+      setErro("Você precisa estar logado para publicar um anúncio.");
+      setCarregando(false);
+      return;
+    }
+
+    const { error } = await supabase.from("veiculos").insert({
+      tipo: form.tipo,
+      marca: form.marca,
+      modelo: form.modelo,
+      versao: form.versao,
+      ano: form.ano,
+      km: form.km,
+      cambio: form.cambio,
+      combustivel: form.combustivel,
+      cor: form.cor,
+      portas: form.portas,
+      preco: form.preco.replace(/\D/g, ""),
+      aceita_troca: form.aceitaTroca,
+      opcionais: form.opcionais,
+      descricao: form.descricao,
+      nome_contato: form.nome,
+      telefone: form.telefone,
+      cidade: form.cidade,
+      usuario_id: user.id,
+      status: "ativo",
+    });
+
+    setCarregando(false);
+
+    if (error) {
+      console.error(error);
+      setErro("Erro ao publicar. Tente novamente.");
+      return;
+    }
+
+    setEtapa(4);
+  }
+
+  function avancar() {
+    if (!validarEtapa()) return;
+    setEtapa(e => e + 1);
+  }
+
   if (etapa === 4) return (
     <main style={{ fontFamily: "'DM Sans', sans-serif", background: "#F7F6F3", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
       <div style={{ textAlign: "center", padding: 40 }}>
@@ -49,7 +117,7 @@ export default function NovoAnuncio() {
         <p style={{ fontSize: 15, color: "#7A7670", marginBottom: 24 }}>Seu veículo já está visível para compradores da região.</p>
         <div style={{ display: "flex", gap: 10, justifyContent: "center" }}>
           <Link href="/painel" style={{ padding: "10px 24px", border: "1.5px solid #E8E6E1", borderRadius: 8, textDecoration: "none", color: "#1A1917", fontWeight: 500, fontSize: 14 }}>Ver painel</Link>
-          <Link href="/veiculos" style={{ padding: "10px 24px", background: "#E85D26", color: "#fff", borderRadius: 8, textDecoration: "none", fontWeight: 600, fontSize: 14 }}>Ver anúncio</Link>
+          <Link href="/veiculos" style={{ padding: "10px 24px", background: "#E85D26", color: "#fff", borderRadius: 8, textDecoration: "none", fontWeight: 600, fontSize: 14 }}>Ver anúncios</Link>
         </div>
       </div>
     </main>
@@ -72,7 +140,6 @@ export default function NovoAnuncio() {
       <div style={{ paddingTop: 80, paddingBottom: 60, display: "flex", justifyContent: "center", padding: "80px 24px 60px" }}>
         <div style={{ width: "100%", maxWidth: 600 }}>
 
-          {/* TÍTULO */}
           <div style={{ marginBottom: 24 }}>
             <div style={{ fontFamily: "Georgia, serif", fontSize: 24, fontWeight: 800, color: "#1A1917", marginBottom: 4 }}>Novo anúncio</div>
             <p style={{ fontSize: 14, color: "#7A7670" }}>Preencha os dados do veículo para publicar</p>
@@ -88,10 +155,16 @@ export default function NovoAnuncio() {
             ))}
           </div>
 
-          {/* CARD */}
           <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 14, padding: "28px" }}>
 
-            {/* ETAPA 1 - VEÍCULO */}
+            {/* ERRO */}
+            {erro && (
+              <div style={{ background: "#FEE2E2", border: "1.5px solid #FCA5A5", borderRadius: 8, padding: "12px 14px", marginBottom: 16, fontSize: 13, color: "#991B1B", fontWeight: 500 }}>
+                ⚠️ {erro}
+              </div>
+            )}
+
+            {/* ETAPA 1 */}
             {etapa === 1 && (
               <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
                 <div>
@@ -121,7 +194,7 @@ export default function NovoAnuncio() {
                 </div>
 
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-                  {[["Ano", "ano", "Ex: 2022"], ["KM rodados", "km", "Ex: 38.000"]].map(([label, field, ph]) => (
+                  {[["Ano", "ano", "Ex: 2022"], ["KM rodados", "km", "Ex: 38000"]].map(([label, field, ph]) => (
                     <div key={field}>
                       <label style={labelStyle}>{label} <span style={{ color: "#E85D26" }}>*</span></label>
                       <input placeholder={ph} value={form[field as keyof typeof form] as string} onChange={e => set(field, e.target.value)} style={inputStyle} />
@@ -134,28 +207,21 @@ export default function NovoAnuncio() {
                     <label style={labelStyle}>Câmbio</label>
                     <select value={form.cambio} onChange={e => set("cambio", e.target.value)} style={inputStyle}>
                       <option value="">Selecione</option>
-                      <option>Automático</option>
-                      <option>Manual</option>
-                      <option>CVT</option>
+                      <option>Automático</option><option>Manual</option><option>CVT</option>
                     </select>
                   </div>
                   <div>
                     <label style={labelStyle}>Combustível</label>
                     <select value={form.combustivel} onChange={e => set("combustivel", e.target.value)} style={inputStyle}>
                       <option value="">Selecione</option>
-                      <option>Flex</option>
-                      <option>Gasolina</option>
-                      <option>Diesel</option>
-                      <option>Elétrico</option>
-                      <option>Híbrido</option>
+                      <option>Flex</option><option>Gasolina</option><option>Diesel</option><option>Elétrico</option><option>Híbrido</option>
                     </select>
                   </div>
                   <div>
                     <label style={labelStyle}>Portas</label>
                     <select value={form.portas} onChange={e => set("portas", e.target.value)} style={inputStyle}>
                       <option value="">Selecione</option>
-                      <option>2 portas</option>
-                      <option>4 portas</option>
+                      <option>2 portas</option><option>4 portas</option>
                     </select>
                   </div>
                 </div>
@@ -170,7 +236,7 @@ export default function NovoAnuncio() {
                   </div>
                   <div>
                     <label style={labelStyle}>Preço <span style={{ color: "#E85D26" }}>*</span></label>
-                    <input placeholder="Ex: 72.900" value={form.preco} onChange={e => set("preco", e.target.value)} style={inputStyle} />
+                    <input placeholder="Ex: 72900" value={form.preco} onChange={e => set("preco", e.target.value)} style={inputStyle} />
                   </div>
                 </div>
 
@@ -181,20 +247,18 @@ export default function NovoAnuncio() {
               </div>
             )}
 
-            {/* ETAPA 2 - DETALHES */}
+            {/* ETAPA 2 */}
             {etapa === 2 && (
               <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
-                {/* FOTOS */}
                 <div>
                   <div style={{ fontSize: 12, fontWeight: 500, color: "#1A1917", marginBottom: 8 }}>Fotos do veículo</div>
                   <div style={{ border: "2px dashed #E8E6E1", borderRadius: 10, padding: "32px", textAlign: "center", cursor: "pointer", background: "#F7F6F3" }}>
                     <div style={{ fontSize: 32, marginBottom: 8 }}>📷</div>
-                    <div style={{ fontSize: 13, color: "#7A7670", marginBottom: 4 }}>Clique para adicionar fotos</div>
+                    <div style={{ fontSize: 13, color: "#7A7670", marginBottom: 4 }}>Upload de fotos em breve</div>
                     <div style={{ fontSize: 11, color: "#7A7670" }}>Até 20 fotos · JPG ou PNG</div>
                   </div>
                 </div>
 
-                {/* OPCIONAIS */}
                 <div>
                   <div style={{ fontSize: 12, fontWeight: 500, color: "#1A1917", marginBottom: 10 }}>Opcionais</div>
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
@@ -210,7 +274,6 @@ export default function NovoAnuncio() {
                   </div>
                 </div>
 
-                {/* DESCRIÇÃO */}
                 <div>
                   <label style={labelStyle}>Descrição</label>
                   <textarea placeholder="Descreva o veículo, histórico de manutenção, diferenciais..." value={form.descricao} onChange={e => set("descricao", e.target.value)}
@@ -219,7 +282,7 @@ export default function NovoAnuncio() {
               </div>
             )}
 
-            {/* ETAPA 3 - CONTATO */}
+            {/* ETAPA 3 */}
             {etapa === 3 && (
               <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
                 <div style={{ background: "#F7F6F3", borderRadius: 10, padding: "14px 16px", fontSize: 13, color: "#7A7670", lineHeight: 1.5 }}>
@@ -235,7 +298,6 @@ export default function NovoAnuncio() {
                   </div>
                 ))}
 
-                {/* RESUMO */}
                 <div style={{ background: "#F7F6F3", borderRadius: 10, padding: "16px" }}>
                   <div style={{ fontSize: 12, fontWeight: 600, color: "#7A7670", letterSpacing: 0.5, textTransform: "uppercase", marginBottom: 10 }}>Resumo do anúncio</div>
                   <div style={{ fontSize: 14, fontWeight: 700, color: "#1A1917", marginBottom: 4 }}>{form.marca} {form.modelo} {form.versao}</div>
@@ -257,9 +319,11 @@ export default function NovoAnuncio() {
                   ← Voltar
                 </button>
               )}
-              <button onClick={() => etapa < 3 ? setEtapa(e => e + 1) : setEtapa(4)}
-                style={{ flex: 2, padding: "10px", background: "#E85D26", border: "none", borderRadius: 8, color: "#fff", fontFamily: "Georgia, serif", fontSize: 15, fontWeight: 700, cursor: "pointer" }}>
-                {etapa === 3 ? "Publicar anúncio 🚀" : "Continuar →"}
+              <button
+                onClick={etapa === 3 ? publicar : avancar}
+                disabled={carregando}
+                style={{ flex: 2, padding: "10px", background: carregando ? "#C44818" : "#E85D26", border: "none", borderRadius: 8, color: "#fff", fontFamily: "Georgia, serif", fontSize: 15, fontWeight: 700, cursor: carregando ? "not-allowed" : "pointer", opacity: carregando ? 0.8 : 1 }}>
+                {carregando ? "Publicando..." : etapa === 3 ? "Publicar anúncio 🚀" : "Continuar →"}
               </button>
             </div>
           </div>

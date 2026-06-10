@@ -1,80 +1,92 @@
+"use client";
 import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
 
-export default function Home() {
+export default function Veiculos() {
+  const [menuAberto, setMenuAberto] = useState(false);
+
+  const carros = [
+    { id: 1, name: "Chevrolet Onix LT", ano: "2022", km: "38.000 km", cambio: "Automático", combustivel: "Flex", cor: "Prata", price: "R$ 72.900", parcel: "60x R$ 1.580", store: "Auto Paulista", city: "Lençóis Paulista", featured: true },
+    { id: 2, name: "VW T-Cross TSI", ano: "2022", km: "29.000 km", cambio: "Automático", combustivel: "Gasolina", cor: "Branco", price: "R$ 118.000", parcel: "60x R$ 2.560", store: "Bauru Motors", city: "Bauru", featured: true },
+    { id: 3, name: "Tracker Premier", ano: "2023", km: "9.000 km", cambio: "Automático", combustivel: "Flex", cor: "Cinza", price: "R$ 139.900", parcel: "60x R$ 3.040", store: "Jaú Veículos", city: "Jaú", featured: false },
+    { id: 4, name: "Fiat Pulse Drive", ano: "2023", km: "18.000 km", cambio: "Automático", combustivel: "Flex", cor: "Vermelho", price: "R$ 98.500", parcel: "60x R$ 2.140", store: "Regional Car", city: "Botucatu", featured: false },
+    { id: 5, name: "Honda HR-V EXL", ano: "2023", km: "14.000 km", cambio: "Automático", combustivel: "Flex", cor: "Preto", price: "R$ 127.000", parcel: "60x R$ 2.760", store: "Auto Paulista", city: "Lençóis Paulista", featured: false },
+    { id: 6, name: "Toyota Corolla XEi", ano: "2022", km: "41.000 km", cambio: "Automático", combustivel: "Flex", cor: "Prata", price: "R$ 148.000", parcel: "60x R$ 3.220", store: "Bauru Motors", city: "Bauru", featured: false },
+    { id: 7, name: "Hyundai HB20 Diamond", ano: "2023", km: "12.000 km", cambio: "Automático", combustivel: "Flex", cor: "Azul", price: "R$ 82.900", parcel: "60x R$ 1.800", store: "Jaú Veículos", city: "Jaú", featured: false },
+    { id: 8, name: "VW Polo Track", ano: "2023", km: "22.000 km", cambio: "Manual", combustivel: "Flex", cor: "Branco", price: "R$ 76.500", parcel: "60x R$ 1.660", store: "Regional Car", city: "Botucatu", featured: false },
+    { id: 9, name: "Fiat Strada Endurance", ano: "2022", km: "35.000 km", cambio: "Manual", combustivel: "Flex", cor: "Prata", price: "R$ 88.900", parcel: "60x R$ 1.930", store: "Auto Paulista", city: "Lençóis Paulista", featured: false },
+  ];
+
   return (
     <main style={{ fontFamily: "'DM Sans', sans-serif", background: "#F7F6F3", minHeight: "100vh" }}>
 
       {/* NAVBAR */}
-      <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, background: "#fff", borderBottom: "1px solid #E8E6E1", height: 60, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 24px" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <Image src="/logo.png" alt="AutoRegião" width={38} height={38} style={{ objectFit: "contain" }} />
-          <span style={{ fontFamily: "Georgia, serif", fontSize: 20, fontWeight: 800, color: "#1A1917" }}>
-            <span style={{ color: "#E85D26" }}>Auto</span>Região
-          </span>
+      <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, background: "#fff", borderBottom: "1px solid #E8E6E1" }}>
+        <div style={{ height: 60, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 24px" }}>
+          {/* LOGO */}
+          <Link href="/" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
+            <Image src="/logo.png" alt="AutoRegião" width={36} height={36} style={{ objectFit: "contain" }} />
+            <span style={{ fontFamily: "Georgia, serif", fontSize: 20, fontWeight: 800, color: "#1A1917" }}>
+              <span style={{ color: "#E85D26" }}>Auto</span>Região
+            </span>
+          </Link>
+
+          {/* MENU DESKTOP */}
+          <div style={{ display: "flex", gap: 24 }} className="nav-desktop">
+            {["Buscar veículos", "Revendas", "Tabela FIPE", "Financiamento", "Anunciar"].map(item => (
+              <a key={item} href="#" style={{ textDecoration: "none", color: "#7A7670", fontSize: 13.5, fontWeight: 500 }}>{item}</a>
+            ))}
+          </div>
+
+          {/* BOTÕES DESKTOP */}
+          <div style={{ display: "flex", gap: 8 }} className="nav-desktop">
+            <Link href="/login" style={{ padding: "7px 16px", border: "1.5px solid #E8E6E1", borderRadius: 7, background: "transparent", fontSize: 13, fontWeight: 500, color: "#1A1917", textDecoration: "none", display: "flex", alignItems: "center" }}>Entrar</Link>
+            <button style={{ padding: "7px 16px", background: "#E85D26", border: "none", borderRadius: 7, color: "#fff", fontSize: 13, fontWeight: 500, cursor: "pointer" }}>Cadastrar loja</button>
+          </div>
+
+          {/* BOTÃO HAMBÚRGUER MOBILE */}
+          <button
+            className="nav-mobile"
+            onClick={() => setMenuAberto(!menuAberto)}
+            style={{ background: "none", border: "none", cursor: "pointer", padding: 8, display: "flex", flexDirection: "column", gap: 5 }}
+          >
+            <span style={{ display: "block", width: 24, height: 2, background: "#1A1917", borderRadius: 2, transition: "all 0.2s", transform: menuAberto ? "rotate(45deg) translate(5px, 5px)" : "none" }}></span>
+            <span style={{ display: "block", width: 24, height: 2, background: "#1A1917", borderRadius: 2, opacity: menuAberto ? 0 : 1 }}></span>
+            <span style={{ display: "block", width: 24, height: 2, background: "#1A1917", borderRadius: 2, transition: "all 0.2s", transform: menuAberto ? "rotate(-45deg) translate(5px, -5px)" : "none" }}></span>
+          </button>
         </div>
-        <div style={{ display: "flex", gap: 24 }}>
-          {["Buscar veículos", "Revendas", "Tabela FIPE", "Financiamento", "Anunciar"].map(item => (
-            <a key={item} href="#" style={{ textDecoration: "none", color: "#7A7670", fontSize: 13.5, fontWeight: 500 }}>{item}</a>
-          ))}
-        </div>
-        <div style={{ display: "flex", gap: 8 }}>
-          <button style={{ padding: "7px 16px", border: "1.5px solid #E8E6E1", borderRadius: 7, background: "transparent", fontSize: 13, fontWeight: 500, cursor: "pointer" }}>Entrar</button>
-          <button style={{ padding: "7px 16px", background: "#E85D26", border: "none", borderRadius: 7, color: "#fff", fontSize: 13, fontWeight: 500, cursor: "pointer" }}>Cadastrar loja</button>
-        </div>
+
+        {/* MENU MOBILE ABERTO */}
+        {menuAberto && (
+          <div className="nav-mobile" style={{ borderTop: "1px solid #E8E6E1", background: "#fff", padding: "16px 24px", display: "flex", flexDirection: "column", gap: 16 }}>
+            {["Buscar veículos", "Revendas", "Tabela FIPE", "Financiamento", "Anunciar"].map(item => (
+              <a key={item} href="#" style={{ textDecoration: "none", color: "#1A1917", fontSize: 15, fontWeight: 500 }}>{item}</a>
+            ))}
+            <div style={{ display: "flex", gap: 8, paddingTop: 8, borderTop: "1px solid #E8E6E1" }}>
+              <Link href="/login" style={{ flex: 1, padding: "9px 16px", border: "1.5px solid #E8E6E1", borderRadius: 7, background: "transparent", fontSize: 13, fontWeight: 500, color: "#1A1917", textDecoration: "none", textAlign: "center" }}>Entrar</Link>
+              <button style={{ flex: 1, padding: "9px 16px", background: "#E85D26", border: "none", borderRadius: 7, color: "#fff", fontSize: 13, fontWeight: 500, cursor: "pointer" }}>Cadastrar loja</button>
+            </div>
+          </div>
+        )}
       </nav>
 
-      {/* HERO */}
-      <section style={{ marginTop: 60, background: "#1A1917", padding: "56px 24px 0" }}>
-        <div style={{ maxWidth: 1180, margin: "0 auto", display: "grid", gridTemplateColumns: "55% 45%", gap: 40, alignItems: "end" }}>
-          <div style={{ paddingBottom: 48 }}>
-            <span style={{ display: "inline-block", background: "rgba(232,93,38,0.15)", color: "#E85D26", fontSize: 11, fontWeight: 500, letterSpacing: 1.5, padding: "4px 10px", borderRadius: 4, marginBottom: 16, textTransform: "uppercase" }}>
-              📍 Lençóis Paulista e região
-            </span>
-            <h1 style={{ fontFamily: "Georgia, serif", fontSize: 44, fontWeight: 800, color: "#fff", lineHeight: 1.08, letterSpacing: -1, marginBottom: 14 }}>
-              O carro certo,<br /><span style={{ color: "#E85D26" }}>perto de você.</span>
-            </h1>
-            <p style={{ color: "#7A7670", fontSize: 15, lineHeight: 1.65, marginBottom: 28, maxWidth: 400 }}>
-              Encontre seminovos de lojistas da sua cidade. Sem intermediários, sem complicação.
-            </p>
-            <div style={{ display: "flex", gap: 10 }}>
-              <button style={{ padding: "11px 24px", background: "#E85D26", color: "#fff", border: "none", borderRadius: 8, fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, cursor: "pointer" }}>Ver veículos</button>
-              <button style={{ padding: "11px 20px", background: "transparent", color: "rgba(255,255,255,0.7)", border: "1.5px solid rgba(255,255,255,0.15)", borderRadius: 8, fontSize: 14, cursor: "pointer" }}>Como funciona</button>
-            </div>
-            <div style={{ display: "flex", gap: 28, marginTop: 36, paddingTop: 28, borderTop: "1px solid rgba(255,255,255,0.07)" }}>
-              {[["1.2k+", "Veículos anunciados"], ["48+", "Lojas cadastradas"], ["12+", "Cidades atendidas"]].map(([num, label]) => (
-                <div key={label}>
-                  <div style={{ fontFamily: "Georgia, serif", fontSize: 24, fontWeight: 800, color: "#fff" }}>{num}</div>
-                  <div style={{ fontSize: 11, color: "#7A7670", marginTop: 3 }}>{label}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div style={{ alignSelf: "flex-end" }}>
-            <div style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.09)", borderRadius: "14px 14px 0 0", padding: "20px 18px", position: "relative" }}>
-              <span style={{ position: "absolute", top: -11, left: 18, background: "#E85D26", color: "#fff", fontSize: 10.5, fontWeight: 500, padding: "3px 11px", borderRadius: 20 }}>⭐ Destaques da semana</span>
-              {[["🚙", "Onix LT 1.0", "2022 · 38.000 km · Lençóis Paulista", "R$ 72.900"],
-                ["🚘", "T-Cross TSI", "2022 · 29.000 km · Bauru", "R$ 118.000"],
-                ["🚗", "Tracker Premier", "2023 · 9.000 km · Jaú", "R$ 139.900"]].map(([icon, name, meta, price]) => (
-                <div key={name} style={{ display: "flex", alignItems: "center", gap: 10, padding: "11px 12px", background: "rgba(255,255,255,0.06)", borderRadius: 9, marginBottom: 8, cursor: "pointer" }}>
-                  <div style={{ width: 50, height: 36, background: "rgba(232,93,38,0.15)", borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, flexShrink: 0 }}>{icon}</div>
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontFamily: "Georgia, serif", fontSize: 12.5, fontWeight: 700, color: "#fff" }}>{name}</div>
-                    <div style={{ fontSize: 10.5, color: "#7A7670", marginTop: 1 }}>{meta}</div>
-                  </div>
-                  <div style={{ fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, color: "#E85D26", flexShrink: 0 }}>{price}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* CSS RESPONSIVO */}
+      <style>{`
+        .nav-desktop { display: flex !important; }
+        .nav-mobile { display: none !important; }
+        @media (max-width: 768px) {
+          .nav-desktop { display: none !important; }
+          .nav-mobile { display: flex !important; }
+        }
+      `}</style>
 
-      {/* SEARCH */}
-      <section style={{ background: "#fff", borderBottom: "1px solid #E8E6E1", padding: 24 }}>
+      {/* SEARCH BAR */}
+      <section style={{ marginTop: 60, background: "#1A1917", padding: "24px 24px" }}>
         <div style={{ maxWidth: 1180, margin: "0 auto" }}>
-          <div style={{ display: "flex", gap: 4, marginBottom: 16 }}>
+          <div style={{ display: "flex", gap: 4, marginBottom: 14 }}>
             {["🚗 Carros", "🏍️ Motos", "🚐 Utilitários"].map((tab, i) => (
-              <button key={tab} style={{ padding: "6px 14px", borderRadius: 6, fontSize: 13, fontWeight: 500, cursor: "pointer", border: "none", background: i === 0 ? "#E85D26" : "transparent", color: i === 0 ? "#fff" : "#7A7670" }}>{tab}</button>
+              <button key={tab} style={{ padding: "6px 14px", borderRadius: 6, fontSize: 13, fontWeight: 500, cursor: "pointer", border: "none", background: i === 0 ? "#E85D26" : "rgba(255,255,255,0.1)", color: i === 0 ? "#fff" : "rgba(255,255,255,0.6)" }}>{tab}</button>
             ))}
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr 1fr auto", gap: 10, alignItems: "end" }}>
@@ -84,8 +96,8 @@ export default function Home() {
               ["Preço até", "Qualquer valor"],
               ["KM até", "Qualquer km"]].map(([label, placeholder]) => (
               <div key={label}>
-                <div style={{ fontSize: 10.5, fontWeight: 500, color: "#7A7670", letterSpacing: 0.4, textTransform: "uppercase", marginBottom: 5 }}>{label}</div>
-                <input placeholder={placeholder} style={{ width: "100%", padding: "9px 12px", border: "1.5px solid #E8E6E1", borderRadius: 7, fontSize: 13.5, color: "#1A1917", background: "#F7F6F3", outline: "none" }} />
+                <div style={{ fontSize: 10, fontWeight: 500, color: "rgba(255,255,255,0.5)", letterSpacing: 0.4, textTransform: "uppercase", marginBottom: 5 }}>{label}</div>
+                <input placeholder={placeholder} style={{ width: "100%", padding: "9px 12px", border: "1.5px solid rgba(255,255,255,0.1)", borderRadius: 7, fontSize: 13.5, color: "#fff", background: "rgba(255,255,255,0.08)", outline: "none" }} />
               </div>
             ))}
             <button style={{ padding: "9px 22px", background: "#E85D26", color: "#fff", border: "none", borderRadius: 7, fontFamily: "Georgia, serif", fontSize: 13.5, fontWeight: 700, cursor: "pointer", whiteSpace: "nowrap" }}>🔍 Buscar</button>
@@ -93,91 +105,113 @@ export default function Home() {
         </div>
       </section>
 
-      {/* VEÍCULOS */}
-      <section style={{ maxWidth: 1180, margin: "0 auto", padding: "48px 24px" }}>
-        <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", marginBottom: 20 }}>
-          <div>
-            <div style={{ fontSize: 10.5, fontWeight: 500, letterSpacing: 1.8, color: "#E85D26", textTransform: "uppercase", marginBottom: 4 }}>Recém adicionados</div>
-            <div style={{ fontFamily: "Georgia, serif", fontSize: 24, fontWeight: 800, color: "#1A1917" }}>Veículos disponíveis</div>
-          </div>
-          <a href="#" style={{ fontSize: 13, fontWeight: 500, color: "#E85D26", textDecoration: "none" }}>Ver todos →</a>
-        </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16 }}>
-          {[
-            { name: "Chevrolet Onix LT", tags: ["2022", "38.000 km", "Flex"], price: "R$ 72.900", parcel: "60x R$ 1.580", store: "Auto Paulista · Lençóis Paulista", featured: true },
-            { name: "VW T-Cross TSI", tags: ["2022", "29.000 km", "Gasolina"], price: "R$ 118.000", parcel: "60x R$ 2.560", store: "Bauru Motors · Bauru", featured: false },
-            { name: "Tracker Premier", tags: ["2023", "9.000 km", "Flex"], price: "R$ 139.900", parcel: "60x R$ 3.040", store: "Jaú Veículos · Jaú", featured: false },
-            { name: "Fiat Pulse Drive", tags: ["2023", "18.000 km", "Flex"], price: "R$ 98.500", parcel: "60x R$ 2.140", store: "Regional Car · Botucatu", featured: false },
-          ].map(car => (
-            <div key={car.name} style={{ background: "#fff", borderRadius: 12, overflow: "hidden", border: car.featured ? "1.5px solid #E85D26" : "1.5px solid #E8E6E1", cursor: "pointer", position: "relative" }}>
-              {car.featured && <span style={{ position: "absolute", top: 9, left: 9, background: "#E85D26", color: "#fff", fontSize: 10, fontWeight: 500, padding: "3px 8px", borderRadius: 20, zIndex: 2 }}>⭐ Destaque</span>}
-              <div style={{ position: "relative", height: 180, width: "100%" }}>
-                <Image
-                  src="/sem-foto.png"
-                  alt={car.name}
-                  fill
-                  style={{ objectFit: "cover" }}
-                />
+      {/* CONTEÚDO */}
+      <div style={{ maxWidth: 1180, margin: "0 auto", padding: "24px", display: "grid", gridTemplateColumns: "260px 1fr", gap: 20 }}>
+
+        {/* FILTROS LATERAL */}
+        <aside>
+          <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, padding: "18px", marginBottom: 14 }}>
+            <div style={{ fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, color: "#1A1917", marginBottom: 16 }}>Filtros</div>
+
+            {[["Marca", ["Todas", "Chevrolet", "Volkswagen", "Fiat", "Toyota", "Honda", "Hyundai"]],
+              ["Ano", ["Qualquer", "2024-2025", "2021-2023", "2018-2020", "Até 2017"]],
+              ["Câmbio", ["Qualquer", "Automático", "Manual"]],
+              ["Combustível", ["Qualquer", "Flex", "Gasolina", "Diesel", "Elétrico"]]].map(([title, opts]) => (
+              <div key={title as string} style={{ marginBottom: 18 }}>
+                <div style={{ fontSize: 11, fontWeight: 600, color: "#7A7670", letterSpacing: 0.5, textTransform: "uppercase", marginBottom: 8 }}>{title as string}</div>
+                <select style={{ width: "100%", padding: "8px 12px", border: "1.5px solid #E8E6E1", borderRadius: 7, fontSize: 13, color: "#1A1917", background: "#F7F6F3", outline: "none", appearance: "none" }}>
+                  {(opts as string[]).map(opt => <option key={opt}>{opt}</option>)}
+                </select>
               </div>
-              <div style={{ padding: 14 }}>
-                <div style={{ fontFamily: "Georgia, serif", fontSize: 15, fontWeight: 700, color: "#1A1917", marginBottom: 6 }}>{car.name}</div>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginBottom: 10 }}>
-                  {car.tags.map(tag => <span key={tag} style={{ fontSize: 11, color: "#7A7670", background: "#F7F6F3", padding: "2px 6px", borderRadius: 4 }}>{tag}</span>)}
-                </div>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: 10, borderTop: "1px solid #E8E6E1" }}>
-                  <div>
-                    <div style={{ fontFamily: "Georgia, serif", fontSize: 18, fontWeight: 800, color: "#1A1917" }}>{car.price}</div>
-                    <div style={{ fontSize: 10.5, color: "#7A7670" }}>{car.parcel}</div>
-                  </div>
-                  <button style={{ width: 30, height: 30, background: "#F7F6F3", border: "1.5px solid #E8E6E1", borderRadius: 7, cursor: "pointer", fontSize: 12 }}>🤍</button>
-                </div>
-                <div style={{ fontSize: 11, color: "#7A7670", marginTop: 8, display: "flex", alignItems: "center", gap: 5 }}>
-                  <span style={{ width: 5, height: 5, background: "#E85D26", borderRadius: "50%", display: "inline-block" }}></span>{car.store}
-                </div>
+            ))}
+
+            <div style={{ marginBottom: 18 }}>
+              <div style={{ fontSize: 11, fontWeight: 600, color: "#7A7670", letterSpacing: 0.5, textTransform: "uppercase", marginBottom: 8 }}>Faixa de preço</div>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+                <input placeholder="Mín" style={{ padding: "8px 10px", border: "1.5px solid #E8E6E1", borderRadius: 7, fontSize: 13, color: "#1A1917", background: "#F7F6F3", outline: "none" }} />
+                <input placeholder="Máx" style={{ padding: "8px 10px", border: "1.5px solid #E8E6E1", borderRadius: 7, fontSize: 13, color: "#1A1917", background: "#F7F6F3", outline: "none" }} />
               </div>
             </div>
-          ))}
-        </div>
-      </section>
 
-      {/* CTA */}
-      <section style={{ maxWidth: 1180, margin: "0 auto", padding: "0 24px 56px" }}>
-        <div style={{ background: "#E85D26", borderRadius: 16, padding: "48px 52px", display: "grid", gridTemplateColumns: "1fr auto", gap: 32, alignItems: "center" }}>
-          <div>
-            <div style={{ fontSize: 10.5, letterSpacing: 1.8, color: "rgba(255,255,255,0.65)", textTransform: "uppercase", marginBottom: 10, fontWeight: 500 }}>Para lojistas</div>
-            <div style={{ fontFamily: "Georgia, serif", fontSize: 30, fontWeight: 800, color: "#fff", lineHeight: 1.1, marginBottom: 10 }}>Sua loja no maior marketplace<br />regional do interior</div>
-            <div style={{ fontSize: 14, color: "rgba(255,255,255,0.72)", lineHeight: 1.55 }}>Alcance compradores da sua cidade e região. Anuncie, gerencie e receba contatos pelo site.</div>
-            <span style={{ display: "inline-block", background: "rgba(255,255,255,0.18)", color: "#fff", fontSize: 11.5, fontWeight: 500, padding: "4px 12px", borderRadius: 20, marginTop: 14 }}>✅ 60 dias grátis para começar</span>
+            <div style={{ marginBottom: 18 }}>
+              <div style={{ fontSize: 11, fontWeight: 600, color: "#7A7670", letterSpacing: 0.5, textTransform: "uppercase", marginBottom: 8 }}>KM até</div>
+              <select style={{ width: "100%", padding: "8px 12px", border: "1.5px solid #E8E6E1", borderRadius: 7, fontSize: 13, color: "#1A1917", background: "#F7F6F3", outline: "none", appearance: "none" }}>
+                <option>Qualquer km</option>
+                <option>Até 20.000 km</option>
+                <option>Até 50.000 km</option>
+                <option>Até 100.000 km</option>
+              </select>
+            </div>
+
+            <button style={{ width: "100%", padding: "10px", background: "#E85D26", color: "#fff", border: "none", borderRadius: 8, fontFamily: "Georgia, serif", fontSize: 13.5, fontWeight: 700, cursor: "pointer" }}>Aplicar filtros</button>
+            <button style={{ width: "100%", padding: "8px", background: "transparent", color: "#7A7670", border: "none", fontSize: 12, cursor: "pointer", marginTop: 8 }}>Limpar filtros</button>
           </div>
-          <button style={{ padding: "14px 30px", background: "#fff", color: "#E85D26", border: "none", borderRadius: 9, fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 800, cursor: "pointer", whiteSpace: "nowrap" }}>Cadastrar minha loja →</button>
-        </div>
-      </section>
 
-      {/* FOOTER */}
-      <footer style={{ background: "#1A1917", padding: "44px 24px 28px" }}>
-        <div style={{ maxWidth: 1180, margin: "0 auto", display: "grid", gridTemplateColumns: "1.8fr 1fr 1fr 1fr", gap: 40, paddingBottom: 32, borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-          <div>
+          <div style={{ background: "#E85D26", borderRadius: 12, padding: "16px" }}>
+            <div style={{ fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, color: "#fff", marginBottom: 6 }}>🔔 Criar alerta</div>
+            <p style={{ fontSize: 12, color: "rgba(255,255,255,0.75)", marginBottom: 12, lineHeight: 1.5 }}>Receba um aviso quando aparecer um veículo com esses filtros!</p>
+            <button style={{ width: "100%", padding: "8px", background: "#fff", color: "#E85D26", border: "none", borderRadius: 7, fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "Georgia, serif" }}>Criar alerta de busca</button>
+          </div>
+        </aside>
+
+        {/* LISTA DE VEÍCULOS */}
+        <div>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
+            <div>
+              <span style={{ fontFamily: "Georgia, serif", fontSize: 18, fontWeight: 800, color: "#1A1917" }}>1.247 veículos</span>
+              <span style={{ fontSize: 13, color: "#7A7670", marginLeft: 8 }}>encontrados na sua região</span>
+            </div>
             <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <Image src="/logo.png" alt="AutoRegião" width={32} height={32} style={{ objectFit: "contain" }} />
-              <span style={{ fontFamily: "Georgia, serif", fontSize: 18, fontWeight: 800 }}><span style={{ color: "#E85D26" }}>Auto</span><span style={{ color: "#fff" }}>Região</span></span>
+              <span style={{ fontSize: 12, color: "#7A7670" }}>Ordenar por:</span>
+              <select style={{ padding: "6px 12px", border: "1.5px solid #E8E6E1", borderRadius: 7, fontSize: 13, color: "#1A1917", background: "#fff", outline: "none", appearance: "none" }}>
+                <option>Mais recentes</option>
+                <option>Menor preço</option>
+                <option>Maior preço</option>
+                <option>Menor km</option>
+                <option>Destaques primeiro</option>
+              </select>
             </div>
-            <p style={{ fontSize: 13, color: "#7A7670", marginTop: 8, lineHeight: 1.6 }}>O carro da sua região. Conectando compradores e lojistas no interior do Brasil.</p>
           </div>
-          {[["Para compradores", ["Buscar veículos", "Tabela FIPE", "Financiamento", "Comparar", "Alertas"]],
-            ["Para lojistas", ["Cadastrar loja", "Planos e preços", "Destaque", "Painel"]],
-            ["AutoRegião", ["Sobre nós", "Contato", "Termos", "Privacidade", "App mobile"]]].map(([title, links]) => (
-            <div key={title as string}>
-              <div style={{ fontFamily: "Georgia, serif", fontSize: 12, fontWeight: 700, color: "#fff", marginBottom: 14 }}>{title as string}</div>
-              {(links as string[]).map(link => <div key={link} style={{ marginBottom: 9 }}><a href="#" style={{ color: "#7A7670", textDecoration: "none", fontSize: 13 }}>{link}</a></div>)}
-            </div>
-          ))}
-        </div>
-        <div style={{ maxWidth: 1180, margin: "20px auto 0", display: "flex", justifyContent: "space-between" }}>
-          <p style={{ fontSize: 12, color: "#7A7670" }}>© 2025 <span style={{ color: "#E85D26" }}>AutoRegião</span> · autoregiao.com.br</p>
-          <p style={{ fontSize: 12, color: "#7A7670" }}>Desenvolvido com ❤️ para o interior do Brasil</p>
-        </div>
-      </footer>
 
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 14 }}>
+            {carros.map(car => (
+              <Link key={car.id} href={`/veiculo/${car.id}`} style={{ textDecoration: "none" }}>
+                <div style={{ background: "#fff", borderRadius: 12, overflow: "hidden", border: car.featured ? "1.5px solid #E85D26" : "1.5px solid #E8E6E1", cursor: "pointer", transition: "all 0.2s", position: "relative" }}>
+                  {car.featured && <span style={{ position: "absolute", top: 9, left: 9, background: "#E85D26", color: "#fff", fontSize: 10, fontWeight: 500, padding: "3px 8px", borderRadius: 20, zIndex: 2 }}>⭐ Destaque</span>}
+                  <div style={{ position: "relative", height: 160, width: "100%" }}>
+                    <Image src="/sem-foto.png" alt={car.name} fill style={{ objectFit: "cover" }} sizes="(max-width: 768px) 100vw, 33vw" />
+                  </div>
+                  <div style={{ padding: "12px 14px" }}>
+                    <div style={{ fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, color: "#1A1917", marginBottom: 5 }}>{car.name}</div>
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginBottom: 8 }}>
+                      {[car.ano, car.km, car.combustivel, car.cambio].map(tag => (
+                        <span key={tag} style={{ fontSize: 10.5, color: "#7A7670", background: "#F7F6F3", padding: "2px 6px", borderRadius: 4 }}>{tag}</span>
+                      ))}
+                    </div>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: 10, borderTop: "1px solid #E8E6E1" }}>
+                      <div>
+                        <div style={{ fontFamily: "Georgia, serif", fontSize: 17, fontWeight: 800, color: "#1A1917" }}>{car.price}</div>
+                        <div style={{ fontSize: 10.5, color: "#7A7670" }}>{car.parcel}</div>
+                      </div>
+                      <button onClick={(e) => e.preventDefault()} style={{ width: 30, height: 30, background: "#F7F6F3", border: "1.5px solid #E8E6E1", borderRadius: 7, cursor: "pointer", fontSize: 12 }}>🤍</button>
+                    </div>
+                    <div style={{ fontSize: 11, color: "#7A7670", marginTop: 6, display: "flex", alignItems: "center", gap: 4 }}>
+                      <span style={{ width: 5, height: 5, background: "#E85D26", borderRadius: "50%", display: "inline-block" }}></span>
+                      {car.store} · {car.city}
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+
+          <div style={{ display: "flex", justifyContent: "center", gap: 6, marginTop: 32 }}>
+            {["‹", "1", "2", "3", "4", "5", "›"].map((p, i) => (
+              <button key={i} style={{ width: 36, height: 36, borderRadius: 7, border: "1.5px solid", borderColor: i === 1 ? "#E85D26" : "#E8E6E1", background: i === 1 ? "#E85D26" : "#fff", color: i === 1 ? "#fff" : "#1A1917", fontSize: 13, fontWeight: i === 1 ? 700 : 400, cursor: "pointer" }}>{p}</button>
+            ))}
+          </div>
+        </div>
+      </div>
     </main>
   );
 }

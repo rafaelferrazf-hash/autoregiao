@@ -15,6 +15,7 @@ type Veiculo = {
   preco: number;
   destaque: boolean;
   loja_id: string;
+  fotos: string[];
   lojas?: { nome: string; cidade: string };
 };
 
@@ -222,7 +223,7 @@ export default function Veiculos() {
               <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 14 }}>
                 {[1,2,3,4,5,6].map(i => (
                   <div key={i} style={{ background: "#fff", borderRadius: 12, overflow: "hidden", border: "1.5px solid #E8E6E1" }}>
-                    <div style={{ height: 150, background: "#F7F6F3", animation: "pulse 1.5s infinite" }}></div>
+                    <div style={{ height: 150, background: "#F7F6F3" }}></div>
                     <div style={{ padding: "10px 12px" }}>
                       <div style={{ height: 14, background: "#F7F6F3", borderRadius: 4, marginBottom: 8 }}></div>
                       <div style={{ height: 10, background: "#F7F6F3", borderRadius: 4, width: "60%" }}></div>
@@ -242,8 +243,12 @@ export default function Veiculos() {
                   <Link key={car.id} href={`/veiculo/${car.id}`} style={{ textDecoration: "none" }}>
                     <div style={{ background: "#fff", borderRadius: 12, overflow: "hidden", border: car.destaque ? "1.5px solid #E85D26" : "1.5px solid #E8E6E1", position: "relative" }}>
                       {car.destaque && <span style={{ position: "absolute", top: 8, left: 8, background: "#E85D26", color: "#fff", fontSize: 10, fontWeight: 500, padding: "3px 8px", borderRadius: 20, zIndex: 2 }}>⭐ Destaque</span>}
-                      <div style={{ position: "relative", height: 150, width: "100%" }}>
-                        <Image src="/sem-foto.png" alt={car.nome} fill style={{ objectFit: "cover" }} sizes="(max-width: 480px) 100vw, (max-width: 768px) 50vw, 33vw" />
+                      <div style={{ position: "relative", height: 150, width: "100%", background: "#F7F6F3" }}>
+                        {car.fotos?.length > 0 ? (
+                          <img src={car.fotos[0]} alt={car.nome} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                        ) : (
+                          <Image src="/sem-foto.png" alt={car.nome} fill style={{ objectFit: "cover" }} sizes="(max-width: 480px) 100vw, (max-width: 768px) 50vw, 33vw" />
+                        )}
                       </div>
                       <div style={{ padding: "10px 12px" }}>
                         <div style={{ fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, color: "#1A1917", marginBottom: 4 }}>{car.nome}</div>

@@ -1,10 +1,9 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { supabase } from "@/lib/supabase";
 
-// DADOS DAS MARCAS/MODELOS/VERSÕES
 const dadosVeiculos: Record<string, Record<string, Record<string, string[]>>> = {
   carro: {
     "Chevrolet": {
@@ -137,10 +136,16 @@ const dadosVeiculos: Record<string, Record<string, Record<string, string[]>>> = 
   },
 };
 
+type FotoPreview = { file: File; preview: string };
+
 export default function NovoAnuncio() {
   const [etapa, setEtapa] = useState(1);
   const [erro, setErro] = useState("");
   const [carregando, setCarregando] = useState(false);
+  const [fotos, setFotos] = useState<FotoPreview[]>([]);
+  const [uploadando, setUploadando] = useState(false);
+  const inputFotoRef = useRef<HTMLInputElement>(null);
+
   const [form, setForm] = useState({
     tipo: "carro",
     marca: "", modelo: "", versao: "", ano: "", km: "",
@@ -181,6 +186,21 @@ export default function NovoAnuncio() {
 
   const labelStyle = { fontSize: 12, fontWeight: 500 as const, color: "#1A1917", marginBottom: 5, display: "block" as const };
 
+  function handleSelecionarFotos(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = Array.from(e.target.files || []);
+    if (fotos.length + files.length > 20) {
+      setErro("Máximo de 20 fotos permitido.");
+      return;
+    }
+    const novas = files.map(file => ({ file, preview: URL.createObjectURL(file) }));
+    setFotos(f => [...f, ...novas]);
+    setErro("");
+  }
+
+  function removerFoto(index: number) {
+    setFotos(f => f.filter((_, i) => i !== index));
+  }
+
   function validarEtapa() {
     if (etapa === 1) {
       if (!form.marca) { setErro("Selecione a marca."); return false; }
@@ -201,25 +221,44 @@ export default function NovoAnuncio() {
     setErro("");
 
     const { data: { user } } = await supabase.auth.getUser();
-
     if (!user) {
       setErro("Você precisa estar logado para publicar um anúncio.");
       setCarregando(false);
       return;
     }
 
+    // Upload das fotos
+    setUploadando(true);
+    const urlsFotos: string[] = [];
+    for (const foto of fotos) {
+      const ext = foto.file.name.split(".").pop();
+      const path = `${user.id}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+      const { error: uploadError } = await supabase.storage
+        .from("veiculos")
+        .upload(path, foto.file, { contentType: foto.file.type });
+
+      if (!uploadError) {
+        const { data: urlData } = supabase.storage.from("veiculos").getPublicUrl(path);
+        urlsFotos.push(urlData.publicUrl);
+      }
+    }
+    setUploadando(false);
+
+    const nomeVeiculo = [form.marca, form.modelo, form.versao, form.ano].filter(Boolean).join(" ");
+
     const { error } = await supabase.from("veiculos").insert({
+      nome: nomeVeiculo,
       tipo: form.tipo,
       marca: form.marca,
       modelo: form.modelo,
       versao: form.versao,
-      ano: form.ano,
-      km: form.km,
+      ano: parseInt(form.ano),
+      km: parseInt(form.km),
       cambio: form.cambio,
       combustivel: form.combustivel,
       cor: form.cor,
       portas: form.portas,
-      preco: form.preco.replace(/\D/g, ""),
+      preco: parseInt(form.preco.replace(/\D/g, "")),
       aceita_troca: form.aceitaTroca,
       opcionais: form.opcionais,
       descricao: form.descricao,
@@ -228,6 +267,8 @@ export default function NovoAnuncio() {
       cidade: form.cidade,
       usuario_id: user.id,
       status: "ativo",
+      ativo: true,
+      fotos: urlsFotos,
     });
 
     setCarregando(false);
@@ -278,7 +319,7 @@ export default function NovoAnuncio() {
           </div>
 
           <div style={{ display: "flex", gap: 6, marginBottom: 28 }}>
-            {["Veículo", "Detalhes", "Contato"].map((label, i) => (
+            {["Veículo", "Fotos", "Contato"].map((label, i) => (
               <div key={i} style={{ flex: 1 }}>
                 <div style={{ height: 4, borderRadius: 2, background: etapa >= i + 1 ? "#E85D26" : "#E8E6E1", opacity: etapa === i + 1 ? 1 : etapa > i + 1 ? 0.5 : 1 }}></div>
                 <div style={{ fontSize: 11, color: etapa >= i + 1 ? "#E85D26" : "#7A7670", marginTop: 4, fontWeight: etapa === i + 1 ? 600 : 400 }}>{label}</div>
@@ -296,7 +337,6 @@ export default function NovoAnuncio() {
 
             {etapa === 1 && (
               <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-                {/* TIPO */}
                 <div>
                   <div style={{ fontSize: 11, fontWeight: 600, color: "#7A7670", letterSpacing: 0.5, textTransform: "uppercase", marginBottom: 8 }}>Tipo</div>
                   <div style={{ display: "flex", gap: 8 }}>
@@ -309,7 +349,6 @@ export default function NovoAnuncio() {
                   </div>
                 </div>
 
-                {/* MARCA E MODELO */}
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
                   <div>
                     <label style={labelStyle}>Marca <span style={{ color: "#E85D26" }}>*</span></label>
@@ -327,7 +366,6 @@ export default function NovoAnuncio() {
                   </div>
                 </div>
 
-                {/* VERSÃO */}
                 <div>
                   <label style={labelStyle}>Versão</label>
                   <select value={form.versao} onChange={e => set("versao", e.target.value)} style={inputStyle} disabled={!form.modelo}>
@@ -336,7 +374,6 @@ export default function NovoAnuncio() {
                   </select>
                 </div>
 
-                {/* ANO E KM */}
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
                   {[["Ano", "ano", "Ex: 2022"], ["KM rodados", "km", "Ex: 38000"]].map(([label, field, ph]) => (
                     <div key={field}>
@@ -346,7 +383,6 @@ export default function NovoAnuncio() {
                   ))}
                 </div>
 
-                {/* CÂMBIO, COMBUSTÍVEL, PORTAS */}
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
                   <div>
                     <label style={labelStyle}>Câmbio</label>
@@ -371,7 +407,6 @@ export default function NovoAnuncio() {
                   </div>
                 </div>
 
-                {/* COR E PREÇO */}
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
                   <div>
                     <label style={labelStyle}>Cor</label>
@@ -395,14 +430,50 @@ export default function NovoAnuncio() {
 
             {etapa === 2 && (
               <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+
+                {/* UPLOAD DE FOTOS */}
                 <div>
-                  <div style={{ fontSize: 12, fontWeight: 500, color: "#1A1917", marginBottom: 8 }}>Fotos do veículo</div>
-                  <div style={{ border: "2px dashed #E8E6E1", borderRadius: 10, padding: "32px", textAlign: "center", background: "#F7F6F3" }}>
-                    <div style={{ fontSize: 32, marginBottom: 8 }}>📷</div>
-                    <div style={{ fontSize: 13, color: "#7A7670", marginBottom: 4 }}>Upload de fotos em breve</div>
-                    <div style={{ fontSize: 11, color: "#7A7670" }}>Até 20 fotos · JPG ou PNG</div>
+                  <div style={{ fontSize: 12, fontWeight: 500, color: "#1A1917", marginBottom: 4 }}>Fotos do veículo</div>
+                  <div style={{ fontSize: 11, color: "#7A7670", marginBottom: 10 }}>{fotos.length}/20 fotos adicionadas</div>
+
+                  {/* ÁREA DE DROP */}
+                  <div
+                    onClick={() => inputFotoRef.current?.click()}
+                    style={{ border: "2px dashed #E8E6E1", borderRadius: 10, padding: "28px", textAlign: "center", background: "#F7F6F3", cursor: "pointer", marginBottom: 12 }}
+                  >
+                    <div style={{ fontSize: 28, marginBottom: 6 }}>📷</div>
+                    <div style={{ fontSize: 13, color: "#1A1917", fontWeight: 500, marginBottom: 2 }}>Clique para adicionar fotos</div>
+                    <div style={{ fontSize: 11, color: "#7A7670" }}>JPG ou PNG · Até 20 fotos · 5MB cada</div>
                   </div>
+                  <input
+                    ref={inputFotoRef}
+                    type="file"
+                    accept="image/jpeg,image/png"
+                    multiple
+                    style={{ display: "none" }}
+                    onChange={handleSelecionarFotos}
+                  />
+
+                  {/* GRID DE PREVIEWS */}
+                  {fotos.length > 0 && (
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8 }}>
+                      {fotos.map((foto, i) => (
+                        <div key={i} style={{ position: "relative", aspectRatio: "4/3", borderRadius: 8, overflow: "hidden", border: i === 0 ? "2px solid #E85D26" : "1.5px solid #E8E6E1" }}>
+                          <img src={foto.preview} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                          {i === 0 && (
+                            <span style={{ position: "absolute", bottom: 4, left: 4, background: "#E85D26", color: "#fff", fontSize: 9, fontWeight: 600, padding: "2px 6px", borderRadius: 4 }}>CAPA</span>
+                          )}
+                          <button
+                            onClick={() => removerFoto(i)}
+                            style={{ position: "absolute", top: 4, right: 4, width: 20, height: 20, borderRadius: "50%", background: "rgba(0,0,0,0.6)", border: "none", color: "#fff", fontSize: 11, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}
+                          >✕</button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
+
+                {/* OPCIONAIS */}
                 <div>
                   <div style={{ fontSize: 12, fontWeight: 500, color: "#1A1917", marginBottom: 10 }}>Opcionais</div>
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
@@ -417,6 +488,8 @@ export default function NovoAnuncio() {
                     ))}
                   </div>
                 </div>
+
+                {/* DESCRIÇÃO */}
                 <div>
                   <label style={labelStyle}>Descrição</label>
                   <textarea placeholder="Descreva o veículo..." value={form.descricao} onChange={e => set("descricao", e.target.value)}
@@ -446,6 +519,9 @@ export default function NovoAnuncio() {
                       <span key={tag} style={{ fontSize: 11, color: "#7A7670", background: "#fff", padding: "2px 8px", borderRadius: 4, border: "1px solid #E8E6E1" }}>{tag}</span>
                     ))}
                   </div>
+                  {fotos.length > 0 && (
+                    <div style={{ fontSize: 11, color: "#16A34A", marginBottom: 6 }}>📷 {fotos.length} foto{fotos.length > 1 ? "s" : ""} adicionada{fotos.length > 1 ? "s" : ""}</div>
+                  )}
                   {form.preco && <div style={{ fontFamily: "Georgia, serif", fontSize: 18, fontWeight: 800, color: "#E85D26" }}>R$ {form.preco}</div>}
                 </div>
               </div>
@@ -458,9 +534,9 @@ export default function NovoAnuncio() {
                   ← Voltar
                 </button>
               )}
-              <button onClick={etapa === 3 ? publicar : avancar} disabled={carregando}
-                style={{ flex: 2, padding: "10px", background: carregando ? "#C44818" : "#E85D26", border: "none", borderRadius: 8, color: "#fff", fontFamily: "Georgia, serif", fontSize: 15, fontWeight: 700, cursor: carregando ? "not-allowed" : "pointer", opacity: carregando ? 0.8 : 1 }}>
-                {carregando ? "Publicando..." : etapa === 3 ? "Publicar anúncio 🚀" : "Continuar →"}
+              <button onClick={etapa === 3 ? publicar : avancar} disabled={carregando || uploadando}
+                style={{ flex: 2, padding: "10px", background: carregando || uploadando ? "#C44818" : "#E85D26", border: "none", borderRadius: 8, color: "#fff", fontFamily: "Georgia, serif", fontSize: 15, fontWeight: 700, cursor: carregando || uploadando ? "not-allowed" : "pointer", opacity: carregando || uploadando ? 0.8 : 1 }}>
+                {uploadando ? "Enviando fotos..." : carregando ? "Publicando..." : etapa === 3 ? "Publicar anúncio 🚀" : "Continuar →"}
               </button>
             </div>
           </div>

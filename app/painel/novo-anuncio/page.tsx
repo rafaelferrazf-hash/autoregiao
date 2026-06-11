@@ -4,6 +4,139 @@ import Link from "next/link";
 import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 
+// DADOS DAS MARCAS/MODELOS/VERSÕES
+const dadosVeiculos: Record<string, Record<string, Record<string, string[]>>> = {
+  carro: {
+    "Chevrolet": {
+      "Onix": ["Onix 1.0 MT", "Onix 1.0 Turbo AT", "Onix Plus 1.0 MT", "Onix Plus 1.0 Turbo AT"],
+      "Tracker": ["Tracker 1.0 Turbo MT", "Tracker 1.2 Turbo AT", "Tracker Premier"],
+      "Cruze": ["Cruze LT 1.4 Turbo", "Cruze LTZ 1.4 Turbo", "Cruze Premier"],
+      "S10": ["S10 LS 2.5", "S10 LT 2.8 TD", "S10 High Country 2.8 TD"],
+      "Spin": ["Spin LT 1.8", "Spin LTZ 1.8", "Spin Activ 1.8"],
+      "Montana": ["Montana 1.2 Turbo MT", "Montana 1.2 Turbo AT"],
+    },
+    "Volkswagen": {
+      "Polo": ["Polo 1.0 MT", "Polo 1.0 TSI AT", "Polo Track 1.0"],
+      "Virtus": ["Virtus 1.0 MT", "Virtus 1.0 TSI AT", "Virtus GTS 1.0 TSI"],
+      "T-Cross": ["T-Cross 1.0 TSI MT", "T-Cross 1.4 TSI AT", "T-Cross Highline"],
+      "Tiguan": ["Tiguan 1.4 TSI", "Tiguan 2.0 TSI Allspace"],
+      "Nivus": ["Nivus 1.0 TSI MT", "Nivus 1.0 TSI AT"],
+      "Amarok": ["Amarok 2.0 TDI", "Amarok V6 3.0 TDI"],
+    },
+    "Fiat": {
+      "Pulse": ["Pulse Drive 1.3", "Pulse Audace 1.0 Turbo", "Pulse Impetus 1.0 Turbo"],
+      "Cronos": ["Cronos 1.3 MT", "Cronos 1.3 AT", "Cronos Precision 1.3"],
+      "Strada": ["Strada Endurance 1.4", "Strada Freedom 1.3 Turbo", "Strada Ultra 1.3 Turbo"],
+      "Toro": ["Toro Freedom 1.8", "Toro Endurance 2.0 TD", "Toro Ultra 2.0 TD"],
+      "Mobi": ["Mobi Like 1.0", "Mobi Drive 1.0"],
+      "Argo": ["Argo Drive 1.0", "Argo 1.3 AT", "Argo Trekking 1.3"],
+    },
+    "Toyota": {
+      "Corolla": ["Corolla GLi 2.0", "Corolla XEi 2.0", "Corolla Altis Hybrid"],
+      "Yaris": ["Yaris XL 1.3 MT", "Yaris XLS 1.5 AT", "Yaris XLS Connect"],
+      "Hilux": ["Hilux SR 2.8 TD", "Hilux SRV 2.8 TD", "Hilux SRX 2.8 TD"],
+      "SW4": ["SW4 SR 2.8 TD", "SW4 SRX 2.8 TD", "SW4 Diamond 2.8 TD"],
+      "RAV4": ["RAV4 2.5 Hybrid", "RAV4 2.5 Hybrid AWD"],
+    },
+    "Honda": {
+      "Civic": ["Civic EX 1.5 Turbo", "Civic EXL 1.5 Turbo", "Civic Touring 1.5 Turbo"],
+      "HR-V": ["HR-V LX 1.8", "HR-V EX 1.8", "HR-V EXL 1.8"],
+      "City": ["City DX 1.5", "City EX 1.5", "City EXL 1.5"],
+      "WR-V": ["WR-V EX 1.5", "WR-V EXL 1.5"],
+      "Fit": ["Fit LX 1.5", "Fit EX 1.5", "Fit EXL 1.5"],
+    },
+    "Hyundai": {
+      "HB20": ["HB20 1.0 MT", "HB20 1.0 Turbo AT", "HB20 Diamond Plus"],
+      "HB20S": ["HB20S 1.0 MT", "HB20S 1.0 Turbo AT"],
+      "Creta": ["Creta Action 1.0 Turbo", "Creta Comfort 1.0 Turbo", "Creta Platinum 1.0 Turbo"],
+      "Tucson": ["Tucson GLS 1.6 Turbo", "Tucson Limited 1.6 Turbo"],
+      "i30": ["i30 1.0 Turbo MT", "i30 1.0 Turbo AT"],
+    },
+    "Renault": {
+      "Kwid": ["Kwid Zen 1.0", "Kwid Intense 1.0", "Kwid Outsider 1.0"],
+      "Sandero": ["Sandero Zen 1.0", "Sandero Stepway 1.0 Turbo"],
+      "Logan": ["Logan Life 1.0", "Logan Zen 1.0"],
+      "Duster": ["Duster Zen 1.3 Turbo", "Duster Iconic 1.3 Turbo"],
+      "Oroch": ["Oroch Zen 1.3 Turbo", "Oroch Iconic 1.3 Turbo"],
+    },
+    "Jeep": {
+      "Renegade": ["Renegade Sport 1.3 Turbo", "Renegade Longitude 1.3 Turbo", "Renegade Trailhawk"],
+      "Compass": ["Compass Sport 1.3 Turbo", "Compass Longitude 1.3 Turbo", "Compass Trailhawk"],
+      "Commander": ["Commander Limited 1.3 Turbo", "Commander Overland 2.0 TD"],
+    },
+    "Nissan": {
+      "Kicks": ["Kicks S 1.6", "Kicks SV 1.6", "Kicks Exclusive 1.6"],
+      "Frontier": ["Frontier S 2.3 TD", "Frontier SV 2.3 TD", "Frontier PRO-4X 2.3 TD"],
+      "Versa": ["Versa Sense 1.6", "Versa Advance 1.6", "Versa Exclusive 1.6"],
+    },
+    "Ford": {
+      "Ranger": ["Ranger XL 2.0 TD", "Ranger XLS 2.0 TD", "Ranger Storm 3.0 TD"],
+      "Bronco": ["Bronco Sport Big Bend", "Bronco Sport Badlands"],
+      "Territory": ["Territory SE 1.5 Turbo", "Territory Titanium 1.5 Turbo"],
+    },
+  },
+  moto: {
+    "Honda": {
+      "CB": ["CB 300F Twister", "CB 500F", "CB 500X", "CB 650R"],
+      "CG": ["CG 160 Start", "CG 160 Fan", "CG 160 Titan", "CG 160 Job"],
+      "Biz": ["Biz 110i"],
+      "PCX": ["PCX 160"],
+      "XRE": ["XRE 190", "XRE 300"],
+      "NXR": ["NXR 160 Bros"],
+    },
+    "Yamaha": {
+      "Factor": ["Factor 125i", "Factor 150i"],
+      "Fazer": ["Fazer 250", "Fazer 150"],
+      "MT": ["MT-03", "MT-07", "MT-09"],
+      "Crosser": ["Crosser 150", "Crosser Z 150"],
+      "NMAX": ["NMAX 160"],
+      "Lander": ["Lander 250"],
+    },
+    "Kawasaki": {
+      "Ninja": ["Ninja 300", "Ninja 400", "Ninja 650"],
+      "Z": ["Z 300", "Z 400", "Z 650"],
+      "Versys": ["Versys 650", "Versys-X 300"],
+    },
+    "Suzuki": {
+      "GSX": ["GSX-S750", "GSX-S1000"],
+      "V-Strom": ["V-Strom 650", "V-Strom 1050"],
+      "Burgman": ["Burgman 125i", "Burgman 400"],
+    },
+    "BMW": {
+      "G": ["G 310 R", "G 310 GS", "G 450 GS"],
+      "R": ["R 1250 GS", "R 1250 RT"],
+      "S": ["S 1000 RR", "S 1000 XR"],
+    },
+  },
+  utilitario: {
+    "Mercedes-Benz": {
+      "Sprinter": ["Sprinter 311 CDI", "Sprinter 313 CDI", "Sprinter 415 CDI"],
+      "Vito": ["Vito 119 CDI", "Vito 124 CDI"],
+    },
+    "Volkswagen": {
+      "Kombi": ["Kombi 1.4 Flex"],
+      "Transporter": ["Transporter 2.0 TDI"],
+      "Crafter": ["Crafter 2.0 TDI"],
+    },
+    "Fiat": {
+      "Ducato": ["Ducato Minibus", "Ducato Cargo", "Ducato Ambulância"],
+      "Doblò": ["Doblò Cargo 1.8", "Doblò Adventure 1.8"],
+    },
+    "Ford": {
+      "Transit": ["Transit 2.0 TDCi Van", "Transit 2.0 TDCi Minibus"],
+      "Transit Custom": ["Transit Custom 2.0 TDCi"],
+    },
+    "Renault": {
+      "Master": ["Master 2.3 dCi Furgão", "Master 2.3 dCi Minibus"],
+      "Kangoo": ["Kangoo Express 1.6"],
+    },
+    "Chevrolet": {
+      "Express": ["Express 6.0 V8"],
+      "Cobalt": ["Cobalt 1.8 LTZ"],
+    },
+  },
+};
+
 export default function NovoAnuncio() {
   const [etapa, setEtapa] = useState(1);
   const [erro, setErro] = useState("");
@@ -29,6 +162,10 @@ export default function NovoAnuncio() {
     }));
   };
 
+  const marcas = Object.keys(dadosVeiculos[form.tipo] || {});
+  const modelos = form.marca ? Object.keys(dadosVeiculos[form.tipo]?.[form.marca] || {}) : [];
+  const versoes = form.marca && form.modelo ? dadosVeiculos[form.tipo]?.[form.marca]?.[form.modelo] || [] : [];
+
   const opcionaisList = [
     "Ar-condicionado", "Direção elétrica", "Vidros elétricos", "Travas elétricas",
     "Airbag", "ABS", "Central multimídia", "Câmera de ré",
@@ -46,7 +183,8 @@ export default function NovoAnuncio() {
 
   function validarEtapa() {
     if (etapa === 1) {
-      if (!form.marca || !form.modelo) { setErro("Preencha a marca e o modelo."); return false; }
+      if (!form.marca) { setErro("Selecione a marca."); return false; }
+      if (!form.modelo) { setErro("Selecione o modelo."); return false; }
       if (!form.ano || !form.km) { setErro("Preencha o ano e a KM."); return false; }
       if (!form.preco) { setErro("Preencha o preço."); return false; }
     }
@@ -62,7 +200,6 @@ export default function NovoAnuncio() {
     setCarregando(true);
     setErro("");
 
-    // Pegar usuário logado
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) {
@@ -125,31 +262,25 @@ export default function NovoAnuncio() {
 
   return (
     <main style={{ fontFamily: "'DM Sans', sans-serif", background: "#F7F6F3", minHeight: "100vh" }}>
-
-      {/* NAVBAR */}
       <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, background: "#fff", borderBottom: "1px solid #E8E6E1", height: 60, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 24px" }}>
         <Link href="/" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
           <Image src="/logo.png" alt="AutoRegião" width={36} height={36} style={{ objectFit: "contain" }} />
-          <span style={{ fontFamily: "Georgia, serif", fontSize: 20, fontWeight: 800, color: "#1A1917" }}>
-            <span style={{ color: "#E85D26" }}>Auto</span>Região
-          </span>
+          <span style={{ fontFamily: "Georgia, serif", fontSize: 20, fontWeight: 800, color: "#1A1917" }}><span style={{ color: "#E85D26" }}>Auto</span>Região</span>
         </Link>
         <Link href="/painel" style={{ fontSize: 13, color: "#7A7670", textDecoration: "none" }}>← Voltar ao painel</Link>
       </nav>
 
       <div style={{ paddingTop: 80, paddingBottom: 60, display: "flex", justifyContent: "center", padding: "80px 24px 60px" }}>
         <div style={{ width: "100%", maxWidth: 600 }}>
-
           <div style={{ marginBottom: 24 }}>
             <div style={{ fontFamily: "Georgia, serif", fontSize: 24, fontWeight: 800, color: "#1A1917", marginBottom: 4 }}>Novo anúncio</div>
             <p style={{ fontSize: 14, color: "#7A7670" }}>Preencha os dados do veículo para publicar</p>
           </div>
 
-          {/* PROGRESS */}
           <div style={{ display: "flex", gap: 6, marginBottom: 28 }}>
             {["Veículo", "Detalhes", "Contato"].map((label, i) => (
               <div key={i} style={{ flex: 1 }}>
-                <div style={{ height: 4, borderRadius: 2, background: etapa > i + 1 ? "#E85D26" : etapa === i + 1 ? "#E85D26" : "#E8E6E1", opacity: etapa === i + 1 ? 1 : etapa > i + 1 ? 0.5 : 1 }}></div>
+                <div style={{ height: 4, borderRadius: 2, background: etapa >= i + 1 ? "#E85D26" : "#E8E6E1", opacity: etapa === i + 1 ? 1 : etapa > i + 1 ? 0.5 : 1 }}></div>
                 <div style={{ fontSize: 11, color: etapa >= i + 1 ? "#E85D26" : "#7A7670", marginTop: 4, fontWeight: etapa === i + 1 ? 600 : 400 }}>{label}</div>
               </div>
             ))}
@@ -157,21 +288,20 @@ export default function NovoAnuncio() {
 
           <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 14, padding: "28px" }}>
 
-            {/* ERRO */}
             {erro && (
               <div style={{ background: "#FEE2E2", border: "1.5px solid #FCA5A5", borderRadius: 8, padding: "12px 14px", marginBottom: 16, fontSize: 13, color: "#991B1B", fontWeight: 500 }}>
                 ⚠️ {erro}
               </div>
             )}
 
-            {/* ETAPA 1 */}
             {etapa === 1 && (
               <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+                {/* TIPO */}
                 <div>
                   <div style={{ fontSize: 11, fontWeight: 600, color: "#7A7670", letterSpacing: 0.5, textTransform: "uppercase", marginBottom: 8 }}>Tipo</div>
                   <div style={{ display: "flex", gap: 8 }}>
                     {[["carro", "🚗 Carro"], ["moto", "🏍️ Moto"], ["utilitario", "🚐 Utilitário"]].map(([val, label]) => (
-                      <button key={val} onClick={() => set("tipo", val)}
+                      <button key={val} onClick={() => { set("tipo", val); set("marca", ""); set("modelo", ""); set("versao", ""); }}
                         style={{ flex: 1, padding: "8px", borderRadius: 8, border: "1.5px solid", borderColor: form.tipo === val ? "#E85D26" : "#E8E6E1", background: form.tipo === val ? "#FFF5F1" : "#fff", color: form.tipo === val ? "#E85D26" : "#7A7670", fontWeight: 600, fontSize: 13, cursor: "pointer" }}>
                         {label}
                       </button>
@@ -179,20 +309,34 @@ export default function NovoAnuncio() {
                   </div>
                 </div>
 
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-                  {[["Marca", "marca", "Ex: Chevrolet"], ["Modelo", "modelo", "Ex: Onix"]].map(([label, field, ph]) => (
-                    <div key={field}>
-                      <label style={labelStyle}>{label} <span style={{ color: "#E85D26" }}>*</span></label>
-                      <input placeholder={ph} value={form[field as keyof typeof form] as string} onChange={e => set(field, e.target.value)} style={inputStyle} />
-                    </div>
-                  ))}
+                {/* MARCA */}
+                <div>
+                  <label style={labelStyle}>Marca <span style={{ color: "#E85D26" }}>*</span></label>
+                  <select value={form.marca} onChange={e => { set("marca", e.target.value); set("modelo", ""); set("versao", ""); }} style={inputStyle}>
+                    <option value="">Selecione a marca</option>
+                    {marcas.map(m => <option key={m}>{m}</option>)}
+                  </select>
                 </div>
 
+                {/* MODELO */}
+                <div>
+                  <label style={labelStyle}>Modelo <span style={{ color: "#E85D26" }}>*</span></label>
+                  <select value={form.modelo} onChange={e => { set("modelo", e.target.value); set("versao", ""); }} style={inputStyle} disabled={!form.marca}>
+                    <option value="">Selecione o modelo</option>
+                    {modelos.map(m => <option key={m}>{m}</option>)}
+                  </select>
+                </div>
+
+                {/* VERSÃO */}
                 <div>
                   <label style={labelStyle}>Versão</label>
-                  <input placeholder="Ex: LT 1.0 Automático" value={form.versao} onChange={e => set("versao", e.target.value)} style={inputStyle} />
+                  <select value={form.versao} onChange={e => set("versao", e.target.value)} style={inputStyle} disabled={!form.modelo}>
+                    <option value="">Selecione a versão</option>
+                    {versoes.map(v => <option key={v}>{v}</option>)}
+                  </select>
                 </div>
 
+                {/* ANO E KM */}
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
                   {[["Ano", "ano", "Ex: 2022"], ["KM rodados", "km", "Ex: 38000"]].map(([label, field, ph]) => (
                     <div key={field}>
@@ -202,6 +346,7 @@ export default function NovoAnuncio() {
                   ))}
                 </div>
 
+                {/* CÂMBIO, COMBUSTÍVEL, PORTAS */}
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
                   <div>
                     <label style={labelStyle}>Câmbio</label>
@@ -226,6 +371,7 @@ export default function NovoAnuncio() {
                   </div>
                 </div>
 
+                {/* COR E PREÇO */}
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
                   <div>
                     <label style={labelStyle}>Cor</label>
@@ -247,18 +393,16 @@ export default function NovoAnuncio() {
               </div>
             )}
 
-            {/* ETAPA 2 */}
             {etapa === 2 && (
               <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
                 <div>
                   <div style={{ fontSize: 12, fontWeight: 500, color: "#1A1917", marginBottom: 8 }}>Fotos do veículo</div>
-                  <div style={{ border: "2px dashed #E8E6E1", borderRadius: 10, padding: "32px", textAlign: "center", cursor: "pointer", background: "#F7F6F3" }}>
+                  <div style={{ border: "2px dashed #E8E6E1", borderRadius: 10, padding: "32px", textAlign: "center", background: "#F7F6F3" }}>
                     <div style={{ fontSize: 32, marginBottom: 8 }}>📷</div>
                     <div style={{ fontSize: 13, color: "#7A7670", marginBottom: 4 }}>Upload de fotos em breve</div>
                     <div style={{ fontSize: 11, color: "#7A7670" }}>Até 20 fotos · JPG ou PNG</div>
                   </div>
                 </div>
-
                 <div>
                   <div style={{ fontSize: 12, fontWeight: 500, color: "#1A1917", marginBottom: 10 }}>Opcionais</div>
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
@@ -273,22 +417,19 @@ export default function NovoAnuncio() {
                     ))}
                   </div>
                 </div>
-
                 <div>
                   <label style={labelStyle}>Descrição</label>
-                  <textarea placeholder="Descreva o veículo, histórico de manutenção, diferenciais..." value={form.descricao} onChange={e => set("descricao", e.target.value)}
+                  <textarea placeholder="Descreva o veículo..." value={form.descricao} onChange={e => set("descricao", e.target.value)}
                     style={{ ...inputStyle, height: 100, resize: "vertical" as const }} />
                 </div>
               </div>
             )}
 
-            {/* ETAPA 3 */}
             {etapa === 3 && (
               <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-                <div style={{ background: "#F7F6F3", borderRadius: 10, padding: "14px 16px", fontSize: 13, color: "#7A7670", lineHeight: 1.5 }}>
+                <div style={{ background: "#F7F6F3", borderRadius: 10, padding: "14px 16px", fontSize: 13, color: "#7A7670" }}>
                   📋 Essas informações serão exibidas no anúncio para os compradores entrarem em contato.
                 </div>
-
                 {[["Nome / Loja", "nome", "text", "Ex: Auto Paulista"],
                   ["Telefone / WhatsApp", "telefone", "tel", "(14) 99999-9999"],
                   ["Cidade", "cidade", "text", "Ex: Lençóis Paulista"]].map(([label, field, type, ph]) => (
@@ -297,9 +438,8 @@ export default function NovoAnuncio() {
                     <input type={type} placeholder={ph} value={form[field as keyof typeof form] as string} onChange={e => set(field, e.target.value)} style={inputStyle} />
                   </div>
                 ))}
-
                 <div style={{ background: "#F7F6F3", borderRadius: 10, padding: "16px" }}>
-                  <div style={{ fontSize: 12, fontWeight: 600, color: "#7A7670", letterSpacing: 0.5, textTransform: "uppercase", marginBottom: 10 }}>Resumo do anúncio</div>
+                  <div style={{ fontSize: 12, fontWeight: 600, color: "#7A7670", textTransform: "uppercase", marginBottom: 10 }}>Resumo</div>
                   <div style={{ fontSize: 14, fontWeight: 700, color: "#1A1917", marginBottom: 4 }}>{form.marca} {form.modelo} {form.versao}</div>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 8 }}>
                     {[form.ano, form.km && `${form.km} km`, form.cambio, form.combustivel].filter(Boolean).map(tag => (
@@ -311,7 +451,6 @@ export default function NovoAnuncio() {
               </div>
             )}
 
-            {/* BOTÕES */}
             <div style={{ display: "flex", gap: 10, marginTop: 24 }}>
               {etapa > 1 && (
                 <button onClick={() => setEtapa(e => e - 1)}
@@ -319,9 +458,7 @@ export default function NovoAnuncio() {
                   ← Voltar
                 </button>
               )}
-              <button
-                onClick={etapa === 3 ? publicar : avancar}
-                disabled={carregando}
+              <button onClick={etapa === 3 ? publicar : avancar} disabled={carregando}
                 style={{ flex: 2, padding: "10px", background: carregando ? "#C44818" : "#E85D26", border: "none", borderRadius: 8, color: "#fff", fontFamily: "Georgia, serif", fontSize: 15, fontWeight: 700, cursor: carregando ? "not-allowed" : "pointer", opacity: carregando ? 0.8 : 1 }}>
                 {carregando ? "Publicando..." : etapa === 3 ? "Publicar anúncio 🚀" : "Continuar →"}
               </button>

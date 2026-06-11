@@ -249,6 +249,29 @@ export default function Admin() {
               </div>
             ))}
           </div>
+          {/* CUPONS */}
+        <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, padding: "20px", marginTop: 24 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+            <div style={{ fontFamily: "Georgia, serif", fontSize: 15, fontWeight: 700, color: "#1A1917" }}>🎟️ Cupons de extensão</div>
+            <button onClick={() => gerarCupom()} style={{ padding: "6px 14px", background: "#E85D26", border: "none", borderRadius: 7, color: "#fff", fontSize: 12, fontWeight: 600, cursor: "pointer" }}>+ Gerar cupom</button>
+          </div>
+          {cupomGerado && (
+            <div style={{ background: "#D1FAE5", border: "1.5px solid #6EE7B7", borderRadius: 10, padding: "16px", marginBottom: 16, display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 10 }}>
+              <div>
+                <div style={{ fontSize: 11, color: "#065F46", fontWeight: 600, marginBottom: 4 }}>CUPOM GERADO COM SUCESSO</div>
+                <div style={{ fontFamily: "Georgia, serif", fontSize: 24, fontWeight: 800, color: "#065F46", letterSpacing: 2 }}>{cupomGerado}</div>
+                <div style={{ fontSize: 12, color: "#065F46", marginTop: 4 }}>Válido para 1 uso · Estende por 30 dias</div>
+              </div>
+              <button onClick={() => { navigator.clipboard.writeText(cupomGerado); alert("Copiado!"); }}
+                style={{ padding: "8px 16px", background: "#065F46", color: "#fff", border: "none", borderRadius: 7, fontSize: 12, fontWeight: 600, cursor: "pointer" }}>
+                📋 Copiar
+              </button>
+            </div>
+          )}
+          <div style={{ fontSize: 13, color: "#7A7670", lineHeight: 1.6 }}>
+            Gere cupons para estender o período de uma loja por 30 dias. Envie o código diretamente para o lojista via WhatsApp ou e-mail.
+          </div>
+        </div>
         </div>
       </div>
     </main>

@@ -105,7 +105,7 @@ export default function Cadastro() {
             <div style={{ marginBottom: 20 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#7A7670", letterSpacing: 0.5, textTransform: "uppercase", marginBottom: 8 }}>Tipo de conta</div>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
-                {[["comprador", "🔍 Quero comprar"], ["particular", "🚗 Vender meu carro"], ["lojista", "🏪 Sou lojista"]].map(([val, label]) => (
+                {[["comprador", "🔍 Comprar"], ["particular", "🚗 Vender carro"], ["lojista", "🏪 Lojista"]].map(([val, label]) => (
                   <button key={val} onClick={() => setTipo(val as "comprador" | "lojista" | "particular")}
                     style={{ padding: "12px", borderRadius: 8, border: "1.5px solid", borderColor: tipo === val ? "#E85D26" : "#E8E6E1", background: tipo === val ? "#FFF5F1" : "#fff", color: tipo === val ? "#E85D26" : "#7A7670", fontWeight: 600, fontSize: 14, cursor: "pointer" }}>
                     {label}

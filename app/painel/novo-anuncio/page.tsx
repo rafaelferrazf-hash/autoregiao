@@ -309,22 +309,22 @@ export default function NovoAnuncio() {
                   </div>
                 </div>
 
-                {/* MARCA */}
-                <div>
-                  <label style={labelStyle}>Marca <span style={{ color: "#E85D26" }}>*</span></label>
-                  <select value={form.marca} onChange={e => { set("marca", e.target.value); set("modelo", ""); set("versao", ""); }} style={inputStyle}>
-                    <option value="">Selecione a marca</option>
-                    {marcas.map(m => <option key={m}>{m}</option>)}
-                  </select>
-                </div>
-
-                {/* MODELO */}
-                <div>
-                  <label style={labelStyle}>Modelo <span style={{ color: "#E85D26" }}>*</span></label>
-                  <select value={form.modelo} onChange={e => { set("modelo", e.target.value); set("versao", ""); }} style={inputStyle} disabled={!form.marca}>
-                    <option value="">Selecione o modelo</option>
-                    {modelos.map(m => <option key={m}>{m}</option>)}
-                  </select>
+                {/* MARCA E MODELO */}
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                  <div>
+                    <label style={labelStyle}>Marca <span style={{ color: "#E85D26" }}>*</span></label>
+                    <select value={form.marca} onChange={e => { set("marca", e.target.value); set("modelo", ""); set("versao", ""); }} style={inputStyle}>
+                      <option value="">Selecione a marca</option>
+                      {marcas.map(m => <option key={m}>{m}</option>)}
+                    </select>
+                  </div>
+                  <div>
+                    <label style={labelStyle}>Modelo <span style={{ color: "#E85D26" }}>*</span></label>
+                    <select value={form.modelo} onChange={e => { set("modelo", e.target.value); set("versao", ""); }} style={inputStyle} disabled={!form.marca}>
+                      <option value="">Selecione o modelo</option>
+                      {modelos.map(m => <option key={m}>{m}</option>)}
+                    </select>
+                  </div>
                 </div>
 
                 {/* VERSÃO */}

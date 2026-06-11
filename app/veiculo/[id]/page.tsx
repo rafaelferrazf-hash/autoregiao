@@ -1,16 +1,108 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useParams } from "next/navigation";
+import { supabase } from "@/lib/supabase";
+
+type Veiculo = {
+  id: string;
+  nome: string;
+  marca: string;
+  modelo: string;
+  versao: string;
+  ano: number;
+  km: number;
+  combustivel: string;
+  cambio: string;
+  cor: string;
+  portas: string;
+  preco: number;
+  aceita_troca: boolean;
+  descricao: string;
+  opcionais: string[];
+  fotos: string[];
+  telefone: string;
+  nome_contato: string;
+  cidade: string;
+  destaque: boolean;
+  lojas?: { nome: string; cidade: string };
+};
 
 export default function Veiculo() {
+  const { id } = useParams();
   const [fotoAtiva, setFotoAtiva] = useState(0);
-  const [entrada, setEntrada] = useState("14580");
+  const [entrada, setEntrada] = useState("");
   const [prazo, setPrazo] = useState("60");
   const [menuAberto, setMenuAberto] = useState(false);
+  const [veiculo, setVeiculo] = useState<Veiculo | null>(null);
+  const [carregando, setCarregando] = useState(true);
 
-  const fotos = [0, 1, 2, 3, 4, 5];
-  const parcela = Math.round((72900 - Number(entrada)) * (0.0149 / (1 - Math.pow(1.0149, -Number(prazo)))));
+  useEffect(() => {
+    if (id) buscarVeiculo();
+  }, [id]);
+
+  async function buscarVeiculo() {
+    const { data, error } = await supabase
+      .from("veiculos")
+      .select("*, lojas(nome, cidade)")
+      .eq("id", id)
+      .single();
+
+    if (!error && data) {
+      setVeiculo(data);
+      setEntrada(Math.round(data.preco * 0.2).toString());
+    }
+    setCarregando(false);
+  }
+
+  function formatarPreco(preco: number) {
+    return preco.toLocaleString("pt-BR", { style: "currency", currency: "BRL", minimumFractionDigits: 0 });
+  }
+
+  function formatarKm(km: number) {
+    return km.toLocaleString("pt-BR") + " km";
+  }
+
+  function formatarTelefone(tel: string) {
+    return tel?.replace(/\D/g, "") || "";
+  }
+
+  function abrirWhatsApp() {
+    if (!veiculo) return;
+    const tel = formatarTelefone(veiculo.telefone);
+    const msg = encodeURIComponent(`Olá! Vi o anúncio do ${veiculo.nome} por ${formatarPreco(veiculo.preco)} no AutoRegião e tenho interesse.`);
+    window.open(`https://wa.me/55${tel}?text=${msg}`, "_blank");
+  }
+
+  function ligar() {
+    if (!veiculo) return;
+    window.open(`tel:${formatarTelefone(veiculo.telefone)}`);
+  }
+
+  const fotos = veiculo?.fotos?.length ? veiculo.fotos : ["/sem-foto.png"];
+  const parcela = entrada && prazo
+    ? Math.round((( veiculo?.preco || 0) - Number(entrada)) * (0.0149 / (1 - Math.pow(1.0149, -Number(prazo)))))
+    : 0;
+
+  if (carregando) return (
+    <main style={{ fontFamily: "'DM Sans', sans-serif", background: "#F7F6F3", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <div style={{ textAlign: "center" }}>
+        <div style={{ fontSize: 40, marginBottom: 12 }}>🚗</div>
+        <div style={{ fontSize: 14, color: "#7A7670" }}>Carregando anúncio...</div>
+      </div>
+    </main>
+  );
+
+  if (!veiculo) return (
+    <main style={{ fontFamily: "'DM Sans', sans-serif", background: "#F7F6F3", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <div style={{ textAlign: "center" }}>
+        <div style={{ fontSize: 40, marginBottom: 12 }}>😕</div>
+        <div style={{ fontFamily: "Georgia, serif", fontSize: 18, fontWeight: 700, color: "#1A1917", marginBottom: 8 }}>Anúncio não encontrado</div>
+        <Link href="/veiculos" style={{ color: "#E85D26", fontSize: 14 }}>← Ver outros veículos</Link>
+      </div>
+    </main>
+  );
 
   return (
     <main style={{ fontFamily: "'DM Sans', sans-serif", background: "#F7F6F3", minHeight: "100vh" }}>
@@ -45,20 +137,17 @@ export default function Veiculo() {
               <span style={{ color: "#E85D26" }}>Auto</span>Região
             </span>
           </Link>
-
           <div className="breadcrumb" style={{ alignItems: "center", gap: 6, fontSize: 13, color: "#7A7670" }}>
             <Link href="/" style={{ color: "#7A7670", textDecoration: "none" }}>Início</Link>
             <span>›</span>
-            <Link href="/veiculos" style={{ color: "#7A7670", textDecoration: "none" }}>Chevrolet</Link>
+            <Link href="/veiculos" style={{ color: "#7A7670", textDecoration: "none" }}>{veiculo.marca}</Link>
             <span>›</span>
-            <span style={{ color: "#1A1917", fontWeight: 500 }}>Onix LT 1.0 2022</span>
+            <span style={{ color: "#1A1917", fontWeight: 500 }}>{veiculo.nome}</span>
           </div>
-
           <div style={{ display: "flex", gap: 8 }} className="nav-desktop">
             <Link href="/login" style={{ padding: "7px 16px", border: "1.5px solid #E8E6E1", borderRadius: 7, background: "transparent", fontSize: 13, fontWeight: 500, color: "#1A1917", textDecoration: "none", display: "flex", alignItems: "center" }}>Entrar</Link>
             <Link href="/cadastro" style={{ padding: "7px 16px", background: "#E85D26", borderRadius: 7, color: "#fff", fontSize: 13, fontWeight: 500, textDecoration: "none", display: "flex", alignItems: "center" }}>Cadastrar loja</Link>
           </div>
-
           <button className="nav-mobile-btn" onClick={() => setMenuAberto(!menuAberto)}
             style={{ background: "none", border: "none", cursor: "pointer", padding: 8, flexDirection: "column", gap: 5 }}>
             <span style={{ display: "block", width: 24, height: 2, background: "#1A1917", borderRadius: 2, transition: "all 0.2s", transform: menuAberto ? "rotate(45deg) translate(5px, 5px)" : "none" }}></span>
@@ -87,42 +176,45 @@ export default function Veiculo() {
           <div>
             {/* GALERIA */}
             <div style={{ marginBottom: 20 }}>
-              <div style={{ position: "relative", height: 300, borderRadius: 12, overflow: "hidden", marginBottom: 10, border: "1.5px solid #E8E6E1" }}>
-                <Image src="/sem-foto.png" alt="Foto do veículo" fill style={{ objectFit: "cover" }} sizes="100vw" />
-                <span style={{ position: "absolute", top: 12, left: 12, background: "#E85D26", color: "#fff", fontSize: 11, fontWeight: 500, padding: "4px 12px", borderRadius: 20 }}>⭐ Em Destaque</span>
-                <span style={{ position: "absolute", bottom: 12, right: 12, background: "rgba(0,0,0,0.55)", color: "#fff", fontSize: 11, padding: "4px 10px", borderRadius: 6 }}>📷 {fotoAtiva + 1} / 6</span>
-                <button onClick={() => setFotoAtiva(Math.max(0, fotoAtiva - 1))} style={{ position: "absolute", top: "50%", left: 10, transform: "translateY(-50%)", width: 36, height: 36, background: "rgba(255,255,255,0.85)", border: "none", borderRadius: 8, fontSize: 16, cursor: "pointer" }}>‹</button>
-                <button onClick={() => setFotoAtiva(Math.min(5, fotoAtiva + 1))} style={{ position: "absolute", top: "50%", right: 10, transform: "translateY(-50%)", width: 36, height: 36, background: "rgba(255,255,255,0.85)", border: "none", borderRadius: 8, fontSize: 16, cursor: "pointer" }}>›</button>
+              <div style={{ position: "relative", height: 300, borderRadius: 12, overflow: "hidden", marginBottom: 10, border: "1.5px solid #E8E6E1", background: "#F7F6F3" }}>
+                {fotos[fotoAtiva] === "/sem-foto.png" ? (
+                  <Image src="/sem-foto.png" alt="Foto do veículo" fill style={{ objectFit: "cover" }} sizes="100vw" />
+                ) : (
+                  <img src={fotos[fotoAtiva]} alt="Foto do veículo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                )}
+                {veiculo.destaque && <span style={{ position: "absolute", top: 12, left: 12, background: "#E85D26", color: "#fff", fontSize: 11, fontWeight: 500, padding: "4px 12px", borderRadius: 20 }}>⭐ Em Destaque</span>}
+                <span style={{ position: "absolute", bottom: 12, right: 12, background: "rgba(0,0,0,0.55)", color: "#fff", fontSize: 11, padding: "4px 10px", borderRadius: 6 }}>📷 {fotoAtiva + 1} / {fotos.length}</span>
+                {fotos.length > 1 && <>
+                  <button onClick={() => setFotoAtiva(Math.max(0, fotoAtiva - 1))} style={{ position: "absolute", top: "50%", left: 10, transform: "translateY(-50%)", width: 36, height: 36, background: "rgba(255,255,255,0.85)", border: "none", borderRadius: 8, fontSize: 16, cursor: "pointer" }}>‹</button>
+                  <button onClick={() => setFotoAtiva(Math.min(fotos.length - 1, fotoAtiva + 1))} style={{ position: "absolute", top: "50%", right: 10, transform: "translateY(-50%)", width: 36, height: 36, background: "rgba(255,255,255,0.85)", border: "none", borderRadius: 8, fontSize: 16, cursor: "pointer" }}>›</button>
+                </>}
               </div>
-              <div className="thumbnails-grid">
-                {fotos.map(i => (
-                  <div key={i} onClick={() => setFotoAtiva(i)} style={{ position: "relative", height: 56, borderRadius: 7, overflow: "hidden", border: fotoAtiva === i ? "2px solid #E85D26" : "1.5px solid #E8E6E1", cursor: "pointer" }}>
-                    <Image src="/sem-foto.png" alt={`Foto ${i + 1}`} fill style={{ objectFit: "cover" }} sizes="80px" />
-                  </div>
-                ))}
-              </div>
+              {fotos.length > 1 && (
+                <div className="thumbnails-grid">
+                  {fotos.slice(0, 6).map((foto, i) => (
+                    <div key={i} onClick={() => setFotoAtiva(i)} style={{ position: "relative", height: 56, borderRadius: 7, overflow: "hidden", border: fotoAtiva === i ? "2px solid #E85D26" : "1.5px solid #E8E6E1", cursor: "pointer", background: "#F7F6F3" }}>
+                      <img src={foto} alt={`Foto ${i + 1}`} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
-            {/* TAGS E TÍTULO */}
+            {/* TÍTULO E PREÇO */}
             <div style={{ marginBottom: 16 }}>
               <div style={{ display: "flex", gap: 6, marginBottom: 10, flexWrap: "wrap" }}>
-                <span style={{ fontSize: 11, fontWeight: 500, padding: "3px 9px", borderRadius: 4, background: "rgba(232,93,38,0.08)", color: "#E85D26" }}>⭐ Destaque</span>
+                {veiculo.destaque && <span style={{ fontSize: 11, fontWeight: 500, padding: "3px 9px", borderRadius: 4, background: "rgba(232,93,38,0.08)", color: "#E85D26" }}>⭐ Destaque</span>}
                 <span style={{ fontSize: 11, fontWeight: 500, padding: "3px 9px", borderRadius: 4, background: "rgba(22,163,74,0.08)", color: "#16A34A" }}>✅ Loja Verificada</span>
-                <span style={{ fontSize: 11, fontWeight: 500, padding: "3px 9px", borderRadius: 4, background: "#F7F6F3", color: "#7A7670", border: "1px solid #E8E6E1" }}>📍 Lençóis Paulista</span>
+                <span style={{ fontSize: 11, fontWeight: 500, padding: "3px 9px", borderRadius: 4, background: "#F7F6F3", color: "#7A7670", border: "1px solid #E8E6E1" }}>📍 {veiculo.cidade}</span>
               </div>
-              <h1 style={{ fontFamily: "Georgia, serif", fontSize: 24, fontWeight: 800, color: "#1A1917", marginBottom: 6 }}>Chevrolet Onix LT 1.0 Turbo</h1>
-              <p style={{ fontSize: 14, color: "#7A7670", marginBottom: 14 }}>2022 · 38.000 km · Flex · Automático · Prata</p>
-
-              {/* PREÇO */}
+              <h1 style={{ fontFamily: "Georgia, serif", fontSize: 24, fontWeight: 800, color: "#1A1917", marginBottom: 6 }}>{veiculo.nome}</h1>
+              <p style={{ fontSize: 14, color: "#7A7670", marginBottom: 14 }}>
+                {[veiculo.ano, formatarKm(veiculo.km), veiculo.combustivel, veiculo.cambio, veiculo.cor].filter(Boolean).join(" · ")}
+              </p>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12, padding: 16, background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, marginBottom: 16 }}>
                 <div>
-                  <div style={{ fontFamily: "Georgia, serif", fontSize: 28, fontWeight: 800, color: "#1A1917", lineHeight: 1 }}>R$ 72.900</div>
-                  <div style={{ fontSize: 13, color: "#7A7670", marginTop: 4 }}>ou 60x de R$ 1.580 · Taxa 1,49% a.m.</div>
-                </div>
-                <div style={{ textAlign: "right" }}>
-                  <div style={{ fontSize: 10, color: "#7A7670", textTransform: "uppercase" }}>Tabela FIPE</div>
-                  <div style={{ fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, color: "#16A34A", marginTop: 2 }}>↓ 4% abaixo</div>
-                  <div style={{ fontSize: 10.5, color: "#7A7670" }}>FIPE: R$ 75.800</div>
+                  <div style={{ fontFamily: "Georgia, serif", fontSize: 28, fontWeight: 800, color: "#1A1917", lineHeight: 1 }}>{formatarPreco(veiculo.preco)}</div>
+                  {veiculo.aceita_troca && <div style={{ fontSize: 12, color: "#16A34A", marginTop: 6, fontWeight: 500 }}>✅ Aceita troca</div>}
                 </div>
               </div>
             </div>
@@ -131,40 +223,44 @@ export default function Veiculo() {
             <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, marginBottom: 16, overflow: "hidden" }}>
               <div style={{ padding: "14px 18px", borderBottom: "1px solid #E8E6E1", fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, color: "#1A1917" }}>Características</div>
               <div className="caracteristicas-grid">
-                {[["📅", "Ano", "2022/2022"], ["📍", "Quilometragem", "38.000 km"], ["⛽", "Combustível", "Flex"],
-                  ["⚙️", "Câmbio", "Automático"], ["🏎️", "Motor", "1.0 Turbo"], ["🎨", "Cor", "Prata"],
-                  ["🚪", "Portas", "4 portas"], ["👥", "Lugares", "5 lugares"], ["📋", "Final placa", "7"]
-                ].map(([icon, label, value], i) => (
-                  <div key={label} style={{ padding: "12px 14px", borderRight: (i + 1) % 3 !== 0 ? "1px solid #E8E6E1" : "none", borderBottom: i < 6 ? "1px solid #E8E6E1" : "none" }}>
+                {[
+                  ["📅", "Ano", veiculo.ano],
+                  ["📍", "Quilometragem", formatarKm(veiculo.km)],
+                  ["⛽", "Combustível", veiculo.combustivel],
+                  ["⚙️", "Câmbio", veiculo.cambio],
+                  ["🎨", "Cor", veiculo.cor],
+                  ["🚪", "Portas", veiculo.portas],
+                ].filter(([,, v]) => v).map(([icon, label, value], i) => (
+                  <div key={label as string} style={{ padding: "12px 14px", borderRight: (i + 1) % 3 !== 0 ? "1px solid #E8E6E1" : "none", borderBottom: i < 3 ? "1px solid #E8E6E1" : "none" }}>
                     <div style={{ fontSize: 16, marginBottom: 4 }}>{icon}</div>
-                    <div style={{ fontSize: 10, color: "#7A7670", textTransform: "uppercase", letterSpacing: 0.4, marginBottom: 2 }}>{label}</div>
-                    <div style={{ fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, color: "#1A1917" }}>{value}</div>
+                    <div style={{ fontSize: 10, color: "#7A7670", textTransform: "uppercase", letterSpacing: 0.4, marginBottom: 2 }}>{label as string}</div>
+                    <div style={{ fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, color: "#1A1917" }}>{value as string}</div>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* DESCRIÇÃO */}
-            <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, marginBottom: 16, overflow: "hidden" }}>
-              <div style={{ padding: "14px 18px", borderBottom: "1px solid #E8E6E1", fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, color: "#1A1917" }}>Descrição</div>
-              <div style={{ padding: "16px 18px", fontSize: 14, lineHeight: 1.7, color: "#1A1917" }}>
-                <p style={{ marginBottom: 10 }}>Onix LT 1.0 Turbo 2022 em perfeito estado de conservação. Único dono, todas as revisões feitas na concessionária com comprovantes. IPVA 2025 pago e licenciado.</p>
-                <p style={{ marginBottom: 10 }}>Pneus novos, freios revisados, ar condicionado gelando. Interior impecável, sem manchas ou rasgos.</p>
-                <p>Aceito troca por veículo de menor valor com volta. Financiamento facilitado via BV Financeira e Santander com aprovação na hora.</p>
+            {veiculo.descricao && (
+              <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, marginBottom: 16, overflow: "hidden" }}>
+                <div style={{ padding: "14px 18px", borderBottom: "1px solid #E8E6E1", fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, color: "#1A1917" }}>Descrição</div>
+                <div style={{ padding: "16px 18px", fontSize: 14, lineHeight: 1.7, color: "#1A1917", whiteSpace: "pre-wrap" }}>{veiculo.descricao}</div>
               </div>
-            </div>
+            )}
 
             {/* OPCIONAIS */}
-            <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, marginBottom: 16, overflow: "hidden" }}>
-              <div style={{ padding: "14px 18px", borderBottom: "1px solid #E8E6E1", fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, color: "#1A1917" }}>Opcionais</div>
-              <div style={{ padding: "14px 18px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
-                {["Ar-condicionado", "Direção elétrica", "Vidros elétricos", "Travas elétricas", "Airbag duplo", "ABS", "Central multimídia", "Bluetooth", "Câmera de ré", "Sensor de estacionamento", "Faróis de neblina", "Rodas de liga"].map(item => (
-                  <div key={item} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, color: "#1A1917" }}>
-                    <span style={{ fontSize: 13, color: "#16A34A" }}>✅</span> {item}
-                  </div>
-                ))}
+            {veiculo.opcionais?.length > 0 && (
+              <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, marginBottom: 16, overflow: "hidden" }}>
+                <div style={{ padding: "14px 18px", borderBottom: "1px solid #E8E6E1", fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, color: "#1A1917" }}>Opcionais</div>
+                <div style={{ padding: "14px 18px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+                  {veiculo.opcionais.map(item => (
+                    <div key={item} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, color: "#1A1917" }}>
+                      <span style={{ fontSize: 13, color: "#16A34A" }}>✅</span> {item}
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* SIMULADOR */}
             <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, overflow: "hidden" }}>
@@ -190,7 +286,9 @@ export default function Veiculo() {
                     <div style={{ fontSize: 12, color: "#7A7670" }}>Parcela estimada</div>
                     <div style={{ fontSize: 10.5, color: "#7A7670", marginTop: 2 }}>Taxa aprox. 1,49% a.m. · {prazo}x</div>
                   </div>
-                  <div style={{ fontFamily: "Georgia, serif", fontSize: 22, fontWeight: 800, color: "#E85D26" }}>R$ {isNaN(parcela) ? "---" : parcela.toLocaleString("pt-BR")}</div>
+                  <div style={{ fontFamily: "Georgia, serif", fontSize: 22, fontWeight: 800, color: "#E85D26" }}>
+                    {parcela > 0 ? `R$ ${parcela.toLocaleString("pt-BR")}` : "---"}
+                  </div>
                 </div>
                 <button style={{ width: "100%", marginTop: 12, padding: 10, background: "#1A1917", color: "#fff", border: "none", borderRadius: 8, fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>Solicitar financiamento →</button>
               </div>
@@ -203,22 +301,17 @@ export default function Veiculo() {
               <div style={{ background: "#1A1917", padding: "16px 18px", display: "flex", alignItems: "center", gap: 12 }}>
                 <div style={{ width: 44, height: 44, background: "#E85D26", borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, flexShrink: 0 }}>🏪</div>
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, color: "#fff" }}>Auto Paulista</div>
-                  <div style={{ fontSize: 11.5, color: "#7A7670", marginTop: 2 }}>📍 Lençóis Paulista, SP</div>
-                </div>
-                <div style={{ textAlign: "right" }}>
-                  <div style={{ fontSize: 13, color: "#E85D26" }}>⭐ 4.8</div>
-                  <div style={{ fontSize: 10.5, color: "#7A7670", marginTop: 1 }}>24 avaliações</div>
+                  <div style={{ fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, color: "#fff" }}>{veiculo.lojas?.nome || veiculo.nome_contato}</div>
+                  <div style={{ fontSize: 11.5, color: "#7A7670", marginTop: 2 }}>📍 {veiculo.lojas?.cidade || veiculo.cidade}</div>
                 </div>
               </div>
               <div style={{ padding: "16px 18px", display: "flex", flexDirection: "column", gap: 8 }}>
-                <button style={{ width: "100%", padding: 13, background: "#25D366", color: "#fff", border: "none", borderRadius: 9, fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, cursor: "pointer" }}>📱 Chamar no WhatsApp</button>
-                <button style={{ width: "100%", padding: 11, background: "#F7F6F3", color: "#1A1917", border: "1.5px solid #E8E6E1", borderRadius: 9, fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>💬 Enviar mensagem</button>
-                <button style={{ width: "100%", padding: 11, background: "#F7F6F3", color: "#1A1917", border: "1.5px solid #E8E6E1", borderRadius: 9, fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>📞 Ver telefone</button>
-              </div>
-              <div style={{ padding: "12px 18px", borderTop: "1px solid #E8E6E1", display: "flex", justifyContent: "space-between" }}>
-                <span style={{ fontSize: 11.5, color: "#7A7670" }}>👁️ 342 visualizações</span>
-                <span style={{ fontSize: 11.5, color: "#7A7670" }}>🕐 Responde em ~1h</span>
+                <button onClick={abrirWhatsApp} style={{ width: "100%", padding: 13, background: "#25D366", color: "#fff", border: "none", borderRadius: 9, fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, cursor: "pointer" }}>
+                  📱 Chamar no WhatsApp
+                </button>
+                <button onClick={ligar} style={{ width: "100%", padding: 11, background: "#F7F6F3", color: "#1A1917", border: "1.5px solid #E8E6E1", borderRadius: 9, fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
+                  📞 Ligar: {veiculo.telefone}
+                </button>
               </div>
             </div>
             <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, padding: 14, display: "flex", gap: 8 }}>
@@ -242,8 +335,8 @@ export default function Veiculo() {
 
       {/* BOTÕES FIXOS MOBILE */}
       <div className="contato-fixo-mobile" style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: "#fff", borderTop: "1px solid #E8E6E1", padding: "12px 16px", gap: 10, zIndex: 50 }}>
-        <button style={{ flex: 1, padding: "13px", background: "#25D366", color: "#fff", border: "none", borderRadius: 9, fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, cursor: "pointer" }}>📱 WhatsApp</button>
-        <button style={{ flex: 1, padding: "13px", background: "#E85D26", color: "#fff", border: "none", borderRadius: 9, fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, cursor: "pointer" }}>📞 Ligar</button>
+        <button onClick={abrirWhatsApp} style={{ flex: 1, padding: "13px", background: "#25D366", color: "#fff", border: "none", borderRadius: 9, fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, cursor: "pointer" }}>📱 WhatsApp</button>
+        <button onClick={ligar} style={{ flex: 1, padding: "13px", background: "#E85D26", color: "#fff", border: "none", borderRadius: 9, fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, cursor: "pointer" }}>📞 Ligar</button>
       </div>
 
     </main>

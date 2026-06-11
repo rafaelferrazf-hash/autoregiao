@@ -5,6 +5,7 @@ import { useState } from "react";
 
 export default function Painel() {
   const [abaAtiva, setAbaAtiva] = useState("dashboard");
+  const [sidebarAberta, setSidebarAberta] = useState(false);
 
   const anuncios = [
     { id: 1, name: "Chevrolet Onix LT", ano: "2022", km: "38.000 km", price: "R$ 72.900", views: 342, status: "destaque" },
@@ -26,17 +27,42 @@ export default function Painel() {
       destaque: { bg: "rgba(232,93,38,0.08)", color: "#E85D26", label: "⭐ Destaque" },
       ativo: { bg: "rgba(22,163,74,0.08)", color: "#16A34A", label: "✅ Ativo" },
       pausado: { bg: "#F7F6F3", color: "#7A7670", label: "⏸ Pausado" },
-      analise: { bg: "rgba(37,99,235,0.08)", color: "#2563EB", label: "🕐 Em análise" },
+      analise: { bg: "rgba(37,99,235,0.08)", color: "#2563EB", label: "🕐 Análise" },
     };
     const s = map[status];
-    return <span style={{ display: "inline-flex", alignItems: "center", fontSize: 10.5, fontWeight: 500, padding: "3px 9px", borderRadius: 20, background: s.bg, color: s.color, whiteSpace: "nowrap" }}>{s.label}</span>;
+    return <span style={{ display: "inline-flex", alignItems: "center", fontSize: 10, fontWeight: 500, padding: "3px 8px", borderRadius: 20, background: s.bg, color: s.color, whiteSpace: "nowrap" }}>{s.label}</span>;
   };
 
   return (
     <div style={{ fontFamily: "'DM Sans', sans-serif", display: "flex", minHeight: "100vh", background: "#F7F6F3" }}>
 
-      {/* SIDEBAR */}
-      <aside style={{ width: 240, background: "#111009", minHeight: "100vh", position: "fixed", top: 0, left: 0, display: "flex", flexDirection: "column", zIndex: 50 }}>
+      <style>{`
+        .sidebar-desktop { display: flex !important; }
+        .main-content { margin-left: 240px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+        .dashboard-grid { display: grid; grid-template-columns: 1fr 300px; gap: 16px; }
+        .bottom-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .tabela-desktop { display: table !important; }
+        .cards-mobile { display: none !important; }
+        .tab-bar { display: none !important; }
+        .header-novo { display: inline-flex !important; }
+        .sidebar-overlay { display: none; }
+        @media (max-width: 768px) {
+          .sidebar-desktop { display: none !important; }
+          .main-content { margin-left: 0 !important; padding-bottom: 70px; }
+          .stats-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 10px !important; }
+          .dashboard-grid { grid-template-columns: 1fr !important; }
+          .bottom-grid { grid-template-columns: 1fr !important; }
+          .tabela-desktop { display: none !important; }
+          .cards-mobile { display: flex !important; }
+          .tab-bar { display: flex !important; }
+          .header-novo { display: none !important; }
+          .sidebar-overlay { display: block; }
+        }
+      `}</style>
+
+      {/* SIDEBAR DESKTOP */}
+      <aside className="sidebar-desktop" style={{ width: 240, background: "#111009", minHeight: "100vh", position: "fixed", top: 0, left: 0, flexDirection: "column", zIndex: 50 }}>
         <Link href="/" style={{ padding: "18px 20px", borderBottom: "1px solid rgba(255,255,255,0.06)", display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
           <Image src="/logo.png" alt="AutoRegião" width={32} height={32} style={{ objectFit: "contain" }} />
           <span style={{ fontFamily: "Georgia, serif", fontSize: 17, fontWeight: 800, color: "#fff" }}><span style={{ color: "#E85D26" }}>Auto</span>Região</span>
@@ -66,10 +92,10 @@ export default function Painel() {
                   <span>Novo Anúncio</span>
                 </Link>
               : <button key={item.id} onClick={() => setAbaAtiva(item.id)} style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 10px", borderRadius: 8, border: "none", background: abaAtiva === item.id ? "#E85D26" : "transparent", color: abaAtiva === item.id ? "#fff" : "rgba(255,255,255,0.5)", fontSize: 13.5, fontWeight: 500, cursor: "pointer", width: "100%", textAlign: "left", fontFamily: "'DM Sans', sans-serif" }}>
-              <span style={{ fontSize: 15, width: 20, textAlign: "center", flexShrink: 0 }}>{item.icon}</span>
-              <span style={{ flex: 1 }}>{item.label}</span>
-              {item.badge && <span style={{ background: abaAtiva === item.id ? "rgba(255,255,255,0.25)" : "#E85D26", color: "#fff", fontSize: 10, fontWeight: 700, padding: "1px 6px", borderRadius: 10 }}>{item.badge}</span>}
-            </button>
+                <span style={{ fontSize: 15, width: 20, textAlign: "center", flexShrink: 0 }}>{item.icon}</span>
+                <span style={{ flex: 1 }}>{item.label}</span>
+                {item.badge && <span style={{ background: abaAtiva === item.id ? "rgba(255,255,255,0.25)" : "#E85D26", color: "#fff", fontSize: 10, fontWeight: 700, padding: "1px 6px", borderRadius: 10 }}>{item.badge}</span>}
+              </button>
           ))}
         </nav>
         <div style={{ padding: "12px 10px", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
@@ -88,62 +114,74 @@ export default function Painel() {
       </aside>
 
       {/* MAIN */}
-      <div style={{ marginLeft: 240, flex: 1, display: "flex", flexDirection: "column" }}>
-        <header style={{ background: "#fff", borderBottom: "1px solid #E8E6E1", padding: "0 28px", height: 58, display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, zIndex: 40 }}>
-          <div>
-            <div style={{ fontFamily: "Georgia, serif", fontSize: 16, fontWeight: 800, color: "#1A1917" }}>Dashboard</div>
-            <div style={{ fontSize: 11, color: "#7A7670", marginTop: 1 }}>Terça-feira, 09 de junho de 2026</div>
+      <div className="main-content" style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+
+        {/* HEADER */}
+        <header style={{ background: "#fff", borderBottom: "1px solid #E8E6E1", padding: "0 16px", height: 58, display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, zIndex: 40 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <div>
+              <div style={{ fontFamily: "Georgia, serif", fontSize: 15, fontWeight: 800, color: "#1A1917" }}>Dashboard</div>
+              <div style={{ fontSize: 10, color: "#7A7670" }}>Terça-feira, 09 de junho de 2026</div>
+            </div>
           </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <Link href="/painel/novo-anuncio" style={{ padding: "7px 16px", background: "#E85D26", borderRadius: 7, fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, color: "#fff", textDecoration: "none", display: "inline-flex", alignItems: "center" }}>+ Novo Anúncio</Link>
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <Link href="/painel/novo-anuncio" className="header-novo" style={{ padding: "7px 14px", background: "#E85D26", borderRadius: 7, fontFamily: "Georgia, serif", fontSize: 12, fontWeight: 700, color: "#fff", textDecoration: "none", alignItems: "center" }}>+ Novo Anúncio</Link>
             <div style={{ width: 34, height: 34, border: "1.5px solid #E8E6E1", borderRadius: 8, background: "#F7F6F3", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: 15, position: "relative" }}>
               🔔<span style={{ position: "absolute", top: 5, right: 5, width: 7, height: 7, background: "#E85D26", borderRadius: "50%", border: "1.5px solid #fff" }}></span>
             </div>
-            <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "5px 10px", border: "1.5px solid #E8E6E1", borderRadius: 8, background: "#F7F6F3", cursor: "pointer" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "5px 10px", border: "1.5px solid #E8E6E1", borderRadius: 8, background: "#F7F6F3", cursor: "pointer" }}>
               <div style={{ width: 26, height: 26, background: "#E85D26", borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13 }}>👤</div>
-              <span style={{ fontSize: 12.5, fontWeight: 500, color: "#1A1917" }}>Rodrigo</span>
+              <span style={{ fontSize: 12, fontWeight: 500, color: "#1A1917" }}>Rodrigo</span>
             </div>
           </div>
         </header>
 
-        <div style={{ padding: "22px 28px", flex: 1 }}>
-          <div style={{ background: "rgba(232,93,38,0.08)", border: "1px solid rgba(232,93,38,0.2)", borderRadius: 10, padding: "12px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <span style={{ fontSize: 18 }}>⏳</span>
-              <div style={{ fontSize: 13, color: "#1A1917" }}>Seu período gratuito termina em <strong style={{ color: "#E85D26" }}>23 dias</strong>. Assine um plano para continuar anunciando.</div>
+        <div style={{ padding: "16px", flex: 1 }}>
+
+          {/* AVISO */}
+          <div style={{ background: "rgba(232,93,38,0.08)", border: "1px solid rgba(232,93,38,0.2)", borderRadius: 10, padding: "12px 14px", display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16, flexWrap: "wrap", gap: 8 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <span style={{ fontSize: 16 }}>⏳</span>
+              <div style={{ fontSize: 13, color: "#1A1917" }}>Período gratuito termina em <strong style={{ color: "#E85D26" }}>23 dias</strong>.</div>
             </div>
-            <a href="#" style={{ fontSize: 12.5, fontWeight: 500, color: "#E85D26", textDecoration: "none", borderBottom: "1px solid rgba(232,93,38,0.3)", whiteSpace: "nowrap" }}>Ver planos →</a>
+            <a href="#" style={{ fontSize: 12, fontWeight: 500, color: "#E85D26", textDecoration: "none" }}>Ver planos →</a>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12, marginBottom: 20 }}>
+          {/* STATS */}
+          <div className="stats-grid" style={{ marginBottom: 16 }}>
             {[
-              { label: "Visualizações (mês)", value: "3.241", change: "▲ 18%", up: true, icon: "👁️", bg: "rgba(232,93,38,0.08)" },
-              { label: "Contatos recebidos", value: "47", change: "▲ 9%", up: true, icon: "💬", bg: "rgba(22,163,74,0.08)" },
-              { label: "Anúncios ativos", value: "18", change: "2 pausados · 30 limite", up: false, icon: "🚗", bg: "rgba(37,99,235,0.08)" },
-              { label: "Avaliação da loja", value: "4.8", change: "▲ 24 avaliações", up: true, icon: "⭐", bg: "rgba(232,93,38,0.08)" },
+              { label: "Visualizações", value: "3.241", change: "▲ 18%", up: true, icon: "👁️", bg: "rgba(232,93,38,0.08)" },
+              { label: "Contatos", value: "47", change: "▲ 9%", up: true, icon: "💬", bg: "rgba(22,163,74,0.08)" },
+              { label: "Anúncios ativos", value: "18", change: "30 limite", up: false, icon: "🚗", bg: "rgba(37,99,235,0.08)" },
+              { label: "Avaliação", value: "4.8", change: "24 avaliações", up: true, icon: "⭐", bg: "rgba(232,93,38,0.08)" },
             ].map(stat => (
-              <div key={stat.label} style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, padding: 16 }}>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
+              <div key={stat.label} style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, padding: 14 }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
                   <span style={{ fontSize: 11, color: "#7A7670", fontWeight: 500 }}>{stat.label}</span>
-                  <div style={{ width: 30, height: 30, borderRadius: 7, background: stat.bg, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14 }}>{stat.icon}</div>
+                  <div style={{ width: 28, height: 28, borderRadius: 7, background: stat.bg, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13 }}>{stat.icon}</div>
                 </div>
-                <div style={{ fontFamily: "Georgia, serif", fontSize: 26, fontWeight: 800, color: "#1A1917", lineHeight: 1, marginBottom: 5 }}>{stat.value}</div>
-                <div style={{ fontSize: 11.5, fontWeight: 500, color: stat.up ? "#16A34A" : "#7A7670" }}>{stat.change}</div>
+                <div style={{ fontFamily: "Georgia, serif", fontSize: 22, fontWeight: 800, color: "#1A1917", lineHeight: 1, marginBottom: 4 }}>{stat.value}</div>
+                <div style={{ fontSize: 11, fontWeight: 500, color: stat.up ? "#16A34A" : "#7A7670" }}>{stat.change}</div>
               </div>
             ))}
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 300px", gap: 16, marginBottom: 16 }}>
+          {/* DASHBOARD GRID */}
+          <div className="dashboard-grid" style={{ marginBottom: 16 }}>
+
+            {/* ANÚNCIOS — tabela desktop */}
             <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, overflow: "hidden" }}>
               <div style={{ padding: "14px 18px", borderBottom: "1px solid #E8E6E1", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                 <div style={{ fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, color: "#1A1917" }}>Anúncios recentes</div>
                 <a href="#" style={{ fontSize: 12, color: "#E85D26", fontWeight: 500, textDecoration: "none" }}>Ver todos →</a>
               </div>
-              <table style={{ width: "100%", borderCollapse: "collapse" }}>
+
+              {/* TABELA DESKTOP */}
+              <table className="tabela-desktop" style={{ width: "100%", borderCollapse: "collapse" }}>
                 <thead>
                   <tr style={{ background: "#F7F6F3" }}>
-                    {["Veículo", "Status", "Preço", "Visualizações", "Ações"].map(h => (
-                      <th key={h} style={{ padding: "9px 14px", fontSize: 10, fontWeight: 500, color: "#7A7670", textAlign: "left", letterSpacing: 0.5, textTransform: "uppercase", whiteSpace: "nowrap" }}>{h}</th>
+                    {["Veículo", "Status", "Preço", "Views", "Ações"].map(h => (
+                      <th key={h} style={{ padding: "9px 14px", fontSize: 10, fontWeight: 500, color: "#7A7670", textAlign: "left", textTransform: "uppercase", whiteSpace: "nowrap" }}>{h}</th>
                     ))}
                   </tr>
                 </thead>
@@ -157,13 +195,13 @@ export default function Painel() {
                           </div>
                           <div>
                             <div style={{ fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, color: "#1A1917" }}>{car.name}</div>
-                            <div style={{ fontSize: 11, color: "#7A7670", marginTop: 1 }}>{car.ano} · {car.km}</div>
+                            <div style={{ fontSize: 11, color: "#7A7670" }}>{car.ano} · {car.km}</div>
                           </div>
                         </div>
                       </td>
                       <td style={{ padding: "11px 14px" }}>{statusBadge(car.status)}</td>
-                      <td style={{ padding: "11px 14px", fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, color: "#1A1917" }}>{car.price}</td>
-                      <td style={{ padding: "11px 14px", fontSize: 13, color: "#7A7670" }}>👁️ {car.views || "—"}</td>
+                      <td style={{ padding: "11px 14px", fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, color: "#1A1917" }}>{car.price}</td>
+                      <td style={{ padding: "11px 14px", fontSize: 12, color: "#7A7670" }}>👁️ {car.views || "—"}</td>
                       <td style={{ padding: "11px 14px" }}>
                         <div style={{ display: "flex", gap: 5 }}>
                           {["✏️", "👁️", car.status === "pausado" ? "▶️" : "⏸️"].map((icon, i) => (
@@ -175,8 +213,35 @@ export default function Painel() {
                   ))}
                 </tbody>
               </table>
+
+              {/* CARDS MOBILE */}
+              <div className="cards-mobile" style={{ flexDirection: "column" }}>
+                {anuncios.map(car => (
+                  <div key={car.id} style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 16px", borderBottom: "1px solid #E8E6E1" }}>
+                    <div style={{ position: "relative", width: 56, height: 42, borderRadius: 7, overflow: "hidden", flexShrink: 0, border: "1px solid #E8E6E1" }}>
+                      <Image src="/sem-foto.png" alt={car.name} fill style={{ objectFit: "cover" }} sizes="56px" />
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, color: "#1A1917", marginBottom: 2 }}>{car.name}</div>
+                      <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
+                        {statusBadge(car.status)}
+                        <span style={{ fontSize: 11, color: "#7A7670" }}>👁️ {car.views || "—"}</span>
+                      </div>
+                    </div>
+                    <div style={{ textAlign: "right" }}>
+                      <div style={{ fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, color: "#1A1917" }}>{car.price}</div>
+                      <div style={{ display: "flex", gap: 4, marginTop: 4 }}>
+                        {["✏️", "⏸️"].map((icon, i) => (
+                          <button key={i} style={{ width: 26, height: 26, borderRadius: 5, border: "1.5px solid #E8E6E1", background: "#F7F6F3", cursor: "pointer", fontSize: 11 }}>{icon}</button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
 
+            {/* CONTATOS + GRÁFICO */}
             <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
               <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, overflow: "hidden" }}>
                 <div style={{ padding: "14px 18px", borderBottom: "1px solid #E8E6E1", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
@@ -184,32 +249,33 @@ export default function Painel() {
                   <a href="#" style={{ fontSize: 12, color: "#E85D26", fontWeight: 500, textDecoration: "none" }}>Ver todos →</a>
                 </div>
                 {contatos.map((c, i) => (
-                  <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 18px", borderBottom: i < contatos.length - 1 ? "1px solid #E8E6E1" : "none", cursor: "pointer" }}>
+                  <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 16px", borderBottom: i < contatos.length - 1 ? "1px solid #E8E6E1" : "none", cursor: "pointer" }}>
                     <span style={{ width: 7, height: 7, background: c.lido ? "transparent" : "#E85D26", borderRadius: "50%", flexShrink: 0, border: c.lido ? "1.5px solid #E8E6E1" : "none" }}></span>
-                    <div style={{ width: 34, height: 34, background: "#F7F6F3", border: "1px solid #E8E6E1", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, flexShrink: 0 }}>👤</div>
+                    <div style={{ width: 32, height: 32, background: "#F7F6F3", border: "1px solid #E8E6E1", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, flexShrink: 0 }}>👤</div>
                     <div style={{ flex: 1 }}>
                       <div style={{ fontSize: 12.5, fontWeight: 500, color: "#1A1917" }}>{c.nome}</div>
-                      <div style={{ fontSize: 11, color: "#7A7670", marginTop: 1 }}>{c.carro}</div>
+                      <div style={{ fontSize: 11, color: "#7A7670" }}>{c.carro}</div>
                     </div>
-                    <div style={{ fontSize: 10.5, color: "#7A7670", flexShrink: 0 }}>{c.tempo}</div>
+                    <div style={{ fontSize: 10.5, color: "#7A7670" }}>{c.tempo}</div>
                   </div>
                 ))}
               </div>
+
               <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, overflow: "hidden" }}>
                 <div style={{ padding: "14px 18px", borderBottom: "1px solid #E8E6E1" }}>
                   <div style={{ fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, color: "#1A1917" }}>Visitas esta semana</div>
                 </div>
                 <div style={{ padding: "14px 18px" }}>
-                  <div style={{ display: "flex", alignItems: "flex-end", gap: 6, height: 80, marginBottom: 8 }}>
+                  <div style={{ display: "flex", alignItems: "flex-end", gap: 6, height: 70, marginBottom: 8 }}>
                     {[{ h: 45, d: "Seg" }, { h: 60, d: "Ter" }, { h: 75, d: "Qua", a: true }, { h: 50, d: "Qui" }, { h: 65, d: "Sex" }, { h: 40, d: "Sáb" }, { h: 30, d: "Dom" }].map((b: { h: number; d: string; a?: boolean }) => (
                       <div key={b.d} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
                         <div style={{ width: "100%", height: b.h, background: b.a ? "#E85D26" : "rgba(232,93,38,0.12)", borderRadius: "4px 4px 0 0" }}></div>
-                        <span style={{ fontSize: 9.5, color: "#7A7670" }}>{b.d}</span>
+                        <span style={{ fontSize: 9, color: "#7A7670" }}>{b.d}</span>
                       </div>
                     ))}
                   </div>
                   <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, color: "#7A7670" }}>
-                    <span>Visitas aos anúncios</span>
+                    <span>Visitas</span>
                     <span>Total: <strong style={{ color: "#1A1917" }}>365</strong></span>
                   </div>
                 </div>
@@ -217,16 +283,17 @@ export default function Painel() {
             </div>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+          {/* BOTTOM GRID */}
+          <div className="bottom-grid">
             <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, overflow: "hidden" }}>
               <div style={{ padding: "14px 18px", borderBottom: "1px solid #E8E6E1" }}>
                 <div style={{ fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, color: "#1A1917" }}>Ações rápidas</div>
               </div>
               <div style={{ padding: 14, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-                {[["➕", "Novo anúncio"], ["⭐", "Contratar destaque"], ["📊", "Ver estatísticas"], ["🏪", "Editar perfil"], ["📱", "Gerar QR Code"], ["💬", "Ver mensagens"]].map(([icon, label]) => (
-                  <button key={label} style={{ padding: 14, border: "1.5px solid #E8E6E1", borderRadius: 10, background: "#F7F6F3", cursor: "pointer", textAlign: "center" }}>
-                    <div style={{ fontSize: 22, marginBottom: 6 }}>{icon}</div>
-                    <div style={{ fontSize: 11.5, fontWeight: 500, color: "#1A1917" }}>{label}</div>
+                {[["➕", "Novo anúncio"], ["⭐", "Destaque"], ["📊", "Estatísticas"], ["🏪", "Editar perfil"], ["📱", "QR Code"], ["💬", "Mensagens"]].map(([icon, label]) => (
+                  <button key={label} style={{ padding: 12, border: "1.5px solid #E8E6E1", borderRadius: 10, background: "#F7F6F3", cursor: "pointer", textAlign: "center" }}>
+                    <div style={{ fontSize: 20, marginBottom: 5 }}>{icon}</div>
+                    <div style={{ fontSize: 11, fontWeight: 500, color: "#1A1917" }}>{label}</div>
                   </button>
                 ))}
               </div>
@@ -251,6 +318,30 @@ export default function Painel() {
           </div>
         </div>
       </div>
+
+      {/* TAB BAR MOBILE */}
+      <div className="tab-bar" style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: "#111009", borderTop: "1px solid rgba(255,255,255,0.08)", padding: "8px 0", zIndex: 50, justifyContent: "space-around", alignItems: "center" }}>
+        {[
+          { id: "dashboard", icon: "📊", label: "Início" },
+          { id: "anuncios", icon: "🚗", label: "Anúncios" },
+          { id: "novo", icon: "➕", label: "Novo", link: "/painel/novo-anuncio" },
+          { id: "mensagens", icon: "💬", label: "Msgs", badge: "5" },
+          { id: "config", icon: "⚙️", label: "Mais" },
+        ].map(item => (
+          item.link
+            ? <Link key={item.id} href={item.link} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2, textDecoration: "none", padding: "4px 12px" }}>
+                <div style={{ width: 36, height: 36, background: "#E85D26", borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>{item.icon}</div>
+                <span style={{ fontSize: 10, color: "#E85D26", fontWeight: 600 }}>{item.label}</span>
+              </Link>
+            : <button key={item.id} onClick={() => setAbaAtiva(item.id)}
+                style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2, background: "none", border: "none", cursor: "pointer", padding: "4px 12px", position: "relative" }}>
+                <span style={{ fontSize: 20 }}>{item.icon}</span>
+                <span style={{ fontSize: 10, color: abaAtiva === item.id ? "#E85D26" : "rgba(255,255,255,0.4)", fontWeight: abaAtiva === item.id ? 600 : 400 }}>{item.label}</span>
+                {item.badge && <span style={{ position: "absolute", top: 0, right: 8, background: "#E85D26", color: "#fff", fontSize: 9, fontWeight: 700, padding: "1px 5px", borderRadius: 8 }}>{item.badge}</span>}
+              </button>
+        ))}
+      </div>
+
     </div>
   );
 }

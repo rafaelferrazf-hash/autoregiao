@@ -5,7 +5,7 @@ import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 
 export default function Cadastro() {
-  const [tipo, setTipo] = useState<"comprador" | "lojista">("comprador");
+  const [tipo, setTipo] = useState<"comprador" | "lojista" | "particular">("comprador");
   const [form, setForm] = useState({ nome: "", email: "", telefone: "", senha: "", confirmarSenha: "", loja: "", cidade: "" });
   const [erro, setErro] = useState("");
   const [sucesso, setSucesso] = useState(false);
@@ -104,9 +104,9 @@ export default function Cadastro() {
             {/* TIPO */}
             <div style={{ marginBottom: 20 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#7A7670", letterSpacing: 0.5, textTransform: "uppercase", marginBottom: 8 }}>Tipo de conta</div>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
-                {[["comprador", "🔍 Quero comprar"], ["lojista", "🏪 Sou lojista"]].map(([val, label]) => (
-                  <button key={val} onClick={() => setTipo(val as "comprador" | "lojista")}
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
+                {[["comprador", "🔍 Quero comprar"], ["particular", "🚗 Vender meu carro"], ["lojista", "🏪 Sou lojista"]].map(([val, label]) => (
+                  <button key={val} onClick={() => setTipo(val as "comprador" | "lojista" | "particular")}
                     style={{ padding: "12px", borderRadius: 8, border: "1.5px solid", borderColor: tipo === val ? "#E85D26" : "#E8E6E1", background: tipo === val ? "#FFF5F1" : "#fff", color: tipo === val ? "#E85D26" : "#7A7670", fontWeight: 600, fontSize: 14, cursor: "pointer" }}>
                     {label}
                   </button>
@@ -134,6 +134,21 @@ export default function Cadastro() {
                   style={{ width: "100%", padding: "12px 14px", border: "1.5px solid #E8E6E1", borderRadius: 8, fontSize: 15, color: "#1A1917", background: "#F7F6F3", outline: "none", boxSizing: "border-box" }} />
               </div>
             ))}
+
+            {tipo === "particular" && (
+              <>
+                <div style={{ marginBottom: 14 }}>
+                  <div style={{ fontSize: 12, fontWeight: 500, color: "#1A1917", marginBottom: 5 }}>Veículo que deseja vender <span style={{ color: "#E85D26" }}>*</span></div>
+                  <input placeholder="Ex: Chevrolet Onix 2022" value={form.loja} onChange={e => setForm({ ...form, loja: e.target.value })}
+                    style={{ width: "100%", padding: "12px 14px", border: "1.5px solid #E8E6E1", borderRadius: 8, fontSize: 15, color: "#1A1917", background: "#F7F6F3", outline: "none", boxSizing: "border-box" }} />
+                </div>
+                <div style={{ marginBottom: 14 }}>
+                  <div style={{ fontSize: 12, fontWeight: 500, color: "#1A1917", marginBottom: 5 }}>Cidade <span style={{ color: "#E85D26" }}>*</span></div>
+                  <input placeholder="Ex: Lençóis Paulista" value={form.cidade} onChange={e => setForm({ ...form, cidade: e.target.value })}
+                    style={{ width: "100%", padding: "12px 14px", border: "1.5px solid #E8E6E1", borderRadius: 8, fontSize: 15, color: "#1A1917", background: "#F7F6F3", outline: "none", boxSizing: "border-box" }} />
+                </div>
+              </>
+            )}
 
             {tipo === "lojista" && (
               <>

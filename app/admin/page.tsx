@@ -6,6 +6,14 @@ import { useState } from "react";
 export default function Admin() {
   const [menuAberto, setMenuAberto] = useState(false);
   const [abaAtiva, setAbaAtiva] = useState("Dashboard");
+  const [cupomGerado, setCupomGerado] = useState("");
+
+  function gerarCupom() {
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    let codigo = "AR-";
+    for (let i = 0; i < 6; i++) codigo += chars[Math.floor(Math.random() * chars.length)];
+    setCupomGerado(codigo);
+  }
 
   const stats = [
     { label: "Lojas cadastradas", value: "48", icon: "🏪", change: "+3 essa semana" },

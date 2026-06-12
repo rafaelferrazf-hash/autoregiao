@@ -32,6 +32,7 @@ type Veiculo = {
 export default function Veiculo() {
   const { id } = useParams();
   const [fotoAtiva, setFotoAtiva] = useState(0);
+  const [lightbox, setLightbox] = useState(false);
   const [entrada, setEntrada] = useState("");
   const [prazo, setPrazo] = useState("60");
   const [menuAberto, setMenuAberto] = useState(false);
@@ -41,6 +42,18 @@ export default function Veiculo() {
   useEffect(() => {
     if (id) buscarVeiculo();
   }, [id]);
+
+  // Fechar lightbox com ESC e navegar com setas
+  useEffect(() => {
+    if (!lightbox) return;
+    function handleKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setLightbox(false);
+      if (e.key === "ArrowRight") setFotoAtiva(f => Math.min(fotos.length - 1, f + 1));
+      if (e.key === "ArrowLeft") setFotoAtiva(f => Math.max(0, f - 1));
+    }
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [lightbox]);
 
   async function buscarVeiculo() {
     const { data, error } = await supabase
@@ -82,7 +95,7 @@ export default function Veiculo() {
 
   const fotos = veiculo?.fotos?.length ? veiculo.fotos : ["/sem-foto.png"];
   const parcela = entrada && prazo
-    ? Math.round((( veiculo?.preco || 0) - Number(entrada)) * (0.0149 / (1 - Math.pow(1.0149, -Number(prazo)))))
+    ? Math.round(((veiculo?.preco || 0) - Number(entrada)) * (0.0149 / (1 - Math.pow(1.0149, -Number(prazo)))))
     : 0;
 
   if (carregando) return (
@@ -116,6 +129,7 @@ export default function Veiculo() {
         .thumbnails-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
         .caracteristicas-grid { display: grid; grid-template-columns: repeat(3, 1fr); }
         .breadcrumb { display: flex !important; }
+        .foto-principal:hover { cursor: zoom-in; }
         @media (max-width: 768px) {
           .nav-desktop { display: none !important; }
           .nav-mobile-btn { display: flex !important; }
@@ -127,6 +141,64 @@ export default function Veiculo() {
           .breadcrumb { display: none !important; }
         }
       `}</style>
+
+      {/* LIGHTBOX */}
+      {lightbox && (
+        <div
+          onClick={() => setLightbox(false)}
+          style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center" }}
+        >
+          {/* Botão fechar */}
+          <button
+            onClick={() => setLightbox(false)}
+            style={{ position: "absolute", top: 16, right: 16, width: 40, height: 40, background: "rgba(255,255,255,0.15)", border: "none", borderRadius: 8, color: "#fff", fontSize: 20, cursor: "pointer", zIndex: 10 }}
+          >✕</button>
+
+          {/* Contador */}
+          <div style={{ position: "absolute", top: 20, left: "50%", transform: "translateX(-50%)", color: "rgba(255,255,255,0.6)", fontSize: 13 }}>
+            {fotoAtiva + 1} / {fotos.length}
+          </div>
+
+          {/* Seta esquerda */}
+          {fotoAtiva > 0 && (
+            <button
+              onClick={e => { e.stopPropagation(); setFotoAtiva(f => f - 1); }}
+              style={{ position: "absolute", left: 16, width: 44, height: 44, background: "rgba(255,255,255,0.15)", border: "none", borderRadius: 8, color: "#fff", fontSize: 24, cursor: "pointer" }}
+            >‹</button>
+          )}
+
+          {/* Foto */}
+          <img
+            src={fotos[fotoAtiva]}
+            alt="Foto ampliada"
+            onClick={e => e.stopPropagation()}
+            style={{ maxWidth: "90vw", maxHeight: "85vh", objectFit: "contain", borderRadius: 8 }}
+          />
+
+          {/* Seta direita */}
+          {fotoAtiva < fotos.length - 1 && (
+            <button
+              onClick={e => { e.stopPropagation(); setFotoAtiva(f => f + 1); }}
+              style={{ position: "absolute", right: 16, width: 44, height: 44, background: "rgba(255,255,255,0.15)", border: "none", borderRadius: 8, color: "#fff", fontSize: 24, cursor: "pointer" }}
+            >›</button>
+          )}
+
+          {/* Thumbnails no lightbox */}
+          {fotos.length > 1 && (
+            <div style={{ position: "absolute", bottom: 16, left: "50%", transform: "translateX(-50%)", display: "flex", gap: 6 }}>
+              {fotos.map((foto, i) => (
+                <div
+                  key={i}
+                  onClick={e => { e.stopPropagation(); setFotoAtiva(i); }}
+                  style={{ width: 48, height: 36, borderRadius: 5, overflow: "hidden", border: fotoAtiva === i ? "2px solid #E85D26" : "2px solid transparent", cursor: "pointer", opacity: fotoAtiva === i ? 1 : 0.5 }}
+                >
+                  <img src={foto} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* NAVBAR */}
       <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, background: "#fff", borderBottom: "1px solid #E8E6E1" }}>
@@ -176,7 +248,11 @@ export default function Veiculo() {
           <div>
             {/* GALERIA */}
             <div style={{ marginBottom: 20 }}>
-              <div style={{ position: "relative", height: 300, borderRadius: 12, overflow: "hidden", marginBottom: 10, border: "1.5px solid #E8E6E1", background: "#F7F6F3" }}>
+              <div
+                className="foto-principal"
+                onClick={() => setLightbox(true)}
+                style={{ position: "relative", height: 300, borderRadius: 12, overflow: "hidden", marginBottom: 10, border: "1.5px solid #E8E6E1", background: "#F7F6F3" }}
+              >
                 {fotos[fotoAtiva] === "/sem-foto.png" ? (
                   <Image src="/sem-foto.png" alt="Foto do veículo" fill style={{ objectFit: "cover" }} sizes="100vw" />
                 ) : (
@@ -184,9 +260,11 @@ export default function Veiculo() {
                 )}
                 {veiculo.destaque && <span style={{ position: "absolute", top: 12, left: 12, background: "#E85D26", color: "#fff", fontSize: 11, fontWeight: 500, padding: "4px 12px", borderRadius: 20 }}>⭐ Em Destaque</span>}
                 <span style={{ position: "absolute", bottom: 12, right: 12, background: "rgba(0,0,0,0.55)", color: "#fff", fontSize: 11, padding: "4px 10px", borderRadius: 6 }}>📷 {fotoAtiva + 1} / {fotos.length}</span>
+                {/* Ícone de zoom */}
+                <span style={{ position: "absolute", top: 12, right: 12, background: "rgba(0,0,0,0.45)", color: "#fff", fontSize: 14, padding: "5px 8px", borderRadius: 6 }}>🔍</span>
                 {fotos.length > 1 && <>
-                  <button onClick={() => setFotoAtiva(Math.max(0, fotoAtiva - 1))} style={{ position: "absolute", top: "50%", left: 10, transform: "translateY(-50%)", width: 36, height: 36, background: "rgba(255,255,255,0.85)", border: "none", borderRadius: 8, fontSize: 16, cursor: "pointer" }}>‹</button>
-                  <button onClick={() => setFotoAtiva(Math.min(fotos.length - 1, fotoAtiva + 1))} style={{ position: "absolute", top: "50%", right: 10, transform: "translateY(-50%)", width: 36, height: 36, background: "rgba(255,255,255,0.85)", border: "none", borderRadius: 8, fontSize: 16, cursor: "pointer" }}>›</button>
+                  <button onClick={e => { e.stopPropagation(); setFotoAtiva(Math.max(0, fotoAtiva - 1)); }} style={{ position: "absolute", top: "50%", left: 10, transform: "translateY(-50%)", width: 36, height: 36, background: "rgba(255,255,255,0.85)", border: "none", borderRadius: 8, fontSize: 16, cursor: "pointer" }}>‹</button>
+                  <button onClick={e => { e.stopPropagation(); setFotoAtiva(Math.min(fotos.length - 1, fotoAtiva + 1)); }} style={{ position: "absolute", top: "50%", right: 10, transform: "translateY(-50%)", width: 36, height: 36, background: "rgba(255,255,255,0.85)", border: "none", borderRadius: 8, fontSize: 16, cursor: "pointer" }}>›</button>
                 </>}
               </div>
               {fotos.length > 1 && (

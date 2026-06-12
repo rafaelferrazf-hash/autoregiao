@@ -30,7 +30,16 @@ export default function Cadastro() {
       return setErro("Erro ao criar conta. Tente novamente.");
     }
     if (tipo === "lojista" && data.user) {
-      await supabase.from("lojas").insert({ nome: form.loja, cidade: form.cidade, telefone: form.telefone, usuario_id: data.user.id });
+      const expira = new Date();
+      expira.setDate(expira.getDate() + 60);
+      await supabase.from("lojas").insert({
+        nome: form.loja,
+        cidade: form.cidade,
+        telefone: form.telefone,
+        usuario_id: data.user.id,
+        ativo: true,
+        expira_em: expira.toISOString(),
+      });
     }
     setCarregando(false);
     setSucesso(true);

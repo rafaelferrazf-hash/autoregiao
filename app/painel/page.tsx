@@ -1,11 +1,27 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 
 export default function Painel() {
   const [abaAtiva, setAbaAtiva] = useState("dashboard");
+  const [nomeUsuario, setNomeUsuario] = useState("...");
+  const [nomeLoja, setNomeLoja] = useState("Minha Loja");
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      if (data.user) {
+        const nome = data.user.user_metadata?.nome || data.user.email || "Lojista";
+        setNomeUsuario(nome.split(" ")[0]);
+
+        // Busca a loja do usuário
+        supabase.from("lojas").select("nome").eq("usuario_id", data.user.id).maybeSingle().then(({ data: loja }) => {
+          if (loja?.nome) setNomeLoja(loja.nome);
+        });
+      }
+    });
+  }, []);
 
   // CUPOM
   const [cupom, setCupom] = useState("");
@@ -14,84 +30,25 @@ export default function Painel() {
   const resgatarCupom = async () => {
     const codigo = cupom.trim().toUpperCase();
     const regex = /^AR-[A-Z0-9]{6}$/;
-    if (!regex.test(codigo)) {
-      setCupomStatus("invalido");
-      return;
-    }
-
+    if (!regex.test(codigo)) { setCupomStatus("invalido"); return; }
     setCupomStatus("loading");
-
     try {
-      // 1. Busca o cupom no banco
-      const { data: cupomData, error: cupomError } = await supabase
-        .from("cupons")
-        .select("*")
-        .eq("codigo", codigo)
-        .eq("ativo", true)
-        .single();
-
-      if (cupomError || !cupomData) {
-        setCupomStatus("erro");
-        return;
-      }
-
-      // 2. Verifica se ainda tem usos disponíveis
-      if (cupomData.usos_realizados >= cupomData.usos_maximos) {
-        setCupomStatus("usado");
-        return;
-      }
-
-      // 3. Busca a loja do usuário logado
+      const { data: cupomData, error: cupomError } = await supabase.from("cupons").select("*").eq("codigo", codigo).eq("ativo", true).single();
+      if (cupomError || !cupomData) { setCupomStatus("erro"); return; }
+      if (cupomData.usos_realizados >= cupomData.usos_maximos) { setCupomStatus("usado"); return; }
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        setCupomStatus("erro");
-        return;
-      }
-
-      const { data: lojaData, error: lojaError } = await supabase
-        .from("lojas")
-        .select("id, expira_em")
-        .eq("usuario_id", user.id)
-        .single();
-
-      if (lojaError || !lojaData) {
-        setCupomStatus("erro");
-        return;
-      }
-
-      // 4. Calcula nova data de expiração (+30 dias)
+      if (!user) { setCupomStatus("erro"); return; }
+      const { data: lojaData, error: lojaError } = await supabase.from("lojas").select("id, expira_em").eq("usuario_id", user.id).maybeSingle();
+      if (lojaError || !lojaData) { setCupomStatus("erro"); return; }
       const base = lojaData.expira_em ? new Date(lojaData.expira_em) : new Date();
-      if (base < new Date()) base.setTime(new Date().getTime()); // se já expirou, começa de hoje
+      if (base < new Date()) base.setTime(new Date().getTime());
       base.setDate(base.getDate() + cupomData.dias);
-
-      // 5. Atualiza expira_em da loja
-      const { error: updateLojaError } = await supabase
-        .from("lojas")
-        .update({ expira_em: base.toISOString() })
-        .eq("id", lojaData.id);
-
-      if (updateLojaError) {
-        setCupomStatus("erro");
-        return;
-      }
-
-      // 6. Registra o uso na tabela cupons_usados
-      await supabase.from("cupons_usados").insert({
-        cupom_id: cupomData.id,
-        loja_id: lojaData.id,
-        usado_em: new Date().toISOString(),
-      });
-
-      // 7. Incrementa usos_realizados no cupom
-      await supabase
-        .from("cupons")
-        .update({ usos_realizados: cupomData.usos_realizados + 1 })
-        .eq("id", cupomData.id);
-
+      const { error: updateLojaError } = await supabase.from("lojas").update({ expira_em: base.toISOString() }).eq("id", lojaData.id);
+      if (updateLojaError) { setCupomStatus("erro"); return; }
+      await supabase.from("cupons_usados").insert({ cupom_id: cupomData.id, loja_id: lojaData.id, usado_em: new Date().toISOString() });
+      await supabase.from("cupons").update({ usos_realizados: cupomData.usos_realizados + 1 }).eq("id", cupomData.id);
       setCupomStatus("ok");
-    } catch {
-      setCupomStatus("erro");
-    }
+    } catch { setCupomStatus("erro"); }
   };
 
   const mensagemCupom = () => {
@@ -167,7 +124,7 @@ export default function Painel() {
         <div style={{ padding: "14px 20px", borderBottom: "1px solid rgba(255,255,255,0.06)", display: "flex", alignItems: "center", gap: 10 }}>
           <div style={{ width: 40, height: 40, background: "#E85D26", borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, flexShrink: 0 }}>🏪</div>
           <div>
-            <div style={{ fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, color: "#fff" }}>Auto Paulista</div>
+            <div style={{ fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, color: "#fff" }}>{nomeLoja}</div>
             <div style={{ fontSize: 10, color: "#E85D26", fontWeight: 500, marginTop: 1 }}>⭐ Plano Profissional</div>
           </div>
         </div>
@@ -228,7 +185,7 @@ export default function Painel() {
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "5px 10px", border: "1.5px solid #E8E6E1", borderRadius: 8, background: "#F7F6F3", cursor: "pointer" }}>
               <div style={{ width: 26, height: 26, background: "#E85D26", borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13 }}>👤</div>
-              <span style={{ fontSize: 12, fontWeight: 500, color: "#1A1917" }}>Rodrigo</span>
+              <span style={{ fontSize: 12, fontWeight: 500, color: "#1A1917" }}>{nomeUsuario}</span>
             </div>
           </div>
         </header>
@@ -265,7 +222,6 @@ export default function Painel() {
 
           {/* DASHBOARD GRID */}
           <div className="dashboard-grid" style={{ marginBottom: 16 }}>
-
             <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, overflow: "hidden" }}>
               <div style={{ padding: "14px 18px", borderBottom: "1px solid #E8E6E1", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                 <div style={{ fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, color: "#1A1917" }}>Anúncios recentes</div>
@@ -389,7 +345,6 @@ export default function Painel() {
               </div>
             </div>
 
-            {/* MEU PLANO */}
             <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, overflow: "hidden" }}>
               <div style={{ padding: "14px 18px", borderBottom: "1px solid #E8E6E1", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                 <div style={{ fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, color: "#1A1917" }}>Meu plano</div>
@@ -404,60 +359,23 @@ export default function Painel() {
                 ))}
               </div>
               <div style={{ padding: "14px 18px", display: "flex", flexDirection: "column", gap: 10 }}>
-
-                {/* RESGATE DE CUPOM */}
                 <div style={{ background: "#F7F6F3", border: "1.5px solid #E8E6E1", borderRadius: 10, padding: 12 }}>
                   <div style={{ fontSize: 11, fontWeight: 600, color: "#7A7670", marginBottom: 8, textTransform: "uppercase" as const, letterSpacing: 0.5 }}>
                     🎟️ Resgatar cupom
                   </div>
                   <div style={{ display: "flex", gap: 8 }}>
-                    <input
-                      type="text"
-                      placeholder="AR-XXXXXX"
-                      value={cupom}
+                    <input type="text" placeholder="AR-XXXXXX" value={cupom}
                       onChange={e => { setCupom(e.target.value.toUpperCase()); setCupomStatus(null); }}
-                      maxLength={9}
-                      disabled={cupomStatus === "ok"}
-                      style={{
-                        flex: 1,
-                        padding: "8px 12px",
-                        border: `1.5px solid ${cupomStatus === "invalido" || cupomStatus === "erro" || cupomStatus === "usado" ? "#DC2626" : "#E8E6E1"}`,
-                        borderRadius: 7,
-                        fontSize: 13,
-                        fontFamily: "'DM Sans', sans-serif",
-                        background: "#fff",
-                        color: "#1A1917",
-                        outline: "none",
-                        letterSpacing: 1,
-                      }}
+                      maxLength={9} disabled={cupomStatus === "ok"}
+                      style={{ flex: 1, padding: "8px 12px", border: `1.5px solid ${cupomStatus === "invalido" || cupomStatus === "erro" || cupomStatus === "usado" ? "#DC2626" : "#E8E6E1"}`, borderRadius: 7, fontSize: 13, fontFamily: "'DM Sans', sans-serif", background: "#fff", color: "#1A1917", outline: "none", letterSpacing: 1 }}
                     />
-                    <button
-                      onClick={resgatarCupom}
-                      disabled={cupomStatus === "loading" || cupomStatus === "ok"}
-                      style={{
-                        padding: "8px 14px",
-                        background: cupomStatus === "ok" ? "#16A34A" : "#E85D26",
-                        color: "#fff",
-                        border: "none",
-                        borderRadius: 7,
-                        fontSize: 12,
-                        fontWeight: 600,
-                        cursor: cupomStatus === "loading" || cupomStatus === "ok" ? "default" : "pointer",
-                        fontFamily: "'DM Sans', sans-serif",
-                        whiteSpace: "nowrap" as const,
-                        opacity: cupomStatus === "loading" ? 0.7 : 1,
-                      }}
-                    >
+                    <button onClick={resgatarCupom} disabled={cupomStatus === "loading" || cupomStatus === "ok"}
+                      style={{ padding: "8px 14px", background: cupomStatus === "ok" ? "#16A34A" : "#E85D26", color: "#fff", border: "none", borderRadius: 7, fontSize: 12, fontWeight: 600, cursor: cupomStatus === "loading" || cupomStatus === "ok" ? "default" : "pointer", fontFamily: "'DM Sans', sans-serif", whiteSpace: "nowrap" as const, opacity: cupomStatus === "loading" ? 0.7 : 1 }}>
                       {cupomStatus === "loading" ? "..." : cupomStatus === "ok" ? "✅ Ok" : "Resgatar"}
                     </button>
                   </div>
-                  {msg && (
-                    <div style={{ fontSize: 11, color: msg.cor, marginTop: 6, fontWeight: 500 }}>
-                      {msg.texto}
-                    </div>
-                  )}
+                  {msg && <div style={{ fontSize: 11, color: msg.cor, marginTop: 6, fontWeight: 500 }}>{msg.texto}</div>}
                 </div>
-
                 <button style={{ width: "100%", padding: 10, background: "#E85D26", color: "#fff", border: "none", borderRadius: 8, fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
                   Assinar plano — R$ 159/mês
                 </button>

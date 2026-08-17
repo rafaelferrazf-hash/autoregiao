@@ -3,6 +3,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
+// Itens do menu de navegação.
+// href: "#" nos itens ainda sem página pronta (Revendas, Tabela FIPE, Financiamento).
+// Quando você criar essas páginas, é só trocar o "#" pela rota real (ex: "/revendas").
+const menuItens = [
+  { nome: "Buscar veículos", href: "/veiculos" },
+  { nome: "Revendas", href: "#" },
+  { nome: "Tabela FIPE", href: "#" },
+  { nome: "Financiamento", href: "#" },
+  { nome: "Anunciar", href: "/anunciar" },
+];
+
 export default function Anunciar() {
   const [menuAberto, setMenuAberto] = useState(false);
 
@@ -37,8 +48,8 @@ export default function Anunciar() {
             </span>
           </Link>
           <div style={{ display: "flex", gap: 24 }} className="nav-desktop">
-            {["Buscar veículos", "Revendas", "Tabela FIPE", "Financiamento", "Anunciar"].map(item => (
-              <a key={item} href="#" style={{ textDecoration: "none", color: "#7A7670", fontSize: 13.5, fontWeight: 500 }}>{item}</a>
+            {menuItens.map(item => (
+              <Link key={item.nome} href={item.href} style={{ textDecoration: "none", color: "#7A7670", fontSize: 13.5, fontWeight: 500 }}>{item.nome}</Link>
             ))}
           </div>
           <div style={{ display: "flex", gap: 8 }} className="nav-desktop">
@@ -54,8 +65,8 @@ export default function Anunciar() {
         </div>
         {menuAberto && (
           <div className="nav-mobile" style={{ borderTop: "1px solid #E8E6E1", background: "#fff", padding: "16px", display: "flex", flexDirection: "column", gap: 14 }}>
-            {["Buscar veículos", "Revendas", "Tabela FIPE", "Financiamento", "Anunciar"].map(item => (
-              <a key={item} href="#" style={{ textDecoration: "none", color: "#1A1917", fontSize: 15, fontWeight: 500 }}>{item}</a>
+            {menuItens.map(item => (
+              <Link key={item.nome} href={item.href} onClick={() => setMenuAberto(false)} style={{ textDecoration: "none", color: "#1A1917", fontSize: 15, fontWeight: 500 }}>{item.nome}</Link>
             ))}
             <div style={{ display: "flex", gap: 8, paddingTop: 8, borderTop: "1px solid #E8E6E1" }}>
               <Link href="/login" style={{ flex: 1, padding: "10px", border: "1.5px solid #E8E6E1", borderRadius: 7, fontSize: 14, fontWeight: 500, color: "#1A1917", textDecoration: "none", textAlign: "center" }}>Entrar</Link>
@@ -262,8 +273,8 @@ export default function Anunciar() {
       {/* FOOTER */}
       <footer style={{ background: "#111009", padding: "24px 16px", textAlign: "center" }}>
         <p style={{ fontSize: 12, color: "rgba(255,255,255,0.3)" }}>
-          © 2026 <span style={{ color: "#E85D26" }}>AutoRegião</span> · Todos os direitos reservados · 
-          <a href="#" style={{ color: "rgba(255,255,255,0.3)", textDecoration: "none", marginLeft: 8 }}>Termos de uso</a> · 
+          © 2026 <span style={{ color: "#E85D26" }}>AutoRegião</span> · Todos os direitos reservados ·{" "}
+          <a href="#" style={{ color: "rgba(255,255,255,0.3)", textDecoration: "none", marginLeft: 8 }}>Termos de uso</a> ·{" "}
           <a href="#" style={{ color: "rgba(255,255,255,0.3)", textDecoration: "none", marginLeft: 8 }}>Privacidade</a>
         </p>
       </footer>

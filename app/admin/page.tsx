@@ -1,14 +1,43 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 
+const ADMIN_EMAILS = (process.env.NEXT_PUBLIC_ADMIN_EMAILS || "")
+  .split(",")
+  .map(e => e.trim().toLowerCase())
+  .filter(Boolean);
+
 export default function Admin() {
+  const router = useRouter();
+  const [autorizado, setAutorizado] = useState(false);
+  const [verificando, setVerificando] = useState(true);
   const [menuAberto, setMenuAberto] = useState(false);
   const [abaAtiva, setAbaAtiva] = useState("Dashboard");
   const [cupomGerado, setCupomGerado] = useState("");
   const [gerando, setGerando] = useState(false);
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      const email = data.user?.email?.toLowerCase();
+      if (email && ADMIN_EMAILS.includes(email)) {
+        setAutorizado(true);
+      } else {
+        router.replace("/login");
+      }
+      setVerificando(false);
+    });
+  }, [router]);
+
+  if (verificando || !autorizado) {
+    return (
+      <main style={{ fontFamily: "'DM Sans', sans-serif", background: "#F7F6F3", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ fontSize: 13, color: "#7A7670" }}>{verificando ? "Verificando acesso..." : "Redirecionando..."}</div>
+      </main>
+    );
+  }
 
   async function gerarCupom() {
     setGerando(true);

@@ -81,7 +81,7 @@ export default function Login() {
               <div>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
                   <label style={{ fontSize: 11, fontWeight: 600, color: "#7A7670", textTransform: "uppercase", letterSpacing: 0.5 }}>Senha</label>
-                  <a href="#" style={{ fontSize: 12, color: "#E85D26", textDecoration: "none", fontWeight: 500 }}>Esqueci minha senha</a>
+                  <Link href="/recuperar-senha" style={{ fontSize: 12, color: "#E85D26", textDecoration: "none", fontWeight: 500 }}>Esqueci minha senha</Link>
                 </div>
                 <input type="password" placeholder="••••••••" value={senha} onChange={e => setSenha(e.target.value)} onKeyDown={e => e.key === "Enter" && handleLogin()}
                   style={{ width: "100%", padding: "12px 14px", border: "1.5px solid #E8E6E1", borderRadius: 8, fontSize: 15, color: "#1A1917", background: "#F7F6F3", outline: "none", boxSizing: "border-box" }} />

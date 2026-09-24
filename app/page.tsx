@@ -2,18 +2,26 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { listarVeiculosAtivos } from "@/lib/dados/veiculos";
+import { useRouter } from "next/navigation";
+import BarraBusca from "@/components/BarraBusca";
+import { listarVeiculosAtivos, opcoesDeFiltro } from "@/lib/dados/veiculos";
 import { formatarPreco, formatarKm } from "@/lib/formatar";
+import { filtrosParaQuery } from "@/lib/busca";
 import type { VeiculoComLoja } from "@/lib/tipos";
 
 const MAX_HOME = 9;
 
 export default function Home() {
+  const router = useRouter();
   const [menuAberto, setMenuAberto] = useState(false);
-  const [filtrosAbertos, setFiltrosAbertos] = useState(false);
   const [carros, setCarros] = useState<VeiculoComLoja[]>([]);
   const [total, setTotal] = useState(0);
   const [carregando, setCarregando] = useState(true);
+  const [cidades, setCidades] = useState<string[]>([]);
+
+  useEffect(() => {
+    opcoesDeFiltro().then(o => setCidades(o.cidades));
+  }, []);
 
   useEffect(() => {
     listarVeiculosAtivos().then(({ veiculos, total, error }) => {
@@ -32,20 +40,11 @@ export default function Home() {
       <style>{`
         .nav-desktop { display: flex !important; }
         .nav-mobile { display: none !important; }
-        .search-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr auto; gap: 10px; align-items: end; }
-        .content-grid { display: grid; grid-template-columns: 260px 1fr; gap: 20px; }
         .cars-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
-        .filtros-sidebar { display: block; }
-        .filtros-mobile-btn { display: none; }
         @media (max-width: 768px) {
           .nav-desktop { display: none !important; }
           .nav-mobile { display: flex !important; }
-          .search-grid { grid-template-columns: 1fr !important; }
-          .content-grid { grid-template-columns: 1fr !important; }
           .cars-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 10px !important; }
-          .filtros-sidebar { display: none; }
-          .filtros-mobile-btn { display: flex !important; }
-          .search-buscar-btn { width: 100% !important; }
         }
         @media (max-width: 480px) {
           .cars-grid { grid-template-columns: 1fr !important; }
@@ -63,8 +62,8 @@ export default function Home() {
           </Link>
 
           <div style={{ display: "flex", gap: 24 }} className="nav-desktop">
-            {["Buscar veículos", "Revendas", "Tabela FIPE", "Financiamento", "Anunciar"].map(item => (
-              <a key={item} href="#" style={{ textDecoration: "none", color: "#7A7670", fontSize: 13.5, fontWeight: 500 }}>{item}</a>
+            {[["Buscar veículos", "/veiculos"], ["Anunciar", "/anunciar"]].map(([item, href]) => (
+              <Link key={item} href={href} style={{ textDecoration: "none", color: "#7A7670", fontSize: 13.5, fontWeight: 500 }}>{item}</Link>
             ))}
           </div>
 
@@ -83,8 +82,8 @@ export default function Home() {
 
         {menuAberto && (
           <div className="nav-mobile" style={{ borderTop: "1px solid #E8E6E1", background: "#fff", padding: "16px", display: "flex", flexDirection: "column", gap: 14 }}>
-            {["Buscar veículos", "Revendas", "Tabela FIPE", "Financiamento", "Anunciar"].map(item => (
-              <a key={item} href="#" style={{ textDecoration: "none", color: "#1A1917", fontSize: 15, fontWeight: 500 }}>{item}</a>
+            {[["Buscar veículos", "/veiculos"], ["Anunciar", "/anunciar"]].map(([item, href]) => (
+              <Link key={item} href={href} style={{ textDecoration: "none", color: "#1A1917", fontSize: 15, fontWeight: 500 }}>{item}</Link>
             ))}
             <div style={{ display: "flex", gap: 8, paddingTop: 8, borderTop: "1px solid #E8E6E1" }}>
               <Link href="/login" style={{ flex: 1, padding: "10px", border: "1.5px solid #E8E6E1", borderRadius: 7, background: "transparent", fontSize: 14, fontWeight: 500, color: "#1A1917", textDecoration: "none", textAlign: "center" }}>Entrar</Link>
@@ -94,107 +93,19 @@ export default function Home() {
         )}
       </nav>
 
-      {/* SEARCH BAR */}
-      <section style={{ marginTop: 60, background: "#1A1917", padding: "20px 16px" }}>
-        <div style={{ maxWidth: 1180, margin: "0 auto" }}>
-          <div style={{ display: "flex", gap: 6, marginBottom: 14, overflowX: "auto" }}>
-            {["🚗 Carros", "🏍️ Motos", "🚐 Utilitários"].map((tab, i) => (
-              <button key={tab} style={{ padding: "7px 16px", borderRadius: 6, fontSize: 13, fontWeight: 500, cursor: "pointer", border: "none", background: i === 0 ? "#E85D26" : "rgba(255,255,255,0.1)", color: i === 0 ? "#fff" : "rgba(255,255,255,0.6)", whiteSpace: "nowrap", flexShrink: 0 }}>{tab}</button>
-            ))}
-          </div>
-          <div className="search-grid">
-            {[["Marca / Modelo", "Ex: Onix, HB20..."],
-              ["Cidade", "Todas as cidades"],
-              ["Ano", "Qualquer ano"],
-              ["Preço até", "Qualquer valor"],
-              ["KM até", "Qualquer km"]].map(([label, placeholder]) => (
-              <div key={label}>
-                <div style={{ fontSize: 10, fontWeight: 500, color: "rgba(255,255,255,0.5)", letterSpacing: 0.4, textTransform: "uppercase", marginBottom: 5 }}>{label}</div>
-                <input placeholder={placeholder} style={{ width: "100%", padding: "10px 12px", border: "1.5px solid rgba(255,255,255,0.1)", borderRadius: 7, fontSize: 14, color: "#fff", background: "rgba(255,255,255,0.08)", outline: "none", boxSizing: "border-box" }} />
-              </div>
-            ))}
-            <button className="search-buscar-btn" style={{ padding: "10px 22px", background: "#E85D26", color: "#fff", border: "none", borderRadius: 7, fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, cursor: "pointer", whiteSpace: "nowrap" }}>🔍 Buscar</button>
-          </div>
-        </div>
-      </section>
+      <BarraBusca filtros={{}} cidades={cidades} onBuscar={f => router.push(`/veiculos${filtrosParaQuery(f)}`)} />
 
       {/* CONTEÚDO */}
       <div style={{ maxWidth: 1180, margin: "0 auto", padding: "16px" }}>
 
-        {/* BOTÃO FILTROS MOBILE */}
-        <div className="filtros-mobile-btn" style={{ marginBottom: 12, display: "none" }}>
-          <button onClick={() => setFiltrosAbertos(!filtrosAbertos)}
-            style={{ width: "100%", padding: "10px", background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 8, fontSize: 14, fontWeight: 500, color: "#1A1917", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
-            🔧 {filtrosAbertos ? "Fechar filtros" : "Abrir filtros"}
-          </button>
-        </div>
-
-        <div className="content-grid">
-
-          {/* FILTROS */}
-          <aside className="filtros-sidebar">
-            <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, padding: "18px", marginBottom: 14 }}>
-              <div style={{ fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, color: "#1A1917", marginBottom: 16 }}>Filtros</div>
-              {[["Marca", ["Todas", "Chevrolet", "Volkswagen", "Fiat", "Toyota", "Honda", "Hyundai"]],
-                ["Ano", ["Qualquer", "2024-2025", "2021-2023", "2018-2020", "Até 2017"]],
-                ["Câmbio", ["Qualquer", "Automático", "Manual"]],
-                ["Combustível", ["Qualquer", "Flex", "Gasolina", "Diesel", "Elétrico"]]].map(([title, opts]) => (
-                <div key={title as string} style={{ marginBottom: 16 }}>
-                  <div style={{ fontSize: 11, fontWeight: 600, color: "#7A7670", letterSpacing: 0.5, textTransform: "uppercase", marginBottom: 8 }}>{title as string}</div>
-                  <select style={{ width: "100%", padding: "8px 12px", border: "1.5px solid #E8E6E1", borderRadius: 7, fontSize: 13, color: "#1A1917", background: "#F7F6F3", outline: "none" }}>
-                    {(opts as string[]).map(opt => <option key={opt}>{opt}</option>)}
-                  </select>
-                </div>
-              ))}
-              <div style={{ marginBottom: 16 }}>
-                <div style={{ fontSize: 11, fontWeight: 600, color: "#7A7670", letterSpacing: 0.5, textTransform: "uppercase", marginBottom: 8 }}>Faixa de preço</div>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
-                  <input placeholder="Mín" style={{ padding: "8px 10px", border: "1.5px solid #E8E6E1", borderRadius: 7, fontSize: 13, color: "#1A1917", background: "#F7F6F3", outline: "none" }} />
-                  <input placeholder="Máx" style={{ padding: "8px 10px", border: "1.5px solid #E8E6E1", borderRadius: 7, fontSize: 13, color: "#1A1917", background: "#F7F6F3", outline: "none" }} />
-                </div>
-              </div>
-              <button style={{ width: "100%", padding: "10px", background: "#E85D26", color: "#fff", border: "none", borderRadius: 8, fontFamily: "Georgia, serif", fontSize: 13.5, fontWeight: 700, cursor: "pointer" }}>Aplicar filtros</button>
-              <button style={{ width: "100%", padding: "8px", background: "transparent", color: "#7A7670", border: "none", fontSize: 12, cursor: "pointer", marginTop: 8 }}>Limpar filtros</button>
-            </div>
-            <div style={{ background: "#E85D26", borderRadius: 12, padding: "16px" }}>
-              <div style={{ fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, color: "#fff", marginBottom: 6 }}>🔔 Criar alerta</div>
-              <p style={{ fontSize: 12, color: "rgba(255,255,255,0.75)", marginBottom: 12, lineHeight: 1.5 }}>Receba um aviso quando aparecer um veículo com esses filtros!</p>
-              <button style={{ width: "100%", padding: "8px", background: "#fff", color: "#E85D26", border: "none", borderRadius: 7, fontSize: 12, fontWeight: 700, cursor: "pointer" }}>Criar alerta de busca</button>
-            </div>
-          </aside>
-
-          {/* FILTROS MOBILE ABERTOS */}
-          {filtrosAbertos && (
-            <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, padding: "18px", marginBottom: 14 }}>
-              <div style={{ fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, color: "#1A1917", marginBottom: 16 }}>Filtros</div>
-              {[["Marca", ["Todas", "Chevrolet", "Volkswagen", "Fiat", "Toyota", "Honda", "Hyundai"]],
-                ["Ano", ["Qualquer", "2024-2025", "2021-2023", "2018-2020", "Até 2017"]],
-                ["Câmbio", ["Qualquer", "Automático", "Manual"]],
-                ["Combustível", ["Qualquer", "Flex", "Gasolina", "Diesel", "Elétrico"]]].map(([title, opts]) => (
-                <div key={title as string} style={{ marginBottom: 16 }}>
-                  <div style={{ fontSize: 11, fontWeight: 600, color: "#7A7670", letterSpacing: 0.5, textTransform: "uppercase", marginBottom: 8 }}>{title as string}</div>
-                  <select style={{ width: "100%", padding: "10px 12px", border: "1.5px solid #E8E6E1", borderRadius: 7, fontSize: 14, color: "#1A1917", background: "#F7F6F3", outline: "none" }}>
-                    {(opts as string[]).map(opt => <option key={opt}>{opt}</option>)}
-                  </select>
-                </div>
-              ))}
-              <button style={{ width: "100%", padding: "12px", background: "#E85D26", color: "#fff", border: "none", borderRadius: 8, fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, cursor: "pointer" }}>Aplicar filtros</button>
-            </div>
-          )}
-
-          {/* LISTA DE VEÍCULOS */}
-          <div>
+        {/* LISTA DE VEÍCULOS */}
+        <div>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14, flexWrap: "wrap", gap: 8 }}>
               <div>
                 <span style={{ fontFamily: "Georgia, serif", fontSize: 16, fontWeight: 800, color: "#1A1917" }}>{carregando ? "..." : `${total} ${total === 1 ? "veículo" : "veículos"}`}</span>
-                <span style={{ fontSize: 12, color: "#7A7670", marginLeft: 6 }}>na sua região</span>
+                <span style={{ fontSize: 12, color: "#7A7670", marginLeft: 6 }}>anunciados · mais recentes</span>
               </div>
-              <select style={{ padding: "6px 12px", border: "1.5px solid #E8E6E1", borderRadius: 7, fontSize: 13, color: "#1A1917", background: "#fff", outline: "none" }}>
-                <option>Mais recentes</option>
-                <option>Menor preço</option>
-                <option>Maior preço</option>
-                <option>Menor km</option>
-              </select>
+              <Link href="/veiculos" style={{ fontSize: 13, color: "#E85D26", fontWeight: 600, textDecoration: "none" }}>Buscar com filtros →</Link>
             </div>
 
             {!carregando && carros.length === 0 && (
@@ -241,7 +152,6 @@ export default function Home() {
                 Ver todos os {total} veículos →
               </Link>
             )}
-          </div>
         </div>
       </div>
     </main>

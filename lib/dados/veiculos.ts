@@ -76,15 +76,56 @@ export async function listarVeiculosDoUsuario(usuarioId: string, lojaId?: string
   const filtro = `usuario_id.eq.${usuarioId}${lojaId ? `,loja_id.eq.${lojaId}` : ""}`;
   const { data, error } = await supabase
     .from("veiculos")
-    .select("id, nome, ano, km, preco, status, fotos, destaque")
+    .select("id, nome, ano, km, preco, status, ativo, fotos, destaque")
     .or(filtro)
     .order("criado_em", { ascending: false });
-  type Resumo = Pick<Veiculo, "id" | "nome" | "ano" | "km" | "preco" | "status" | "fotos" | "destaque">;
+  type Resumo = Pick<Veiculo, "id" | "nome" | "ano" | "km" | "preco" | "status" | "ativo" | "fotos" | "destaque">;
   return { veiculos: (data ?? []) as Resumo[], error };
 }
 
 export async function criarVeiculo(veiculo: NovoVeiculo) {
   return supabase.from("veiculos").insert(veiculo);
+}
+
+// Anúncio completo para o dono editar (inclui pausados, pela policy veiculos_select_owner).
+export async function buscarVeiculoDoDono(id: string, usuarioId: string) {
+  const { data } = await supabase.from("veiculos").select("*").eq("id", id).eq("usuario_id", usuarioId).maybeSingle();
+  return data as Veiculo | null;
+}
+
+// Edição pelo dono (RLS: só altera anúncio com usuario_id = auth.uid()).
+export async function atualizarVeiculo(id: string, dados: Partial<NovoVeiculo>) {
+  return supabase.from("veiculos").update(dados).eq("id", id).select("id").single();
+}
+
+// Pausar tira o anúncio do site sem apagar; reativar devolve.
+export async function definirAnuncioAtivo(id: string, ativo: boolean) {
+  return supabase
+    .from("veiculos")
+    .update({ ativo, status: ativo ? "ativo" : "pausado" })
+    .eq("id", id)
+    .select("id")
+    .single();
+}
+
+// Exclui o anúncio e tenta apagar as fotos do Storage (se falhar, o anúncio já saiu do ar).
+export async function excluirVeiculo(id: string, fotos: string[] | null) {
+  // .select() confirma que a linha saiu mesmo (com RLS, um delete barrado não dá erro, só apaga 0 linhas).
+  const { data, error } = await supabase.from("veiculos").delete().eq("id", id).select("id");
+  if (error) return { error };
+  if (!data?.length) return { error: { message: "Anúncio não encontrado ou sem permissão." } };
+  await apagarFotos(fotos ?? []);
+  return { error: null };
+}
+
+// Apaga fotos do Storage a partir das URLs públicas. Só funciona na pasta do próprio usuário
+// (policy veiculos_fotos_delete_propria_pasta); falha em silêncio — nunca bloqueia o lojista.
+export async function apagarFotos(urls: string[]) {
+  const marcador = "/object/public/veiculos/";
+  const caminhos = urls
+    .map(url => (url.includes(marcador) ? decodeURIComponent(url.split(marcador)[1].split("?")[0]) : null))
+    .filter((c): c is string => !!c);
+  if (caminhos.length) await supabase.storage.from("veiculos").remove(caminhos);
 }
 
 // Envia a foto para o bucket "veiculos" e devolve a URL pública (ou null se falhar).

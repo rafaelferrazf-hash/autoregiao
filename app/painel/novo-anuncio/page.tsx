@@ -1,9 +1,9 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { usuarioAtual } from "@/lib/dados/usuario";
-import { criarVeiculo, enviarFotoVeiculo } from "@/lib/dados/veiculos";
+import { criarVeiculo, atualizarVeiculo, buscarVeiculoDoDono, enviarFotoVeiculo, apagarFotos } from "@/lib/dados/veiculos";
 
 const dadosVeiculos: Record<string, Record<string, Record<string, string[]>>> = {
   carro: {
@@ -137,7 +137,8 @@ const dadosVeiculos: Record<string, Record<string, Record<string, string[]>>> = 
   },
 };
 
-type FotoPreview = { file: File; preview: string };
+// Foto nova (file, ainda não enviada) ou já publicada (url, no modo edição).
+type FotoPreview = { file?: File; url?: string; preview: string };
 
 export default function NovoAnuncio() {
   const [etapa, setEtapa] = useState(1);
@@ -158,6 +159,39 @@ export default function NovoAnuncio() {
   });
 
   const set = (field: string, value: unknown) => setForm(f => ({ ...f, [field]: value }));
+
+  // Modo edição: /painel/novo-anuncio?editar=<id>
+  const [editandoId, setEditandoId] = useState<string | null>(null);
+  const [fotosOriginais, setFotosOriginais] = useState<string[]>([]);
+  const [carregandoEdicao, setCarregandoEdicao] = useState(false);
+
+  useEffect(() => {
+    const id = new URLSearchParams(window.location.search).get("editar");
+    if (!id) return;
+    (async () => {
+      setCarregandoEdicao(true);
+      const user = await usuarioAtual();
+      const v = user ? await buscarVeiculoDoDono(id, user.id) : null;
+      setCarregandoEdicao(false);
+      if (!user || !v) {
+        setErro("Anúncio não encontrado ou você não tem permissão para editá-lo.");
+        return;
+      }
+      setEditandoId(v.id);
+      setForm({
+        tipo: v.tipo || "carro",
+        marca: v.marca || "", modelo: v.modelo || "", versao: v.versao || "",
+        ano: v.ano || "", km: v.km || "",
+        cambio: v.cambio || "", combustivel: v.combustivel || "", cor: v.cor || "", portas: v.portas || "",
+        preco: v.preco != null ? String(v.preco) : "", aceitaTroca: !!v.aceita_troca,
+        opcionais: v.opcionais || [],
+        descricao: v.descricao || "",
+        nome: v.nome_contato || "", telefone: v.telefone || "", cidade: v.cidade || "",
+      });
+      setFotos((v.fotos || []).map(url => ({ url, preview: url })));
+      setFotosOriginais(v.fotos || []);
+    })();
+  }, []);
 
   const toggleOpcional = (op: string) => {
     setForm(f => ({
@@ -232,16 +266,20 @@ export default function NovoAnuncio() {
     setUploadando(true);
     const urlsFotos: string[] = [];
     for (const foto of fotos) {
+      if (foto.url) { urlsFotos.push(foto.url); continue; }
+      if (!foto.file) continue;
       const url = await enviarFotoVeiculo(user.id, foto.file);
       if (url) urlsFotos.push(url);
     }
     setUploadando(false);
 
-    const nomeVeiculo = [form.marca, form.modelo, form.versao, form.ano].filter(Boolean).join(" ");
+    // A versão já costuma trazer o modelo ("Civic EX 1.5 Turbo"); nesse caso não repete.
+    const versaoComModelo = form.versao && form.modelo && form.versao.toLowerCase().startsWith(form.modelo.toLowerCase());
+    const nomeVeiculo = [form.marca, versaoComModelo ? null : form.modelo, form.versao, form.ano].filter(Boolean).join(" ");
     // ano e km são texto no banco; guarda só os dígitos (ou null se vazio).
     const soNumero = (v: string) => { const n = parseInt(v.replace(/\D/g, ""), 10); return Number.isNaN(n) ? null : n; };
 
-    const { error } = await criarVeiculo({
+    const dados = {
       nome: nomeVeiculo,
       tipo: form.tipo,
       marca: form.marca,
@@ -264,7 +302,12 @@ export default function NovoAnuncio() {
       status: "ativo",
       ativo: true,
       fotos: urlsFotos,
-    });
+    };
+    // Na edição não mexe em dono nem em pausado/ativo (isso é pelo painel).
+    const { usuario_id: _dono, status: _status, ativo: _ativo, ...dadosEdicao } = dados;
+    const { error } = editandoId ? await atualizarVeiculo(editandoId, dadosEdicao) : await criarVeiculo(dados);
+    // Fotos que o lojista removeu na edição saem do Storage (depois de salvar, para não perder nada se falhar).
+    if (!error && editandoId) await apagarFotos(fotosOriginais.filter(url => !urlsFotos.includes(url)));
 
     setCarregando(false);
 
@@ -286,8 +329,8 @@ export default function NovoAnuncio() {
     <main style={{ fontFamily: "'DM Sans', sans-serif", background: "#F7F6F3", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
       <div style={{ textAlign: "center", padding: 40 }}>
         <div style={{ fontSize: 64, marginBottom: 16 }}>🚗</div>
-        <div style={{ fontFamily: "Georgia, serif", fontSize: 26, fontWeight: 800, color: "#1A1917", marginBottom: 8 }}>Anúncio publicado!</div>
-        <p style={{ fontSize: 15, color: "#7A7670", marginBottom: 24 }}>Seu veículo já está visível para compradores da região.</p>
+        <div style={{ fontFamily: "Georgia, serif", fontSize: 26, fontWeight: 800, color: "#1A1917", marginBottom: 8 }}>{editandoId ? "Anúncio atualizado!" : "Anúncio publicado!"}</div>
+        <p style={{ fontSize: 15, color: "#7A7670", marginBottom: 24 }}>{editandoId ? "As alterações já estão no site." : "Seu veículo já está visível para compradores da região."}</p>
         <div style={{ display: "flex", gap: 10, justifyContent: "center" }}>
           <Link href="/painel" style={{ padding: "10px 24px", border: "1.5px solid #E8E6E1", borderRadius: 8, textDecoration: "none", color: "#1A1917", fontWeight: 500, fontSize: 14 }}>Ver painel</Link>
           <Link href="/veiculos" style={{ padding: "10px 24px", background: "#E85D26", color: "#fff", borderRadius: 8, textDecoration: "none", fontWeight: 600, fontSize: 14 }}>Ver anúncios</Link>
@@ -309,8 +352,8 @@ export default function NovoAnuncio() {
       <div style={{ paddingTop: 80, paddingBottom: 60, display: "flex", justifyContent: "center", padding: "80px 24px 60px" }}>
         <div style={{ width: "100%", maxWidth: 600 }}>
           <div style={{ marginBottom: 24 }}>
-            <div style={{ fontFamily: "Georgia, serif", fontSize: 24, fontWeight: 800, color: "#1A1917", marginBottom: 4 }}>Novo anúncio</div>
-            <p style={{ fontSize: 14, color: "#7A7670" }}>Preencha os dados do veículo para publicar</p>
+            <div style={{ fontFamily: "Georgia, serif", fontSize: 24, fontWeight: 800, color: "#1A1917", marginBottom: 4 }}>{editandoId ? "Editar anúncio" : "Novo anúncio"}</div>
+            <p style={{ fontSize: 14, color: "#7A7670" }}>{carregandoEdicao ? "Carregando o anúncio..." : editandoId ? "Altere o que precisar e salve" : "Preencha os dados do veículo para publicar"}</p>
           </div>
 
           <div style={{ display: "flex", gap: 6, marginBottom: 28 }}>
@@ -349,6 +392,7 @@ export default function NovoAnuncio() {
                     <label style={labelStyle}>Marca <span style={{ color: "#E85D26" }}>*</span></label>
                     <select value={form.marca} onChange={e => { set("marca", e.target.value); set("modelo", ""); set("versao", ""); }} style={inputStyle}>
                       <option value="">Selecione a marca</option>
+                      {form.marca && !marcas.includes(form.marca) && <option>{form.marca}</option>}
                       {marcas.map(m => <option key={m}>{m}</option>)}
                     </select>
                   </div>
@@ -356,6 +400,7 @@ export default function NovoAnuncio() {
                     <label style={labelStyle}>Modelo <span style={{ color: "#E85D26" }}>*</span></label>
                     <select value={form.modelo} onChange={e => { set("modelo", e.target.value); set("versao", ""); }} style={inputStyle} disabled={!form.marca}>
                       <option value="">Selecione o modelo</option>
+                      {form.modelo && !modelos.includes(form.modelo) && <option>{form.modelo}</option>}
                       {modelos.map(m => <option key={m}>{m}</option>)}
                     </select>
                   </div>
@@ -365,6 +410,7 @@ export default function NovoAnuncio() {
                   <label style={labelStyle}>Versão</label>
                   <select value={form.versao} onChange={e => set("versao", e.target.value)} style={inputStyle} disabled={!form.modelo}>
                     <option value="">Selecione a versão</option>
+                    {form.versao && !versoes.includes(form.versao) && <option>{form.versao}</option>}
                     {versoes.map(v => <option key={v}>{v}</option>)}
                   </select>
                 </div>
@@ -531,7 +577,7 @@ export default function NovoAnuncio() {
               )}
               <button onClick={etapa === 3 ? publicar : avancar} disabled={carregando || uploadando}
                 style={{ flex: 2, padding: "10px", background: carregando || uploadando ? "#C44818" : "#E85D26", border: "none", borderRadius: 8, color: "#fff", fontFamily: "Georgia, serif", fontSize: 15, fontWeight: 700, cursor: carregando || uploadando ? "not-allowed" : "pointer", opacity: carregando || uploadando ? 0.8 : 1 }}>
-                {uploadando ? "Enviando fotos..." : carregando ? "Publicando..." : etapa === 3 ? "Publicar anúncio 🚀" : "Continuar →"}
+                {uploadando ? "Enviando fotos..." : carregando ? (editandoId ? "Salvando..." : "Publicando...") : etapa === 3 ? (editandoId ? "Salvar alterações ✓" : "Publicar anúncio 🚀") : "Continuar →"}
               </button>
             </div>
           </div>

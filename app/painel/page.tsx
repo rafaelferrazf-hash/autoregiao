@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { usuarioAtual, sair } from "@/lib/dados/usuario";
 import { resgatarCupom as resgatarCupomNoBanco } from "@/lib/dados/cupons";
 import { buscarLojaDoUsuario } from "@/lib/dados/lojas";
-import { listarVeiculosDoUsuario } from "@/lib/dados/veiculos";
+import { listarVeiculosDoUsuario, definirAnuncioAtivo, excluirVeiculo } from "@/lib/dados/veiculos";
 import { formatarPreco, formatarKm } from "@/lib/formatar";
 import { buscarEstatisticasPainel, type EstatisticasPainel } from "@/lib/dados/eventos";
 import type { Loja } from "@/lib/tipos";
@@ -18,7 +18,10 @@ export default function Painel() {
   const [anunciosReais, setAnunciosReais] = useState<Awaited<ReturnType<typeof listarVeiculosDoUsuario>>["veiculos"]>([]);
   const [lojaId, setLojaId] = useState<string | null>(null);
   const [loja, setLoja] = useState<Loja | null>(null);
+  const [lojaCarregada, setLojaCarregada] = useState(false);
   const [stats, setStats] = useState<EstatisticasPainel | null>(null);
+  // Hora lida uma vez ao abrir o painel (cálculo de dias restantes e "há X min").
+  const [agora] = useState(() => Date.now());
 
   useEffect(() => {
     (async () => {
@@ -31,6 +34,7 @@ export default function Painel() {
       if (loja?.nome) setNomeLoja(loja.nome);
       if (loja?.id) setLojaId(loja.id);
       setLoja(loja);
+      setLojaCarregada(true);
 
       // Anúncios pelo usuario_id OU loja_id
       const { veiculos } = await listarVeiculosDoUsuario(user.id, loja?.id);
@@ -39,6 +43,31 @@ export default function Painel() {
       setStats(await buscarEstatisticasPainel());
     })();
   }, []);
+
+  // AÇÕES NOS ANÚNCIOS
+  const [acaoEmAndamento, setAcaoEmAndamento] = useState<string | null>(null);
+  type Anuncio = (typeof anunciosReais)[number];
+
+  const alternarPausa = async (car: Anuncio) => {
+    const reativar = car.ativo === false;
+    setAcaoEmAndamento(car.id);
+    const { error } = await definirAnuncioAtivo(car.id, reativar);
+    setAcaoEmAndamento(null);
+    if (error) return alert("Não foi possível " + (reativar ? "reativar" : "pausar") + " o anúncio. Tente de novo.");
+    setAnunciosReais(lista => lista.map(a => a.id === car.id ? { ...a, ativo: reativar, status: reativar ? "ativo" : "pausado" } : a));
+  };
+
+  const excluir = async (car: Anuncio) => {
+    if (!window.confirm(`Excluir o anúncio "${car.nome}"?\n\nEle sai do site e não dá para desfazer. Se quiser só tirar do ar por um tempo, use Pausar.`)) return;
+    setAcaoEmAndamento(car.id);
+    const { error } = await excluirVeiculo(car.id, car.fotos);
+    setAcaoEmAndamento(null);
+    if (error) return alert("Não foi possível excluir o anúncio. Tente de novo.");
+    setAnunciosReais(lista => lista.filter(a => a.id !== car.id));
+  };
+
+  const verTodos = abaAtiva === "anuncios";
+  const anunciosVisiveis = verTodos ? anunciosReais : anunciosReais.slice(0, 5);
 
   // CUPOM
   const [cupom, setCupom] = useState("");
@@ -81,9 +110,9 @@ export default function Painel() {
   // Plano "vitalicio" (conta do dono): sem vencimento e sem limite de anúncios.
   const vitalicio = ehVitalicio(loja?.plano);
   const expiraEm = !vitalicio && loja?.expira_em ? new Date(loja.expira_em) : null;
-  const diasRestantes = expiraEm ? Math.ceil((expiraEm.getTime() - Date.now()) / 86_400_000) : null;
+  const diasRestantes = expiraEm ? Math.ceil((expiraEm.getTime() - agora) / 86_400_000) : null;
   const periodoVencido = diasRestantes !== null && diasRestantes <= 0;
-  const nomePlano = !loja ? "Sem loja" : vitalicio ? "Acesso vitalício" : loja.plano === "trial" || !loja.plano ? "Período grátis" : `Plano ${loja.plano.charAt(0).toUpperCase()}${loja.plano.slice(1)}`;
+  const nomePlano = !lojaCarregada ? "…" : !loja ? "Sem loja" : vitalicio ? "Acesso vitalício" : loja.plano === "trial" || !loja.plano ? "Período grátis" : `Plano ${loja.plano.charAt(0).toUpperCase()}${loja.plano.slice(1)}`;
   const dataFim = expiraEm ? expiraEm.toLocaleDateString("pt-BR") : "";
   const textoPeriodo = diasRestantes === null ? "—"
     : periodoVencido ? `Encerrado em ${dataFim}`
@@ -101,7 +130,7 @@ export default function Painel() {
   const totalVisitas7d = visitas7d.reduce((soma, v) => soma + v.total, 0);
   const contatosRecentes = stats?.contatos_recentes ?? [];
   const tempoAtras = (iso: string) => {
-    const min = Math.max(0, Math.round((Date.now() - new Date(iso).getTime()) / 60_000));
+    const min = Math.max(0, Math.round((agora - new Date(iso).getTime()) / 60_000));
     if (min < 60) return `${min}min`;
     if (min < 1440) return `${Math.round(min / 60)}h`;
     return `${Math.round(min / 1440)}d`;
@@ -211,7 +240,7 @@ export default function Painel() {
         <div style={{ padding: "16px", flex: 1 }}>
 
           {/* AVISO */}
-          {!vitalicio && <div style={{ background: "rgba(232,93,38,0.08)", border: "1px solid rgba(232,93,38,0.2)", borderRadius: 10, padding: "12px 14px", display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16, flexWrap: "wrap", gap: 8 }}>
+          {lojaCarregada && !vitalicio && <div style={{ background: "rgba(232,93,38,0.08)", border: "1px solid rgba(232,93,38,0.2)", borderRadius: 10, padding: "12px 14px", display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16, flexWrap: "wrap", gap: 8 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
               <span style={{ fontSize: 16 }}>⏳</span>
               <div style={{ fontSize: 13, color: "#1A1917" }}>{diasRestantes === null ? "Sua conta ainda não tem uma loja vinculada." : periodoVencido ? <>Seu período gratuito <strong style={{ color: "#E85D26" }}>terminou em {dataFim}</strong>. Use um cupom em &quot;Meu plano&quot; ou assine um plano.</> : <>Período gratuito termina em <strong style={{ color: "#E85D26" }}>{diasRestantes} {diasRestantes === 1 ? "dia" : "dias"}</strong>.</>}</div>
@@ -224,7 +253,7 @@ export default function Painel() {
             {[
               { label: "Visualizações (30 dias)", value: stats ? stats.visualizacoes_30d.toLocaleString("pt-BR") : "—", change: varVisitas.texto, up: varVisitas.up, icon: "👁️", bg: "rgba(232,93,38,0.08)" },
               { label: "Contatos (30 dias)", value: stats ? stats.contatos_30d.toLocaleString("pt-BR") : "—", change: varContatos.texto, up: varContatos.up, icon: "💬", bg: "rgba(22,163,74,0.08)" },
-              { label: "Anúncios ativos", value: String(anunciosReais.length), change: vitalicio ? "sem limite" : "30 limite", up: false, icon: "🚗", bg: "rgba(37,99,235,0.08)" },
+              { label: "Anúncios ativos", value: String(anunciosReais.filter(a => a.ativo !== false).length), change: vitalicio ? "sem limite" : "30 limite", up: false, icon: "🚗", bg: "rgba(37,99,235,0.08)" },
               vitalicio
                 ? { label: "Plano", value: "Vitalício", change: "sem vencimento", up: true, icon: "👑", bg: "rgba(232,93,38,0.08)" }
                 : { label: "Período grátis", value: diasRestantes === null ? "—" : periodoVencido ? "Encerrado" : String(diasRestantes), change: diasRestantes === null ? "sem loja" : periodoVencido ? `em ${dataFim}` : diasRestantes === 1 ? "dia restante" : "dias restantes", up: !periodoVencido, icon: "⏳", bg: "rgba(232,93,38,0.08)" },
@@ -245,8 +274,10 @@ export default function Painel() {
 
             <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, overflow: "hidden" }}>
               <div style={{ padding: "14px 18px", borderBottom: "1px solid #E8E6E1", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                <div style={{ fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, color: "#1A1917" }}>Anúncios recentes</div>
-                <a href="#" style={{ fontSize: 12, color: "#E85D26", fontWeight: 500, textDecoration: "none" }}>Ver todos →</a>
+                <div style={{ fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, color: "#1A1917" }}>{verTodos ? `Meus anúncios (${anunciosReais.length})` : "Anúncios recentes"}</div>
+                {verTodos
+                  ? <button onClick={() => setAbaAtiva("dashboard")} style={{ fontSize: 12, color: "#E85D26", fontWeight: 500, background: "none", border: "none", cursor: "pointer" }}>← Voltar ao resumo</button>
+                  : anunciosReais.length > 5 && <button onClick={() => setAbaAtiva("anuncios")} style={{ fontSize: 12, color: "#E85D26", fontWeight: 500, background: "none", border: "none", cursor: "pointer" }}>Ver todos ({anunciosReais.length}) →</button>}
               </div>
 
               {anunciosReais.length === 0 ? (
@@ -266,7 +297,7 @@ export default function Painel() {
                       </tr>
                     </thead>
                     <tbody>
-                      {anunciosReais.slice(0, 5).map(car => (
+                      {anunciosVisiveis.map(car => (
                         <tr key={car.id} style={{ borderBottom: "1px solid #E8E6E1" }}>
                           <td style={{ padding: "11px 14px" }}>
                             <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
@@ -282,13 +313,14 @@ export default function Painel() {
                               </div>
                             </div>
                           </td>
-                          <td style={{ padding: "11px 14px" }}>{statusBadge(car.status || "ativo")}</td>
+                          <td style={{ padding: "11px 14px" }}>{statusBadge(car.ativo === false ? "pausado" : car.status || "ativo")}</td>
                           <td style={{ padding: "11px 14px", fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, color: "#1A1917" }}>{formatarPreco(car.preco)}</td>
                           <td style={{ padding: "11px 14px" }}>
                             <div style={{ display: "flex", gap: 5 }}>
                               <Link href={`/veiculo/${car.id}`} style={{ width: 28, height: 28, borderRadius: 6, border: "1.5px solid #E8E6E1", background: "#F7F6F3", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, textDecoration: "none" }}>👁️</Link>
-                              <button style={{ width: 28, height: 28, borderRadius: 6, border: "1.5px solid #E8E6E1", background: "#F7F6F3", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: 12 }}>✏️</button>
-                              <button style={{ width: 28, height: 28, borderRadius: 6, border: "1.5px solid #E8E6E1", background: "#F7F6F3", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: 12 }}>⏸️</button>
+                              <Link href={`/painel/novo-anuncio?editar=${car.id}`} title="Editar" style={{ width: 28, height: 28, borderRadius: 6, border: "1.5px solid #E8E6E1", background: "#F7F6F3", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: 12, textDecoration: "none" }}>✏️</Link>
+                              <button title={car.ativo === false ? "Reativar" : "Pausar"} disabled={acaoEmAndamento === car.id} onClick={() => alternarPausa(car)} style={{ width: 28, height: 28, borderRadius: 6, border: "1.5px solid #E8E6E1", background: "#F7F6F3", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: 12, opacity: acaoEmAndamento === car.id ? 0.5 : 1 }}>{car.ativo === false ? "▶️" : "⏸️"}</button>
+                              <button title="Excluir" disabled={acaoEmAndamento === car.id} onClick={() => excluir(car)} style={{ width: 28, height: 28, borderRadius: 6, border: "1.5px solid #E8E6E1", background: "#F7F6F3", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: 12, opacity: acaoEmAndamento === car.id ? 0.5 : 1 }}>🗑️</button>
                             </div>
                           </td>
                         </tr>
@@ -297,7 +329,7 @@ export default function Painel() {
                   </table>
 
                   <div className="cards-mobile" style={{ flexDirection: "column" }}>
-                    {anunciosReais.slice(0, 5).map(car => (
+                    {anunciosVisiveis.map(car => (
                       <div key={car.id} style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 16px", borderBottom: "1px solid #E8E6E1" }}>
                         <div style={{ width: 56, height: 42, borderRadius: 7, overflow: "hidden", flexShrink: 0, border: "1px solid #E8E6E1", background: "#F7F6F3" }}>
                           {car.fotos && car.fotos.length > 0
@@ -308,14 +340,16 @@ export default function Painel() {
                         <div style={{ flex: 1 }}>
                           <div style={{ fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, color: "#1A1917", marginBottom: 2 }}>{car.nome}</div>
                           <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                            {statusBadge(car.status || "ativo")}
+                            {statusBadge(car.ativo === false ? "pausado" : car.status || "ativo")}
                           </div>
                         </div>
                         <div style={{ textAlign: "right" }}>
                           <div style={{ fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, color: "#1A1917" }}>{formatarPreco(car.preco)}</div>
                           <div style={{ display: "flex", gap: 4, marginTop: 4 }}>
                             <Link href={`/veiculo/${car.id}`} style={{ width: 26, height: 26, borderRadius: 5, border: "1.5px solid #E8E6E1", background: "#F7F6F3", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, textDecoration: "none" }}>👁️</Link>
-                            <button style={{ width: 26, height: 26, borderRadius: 5, border: "1.5px solid #E8E6E1", background: "#F7F6F3", cursor: "pointer", fontSize: 11 }}>⏸️</button>
+                            <Link href={`/painel/novo-anuncio?editar=${car.id}`} title="Editar" style={{ width: 26, height: 26, borderRadius: 5, border: "1.5px solid #E8E6E1", background: "#F7F6F3", cursor: "pointer", fontSize: 11, display: "flex", alignItems: "center", justifyContent: "center", textDecoration: "none" }}>✏️</Link>
+                            <button title={car.ativo === false ? "Reativar" : "Pausar"} disabled={acaoEmAndamento === car.id} onClick={() => alternarPausa(car)} style={{ width: 26, height: 26, borderRadius: 5, border: "1.5px solid #E8E6E1", background: "#F7F6F3", cursor: "pointer", fontSize: 11 }}>{car.ativo === false ? "▶️" : "⏸️"}</button>
+                            <button title="Excluir" disabled={acaoEmAndamento === car.id} onClick={() => excluir(car)} style={{ width: 26, height: 26, borderRadius: 5, border: "1.5px solid #E8E6E1", background: "#F7F6F3", cursor: "pointer", fontSize: 11 }}>🗑️</button>
                           </div>
                         </div>
                       </div>

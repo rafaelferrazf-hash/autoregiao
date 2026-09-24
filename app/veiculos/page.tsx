@@ -2,27 +2,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { supabase } from "@/lib/supabase";
-
-type Veiculo = {
-  id: string;
-  nome: string;
-  marca: string;
-  modelo: string;
-  ano: number;
-  km: number;
-  combustivel: string;
-  preco: number;
-  destaque: boolean;
-  loja_id: string;
-  fotos: string[];
-  lojas?: { nome: string; cidade: string };
-};
+import { listarVeiculosAtivos } from "@/lib/dados/veiculos";
+import { formatarPreco, formatarKm } from "@/lib/formatar";
+import type { VeiculoComLoja } from "@/lib/tipos";
 
 export default function Veiculos() {
   const [menuAberto, setMenuAberto] = useState(false);
   const [filtrosAbertos, setFiltrosAbertos] = useState(false);
-  const [veiculos, setVeiculos] = useState<Veiculo[]>([]);
+  const [veiculos, setVeiculos] = useState<VeiculoComLoja[]>([]);
   const [carregando, setCarregando] = useState(true);
   const [total, setTotal] = useState(0);
 
@@ -32,25 +19,12 @@ export default function Veiculos() {
 
   async function buscarVeiculos() {
     setCarregando(true);
-    const { data, error, count } = await supabase
-      .from("veiculos")
-      .select("*, lojas(nome, cidade)", { count: "exact" })
-      .eq("ativo", true)
-      .order("criado_em", { ascending: false });
-
-    if (!error && data) {
-      setVeiculos(data);
-      setTotal(count || data.length);
+    const { veiculos, total, error } = await listarVeiculosAtivos();
+    if (!error) {
+      setVeiculos(veiculos);
+      setTotal(total);
     }
     setCarregando(false);
-  }
-
-  function formatarPreco(preco: number) {
-    return preco.toLocaleString("pt-BR", { style: "currency", currency: "BRL", minimumFractionDigits: 0 });
-  }
-
-  function formatarKm(km: number) {
-    return km.toLocaleString("pt-BR") + " km";
   }
 
   return (
@@ -244,7 +218,7 @@ export default function Veiculos() {
                     <div style={{ background: "#fff", borderRadius: 12, overflow: "hidden", border: car.destaque ? "1.5px solid #E85D26" : "1.5px solid #E8E6E1", position: "relative" }}>
                       {car.destaque && <span style={{ position: "absolute", top: 8, left: 8, background: "#E85D26", color: "#fff", fontSize: 10, fontWeight: 500, padding: "3px 8px", borderRadius: 20, zIndex: 2 }}>⭐ Destaque</span>}
                       <div style={{ position: "relative", height: 150, width: "100%", background: "#F7F6F3" }}>
-                        {car.fotos?.length > 0 ? (
+                        {car.fotos && car.fotos.length > 0 ? (
                           <img src={car.fotos[0]} alt={car.nome} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                         ) : (
                           <Image src="/sem-foto.png" alt={car.nome} fill style={{ objectFit: "cover" }} sizes="(max-width: 480px) 100vw, (max-width: 768px) 50vw, 33vw" />

@@ -2,7 +2,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useRef } from "react";
-import { supabase } from "@/lib/supabase";
+import { usuarioAtual } from "@/lib/dados/usuario";
+import { criarVeiculo, enviarFotoVeiculo } from "@/lib/dados/veiculos";
 
 const dadosVeiculos: Record<string, Record<string, Record<string, string[]>>> = {
   carro: {
@@ -220,7 +221,7 @@ export default function NovoAnuncio() {
     setCarregando(true);
     setErro("");
 
-    const { data: { user } } = await supabase.auth.getUser();
+    const user = await usuarioAtual();
     if (!user) {
       setErro("Você precisa estar logado para publicar um anúncio.");
       setCarregando(false);
@@ -231,34 +232,28 @@ export default function NovoAnuncio() {
     setUploadando(true);
     const urlsFotos: string[] = [];
     for (const foto of fotos) {
-      const ext = foto.file.name.split(".").pop();
-      const path = `${user.id}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
-      const { error: uploadError } = await supabase.storage
-        .from("veiculos")
-        .upload(path, foto.file, { contentType: foto.file.type });
-
-      if (!uploadError) {
-        const { data: urlData } = supabase.storage.from("veiculos").getPublicUrl(path);
-        urlsFotos.push(urlData.publicUrl);
-      }
+      const url = await enviarFotoVeiculo(user.id, foto.file);
+      if (url) urlsFotos.push(url);
     }
     setUploadando(false);
 
     const nomeVeiculo = [form.marca, form.modelo, form.versao, form.ano].filter(Boolean).join(" ");
+    // ano e km são texto no banco; guarda só os dígitos (ou null se vazio).
+    const soNumero = (v: string) => { const n = parseInt(v.replace(/\D/g, ""), 10); return Number.isNaN(n) ? null : n; };
 
-    const { error } = await supabase.from("veiculos").insert({
+    const { error } = await criarVeiculo({
       nome: nomeVeiculo,
       tipo: form.tipo,
       marca: form.marca,
       modelo: form.modelo,
       versao: form.versao,
-      ano: parseInt(form.ano),
-      km: parseInt(form.km),
+      ano: soNumero(form.ano)?.toString() ?? null,
+      km: soNumero(form.km)?.toString() ?? null,
       cambio: form.cambio,
       combustivel: form.combustivel,
       cor: form.cor,
       portas: form.portas,
-      preco: parseInt(form.preco.replace(/\D/g, "")),
+      preco: soNumero(form.preco),
       aceita_troca: form.aceitaTroca,
       opcionais: form.opcionais,
       descricao: form.descricao,

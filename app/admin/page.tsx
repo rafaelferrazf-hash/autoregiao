@@ -4,11 +4,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
-
-const ADMIN_EMAILS = (process.env.NEXT_PUBLIC_ADMIN_EMAILS || "")
-  .split(",")
-  .map(e => e.trim().toLowerCase())
-  .filter(Boolean);
+import { ehAdmin } from "@/lib/admin";
 
 export default function Admin() {
   const router = useRouter();
@@ -20,9 +16,9 @@ export default function Admin() {
   const [gerando, setGerando] = useState(false);
 
   useEffect(() => {
+    // O proxy.ts já barra no servidor; esta checagem é uma segunda camada.
     supabase.auth.getUser().then(({ data }) => {
-      const email = data.user?.email?.toLowerCase();
-      if (email && ADMIN_EMAILS.includes(email)) {
+      if (ehAdmin(data.user?.email)) {
         setAutorizado(true);
       } else {
         router.replace("/login");

@@ -14,10 +14,23 @@ export default function RedefinirSenha() {
   const [estado, setEstado] = useState<"verificando" | "valido" | "invalido">("verificando");
 
   useEffect(() => {
-    // O link do e-mail chega com #access_token=...&type=recovery (ou #error=... se expirou).
+    // O link do e-mail pode chegar em três formatos:
+    //  - ?token_hash=...&type=recovery  → modelo de e-mail customizado; funciona em qualquer aparelho
+    //  - ?code=...                      → fluxo PKCE padrão; só funciona no mesmo navegador que pediu
+    //  - #access_token=...              → links antigos (fluxo implícito)
+    // Erros (link expirado/usado) chegam como ?error=... ou #error=...
+    const query = new URLSearchParams(window.location.search);
     const hash = new URLSearchParams(window.location.hash.slice(1));
-    if (hash.get("error")) {
+    if (query.get("error") || hash.get("error")) {
       setEstado("invalido");
+      return;
+    }
+
+    const tokenHash = query.get("token_hash");
+    if (tokenHash) {
+      supabase.auth.verifyOtp({ token_hash: tokenHash, type: "recovery" }).then(({ data, error }) => {
+        setEstado(!error && data.session ? "valido" : "invalido");
+      });
       return;
     }
 
@@ -25,7 +38,7 @@ export default function RedefinirSenha() {
       if (evento === "PASSWORD_RECOVERY" && session) setEstado("valido");
     });
 
-    // getSession espera o supabase-js terminar de processar o token da URL.
+    // getSession espera o supabase-js terminar de processar o código/token da URL.
     supabase.auth.getSession().then(({ data }) => {
       setEstado(atual => atual === "valido" ? atual : (data.session ? "valido" : "invalido"));
     });

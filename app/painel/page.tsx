@@ -3,46 +3,33 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
-
-type Veiculo = {
-  id: string;
-  nome: string;
-  ano: number;
-  km: number;
-  preco: number;
-  status: string;
-  fotos: string[];
-  destaque: boolean;
-};
+import { usuarioAtual, sair } from "@/lib/dados/usuario";
+import { buscarLojaDoUsuario } from "@/lib/dados/lojas";
+import { listarVeiculosDoUsuario } from "@/lib/dados/veiculos";
+import { formatarPreco, formatarKm } from "@/lib/formatar";
 
 export default function Painel() {
   const [abaAtiva, setAbaAtiva] = useState("dashboard");
   const [nomeUsuario, setNomeUsuario] = useState("...");
   const [nomeLoja, setNomeLoja] = useState("Minha Loja");
-  const [anunciosReais, setAnunciosReais] = useState<Veiculo[]>([]);
+  const [anunciosReais, setAnunciosReais] = useState<Awaited<ReturnType<typeof listarVeiculosDoUsuario>>["veiculos"]>([]);
   const [lojaId, setLojaId] = useState<string | null>(null);
 
   useEffect(() => {
-    supabase.auth.getUser().then(async ({ data }) => {
-      if (data.user) {
-        const nome = data.user.user_metadata?.nome || data.user.email || "Lojista";
-        setNomeUsuario(nome.split(" ")[0]);
+    (async () => {
+      const user = await usuarioAtual();
+      if (!user) return;
+      const nome = user.user_metadata?.nome || user.email || "Lojista";
+      setNomeUsuario(nome.split(" ")[0]);
 
-        // Busca a loja do usuário
-        const { data: loja } = await supabase.from("lojas").select("id, nome").eq("usuario_id", data.user.id).maybeSingle();
-        if (loja?.nome) setNomeLoja(loja.nome);
-        if (loja?.id) setLojaId(loja.id);
+      const { loja } = await buscarLojaDoUsuario(user.id);
+      if (loja?.nome) setNomeLoja(loja.nome);
+      if (loja?.id) setLojaId(loja.id);
 
-        // Busca veículos pelo usuario_id OU loja_id
-        const { data: veiculos } = await supabase
-          .from("veiculos")
-          .select("id, nome, ano, km, preco, status, fotos, destaque")
-          .or(`usuario_id.eq.${data.user.id}${loja?.id ? `,loja_id.eq.${loja.id}` : ""}`)
-          .order("criado_em", { ascending: false });
-
-        if (veiculos) setAnunciosReais(veiculos);
-      }
-    });
+      // Anúncios pelo usuario_id OU loja_id
+      const { veiculos } = await listarVeiculosDoUsuario(user.id, loja?.id);
+      setAnunciosReais(veiculos);
+    })();
   }, []);
 
   // CUPOM
@@ -88,22 +75,14 @@ export default function Painel() {
     { nome: "Fernanda Costa", carro: "HR-V EXL", tempo: "3h", lido: true },
   ];
 
-  function formatarPreco(preco: number) {
-    return preco?.toLocaleString("pt-BR", { style: "currency", currency: "BRL", minimumFractionDigits: 0 }) || "—";
-  }
-
-  function formatarKm(km: number) {
-    return km?.toLocaleString("pt-BR") + " km" || "—";
-  }
-
-  const statusBadge = (status: string) => {
+  const statusBadge = (status: string | null) => {
     const map: Record<string, { bg: string; color: string; label: string }> = {
       destaque: { bg: "rgba(232,93,38,0.08)", color: "#E85D26", label: "⭐ Destaque" },
       ativo: { bg: "rgba(22,163,74,0.08)", color: "#16A34A", label: "✅ Ativo" },
       pausado: { bg: "#F7F6F3", color: "#7A7670", label: "⏸ Pausado" },
       analise: { bg: "rgba(37,99,235,0.08)", color: "#2563EB", label: "🕐 Análise" },
     };
-    const s = map[status] || map["ativo"];
+    const s = (status && map[status]) || map["ativo"];
     return <span style={{ display: "inline-flex", alignItems: "center", fontSize: 10, fontWeight: 500, padding: "3px 8px", borderRadius: 20, background: s.bg, color: s.color, whiteSpace: "nowrap" }}>{s.label}</span>;
   };
 
@@ -183,7 +162,7 @@ export default function Painel() {
             <div style={{ fontSize: 10, color: "rgba(255,255,255,0.45)" }}>{Math.max(30 - anunciosReais.length, 0)} slots disponíveis</div>
           </div>
           <button
-            onClick={async () => { await supabase.auth.signOut(); window.location.href = "/login"; }}
+            onClick={async () => { await sair(); window.location.href = "/login"; }}
             style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 10px", borderRadius: 8, border: "none", background: "transparent", color: "rgba(255,255,255,0.35)", fontSize: 12.5, cursor: "pointer", width: "100%", fontFamily: "'DM Sans', sans-serif" }}>
             <span>🚪</span> Sair
           </button>
@@ -272,7 +251,7 @@ export default function Painel() {
                           <td style={{ padding: "11px 14px" }}>
                             <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
                               <div style={{ width: 48, height: 36, borderRadius: 6, overflow: "hidden", flexShrink: 0, border: "1px solid #E8E6E1", background: "#F7F6F3" }}>
-                                {car.fotos?.length > 0
+                                {car.fotos && car.fotos.length > 0
                                   ? <img src={car.fotos[0]} alt={car.nome} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                                   : <Image src="/sem-foto.png" alt={car.nome} width={48} height={36} style={{ objectFit: "cover" }} />
                                 }
@@ -301,7 +280,7 @@ export default function Painel() {
                     {anunciosReais.slice(0, 5).map(car => (
                       <div key={car.id} style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 16px", borderBottom: "1px solid #E8E6E1" }}>
                         <div style={{ width: 56, height: 42, borderRadius: 7, overflow: "hidden", flexShrink: 0, border: "1px solid #E8E6E1", background: "#F7F6F3" }}>
-                          {car.fotos?.length > 0
+                          {car.fotos && car.fotos.length > 0
                             ? <img src={car.fotos[0]} alt={car.nome} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                             : <Image src="/sem-foto.png" alt={car.nome} width={56} height={42} style={{ objectFit: "cover" }} />
                           }

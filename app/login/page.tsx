@@ -23,7 +23,10 @@ export default function Login() {
         setErro(error.message.includes("Invalid login") ? "E-mail ou senha incorretos." : "Erro ao entrar. Tente novamente.");
       } else {
         setSucesso(true);
-        setTimeout(() => { window.location.href = "/painel"; }, 1500);
+        // Volta para a página que pediu login (?next=/admin, por exemplo). Só aceita caminho interno.
+        const next = new URLSearchParams(window.location.search).get("next");
+        const destino = next && next.startsWith("/") && !next.startsWith("//") ? next : "/painel";
+        setTimeout(() => { window.location.href = destino; }, 1500);
       }
     } catch (e) {
       setCarregando(false);

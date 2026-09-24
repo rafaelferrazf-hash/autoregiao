@@ -3,40 +3,18 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
-import { supabase } from "@/lib/supabase";
-
-type Veiculo = {
-  id: string;
-  nome: string;
-  marca: string;
-  modelo: string;
-  versao: string;
-  ano: number;
-  km: number;
-  combustivel: string;
-  cambio: string;
-  cor: string;
-  portas: string;
-  preco: number;
-  aceita_troca: boolean;
-  descricao: string;
-  opcionais: string[];
-  fotos: string[];
-  telefone: string;
-  nome_contato: string;
-  cidade: string;
-  destaque: boolean;
-  lojas?: { nome: string; cidade: string };
-};
+import { buscarVeiculo as buscarVeiculoPorId } from "@/lib/dados/veiculos";
+import { formatarPreco, formatarKm } from "@/lib/formatar";
+import type { VeiculoComLoja } from "@/lib/tipos";
 
 export default function Veiculo() {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
   const [fotoAtiva, setFotoAtiva] = useState(0);
   const [lightbox, setLightbox] = useState(false);
   const [entrada, setEntrada] = useState("");
   const [prazo, setPrazo] = useState("60");
   const [menuAberto, setMenuAberto] = useState(false);
-  const [veiculo, setVeiculo] = useState<Veiculo | null>(null);
+  const [veiculo, setVeiculo] = useState<VeiculoComLoja | null>(null);
   const [carregando, setCarregando] = useState(true);
 
   useEffect(() => {
@@ -56,28 +34,15 @@ export default function Veiculo() {
   }, [lightbox]);
 
   async function buscarVeiculo() {
-    const { data, error } = await supabase
-      .from("veiculos")
-      .select("*, lojas(nome, cidade)")
-      .eq("id", id)
-      .single();
-
-    if (!error && data) {
-      setVeiculo(data);
-      setEntrada(Math.round(data.preco * 0.2).toString());
+    const { veiculo, error } = await buscarVeiculoPorId(id);
+    if (!error && veiculo) {
+      setVeiculo(veiculo);
+      setEntrada(Math.round((veiculo.preco ?? 0) * 0.2).toString());
     }
     setCarregando(false);
   }
 
-  function formatarPreco(preco: number) {
-    return preco.toLocaleString("pt-BR", { style: "currency", currency: "BRL", minimumFractionDigits: 0 });
-  }
-
-  function formatarKm(km: number) {
-    return km.toLocaleString("pt-BR") + " km";
-  }
-
-  function formatarTelefone(tel: string) {
+  function formatarTelefone(tel: string | null) {
     return tel?.replace(/\D/g, "") || "";
   }
 
@@ -327,7 +292,7 @@ export default function Veiculo() {
             )}
 
             {/* OPCIONAIS */}
-            {veiculo.opcionais?.length > 0 && (
+            {veiculo.opcionais && veiculo.opcionais.length > 0 && (
               <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, marginBottom: 16, overflow: "hidden" }}>
                 <div style={{ padding: "14px 18px", borderBottom: "1px solid #E8E6E1", fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, color: "#1A1917" }}>Opcionais</div>
                 <div style={{ padding: "14px 18px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>

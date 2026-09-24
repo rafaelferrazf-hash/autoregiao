@@ -1,4 +1,4 @@
-import { supabase } from "@/lib/supabase";
+import { criarClienteAnonimo } from "@/lib/supabase-servidor";
 
 // Chamado 1x por dia pelo Cron da Vercel (ver vercel.json).
 // O Supabase no plano gratuito pausa o projeto após ~7 dias sem uso; uma consulta
@@ -6,7 +6,7 @@ import { supabase } from "@/lib/supabase";
 export const dynamic = "force-dynamic";
 
 export async function GET() {
-  const { count, error } = await supabase
+  const { count, error } = await criarClienteAnonimo()
     .from("veiculos")
     .select("id", { count: "exact", head: true });
 

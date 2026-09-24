@@ -7,6 +7,8 @@ import { resgatarCupom as resgatarCupomNoBanco } from "@/lib/dados/cupons";
 import { buscarLojaDoUsuario } from "@/lib/dados/lojas";
 import { listarVeiculosDoUsuario } from "@/lib/dados/veiculos";
 import { formatarPreco, formatarKm } from "@/lib/formatar";
+import { buscarEstatisticasPainel, type EstatisticasPainel } from "@/lib/dados/eventos";
+import type { Loja } from "@/lib/tipos";
 
 export default function Painel() {
   const [abaAtiva, setAbaAtiva] = useState("dashboard");
@@ -14,6 +16,8 @@ export default function Painel() {
   const [nomeLoja, setNomeLoja] = useState("Minha Loja");
   const [anunciosReais, setAnunciosReais] = useState<Awaited<ReturnType<typeof listarVeiculosDoUsuario>>["veiculos"]>([]);
   const [lojaId, setLojaId] = useState<string | null>(null);
+  const [loja, setLoja] = useState<Loja | null>(null);
+  const [stats, setStats] = useState<EstatisticasPainel | null>(null);
 
   useEffect(() => {
     (async () => {
@@ -25,10 +29,13 @@ export default function Painel() {
       const { loja } = await buscarLojaDoUsuario(user.id);
       if (loja?.nome) setNomeLoja(loja.nome);
       if (loja?.id) setLojaId(loja.id);
+      setLoja(loja);
 
       // Anúncios pelo usuario_id OU loja_id
       const { veiculos } = await listarVeiculosDoUsuario(user.id, loja?.id);
       setAnunciosReais(veiculos);
+
+      setStats(await buscarEstatisticasPainel());
     })();
   }, []);
 
@@ -55,13 +62,6 @@ export default function Painel() {
     return null;
   };
 
-  const contatos = [
-    { nome: "Carlos Mendes", carro: "Onix LT 2022", tempo: "2min", lido: false },
-    { nome: "Ana Paula", carro: "T-Cross TSI", tempo: "18min", lido: false },
-    { nome: "Marcos Lima", carro: "Tracker Premier", tempo: "1h", lido: true },
-    { nome: "Fernanda Costa", carro: "HR-V EXL", tempo: "3h", lido: true },
-  ];
-
   const statusBadge = (status: string | null) => {
     const map: Record<string, { bg: string; color: string; label: string }> = {
       destaque: { bg: "rgba(232,93,38,0.08)", color: "#E85D26", label: "⭐ Destaque" },
@@ -75,6 +75,34 @@ export default function Painel() {
 
   const msg = mensagemCupom();
   const hoje = new Date().toLocaleDateString("pt-BR", { weekday: "long", day: "2-digit", month: "long", year: "numeric" });
+
+  // Plano e período grátis reais (tabela lojas). A regra de bloqueio ao vencer fica para a Fase 4.
+  const expiraEm = loja?.expira_em ? new Date(loja.expira_em) : null;
+  const diasRestantes = expiraEm ? Math.ceil((expiraEm.getTime() - Date.now()) / 86_400_000) : null;
+  const periodoVencido = diasRestantes !== null && diasRestantes <= 0;
+  const nomePlano = !loja ? "Sem loja" : loja.plano === "trial" || !loja.plano ? "Período grátis" : `Plano ${loja.plano.charAt(0).toUpperCase()}${loja.plano.slice(1)}`;
+  const dataFim = expiraEm ? expiraEm.toLocaleDateString("pt-BR") : "";
+  const textoPeriodo = diasRestantes === null ? "—"
+    : periodoVencido ? `Encerrado em ${dataFim}`
+    : `${diasRestantes} ${diasRestantes === 1 ? "dia restante" : "dias restantes"}`;
+
+  const variacao = (atual: number, anterior: number) => {
+    if (!anterior) return atual > 0 ? { texto: "novo este mês", up: true } : { texto: "últimos 30 dias", up: false };
+    const pct = Math.round(((atual - anterior) / anterior) * 100);
+    return { texto: `${pct >= 0 ? "▲" : "▼"} ${Math.abs(pct)}% vs mês anterior`, up: pct >= 0 };
+  };
+  const varVisitas = variacao(stats?.visualizacoes_30d ?? 0, stats?.visualizacoes_30d_anterior ?? 0);
+  const varContatos = variacao(stats?.contatos_30d ?? 0, stats?.contatos_30d_anterior ?? 0);
+  const visitas7d = stats?.visitas_7d ?? [];
+  const maxVisitas = Math.max(1, ...visitas7d.map(v => v.total));
+  const totalVisitas7d = visitas7d.reduce((soma, v) => soma + v.total, 0);
+  const contatosRecentes = stats?.contatos_recentes ?? [];
+  const tempoAtras = (iso: string) => {
+    const min = Math.max(0, Math.round((Date.now() - new Date(iso).getTime()) / 60_000));
+    if (min < 60) return `${min}min`;
+    if (min < 1440) return `${Math.round(min / 60)}h`;
+    return `${Math.round(min / 1440)}d`;
+  };
 
   return (
     <div style={{ fontFamily: "'DM Sans', sans-serif", display: "flex", minHeight: "100vh", background: "#F7F6F3" }}>
@@ -112,7 +140,7 @@ export default function Painel() {
           <div style={{ width: 40, height: 40, background: "#E85D26", borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, flexShrink: 0 }}>🏪</div>
           <div>
             <div style={{ fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, color: "#fff" }}>{nomeLoja}</div>
-            <div style={{ fontSize: 10, color: "#E85D26", fontWeight: 500, marginTop: 1 }}>⭐ Plano Profissional</div>
+            <div style={{ fontSize: 10, color: "#E85D26", fontWeight: 500, marginTop: 1 }}>{nomePlano}</div>
           </div>
         </div>
         <nav style={{ flex: 1, padding: "12px 10px", display: "flex", flexDirection: "column", gap: 1 }}>
@@ -120,7 +148,7 @@ export default function Painel() {
             { id: "dashboard", icon: "📊", label: "Dashboard" },
             { id: "anuncios", icon: "🚗", label: "Meus Anúncios", badge: anunciosReais.length > 0 ? String(anunciosReais.length) : undefined },
             { id: "novo", icon: "➕", label: "Novo Anúncio" },
-            { id: "mensagens", icon: "💬", label: "Mensagens", badge: "5" },
+            { id: "mensagens", icon: "💬", label: "Mensagens" },
             { id: "avaliacoes", icon: "⭐", label: "Avaliações" },
             { id: "estatisticas", icon: "📈", label: "Estatísticas" },
             { id: "plano", icon: "💳", label: "Plano & Pagamento" },
@@ -183,7 +211,7 @@ export default function Painel() {
           <div style={{ background: "rgba(232,93,38,0.08)", border: "1px solid rgba(232,93,38,0.2)", borderRadius: 10, padding: "12px 14px", display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16, flexWrap: "wrap", gap: 8 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
               <span style={{ fontSize: 16 }}>⏳</span>
-              <div style={{ fontSize: 13, color: "#1A1917" }}>Período gratuito termina em <strong style={{ color: "#E85D26" }}>23 dias</strong>.</div>
+              <div style={{ fontSize: 13, color: "#1A1917" }}>{diasRestantes === null ? "Sua conta ainda não tem uma loja vinculada." : periodoVencido ? <>Seu período gratuito <strong style={{ color: "#E85D26" }}>terminou em {dataFim}</strong>. Use um cupom em &quot;Meu plano&quot; ou assine um plano.</> : <>Período gratuito termina em <strong style={{ color: "#E85D26" }}>{diasRestantes} {diasRestantes === 1 ? "dia" : "dias"}</strong>.</>}</div>
             </div>
             <a href="#" style={{ fontSize: 12, fontWeight: 500, color: "#E85D26", textDecoration: "none" }}>Ver planos →</a>
           </div>
@@ -191,10 +219,10 @@ export default function Painel() {
           {/* STATS */}
           <div className="stats-grid" style={{ marginBottom: 16 }}>
             {[
-              { label: "Visualizações", value: "3.241", change: "▲ 18%", up: true, icon: "👁️", bg: "rgba(232,93,38,0.08)" },
-              { label: "Contatos", value: "47", change: "▲ 9%", up: true, icon: "💬", bg: "rgba(22,163,74,0.08)" },
+              { label: "Visualizações (30 dias)", value: stats ? stats.visualizacoes_30d.toLocaleString("pt-BR") : "—", change: varVisitas.texto, up: varVisitas.up, icon: "👁️", bg: "rgba(232,93,38,0.08)" },
+              { label: "Contatos (30 dias)", value: stats ? stats.contatos_30d.toLocaleString("pt-BR") : "—", change: varContatos.texto, up: varContatos.up, icon: "💬", bg: "rgba(22,163,74,0.08)" },
               { label: "Anúncios ativos", value: String(anunciosReais.length), change: "30 limite", up: false, icon: "🚗", bg: "rgba(37,99,235,0.08)" },
-              { label: "Avaliação", value: "4.8", change: "24 avaliações", up: true, icon: "⭐", bg: "rgba(232,93,38,0.08)" },
+              { label: "Período grátis", value: diasRestantes === null ? "—" : periodoVencido ? "Encerrado" : String(diasRestantes), change: diasRestantes === null ? "sem loja" : periodoVencido ? `em ${dataFim}` : diasRestantes === 1 ? "dia restante" : "dias restantes", up: !periodoVencido, icon: "⏳", bg: "rgba(232,93,38,0.08)" },
             ].map(stat => (
               <div key={stat.label} style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, padding: 14 }}>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
@@ -296,17 +324,17 @@ export default function Painel() {
               <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, overflow: "hidden" }}>
                 <div style={{ padding: "14px 18px", borderBottom: "1px solid #E8E6E1", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                   <div style={{ fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, color: "#1A1917" }}>Contatos recentes</div>
-                  <a href="#" style={{ fontSize: 12, color: "#E85D26", fontWeight: 500, textDecoration: "none" }}>Ver todos →</a>
                 </div>
-                {contatos.map((c, i) => (
-                  <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 16px", borderBottom: i < contatos.length - 1 ? "1px solid #E8E6E1" : "none", cursor: "pointer" }}>
-                    <span style={{ width: 7, height: 7, background: c.lido ? "transparent" : "#E85D26", borderRadius: "50%", flexShrink: 0, border: c.lido ? "1.5px solid #E8E6E1" : "none" }}></span>
-                    <div style={{ width: 32, height: 32, background: "#F7F6F3", border: "1px solid #E8E6E1", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, flexShrink: 0 }}>👤</div>
+                {contatosRecentes.length === 0 ? (
+                  <div style={{ padding: "18px 16px", fontSize: 12, color: "#7A7670", lineHeight: 1.5 }}>Nenhum contato ainda. Quando alguém clicar em WhatsApp ou Ligar nos seus anúncios, aparece aqui.</div>
+                ) : contatosRecentes.map((c, i) => (
+                  <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 16px", borderBottom: i < contatosRecentes.length - 1 ? "1px solid #E8E6E1" : "none" }}>
+                    <div style={{ width: 32, height: 32, background: "#F7F6F3", border: "1px solid #E8E6E1", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, flexShrink: 0 }}>{c.tipo === "whatsapp" ? "💬" : "📞"}</div>
                     <div style={{ flex: 1 }}>
-                      <div style={{ fontSize: 12.5, fontWeight: 500, color: "#1A1917" }}>{c.nome}</div>
-                      <div style={{ fontSize: 11, color: "#7A7670" }}>{c.carro}</div>
+                      <div style={{ fontSize: 12.5, fontWeight: 500, color: "#1A1917" }}>{c.tipo === "whatsapp" ? "Clique no WhatsApp" : "Clique em Ligar"}</div>
+                      <div style={{ fontSize: 11, color: "#7A7670" }}>{c.veiculo}</div>
                     </div>
-                    <div style={{ fontSize: 10.5, color: "#7A7670" }}>{c.tempo}</div>
+                    <div style={{ fontSize: 10.5, color: "#7A7670" }}>{tempoAtras(c.criado_em)}</div>
                   </div>
                 ))}
               </div>
@@ -316,16 +344,20 @@ export default function Painel() {
                 </div>
                 <div style={{ padding: "14px 18px" }}>
                   <div style={{ display: "flex", alignItems: "flex-end", gap: 6, height: 70, marginBottom: 8 }}>
-                    {[{ h: 45, d: "Seg" }, { h: 60, d: "Ter" }, { h: 75, d: "Qua", a: true }, { h: 50, d: "Qui" }, { h: 65, d: "Sex" }, { h: 40, d: "Sáb" }, { h: 30, d: "Dom" }].map((b: { h: number; d: string; a?: boolean }) => (
-                      <div key={b.d} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
-                        <div style={{ width: "100%", height: b.h, background: b.a ? "#E85D26" : "rgba(232,93,38,0.12)", borderRadius: "4px 4px 0 0" }}></div>
-                        <span style={{ fontSize: 9, color: "#7A7670" }}>{b.d}</span>
-                      </div>
-                    ))}
+                    {visitas7d.map((v, i) => {
+                      const barraHoje = i === visitas7d.length - 1;
+                      const dia = new Date(v.dia + "T12:00:00").toLocaleDateString("pt-BR", { weekday: "short" }).replace(".", "");
+                      return (
+                        <div key={v.dia} title={`${v.total} visita${v.total === 1 ? "" : "s"}`} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+                          <div style={{ width: "100%", height: Math.max(3, Math.round((v.total / maxVisitas) * 60)), background: barraHoje ? "#E85D26" : "rgba(232,93,38,0.25)", borderRadius: "4px 4px 0 0" }}></div>
+                          <span style={{ fontSize: 9, color: "#7A7670", textTransform: "capitalize" }}>{dia}</span>
+                        </div>
+                      );
+                    })}
                   </div>
                   <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, color: "#7A7670" }}>
-                    <span>Visitas</span>
-                    <span>Total: <strong style={{ color: "#1A1917" }}>365</strong></span>
+                    <span>Últimos 7 dias</span>
+                    <span>Total: <strong style={{ color: "#1A1917" }}>{totalVisitas7d}</strong></span>
                   </div>
                 </div>
               </div>
@@ -354,7 +386,7 @@ export default function Painel() {
                 <a href="#" style={{ fontSize: 12, color: "#E85D26", fontWeight: 500, textDecoration: "none" }}>Alterar →</a>
               </div>
               <div style={{ padding: "0 18px" }}>
-                {[["Plano atual", "⭐ Profissional", "#E85D26"], ["Anúncios usados", `${anunciosReais.length} / 30`, "#1A1917"], ["Período gratuito", "23 dias restantes", "#E85D26"], ["Destaque patrocinado", "Não contratado", "#7A7670"], ["Loja verificada", "✅ Sim", "#16A34A"]].map(([label, value, color]) => (
+                {[["Plano atual", nomePlano, "#E85D26"], ["Anúncios usados", `${anunciosReais.length} / 30`, "#1A1917"], ["Período gratuito", textoPeriodo, periodoVencido ? "#DC2626" : "#E85D26"], ["Destaque patrocinado", "Não contratado", "#7A7670"]].map(([label, value, color]) => (
                   <div key={label} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 0", borderBottom: "1px solid #E8E6E1" }}>
                     <span style={{ fontSize: 12.5, color: "#7A7670" }}>{label}</span>
                     <span style={{ fontSize: 13, fontWeight: 500, color }}>{value}</span>
@@ -392,7 +424,7 @@ export default function Painel() {
           { id: "dashboard", icon: "📊", label: "Início" },
           { id: "anuncios", icon: "🚗", label: "Anúncios" },
           { id: "novo", icon: "➕", label: "Novo", link: "/painel/novo-anuncio" },
-          { id: "mensagens", icon: "💬", label: "Msgs", badge: "5" },
+          { id: "mensagens", icon: "💬", label: "Msgs" },
           { id: "config", icon: "⚙️", label: "Mais" },
         ].map(item => (
           item.link
@@ -404,7 +436,6 @@ export default function Painel() {
                 style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2, background: "none", border: "none", cursor: "pointer", padding: "4px 12px", position: "relative" }}>
                 <span style={{ fontSize: 20 }}>{item.icon}</span>
                 <span style={{ fontSize: 10, color: abaAtiva === item.id ? "#E85D26" : "rgba(255,255,255,0.4)", fontWeight: abaAtiva === item.id ? 600 : 400 }}>{item.label}</span>
-                {item.badge && <span style={{ position: "absolute", top: 0, right: 8, background: "#E85D26", color: "#fff", fontSize: 9, fontWeight: 700, padding: "1px 5px", borderRadius: 8 }}>{item.badge}</span>}
               </button>
         ))}
       </div>

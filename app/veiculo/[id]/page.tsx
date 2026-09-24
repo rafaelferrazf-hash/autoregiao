@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { buscarVeiculo as buscarVeiculoPorId } from "@/lib/dados/veiculos";
 import { formatarPreco, formatarKm } from "@/lib/formatar";
+import { registrarEvento } from "@/lib/dados/eventos";
 import type { VeiculoComLoja } from "@/lib/tipos";
 
 export default function Veiculo() {
@@ -38,6 +39,7 @@ export default function Veiculo() {
     if (!error && veiculo) {
       setVeiculo(veiculo);
       setEntrada(Math.round((veiculo.preco ?? 0) * 0.2).toString());
+      registrarEvento(veiculo.id, "visualizacao");
     }
     setCarregando(false);
   }
@@ -50,11 +52,13 @@ export default function Veiculo() {
     if (!veiculo) return;
     const tel = formatarTelefone(veiculo.telefone);
     const msg = encodeURIComponent(`Olá! Vi o anúncio do ${veiculo.nome} por ${formatarPreco(veiculo.preco)} no AutoRegião e tenho interesse.`);
+    registrarEvento(veiculo.id, "whatsapp");
     window.open(`https://wa.me/55${tel}?text=${msg}`, "_blank");
   }
 
   function ligar() {
     if (!veiculo) return;
+    registrarEvento(veiculo.id, "ligacao");
     window.open(`tel:${formatarTelefone(veiculo.telefone)}`);
   }
 
@@ -247,7 +251,6 @@ export default function Veiculo() {
             <div style={{ marginBottom: 16 }}>
               <div style={{ display: "flex", gap: 6, marginBottom: 10, flexWrap: "wrap" }}>
                 {veiculo.destaque && <span style={{ fontSize: 11, fontWeight: 500, padding: "3px 9px", borderRadius: 4, background: "rgba(232,93,38,0.08)", color: "#E85D26" }}>⭐ Destaque</span>}
-                <span style={{ fontSize: 11, fontWeight: 500, padding: "3px 9px", borderRadius: 4, background: "rgba(22,163,74,0.08)", color: "#16A34A" }}>✅ Loja Verificada</span>
                 <span style={{ fontSize: 11, fontWeight: 500, padding: "3px 9px", borderRadius: 4, background: "#F7F6F3", color: "#7A7670", border: "1px solid #E8E6E1" }}>📍 {veiculo.cidade}</span>
               </div>
               <h1 style={{ fontFamily: "Georgia, serif", fontSize: 24, fontWeight: 800, color: "#1A1917", marginBottom: 6 }}>{veiculo.nome}</h1>
@@ -346,6 +349,9 @@ export default function Veiculo() {
                 <div style={{ flex: 1 }}>
                   <div style={{ fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, color: "#fff" }}>{veiculo.lojas?.nome || veiculo.nome_contato}</div>
                   <div style={{ fontSize: 11.5, color: "#7A7670", marginTop: 2 }}>📍 {veiculo.lojas?.cidade || veiculo.cidade}</div>
+                  {veiculo.loja_id && (
+                    <Link href={`/loja/${veiculo.loja_id}`} style={{ display: "inline-block", fontSize: 11.5, color: "#E85D26", fontWeight: 600, textDecoration: "none", marginTop: 4 }}>Ver loja e outros anúncios →</Link>
+                  )}
                 </div>
               </div>
               <div style={{ padding: "16px 18px", display: "flex", flexDirection: "column", gap: 8 }}>

@@ -127,8 +127,8 @@ export default function Login() {
               <h2 style={{ fontFamily: "Georgia, serif", fontSize: 24, fontWeight: 800, color: "#fff", lineHeight: 1.2, marginBottom: 16 }}>
                 O carro certo,<br /><span style={{ color: "#E85D26" }}>perto de você.</span>
               </h2>
-              <p style={{ fontSize: 14, color: "#7A7670", lineHeight: 1.65, marginBottom: 32 }}>Mais de 1.200 veículos de lojistas verificados da sua região.</p>
-              {[["✅", "Lojas verificadas pela AutoRegião"], ["📍", "Veículos perto de você"], ["💬", "Chat direto com o lojista"], ["🔒", "Negociação segura"]].map(([icon, text]) => (
+              <p style={{ fontSize: 14, color: "#7A7670", lineHeight: 1.65, marginBottom: 32 }}>Veículos de lojistas da sua região, com contato direto pelo WhatsApp.</p>
+              {[["🏪", "Lojas e revendas da sua região"], ["📍", "Veículos perto de você"], ["💬", "Contato direto com o lojista"]].map(([icon, text]) => (
                 <div key={text} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
                   <span style={{ fontSize: 16 }}>{icon}</span>
                   <span style={{ fontSize: 13, color: "rgba(255,255,255,0.7)" }}>{text}</span>

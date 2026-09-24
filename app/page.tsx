@@ -1,23 +1,29 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { listarVeiculosAtivos } from "@/lib/dados/veiculos";
+import { formatarPreco, formatarKm } from "@/lib/formatar";
+import type { VeiculoComLoja } from "@/lib/tipos";
+
+const MAX_HOME = 9;
 
 export default function Home() {
   const [menuAberto, setMenuAberto] = useState(false);
   const [filtrosAbertos, setFiltrosAbertos] = useState(false);
+  const [carros, setCarros] = useState<VeiculoComLoja[]>([]);
+  const [total, setTotal] = useState(0);
+  const [carregando, setCarregando] = useState(true);
 
-  const carros = [
-    { id: 1, name: "Chevrolet Onix LT", ano: "2022", km: "38.000 km", cambio: "Automático", combustivel: "Flex", price: "R$ 72.900", parcel: "60x R$ 1.580", store: "Auto Paulista", city: "Lençóis Paulista", featured: true },
-    { id: 2, name: "VW T-Cross TSI", ano: "2022", km: "29.000 km", cambio: "Automático", combustivel: "Gasolina", price: "R$ 118.000", parcel: "60x R$ 2.560", store: "Bauru Motors", city: "Bauru", featured: true },
-    { id: 3, name: "Tracker Premier", ano: "2023", km: "9.000 km", cambio: "Automático", combustivel: "Flex", price: "R$ 139.900", parcel: "60x R$ 3.040", store: "Jaú Veículos", city: "Jaú", featured: false },
-    { id: 4, name: "Fiat Pulse Drive", ano: "2023", km: "18.000 km", cambio: "Automático", combustivel: "Flex", price: "R$ 98.500", parcel: "60x R$ 2.140", store: "Regional Car", city: "Botucatu", featured: false },
-    { id: 5, name: "Honda HR-V EXL", ano: "2023", km: "14.000 km", cambio: "Automático", combustivel: "Flex", price: "R$ 127.000", parcel: "60x R$ 2.760", store: "Auto Paulista", city: "Lençóis Paulista", featured: false },
-    { id: 6, name: "Toyota Corolla XEi", ano: "2022", km: "41.000 km", cambio: "Automático", combustivel: "Flex", price: "R$ 148.000", parcel: "60x R$ 3.220", store: "Bauru Motors", city: "Bauru", featured: false },
-    { id: 7, name: "Hyundai HB20 Diamond", ano: "2023", km: "12.000 km", cambio: "Automático", combustivel: "Flex", price: "R$ 82.900", parcel: "60x R$ 1.800", store: "Jaú Veículos", city: "Jaú", featured: false },
-    { id: 8, name: "VW Polo Track", ano: "2023", km: "22.000 km", cambio: "Manual", combustivel: "Flex", price: "R$ 76.500", parcel: "60x R$ 1.660", store: "Regional Car", city: "Botucatu", featured: false },
-    { id: 9, name: "Fiat Strada Endurance", ano: "2022", km: "35.000 km", cambio: "Manual", combustivel: "Flex", price: "R$ 88.900", parcel: "60x R$ 1.930", store: "Auto Paulista", city: "Lençóis Paulista", featured: false },
-  ];
+  useEffect(() => {
+    listarVeiculosAtivos().then(({ veiculos, total, error }) => {
+      if (!error) {
+        setCarros(veiculos.slice(0, MAX_HOME));
+        setTotal(total);
+      }
+      setCarregando(false);
+    });
+  }, []);
 
   return (
     <main style={{ fontFamily: "'DM Sans', sans-serif", background: "#F7F6F3", minHeight: "100vh" }}>
@@ -180,7 +186,7 @@ export default function Home() {
           <div>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14, flexWrap: "wrap", gap: 8 }}>
               <div>
-                <span style={{ fontFamily: "Georgia, serif", fontSize: 16, fontWeight: 800, color: "#1A1917" }}>1.247 veículos</span>
+                <span style={{ fontFamily: "Georgia, serif", fontSize: 16, fontWeight: 800, color: "#1A1917" }}>{carregando ? "..." : `${total} ${total === 1 ? "veículo" : "veículos"}`}</span>
                 <span style={{ fontSize: 12, color: "#7A7670", marginLeft: 6 }}>na sua região</span>
               </div>
               <select style={{ padding: "6px 12px", border: "1.5px solid #E8E6E1", borderRadius: 7, fontSize: 13, color: "#1A1917", background: "#fff", outline: "none" }}>
@@ -191,43 +197,50 @@ export default function Home() {
               </select>
             </div>
 
+            {!carregando && carros.length === 0 && (
+              <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, padding: 32, textAlign: "center", fontSize: 13, color: "#7A7670" }}>
+                Ainda não há veículos anunciados. <Link href="/anunciar" style={{ color: "#E85D26", fontWeight: 600, textDecoration: "none" }}>Anuncie o seu →</Link>
+              </div>
+            )}
+
             <div className="cars-grid">
               {carros.map(car => (
                 <Link key={car.id} href={`/veiculo/${car.id}`} style={{ textDecoration: "none" }}>
-                  <div style={{ background: "#fff", borderRadius: 12, overflow: "hidden", border: car.featured ? "1.5px solid #E85D26" : "1.5px solid #E8E6E1", position: "relative" }}>
-                    {car.featured && <span style={{ position: "absolute", top: 8, left: 8, background: "#E85D26", color: "#fff", fontSize: 10, fontWeight: 500, padding: "3px 8px", borderRadius: 20, zIndex: 2 }}>⭐ Destaque</span>}
-                    <div style={{ position: "relative", height: 150, width: "100%" }}>
-                      <Image src="/sem-foto.png" alt={car.name} fill style={{ objectFit: "cover" }} sizes="(max-width: 480px) 100vw, (max-width: 768px) 50vw, 33vw" />
+                  <div style={{ background: "#fff", borderRadius: 12, overflow: "hidden", border: car.destaque ? "1.5px solid #E85D26" : "1.5px solid #E8E6E1", position: "relative" }}>
+                    {car.destaque && <span style={{ position: "absolute", top: 8, left: 8, background: "#E85D26", color: "#fff", fontSize: 10, fontWeight: 500, padding: "3px 8px", borderRadius: 20, zIndex: 2 }}>⭐ Destaque</span>}
+                    <div style={{ position: "relative", height: 150, width: "100%", background: "#F7F6F3" }}>
+                      {car.fotos && car.fotos.length > 0
+                        ? <img src={car.fotos[0]} alt={car.nome} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                        : <Image src="/sem-foto.png" alt={car.nome} fill style={{ objectFit: "cover" }} sizes="(max-width: 480px) 100vw, (max-width: 768px) 50vw, 33vw" />
+                      }
                     </div>
                     <div style={{ padding: "10px 12px" }}>
-                      <div style={{ fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, color: "#1A1917", marginBottom: 4 }}>{car.name}</div>
+                      <div style={{ fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, color: "#1A1917", marginBottom: 4 }}>{car.nome}</div>
                       <div style={{ display: "flex", flexWrap: "wrap", gap: 3, marginBottom: 8 }}>
-                        {[car.ano, car.km, car.combustivel].map(tag => (
+                        {[car.ano, formatarKm(car.km), car.combustivel].filter(Boolean).map(tag => (
                           <span key={tag} style={{ fontSize: 10, color: "#7A7670", background: "#F7F6F3", padding: "2px 5px", borderRadius: 4 }}>{tag}</span>
                         ))}
                       </div>
                       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: 8, borderTop: "1px solid #E8E6E1" }}>
-                        <div>
-                          <div style={{ fontFamily: "Georgia, serif", fontSize: 15, fontWeight: 800, color: "#1A1917" }}>{car.price}</div>
-                          <div style={{ fontSize: 10, color: "#7A7670" }}>{car.parcel}</div>
+                        <div style={{ fontFamily: "Georgia, serif", fontSize: 15, fontWeight: 800, color: "#1A1917" }}>{formatarPreco(car.preco)}</div>
+                      </div>
+                      {(car.lojas?.nome || car.cidade) && (
+                        <div style={{ fontSize: 10.5, color: "#7A7670", marginTop: 5, display: "flex", alignItems: "center", gap: 3 }}>
+                          <span style={{ width: 5, height: 5, background: "#E85D26", borderRadius: "50%", display: "inline-block", flexShrink: 0 }}></span>
+                          {[car.lojas?.nome, car.lojas?.cidade || car.cidade].filter(Boolean).join(" · ")}
                         </div>
-                        <button onClick={(e) => e.preventDefault()} style={{ width: 28, height: 28, background: "#F7F6F3", border: "1.5px solid #E8E6E1", borderRadius: 6, cursor: "pointer", fontSize: 11 }}>🤍</button>
-                      </div>
-                      <div style={{ fontSize: 10.5, color: "#7A7670", marginTop: 5, display: "flex", alignItems: "center", gap: 3 }}>
-                        <span style={{ width: 5, height: 5, background: "#E85D26", borderRadius: "50%", display: "inline-block", flexShrink: 0 }}></span>
-                        {car.store} · {car.city}
-                      </div>
+                      )}
                     </div>
                   </div>
                 </Link>
               ))}
             </div>
 
-            <div style={{ display: "flex", justifyContent: "center", gap: 6, marginTop: 24 }}>
-              {["‹", "1", "2", "3", "4", "5", "›"].map((p, i) => (
-                <button key={i} style={{ width: 36, height: 36, borderRadius: 7, border: "1.5px solid", borderColor: i === 1 ? "#E85D26" : "#E8E6E1", background: i === 1 ? "#E85D26" : "#fff", color: i === 1 ? "#fff" : "#1A1917", fontSize: 13, fontWeight: i === 1 ? 700 : 400, cursor: "pointer" }}>{p}</button>
-              ))}
-            </div>
+            {total > MAX_HOME && (
+              <Link href="/veiculos" style={{ display: "block", textAlign: "center", marginTop: 24, padding: "11px", border: "1.5px solid #E8E6E1", borderRadius: 8, background: "#fff", color: "#1A1917", textDecoration: "none", fontSize: 13, fontWeight: 500 }}>
+                Ver todos os {total} veículos →
+              </Link>
+            )}
           </div>
         </div>
       </div>

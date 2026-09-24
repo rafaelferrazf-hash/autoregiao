@@ -1,24 +1,21 @@
 import { ehAdmin } from "@/lib/admin";
+import { exigirAdmin } from "@/lib/admin-servidor";
 import { ehVitalicio } from "@/lib/planos";
-import { criarClienteAdmin, criarClienteServidor } from "@/lib/supabase-servidor";
 
-// Números reais do painel /admin. Só para e-mails da allowlist; lê com a service key.
+// Dados do painel /admin (dashboard + abas Lojas, Anúncios e Usuários). Só admin; service key.
 export const dynamic = "force-dynamic";
 
-type StatusLoja = "vitalicio" | "assinante" | "trial" | "vencida";
+type StatusLoja = "vitalicio" | "desativada" | "assinante" | "trial" | "vencida";
 
 export async function GET() {
-  const sessao = await criarClienteServidor();
-  const { data: { user } } = await sessao.auth.getUser();
-  if (!user) return Response.json({ erro: "Não autenticado." }, { status: 401 });
-  if (!ehAdmin(user.email)) return Response.json({ erro: "Sem permissão." }, { status: 403 });
-
-  const admin = criarClienteAdmin();
+  const r = await exigirAdmin();
+  if ("erro" in r) return r.erro;
+  const admin = r.admin;
   const agora = Date.now();
   const dias = (n: number) => new Date(agora - n * 86_400_000).toISOString();
 
   const [lojasRes, veiculosRes, usuariosRes, visRes, contRes] = await Promise.all([
-    admin.from("lojas").select("id, nome, cidade, plano, expira_em, criado_em").order("criado_em", { ascending: false }),
+    admin.from("lojas").select("id, nome, cidade, plano, expira_em, criado_em, ativo, usuario_id").order("criado_em", { ascending: false }),
     admin.from("veiculos").select("id, nome, preco, status, ativo, loja_id, criado_em, lojas(nome)").order("criado_em", { ascending: false }),
     admin.auth.admin.listUsers({ perPage: 1000 }),
     admin.from("eventos_veiculo").select("id", { count: "exact", head: true }).eq("tipo", "visualizacao").gte("criado_em", dias(30)),
@@ -29,15 +26,17 @@ export async function GET() {
   const veiculos = veiculosRes.data ?? [];
   const usuarios = usuariosRes.data?.users ?? [];
 
-  const statusDe = (plano: string | null, expira: string | null): StatusLoja => {
-    if (ehVitalicio(plano)) return "vitalicio";
-    if (!expira || new Date(expira).getTime() <= agora) return "vencida";
-    return !plano || plano === "trial" ? "trial" : "assinante";
+  const statusDe = (l: { plano: string | null; expira_em: string | null; ativo: boolean | null }): StatusLoja => {
+    if (ehVitalicio(l.plano)) return "vitalicio";
+    if (l.ativo === false) return "desativada";
+    if (!l.expira_em || new Date(l.expira_em).getTime() <= agora) return "vencida";
+    return !l.plano || l.plano === "trial" ? "trial" : "assinante";
   };
 
   const lojasDetalhe = lojas.map(l => {
-    const status = statusDe(l.plano, l.expira_em);
+    const status = statusDe(l);
     const restante = l.expira_em ? Math.ceil((new Date(l.expira_em).getTime() - agora) / 86_400_000) : null;
+    const vencida = !!l.expira_em && new Date(l.expira_em).getTime() <= agora;
     return {
       id: l.id,
       nome: l.nome,
@@ -45,20 +44,22 @@ export async function GET() {
       plano: ehVitalicio(l.plano) ? "Vitalício" : !l.plano || l.plano === "trial" ? "Grátis" : l.plano,
       veiculos: veiculos.filter(v => v.loja_id === l.id && v.ativo !== false).length,
       status,
-      vencimento: status === "vitalicio" ? "Nunca"
+      protegida: ehVitalicio(l.plano),
+      ativo: l.ativo !== false,
+      vencimento: ehVitalicio(l.plano) ? "Nunca"
         : !l.expira_em ? "—"
-        : status === "vencida" ? `Venceu ${new Date(l.expira_em).toLocaleDateString("pt-BR")}`
-        : `${restante} ${restante === 1 ? "dia" : "dias"}`,
+        : vencida ? `Venceu ${new Date(l.expira_em).toLocaleDateString("pt-BR")}`
+        : `${restante} ${restante === 1 ? "dia" : "dias"} (${new Date(l.expira_em).toLocaleDateString("pt-BR")})`,
     };
   });
 
-  const veiculosAtivos = veiculos.filter(v => v.ativo !== false);
+  const lojaPorUsuario = new Map(lojas.map(l => [l.usuario_id, l.nome]));
 
   return Response.json({
     totais: {
       lojas: lojas.length,
       lojas_7d: lojas.filter(l => l.criado_em && l.criado_em >= dias(7)).length,
-      veiculos_ativos: veiculosAtivos.length,
+      veiculos_ativos: veiculos.filter(v => v.ativo !== false).length,
       veiculos_7d: veiculos.filter(v => v.criado_em && v.criado_em >= dias(7)).length,
       usuarios: usuarios.length,
       usuarios_30d: usuarios.filter(u => u.created_at >= dias(30)).length,
@@ -70,14 +71,28 @@ export async function GET() {
       assinante: lojasDetalhe.filter(l => l.status === "assinante").length,
       trial: lojasDetalhe.filter(l => l.status === "trial").length,
       vencida: lojasDetalhe.filter(l => l.status === "vencida").length,
+      desativada: lojasDetalhe.filter(l => l.status === "desativada").length,
     },
     lojas: lojasDetalhe,
-    anuncios: veiculos.slice(0, 8).map(v => ({
+    anuncios: veiculos.map(v => ({
       id: v.id,
       nome: v.nome,
       loja: (v.lojas as unknown as { nome: string } | null)?.nome ?? "Particular",
       preco: v.preco,
-      status: v.ativo === false ? "inativo" : (v.status || "ativo"),
+      ativo: v.ativo !== false,
+      criado_em: v.criado_em,
     })),
+    usuarios: usuarios
+      .map(u => ({
+        id: u.id,
+        email: u.email ?? "",
+        nome: (u.user_metadata?.nome as string | undefined) ?? "",
+        cadastro: u.created_at,
+        confirmado: !!u.email_confirmed_at,
+        ultimo_acesso: u.last_sign_in_at ?? null,
+        loja: lojaPorUsuario.get(u.id) ?? null,
+        admin: ehAdmin(u.email),
+      }))
+      .sort((a, b) => b.cadastro.localeCompare(a.cadastro)),
   });
 }

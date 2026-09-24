@@ -1,18 +1,15 @@
 import { randomInt } from "node:crypto";
-import { ehAdmin } from "@/lib/admin";
-import { criarClienteAdmin, criarClienteServidor } from "@/lib/supabase-servidor";
+import { exigirAdmin } from "@/lib/admin-servidor";
 
 // Gera um cupom AR-XXXXXX de 30 dias e 1 uso. Só para e-mails da allowlist de admin.
 // A tabela `cupons` não aceita escrita pelo navegador (ver supabase/fase1-seguranca.sql),
 // por isso a gravação usa a service key — depois de validar o admin aqui no servidor.
 export async function POST() {
-  const supabase = await criarClienteServidor();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return Response.json({ erro: "Não autenticado." }, { status: 401 });
-  if (!ehAdmin(user.email)) return Response.json({ erro: "Sem permissão." }, { status: 403 });
+  const r = await exigirAdmin();
+  if ("erro" in r) return r.erro;
+  const admin = r.admin;
 
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-  const admin = criarClienteAdmin();
 
   // Tenta de novo se, por azar, o código sorteado já existir.
   for (let tentativa = 0; tentativa < 3; tentativa++) {

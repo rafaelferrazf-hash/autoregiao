@@ -13,7 +13,8 @@ export default async function PerfilLoja({ params }: { params: Promise<{ id: str
 
   const supabase = criarClienteAnonimo();
   const { data: loja } = await supabase.from("lojas").select("*").eq("id", id).maybeSingle<Loja>();
-  if (!loja) notFound();
+  // Loja desativada pelo admin some do site (os anúncios já somem pelo RLS).
+  if (!loja || loja.ativo === false) notFound();
 
   const { data } = await supabase
     .from("veiculos")

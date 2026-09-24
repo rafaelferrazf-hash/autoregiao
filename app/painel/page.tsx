@@ -9,6 +9,7 @@ import { listarVeiculosDoUsuario } from "@/lib/dados/veiculos";
 import { formatarPreco, formatarKm } from "@/lib/formatar";
 import { buscarEstatisticasPainel, type EstatisticasPainel } from "@/lib/dados/eventos";
 import type { Loja } from "@/lib/tipos";
+import { ehVitalicio } from "@/lib/planos";
 
 export default function Painel() {
   const [abaAtiva, setAbaAtiva] = useState("dashboard");
@@ -77,10 +78,12 @@ export default function Painel() {
   const hoje = new Date().toLocaleDateString("pt-BR", { weekday: "long", day: "2-digit", month: "long", year: "numeric" });
 
   // Plano e período grátis reais (tabela lojas). A regra de bloqueio ao vencer fica para a Fase 4.
-  const expiraEm = loja?.expira_em ? new Date(loja.expira_em) : null;
+  // Plano "vitalicio" (conta do dono): sem vencimento e sem limite de anúncios.
+  const vitalicio = ehVitalicio(loja?.plano);
+  const expiraEm = !vitalicio && loja?.expira_em ? new Date(loja.expira_em) : null;
   const diasRestantes = expiraEm ? Math.ceil((expiraEm.getTime() - Date.now()) / 86_400_000) : null;
   const periodoVencido = diasRestantes !== null && diasRestantes <= 0;
-  const nomePlano = !loja ? "Sem loja" : loja.plano === "trial" || !loja.plano ? "Período grátis" : `Plano ${loja.plano.charAt(0).toUpperCase()}${loja.plano.slice(1)}`;
+  const nomePlano = !loja ? "Sem loja" : vitalicio ? "Acesso vitalício" : loja.plano === "trial" || !loja.plano ? "Período grátis" : `Plano ${loja.plano.charAt(0).toUpperCase()}${loja.plano.slice(1)}`;
   const dataFim = expiraEm ? expiraEm.toLocaleDateString("pt-BR") : "";
   const textoPeriodo = diasRestantes === null ? "—"
     : periodoVencido ? `Encerrado em ${dataFim}`
@@ -174,7 +177,7 @@ export default function Painel() {
             <div style={{ background: "rgba(255,255,255,0.1)", borderRadius: 4, height: 4, marginBottom: 6 }}>
               <div style={{ background: "#E85D26", height: 4, borderRadius: 4, width: `${Math.min((anunciosReais.length / 30) * 100, 100)}%` }}></div>
             </div>
-            <div style={{ fontSize: 10, color: "rgba(255,255,255,0.45)" }}>{Math.max(30 - anunciosReais.length, 0)} slots disponíveis</div>
+            <div style={{ fontSize: 10, color: "rgba(255,255,255,0.45)" }}>{vitalicio ? "Sem limite de anúncios" : `${Math.max(30 - anunciosReais.length, 0)} slots disponíveis`}</div>
           </div>
           <button
             onClick={async () => { await sair(); window.location.href = "/login"; }}
@@ -208,21 +211,23 @@ export default function Painel() {
         <div style={{ padding: "16px", flex: 1 }}>
 
           {/* AVISO */}
-          <div style={{ background: "rgba(232,93,38,0.08)", border: "1px solid rgba(232,93,38,0.2)", borderRadius: 10, padding: "12px 14px", display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16, flexWrap: "wrap", gap: 8 }}>
+          {!vitalicio && <div style={{ background: "rgba(232,93,38,0.08)", border: "1px solid rgba(232,93,38,0.2)", borderRadius: 10, padding: "12px 14px", display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16, flexWrap: "wrap", gap: 8 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
               <span style={{ fontSize: 16 }}>⏳</span>
               <div style={{ fontSize: 13, color: "#1A1917" }}>{diasRestantes === null ? "Sua conta ainda não tem uma loja vinculada." : periodoVencido ? <>Seu período gratuito <strong style={{ color: "#E85D26" }}>terminou em {dataFim}</strong>. Use um cupom em &quot;Meu plano&quot; ou assine um plano.</> : <>Período gratuito termina em <strong style={{ color: "#E85D26" }}>{diasRestantes} {diasRestantes === 1 ? "dia" : "dias"}</strong>.</>}</div>
             </div>
             <a href="#" style={{ fontSize: 12, fontWeight: 500, color: "#E85D26", textDecoration: "none" }}>Ver planos →</a>
-          </div>
+          </div>}
 
           {/* STATS */}
           <div className="stats-grid" style={{ marginBottom: 16 }}>
             {[
               { label: "Visualizações (30 dias)", value: stats ? stats.visualizacoes_30d.toLocaleString("pt-BR") : "—", change: varVisitas.texto, up: varVisitas.up, icon: "👁️", bg: "rgba(232,93,38,0.08)" },
               { label: "Contatos (30 dias)", value: stats ? stats.contatos_30d.toLocaleString("pt-BR") : "—", change: varContatos.texto, up: varContatos.up, icon: "💬", bg: "rgba(22,163,74,0.08)" },
-              { label: "Anúncios ativos", value: String(anunciosReais.length), change: "30 limite", up: false, icon: "🚗", bg: "rgba(37,99,235,0.08)" },
-              { label: "Período grátis", value: diasRestantes === null ? "—" : periodoVencido ? "Encerrado" : String(diasRestantes), change: diasRestantes === null ? "sem loja" : periodoVencido ? `em ${dataFim}` : diasRestantes === 1 ? "dia restante" : "dias restantes", up: !periodoVencido, icon: "⏳", bg: "rgba(232,93,38,0.08)" },
+              { label: "Anúncios ativos", value: String(anunciosReais.length), change: vitalicio ? "sem limite" : "30 limite", up: false, icon: "🚗", bg: "rgba(37,99,235,0.08)" },
+              vitalicio
+                ? { label: "Plano", value: "Vitalício", change: "sem vencimento", up: true, icon: "👑", bg: "rgba(232,93,38,0.08)" }
+                : { label: "Período grátis", value: diasRestantes === null ? "—" : periodoVencido ? "Encerrado" : String(diasRestantes), change: diasRestantes === null ? "sem loja" : periodoVencido ? `em ${dataFim}` : diasRestantes === 1 ? "dia restante" : "dias restantes", up: !periodoVencido, icon: "⏳", bg: "rgba(232,93,38,0.08)" },
             ].map(stat => (
               <div key={stat.label} style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, padding: 14 }}>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
@@ -386,14 +391,17 @@ export default function Painel() {
                 <a href="#" style={{ fontSize: 12, color: "#E85D26", fontWeight: 500, textDecoration: "none" }}>Alterar →</a>
               </div>
               <div style={{ padding: "0 18px" }}>
-                {[["Plano atual", nomePlano, "#E85D26"], ["Anúncios usados", `${anunciosReais.length} / 30`, "#1A1917"], ["Período gratuito", textoPeriodo, periodoVencido ? "#DC2626" : "#E85D26"], ["Destaque patrocinado", "Não contratado", "#7A7670"]].map(([label, value, color]) => (
+                {(vitalicio
+                  ? [["Plano atual", "👑 Acesso vitalício", "#E85D26"], ["Anúncios usados", `${anunciosReais.length} (sem limite)`, "#1A1917"], ["Vencimento", "Nunca", "#16A34A"]]
+                  : [["Plano atual", nomePlano, "#E85D26"], ["Anúncios usados", `${anunciosReais.length} / 30`, "#1A1917"], ["Período gratuito", textoPeriodo, periodoVencido ? "#DC2626" : "#E85D26"], ["Destaque patrocinado", "Não contratado", "#7A7670"]]
+                ).map(([label, value, color]) => (
                   <div key={label} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 0", borderBottom: "1px solid #E8E6E1" }}>
                     <span style={{ fontSize: 12.5, color: "#7A7670" }}>{label}</span>
                     <span style={{ fontSize: 13, fontWeight: 500, color }}>{value}</span>
                   </div>
                 ))}
               </div>
-              <div style={{ padding: "14px 18px", display: "flex", flexDirection: "column", gap: 10 }}>
+              {!vitalicio && <div style={{ padding: "14px 18px", display: "flex", flexDirection: "column", gap: 10 }}>
                 <div style={{ background: "#F7F6F3", border: "1.5px solid #E8E6E1", borderRadius: 10, padding: 12 }}>
                   <div style={{ fontSize: 11, fontWeight: 600, color: "#7A7670", marginBottom: 8, textTransform: "uppercase" as const, letterSpacing: 0.5 }}>🎟️ Resgatar cupom</div>
                   <div style={{ display: "flex", gap: 8 }}>
@@ -412,7 +420,7 @@ export default function Painel() {
                 <button style={{ width: "100%", padding: 10, background: "#E85D26", color: "#fff", border: "none", borderRadius: 8, fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
                   Assinar plano — R$ 159/mês
                 </button>
-              </div>
+              </div>}
             </div>
           </div>
         </div>

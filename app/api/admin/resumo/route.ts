@@ -1,10 +1,11 @@
 import { ehAdmin } from "@/lib/admin";
+import { ehVitalicio } from "@/lib/planos";
 import { criarClienteAdmin, criarClienteServidor } from "@/lib/supabase-servidor";
 
 // Números reais do painel /admin. Só para e-mails da allowlist; lê com a service key.
 export const dynamic = "force-dynamic";
 
-type StatusLoja = "assinante" | "trial" | "vencida";
+type StatusLoja = "vitalicio" | "assinante" | "trial" | "vencida";
 
 export async function GET() {
   const sessao = await criarClienteServidor();
@@ -29,6 +30,7 @@ export async function GET() {
   const usuarios = usuariosRes.data?.users ?? [];
 
   const statusDe = (plano: string | null, expira: string | null): StatusLoja => {
+    if (ehVitalicio(plano)) return "vitalicio";
     if (!expira || new Date(expira).getTime() <= agora) return "vencida";
     return !plano || plano === "trial" ? "trial" : "assinante";
   };
@@ -40,10 +42,11 @@ export async function GET() {
       id: l.id,
       nome: l.nome,
       cidade: l.cidade,
-      plano: !l.plano || l.plano === "trial" ? "Grátis" : l.plano,
+      plano: ehVitalicio(l.plano) ? "Vitalício" : !l.plano || l.plano === "trial" ? "Grátis" : l.plano,
       veiculos: veiculos.filter(v => v.loja_id === l.id && v.ativo !== false).length,
       status,
-      vencimento: !l.expira_em ? "—"
+      vencimento: status === "vitalicio" ? "Nunca"
+        : !l.expira_em ? "—"
         : status === "vencida" ? `Venceu ${new Date(l.expira_em).toLocaleDateString("pt-BR")}`
         : `${restante} ${restante === 1 ? "dia" : "dias"}`,
     };
@@ -63,6 +66,7 @@ export async function GET() {
       contatos_30d: contRes.count ?? 0,
     },
     status: {
+      vitalicio: lojasDetalhe.filter(l => l.status === "vitalicio").length,
       assinante: lojasDetalhe.filter(l => l.status === "assinante").length,
       trial: lojasDetalhe.filter(l => l.status === "trial").length,
       vencida: lojasDetalhe.filter(l => l.status === "vencida").length,

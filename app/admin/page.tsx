@@ -10,8 +10,8 @@ import { formatarPreco } from "@/lib/formatar";
 
 type Resumo = {
   totais: { lojas: number; lojas_7d: number; veiculos_ativos: number; veiculos_7d: number; usuarios: number; usuarios_30d: number; visualizacoes_30d: number; contatos_30d: number };
-  status: { assinante: number; trial: number; vencida: number };
-  lojas: { id: string; nome: string; cidade: string; plano: string; veiculos: number; status: "assinante" | "trial" | "vencida"; vencimento: string }[];
+  status: { vitalicio: number; assinante: number; trial: number; vencida: number };
+  lojas: { id: string; nome: string; cidade: string; plano: string; veiculos: number; status: "vitalicio" | "assinante" | "trial" | "vencida"; vencimento: string }[];
   anuncios: { id: string; nome: string; loja: string; preco: number | null; status: string }[];
 };
 
@@ -80,6 +80,7 @@ export default function Admin() {
   const corStatus = (st: string) => statusColor[st] ?? statusColor.ativo;
   const statusColor: Record<string, { bg: string; color: string }> = {
     ativo: { bg: "#D1FAE5", color: "#065F46" },
+    vitalicio: { bg: "rgba(232,93,38,0.12)", color: "#C44818" },
     assinante: { bg: "#D1FAE5", color: "#065F46" },
     trial: { bg: "#FEF3C7", color: "#92400E" },
     vencida: { bg: "#FEE2E2", color: "#991B1B" },
@@ -179,6 +180,7 @@ export default function Admin() {
           <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, padding: "20px" }}>
             <div style={{ fontFamily: "Georgia, serif", fontSize: 15, fontWeight: 700, color: "#1A1917", marginBottom: 16 }}>Lojas por status</div>
             {[
+              { label: "Vitalícias (dono)", valor: resumo?.status.vitalicio, cor: "rgba(232,93,38,0.12)", corTexto: "#C44818" },
               { label: "Assinantes", valor: resumo?.status.assinante, cor: "#D1FAE5", corTexto: "#065F46" },
               { label: "Em período grátis", valor: resumo?.status.trial, cor: "#FEF3C7", corTexto: "#92400E" },
               { label: "Período vencido", valor: resumo?.status.vencida, cor: "#FEE2E2", corTexto: "#991B1B" },

@@ -2,8 +2,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { supabase } from "@/lib/supabase";
 import { usuarioAtual, sair } from "@/lib/dados/usuario";
+import { resgatarCupom as resgatarCupomNoBanco } from "@/lib/dados/cupons";
 import { buscarLojaDoUsuario } from "@/lib/dados/lojas";
 import { listarVeiculosDoUsuario } from "@/lib/dados/veiculos";
 import { formatarPreco, formatarKm } from "@/lib/formatar";
@@ -41,23 +41,10 @@ export default function Painel() {
     const regex = /^AR-[A-Z0-9]{6}$/;
     if (!regex.test(codigo)) { setCupomStatus("invalido"); return; }
     setCupomStatus("loading");
-    try {
-      const { data: cupomData, error: cupomError } = await supabase.from("cupons").select("*").eq("codigo", codigo).eq("ativo", true).single();
-      if (cupomError || !cupomData) { setCupomStatus("erro"); return; }
-      if (cupomData.usos_realizados >= cupomData.usos_maximos) { setCupomStatus("usado"); return; }
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) { setCupomStatus("erro"); return; }
-      const { data: lojaData, error: lojaError } = await supabase.from("lojas").select("id, expira_em").eq("usuario_id", user.id).maybeSingle();
-      if (lojaError || !lojaData) { setCupomStatus("erro"); return; }
-      const base = lojaData.expira_em ? new Date(lojaData.expira_em) : new Date();
-      if (base < new Date()) base.setTime(new Date().getTime());
-      base.setDate(base.getDate() + cupomData.dias);
-      const { error: updateLojaError } = await supabase.from("lojas").update({ expira_em: base.toISOString() }).eq("id", lojaData.id);
-      if (updateLojaError) { setCupomStatus("erro"); return; }
-      await supabase.from("cupons_usados").insert({ cupom_id: cupomData.id, loja_id: lojaData.id, usado_em: new Date().toISOString() });
-      await supabase.from("cupons").update({ usos_realizados: cupomData.usos_realizados + 1 }).eq("id", cupomData.id);
-      setCupomStatus("ok");
-    } catch { setCupomStatus("erro"); }
+    const resultado = await resgatarCupomNoBanco(codigo);
+    if (resultado === "ok") setCupomStatus("ok");
+    else if (resultado === "usado" || resultado === "ja_resgatado") setCupomStatus("usado");
+    else setCupomStatus("erro");
   };
 
   const mensagemCupom = () => {

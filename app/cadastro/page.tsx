@@ -22,24 +22,22 @@ export default function Cadastro() {
     const { data, error } = await supabase.auth.signUp({
       email: form.email,
       password: form.senha,
-      options: { data: { nome: form.nome, telefone: form.telefone, tipo } }
+      // Para lojista, `loja` e `cidade` vão nos metadados: o banco cria a loja
+      // (com os 60 dias grátis) no trigger criar_loja_no_cadastro — ver supabase/fase1-seguranca.sql.
+      options: {
+        data: {
+          nome: form.nome,
+          telefone: form.telefone,
+          tipo,
+          ...(tipo === "lojista" ? { loja: form.loja, cidade: form.cidade } : {}),
+        },
+      },
     });
     if (error) {
       setCarregando(false);
       if (error.message.includes("already registered")) return setErro("Este e-mail já está cadastrado. Tente fazer login.");
+      if (error.message.toLowerCase().includes("rate limit")) return setErro("Muitos cadastros seguidos. Aguarde alguns minutos e tente de novo.");
       return setErro("Erro ao criar conta. Tente novamente.");
-    }
-    if (tipo === "lojista" && data.user) {
-      const expira = new Date();
-      expira.setDate(expira.getDate() + 60);
-      await supabase.from("lojas").insert({
-        nome: form.loja,
-        cidade: form.cidade,
-        telefone: form.telefone,
-        usuario_id: data.user.id,
-        ativo: true,
-        expira_em: expira.toISOString(),
-      });
     }
     setCarregando(false);
     setSucesso(true);

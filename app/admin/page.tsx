@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { ehAdmin } from "@/lib/admin";
+import { gerarCupom as gerarCupomNoServidor } from "@/lib/dados/cupons";
 
 export default function Admin() {
   const router = useRouter();
@@ -37,20 +38,9 @@ export default function Admin() {
 
   async function gerarCupom() {
     setGerando(true);
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    let codigo = "AR-";
-    for (let i = 0; i < 6; i++) codigo += chars[Math.floor(Math.random() * chars.length)];
-
-    const { error } = await supabase.from("cupons").insert({
-      codigo,
-      dias: 30,
-      usos_maximos: 1,
-      usos_realizados: 0,
-      ativo: true,
-    });
-
-    if (error) {
-      alert("Erro ao salvar cupom: " + error.message);
+    const { codigo, erro } = await gerarCupomNoServidor();
+    if (erro || !codigo) {
+      alert("Erro ao gerar cupom: " + (erro || "resposta vazia"));
     } else {
       setCupomGerado(codigo);
     }

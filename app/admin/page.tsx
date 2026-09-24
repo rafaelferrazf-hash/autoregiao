@@ -78,6 +78,7 @@ export default function Admin() {
   const mesAtual = new Date().toLocaleDateString("pt-BR", { month: "long", year: "numeric" });
 
   const corStatus = (st: string) => statusColor[st] ?? statusColor.ativo;
+  const rotuloStatus: Record<string, string> = { vitalicio: "vitalícia", assinante: "assinante", trial: "grátis", vencida: "vencida" };
   const statusColor: Record<string, { bg: string; color: string }> = {
     ativo: { bg: "#D1FAE5", color: "#065F46" },
     vitalicio: { bg: "rgba(232,93,38,0.12)", color: "#C44818" },
@@ -144,7 +145,7 @@ export default function Admin() {
         {/* TÍTULO */}
         <div style={{ marginBottom: 20 }}>
           <div style={{ fontFamily: "Georgia, serif", fontSize: 20, fontWeight: 800, color: "#1A1917" }}>Dashboard</div>
-          <div style={{ fontSize: 13, color: "#7A7670" }}><span style={{ textTransform: "capitalize" }}>Visão geral do AutoRegião — {mesAtual}</span></div>
+          <div style={{ fontSize: 13, color: "#7A7670" }}>Visão geral do AutoRegião — {mesAtual.charAt(0).toUpperCase() + mesAtual.slice(1)}</div>
           {erroResumo && <div style={{ fontSize: 13, color: "#991B1B", marginTop: 6 }}>⚠️ {erroResumo}</div>}
         </div>
 
@@ -213,7 +214,7 @@ export default function Admin() {
                   <td style={{ padding: "12px 8px", fontSize: 13, color: "#7A7670" }}>{loja.cidade}</td>
                   <td style={{ padding: "12px 8px" }}><span style={{ fontSize: 11, fontWeight: 600, color: "#1A1917" }}>{loja.plano}</span></td>
                   <td style={{ padding: "12px 8px", fontSize: 13, color: "#1A1917" }}>{loja.veiculos}</td>
-                  <td style={{ padding: "12px 8px" }}><span style={{ fontSize: 11, fontWeight: 600, padding: "3px 8px", borderRadius: 20, background: corStatus(loja.status).bg, color: corStatus(loja.status).color }}>{loja.status}</span></td>
+                  <td style={{ padding: "12px 8px" }}><span style={{ fontSize: 11, fontWeight: 600, padding: "3px 8px", borderRadius: 20, background: corStatus(loja.status).bg, color: corStatus(loja.status).color }}>{rotuloStatus[loja.status] ?? loja.status}</span></td>
                   <td style={{ padding: "12px 8px", fontSize: 12, color: "#7A7670" }}>{loja.vencimento}</td>
                   <td style={{ padding: "12px 8px" }}><Link href={`/loja/${loja.id}`} style={{ fontSize: 12, color: "#E85D26", textDecoration: "none", fontWeight: 500 }}>Ver →</Link></td>
                 </tr>
@@ -228,7 +229,7 @@ export default function Admin() {
                     <div style={{ fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, color: "#1A1917" }}>{loja.nome}</div>
                     <div style={{ fontSize: 12, color: "#7A7670" }}>📍 {loja.cidade}</div>
                   </div>
-                  <span style={{ fontSize: 11, fontWeight: 600, padding: "3px 8px", borderRadius: 20, background: corStatus(loja.status).bg, color: corStatus(loja.status).color }}>{loja.status}</span>
+                  <span style={{ fontSize: 11, fontWeight: 600, padding: "3px 8px", borderRadius: 20, background: corStatus(loja.status).bg, color: corStatus(loja.status).color }}>{rotuloStatus[loja.status] ?? loja.status}</span>
                 </div>
                 <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 8 }}>
                   <span style={{ fontSize: 11, fontWeight: 600, color: "#1A1917" }}>📋 {loja.plano}</span>

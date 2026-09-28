@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { usuarioAtual, sair } from "@/lib/dados/usuario";
+import { ehAdmin } from "@/lib/admin";
 import { resgatarCupom as resgatarCupomNoBanco } from "@/lib/dados/cupons";
 import { buscarLojaDoUsuario } from "@/lib/dados/lojas";
 import { listarVeiculosDoUsuario, definirAnuncioAtivo, excluirVeiculo } from "@/lib/dados/veiculos";
@@ -18,6 +19,8 @@ export default function Painel() {
   const [nomeLoja, setNomeLoja] = useState("Minha Loja");
   const [anunciosReais, setAnunciosReais] = useState<Awaited<ReturnType<typeof listarVeiculosDoUsuario>>["veiculos"]>([]);
   const [lojaId, setLojaId] = useState<string | null>(null);
+  // Atalho para o /admin, só para o dono (a checagem de verdade é no servidor/proxy).
+  const [souAdmin, setSouAdmin] = useState(false);
   const [loja, setLoja] = useState<Loja | null>(null);
   const [lojaCarregada, setLojaCarregada] = useState(false);
   const [stats, setStats] = useState<EstatisticasPainel | null>(null);
@@ -28,6 +31,7 @@ export default function Painel() {
     (async () => {
       const user = await usuarioAtual();
       if (!user) return;
+      setSouAdmin(ehAdmin(user.email));
       const nome = user.user_metadata?.nome || user.email || "Lojista";
       setNomeUsuario(nome.split(" ")[0]);
 
@@ -201,6 +205,12 @@ export default function Painel() {
                 {item.badge && <span style={{ background: abaAtiva === item.id ? "rgba(255,255,255,0.25)" : "#E85D26", color: "#fff", fontSize: 10, fontWeight: 700, padding: "1px 6px", borderRadius: 10 }}>{item.badge}</span>}
               </button>
           ))}
+          {souAdmin && (
+            <Link href="/admin" style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 10px", borderRadius: 8, marginTop: 10, border: "1px solid rgba(232,93,38,0.35)", background: "rgba(232,93,38,0.1)", color: "#fff", fontSize: 13.5, fontWeight: 600, textDecoration: "none" }}>
+              <span style={{ fontSize: 15, width: 20, textAlign: "center", flexShrink: 0 }}>🛡️</span>
+              <span style={{ flex: 1 }}>Painel Admin</span>
+            </Link>
+          )}
         </nav>
         <div style={{ padding: "12px 10px", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
           <div style={{ background: "rgba(232,93,38,0.12)", border: "1px solid rgba(232,93,38,0.25)", borderRadius: 10, padding: 12, marginBottom: 8 }}>
@@ -493,6 +503,12 @@ export default function Painel() {
                 <span style={{ fontSize: 10, color: abaAtiva === item.id ? "#E85D26" : "rgba(255,255,255,0.4)", fontWeight: abaAtiva === item.id ? 600 : 400 }}>{item.label}</span>
               </button>
         ))}
+        {souAdmin && (
+          <Link href="/admin" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2, textDecoration: "none", padding: "4px 12px" }}>
+            <span style={{ fontSize: 20 }}>🛡️</span>
+            <span style={{ fontSize: 10, color: "rgba(255,255,255,0.4)" }}>Admin</span>
+          </Link>
+        )}
       </div>
 
     </div>

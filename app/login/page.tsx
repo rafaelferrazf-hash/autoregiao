@@ -7,7 +7,6 @@ import { supabase } from "@/lib/supabase";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
-  const [lembrar, setLembrar] = useState(false);
   const [erro, setErro] = useState("");
   const [carregando, setCarregando] = useState(false);
   const [sucesso, setSucesso] = useState(false);
@@ -65,7 +64,7 @@ export default function Login() {
           {/* FORMULÁRIO */}
           <div className="login-form" style={{ padding: "40px 36px" }}>
             <h1 style={{ fontFamily: "Georgia, serif", fontSize: 24, fontWeight: 800, color: "#1A1917", marginBottom: 6 }}>Bem-vindo de volta!</h1>
-            <p style={{ fontSize: 14, color: "#7A7670", marginBottom: 24, lineHeight: 1.5 }}>Entre na sua conta para acessar seus anúncios e favoritos.</p>
+            <p style={{ fontSize: 14, color: "#7A7670", marginBottom: 24, lineHeight: 1.5 }}>Entre na sua conta para gerenciar seus anúncios.</p>
 
             <div style={{ display: "flex", gap: 0, marginBottom: 24, background: "#F7F6F3", borderRadius: 8, padding: 4 }}>
               <button style={{ flex: 1, padding: "9px 0", borderRadius: 6, border: "none", background: "#fff", fontSize: 14, fontWeight: 600, color: "#1A1917", cursor: "pointer", boxShadow: "0 1px 4px rgba(0,0,0,0.08)" }}>Entrar</button>
@@ -89,33 +88,14 @@ export default function Login() {
                 <input type="password" placeholder="••••••••" value={senha} onChange={e => setSenha(e.target.value)} onKeyDown={e => e.key === "Enter" && handleLogin()}
                   style={{ width: "100%", padding: "12px 14px", border: "1.5px solid #E8E6E1", borderRadius: 8, fontSize: 15, color: "#1A1917", background: "#F7F6F3", outline: "none", boxSizing: "border-box" }} />
               </div>
-              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <input type="checkbox" id="lembrar" checked={lembrar} onChange={e => setLembrar(e.target.checked)} style={{ width: 18, height: 18, accentColor: "#E85D26", cursor: "pointer" }} />
-                <label htmlFor="lembrar" style={{ fontSize: 14, color: "#7A7670", cursor: "pointer" }}>Lembrar de mim</label>
-              </div>
               <button onClick={handleLogin} disabled={carregando}
                 style={{ width: "100%", padding: "14px", background: carregando ? "#C44818" : "#E85D26", color: "#fff", border: "none", borderRadius: 9, fontFamily: "Georgia, serif", fontSize: 16, fontWeight: 700, cursor: carregando ? "not-allowed" : "pointer", opacity: carregando ? 0.8 : 1 }}>
                 {carregando ? "Entrando..." : "Entrar na minha conta"}
               </button>
             </div>
 
-            <div style={{ display: "flex", alignItems: "center", gap: 12, margin: "20px 0" }}>
-              <div style={{ flex: 1, height: 1, background: "#E8E6E1" }}></div>
-              <span style={{ fontSize: 12, color: "#7A7670" }}>ou entre com</span>
-              <div style={{ flex: 1, height: 1, background: "#E8E6E1" }}></div>
-            </div>
-
-            <div style={{ display: "flex", gap: 10 }}>
-              <button style={{ flex: 1, padding: "11px", border: "1.5px solid #E8E6E1", borderRadius: 8, background: "#fff", fontSize: 14, fontWeight: 500, color: "#1A1917", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
-                <span style={{ fontSize: 16 }}>G</span> Google
-              </button>
-              <button style={{ flex: 1, padding: "11px", border: "1.5px solid #E8E6E1", borderRadius: 8, background: "#fff", fontSize: 14, fontWeight: 500, color: "#1A1917", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
-                <span style={{ fontSize: 16 }}>📱</span> WhatsApp
-              </button>
-            </div>
-
             <div style={{ textAlign: "center", fontSize: 13, color: "#7A7670", marginTop: 20 }}>
-              Já tem conta? <Link href="/cadastro" style={{ color: "#E85D26", fontWeight: 600, textDecoration: "none" }}>Cadastrar agora</Link>
+              Ainda não tem conta? <Link href="/cadastro" style={{ color: "#E85D26", fontWeight: 600, textDecoration: "none" }}>Cadastrar agora</Link>
             </div>
           </div>
 

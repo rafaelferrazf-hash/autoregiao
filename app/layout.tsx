@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { NOME_SITE, URL_SITE } from "@/lib/site";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -12,9 +13,20 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const descricaoPadrao = "Encontre carros, motos e utilitários de lojas da sua região. Fale direto com o vendedor pelo WhatsApp. Anuncie seu veículo ou cadastre sua loja.";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(URL_SITE),
   title: "AutoRegião — O carro da sua região",
-  description: "Encontre veículos de lojas verificadas perto de você. Anuncie seu carro ou cadastre sua loja no AutoRegião.",
+  description: descricaoPadrao,
+  openGraph: {
+    siteName: NOME_SITE,
+    locale: "pt_BR",
+    type: "website",
+    title: "AutoRegião — O carro da sua região",
+    description: descricaoPadrao,
+    images: [{ url: "/logo.png", alt: NOME_SITE }],
+  },
 };
 
 export default function RootLayout({

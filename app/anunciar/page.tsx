@@ -274,8 +274,8 @@ export default function Anunciar() {
       <footer style={{ background: "#111009", padding: "24px 16px", textAlign: "center" }}>
         <p style={{ fontSize: 12, color: "rgba(255,255,255,0.3)" }}>
           © 2026 <span style={{ color: "#E85D26" }}>AutoRegião</span> · Todos os direitos reservados ·{" "}
-          <a href="#" style={{ color: "rgba(255,255,255,0.3)", textDecoration: "none", marginLeft: 8 }}>Termos de uso</a> ·{" "}
-          <a href="#" style={{ color: "rgba(255,255,255,0.3)", textDecoration: "none", marginLeft: 8 }}>Privacidade</a>
+          <Link href="/termos" style={{ color: "rgba(255,255,255,0.3)", textDecoration: "none", marginLeft: 8 }}>Termos de uso</Link> ·{" "}
+          <Link href="/privacidade" style={{ color: "rgba(255,255,255,0.3)", textDecoration: "none", marginLeft: 8 }}>Privacidade</Link>
         </p>
       </footer>
 

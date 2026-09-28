@@ -154,6 +154,13 @@ export default function Home() {
             )}
         </div>
       </div>
+
+      <footer style={{ borderTop: "1px solid #E8E6E1", marginTop: 32, padding: "20px 16px", textAlign: "center", fontSize: 12, color: "#7A7670", display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
+        <span>© {new Date().getFullYear()} <span style={{ color: "#E85D26" }}>AutoRegião</span></span>
+        <Link href="/anunciar" style={{ color: "#7A7670", textDecoration: "none" }}>Anunciar</Link>
+        <Link href="/termos" style={{ color: "#7A7670", textDecoration: "none" }}>Termos de Uso</Link>
+        <Link href="/privacidade" style={{ color: "#7A7670", textDecoration: "none" }}>Política de Privacidade</Link>
+      </footer>
     </main>
   );
 }

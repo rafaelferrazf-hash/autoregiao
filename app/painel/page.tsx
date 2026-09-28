@@ -10,6 +10,7 @@ import { formatarPreco, formatarKm } from "@/lib/formatar";
 import { buscarEstatisticasPainel, type EstatisticasPainel } from "@/lib/dados/eventos";
 import type { Loja } from "@/lib/tipos";
 import { ehVitalicio } from "@/lib/planos";
+import PerfilLoja from "@/components/PerfilLoja";
 
 export default function Painel() {
   const [abaAtiva, setAbaAtiva] = useState("dashboard");
@@ -180,12 +181,9 @@ export default function Painel() {
             { id: "dashboard", icon: "📊", label: "Dashboard" },
             { id: "anuncios", icon: "🚗", label: "Meus Anúncios", badge: anunciosReais.length > 0 ? String(anunciosReais.length) : undefined },
             { id: "novo", icon: "➕", label: "Novo Anúncio" },
-            { id: "mensagens", icon: "💬", label: "Mensagens" },
-            { id: "avaliacoes", icon: "⭐", label: "Avaliações" },
-            { id: "estatisticas", icon: "📈", label: "Estatísticas" },
-            { id: "plano", icon: "💳", label: "Plano & Pagamento" },
+            // Mensagens, Avaliações, Estatísticas, Plano & Pagamento e Configurações
+            // ficam escondidas até existirem de verdade.
             { id: "perfil", icon: "🏪", label: "Perfil da Loja" },
-            { id: "config", icon: "⚙️", label: "Configurações" },
           ].map(item => (
             item.id === "novo"
               ? <Link key={item.id} href="/painel/novo-anuncio" style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 10px", borderRadius: 8, background: "transparent", color: "rgba(255,255,255,0.5)", fontSize: 13.5, fontWeight: 500, textDecoration: "none", width: "100%" }}>
@@ -222,7 +220,7 @@ export default function Painel() {
         {/* HEADER */}
         <header style={{ background: "#fff", borderBottom: "1px solid #E8E6E1", padding: "0 16px", height: 58, display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, zIndex: 40 }}>
           <div>
-            <div style={{ fontFamily: "Georgia, serif", fontSize: 15, fontWeight: 800, color: "#1A1917" }}>Dashboard</div>
+            <div style={{ fontFamily: "Georgia, serif", fontSize: 15, fontWeight: 800, color: "#1A1917" }}>{abaAtiva === "perfil" ? "Perfil da loja" : abaAtiva === "anuncios" ? "Meus anúncios" : "Dashboard"}</div>
             <div style={{ fontSize: 10, color: "#7A7670", textTransform: "capitalize" }}>{hoje}</div>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -238,6 +236,9 @@ export default function Painel() {
         </header>
 
         <div style={{ padding: "16px", flex: 1 }}>
+          {abaAtiva === "perfil" ? (
+            lojaCarregada && <PerfilLoja key={loja?.id ?? "sem-loja"} loja={loja} onSalvo={l => { setLoja(l); setNomeLoja(l.nome); }} />
+          ) : (<>
 
           {/* AVISO */}
           {lojaCarregada && !vitalicio && <div style={{ background: "rgba(232,93,38,0.08)", border: "1px solid rgba(232,93,38,0.2)", borderRadius: 10, padding: "12px 14px", display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16, flexWrap: "wrap", gap: 8 }}>
@@ -457,6 +458,7 @@ export default function Painel() {
               </div>}
             </div>
           </div>
+          </>)}
         </div>
       </div>
 
@@ -466,8 +468,7 @@ export default function Painel() {
           { id: "dashboard", icon: "📊", label: "Início" },
           { id: "anuncios", icon: "🚗", label: "Anúncios" },
           { id: "novo", icon: "➕", label: "Novo", link: "/painel/novo-anuncio" },
-          { id: "mensagens", icon: "💬", label: "Msgs" },
-          { id: "config", icon: "⚙️", label: "Mais" },
+          { id: "perfil", icon: "🏪", label: "Loja" },
         ].map(item => (
           item.link
             ? <Link key={item.id} href={item.link} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2, textDecoration: "none", padding: "4px 12px" }}>

@@ -183,8 +183,8 @@ export default function Cadastro() {
 
             <div style={{ fontSize: 12, color: "#7A7670", marginBottom: 20, lineHeight: 1.6 }}>
               Ao criar sua conta você concorda com os{" "}
-              <a href="#" style={{ color: "#E85D26", textDecoration: "none" }}>Termos de uso</a>{" "}e a{" "}
-              <a href="#" style={{ color: "#E85D26", textDecoration: "none" }}>Política de privacidade</a>.
+              <Link href="/termos" target="_blank" style={{ color: "#E85D26", textDecoration: "none" }}>Termos de uso</Link>{" "}e a{" "}
+              <Link href="/privacidade" target="_blank" style={{ color: "#E85D26", textDecoration: "none" }}>Política de privacidade</Link>.
             </div>
 
             <button onClick={handleSubmit} disabled={carregando}

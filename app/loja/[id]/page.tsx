@@ -4,6 +4,41 @@ import { notFound } from "next/navigation";
 import { criarClienteAnonimo } from "@/lib/supabase-servidor";
 import { formatarPreco, formatarKm } from "@/lib/formatar";
 import type { Loja, Veiculo } from "@/lib/tipos";
+import type { Metadata } from "next";
+
+// Título, descrição e foto de capa para o link da loja no WhatsApp/Google.
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params;
+  if (!/^[0-9a-f-]{36}$/i.test(id)) return { title: "Loja não encontrada — AutoRegião" };
+  const supabase = criarClienteAnonimo();
+  const { data: loja } = await supabase.from("lojas").select("nome, cidade, estado, descricao, ativo").eq("id", id).maybeSingle();
+  if (!loja || loja.ativo === false) return { title: "Loja não encontrada — AutoRegião" };
+
+  const { data: carros, count } = await supabase
+    .from("veiculos")
+    .select("fotos", { count: "exact" })
+    .eq("loja_id", id)
+    .eq("ativo", true)
+    .order("criado_em", { ascending: false })
+    .limit(5);
+  const foto = (carros ?? []).map(c => (c.fotos as string[] | null)?.[0]).find(Boolean);
+  const local = [loja.cidade, loja.estado].filter(Boolean).join("/");
+  const qtd = count ?? 0;
+  const descricao = loja.descricao?.slice(0, 160)
+    || `${qtd} ${qtd === 1 ? "veículo à venda" : "veículos à venda"}${local ? ` em ${local}` : ""}. Fale direto com a loja pelo WhatsApp.`;
+
+  return {
+    title: `${loja.nome}${local ? ` — ${local}` : ""} | AutoRegião`,
+    description: descricao,
+    alternates: { canonical: `/loja/${id}` },
+    openGraph: {
+      title: loja.nome,
+      description: descricao,
+      url: `/loja/${id}`,
+      ...(foto ? { images: [{ url: foto, alt: loja.nome }] } : {}),
+    },
+  };
+}
 
 // Página pública da loja. Roda no servidor e lê só dados públicos (RLS: lojas e veículos ativos).
 // No Next 16, `params` é uma Promise.

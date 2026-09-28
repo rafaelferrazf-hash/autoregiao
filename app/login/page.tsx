@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { supabase } from "@/lib/supabase";
+import { ehAdmin } from "@/lib/admin";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -16,7 +17,7 @@ export default function Login() {
     setErro("");
     setCarregando(true);
     try {
-      const { error } = await supabase.auth.signInWithPassword({ email, password: senha });
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password: senha });
       setCarregando(false);
       if (error) {
         setErro(error.message.includes("Invalid login") ? "E-mail ou senha incorretos." : "Erro ao entrar. Tente novamente.");
@@ -24,7 +25,9 @@ export default function Login() {
         setSucesso(true);
         // Volta para a página que pediu login (?next=/admin, por exemplo). Só aceita caminho interno.
         const next = new URLSearchParams(window.location.search).get("next");
-        const destino = next && next.startsWith("/") && !next.startsWith("//") ? next : "/painel";
+        // Sem página pedida: o admin vai para /admin, os lojistas para o painel.
+        const inicio = ehAdmin(data.user?.email) ? "/admin" : "/painel";
+        const destino = next && next.startsWith("/") && !next.startsWith("//") ? next : inicio;
         setTimeout(() => { window.location.href = destino; }, 1500);
       }
     } catch (e) {

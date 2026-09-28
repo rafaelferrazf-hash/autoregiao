@@ -151,7 +151,7 @@ export default function Cadastro() {
                 </div>
                 <div style={{ marginBottom: 14 }}>
                   <div style={{ fontSize: 12, fontWeight: 500, color: "#1A1917", marginBottom: 5 }}>Cidade <span style={{ color: "#E85D26" }}>*</span></div>
-                  <input placeholder="Ex: Lençóis Paulista" value={form.cidade} onChange={e => setForm({ ...form, cidade: e.target.value })}
+                  <input placeholder="Ex: Teixeira de Freitas" value={form.cidade} onChange={e => setForm({ ...form, cidade: e.target.value })}
                     style={{ width: "100%", padding: "12px 14px", border: "1.5px solid #E8E6E1", borderRadius: 8, fontSize: 15, color: "#1A1917", background: "#F7F6F3", outline: "none", boxSizing: "border-box" }} />
                 </div>
               </>
@@ -166,7 +166,7 @@ export default function Cadastro() {
                 </div>
                 <div style={{ marginBottom: 14 }}>
                   <div style={{ fontSize: 12, fontWeight: 500, color: "#1A1917", marginBottom: 5 }}>Cidade <span style={{ color: "#E85D26" }}>*</span></div>
-                  <input placeholder="Ex: Lençóis Paulista" value={form.cidade} onChange={e => setForm({ ...form, cidade: e.target.value })}
+                  <input placeholder="Ex: Teixeira de Freitas" value={form.cidade} onChange={e => setForm({ ...form, cidade: e.target.value })}
                     style={{ width: "100%", padding: "12px 14px", border: "1.5px solid #E8E6E1", borderRadius: 8, fontSize: 15, color: "#1A1917", background: "#F7F6F3", outline: "none", boxSizing: "border-box" }} />
                 </div>
               </>

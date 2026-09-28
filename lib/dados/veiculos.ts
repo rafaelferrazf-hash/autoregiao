@@ -7,6 +7,7 @@ export async function listarVeiculosAtivos() {
     .from("veiculos")
     .select("*, lojas(nome, cidade)", { count: "exact" })
     .eq("ativo", true)
+    .order("destaque", { ascending: false })
     .order("criado_em", { ascending: false });
   return { veiculos: (data ?? []) as VeiculoComLoja[], total: count ?? data?.length ?? 0, error };
 }
@@ -38,6 +39,7 @@ export async function buscarVeiculosFiltrados(f: Filtros) {
     case "menor_preco": consulta = consulta.order("preco", { ascending: true, nullsFirst: false }); break;
     case "maior_preco": consulta = consulta.order("preco", { ascending: false, nullsFirst: false }); break;
     case "menor_km": consulta = consulta.order("km_num", { ascending: true, nullsFirst: false }); break;
+    default: consulta = consulta.order("destaque", { ascending: false });
   }
   consulta = consulta.order("criado_em", { ascending: false });
 

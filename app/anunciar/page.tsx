@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
+import { PLANOS, DIAS_GRATIS } from "@/lib/planos";
 import { useState } from "react";
 
 // Itens do menu de navegação.
@@ -26,14 +27,12 @@ export default function Anunciar() {
         .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
         .numeros-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
         .planos-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-        .depoimentos-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
         @media (max-width: 768px) {
           .nav-desktop { display: none !important; }
           .nav-mobile { display: flex !important; }
           .hero-grid { grid-template-columns: 1fr !important; gap: 24px !important; text-align: center; }
           .numeros-grid { grid-template-columns: repeat(2, 1fr) !important; }
           .planos-grid { grid-template-columns: 1fr !important; }
-          .depoimentos-grid { grid-template-columns: 1fr !important; }
           .hero-btns { justify-content: center !important; }
         }
       `}</style>
@@ -82,13 +81,13 @@ export default function Anunciar() {
           <div className="hero-grid">
             <div>
               <div style={{ display: "inline-block", background: "rgba(232,93,38,0.15)", border: "1px solid rgba(232,93,38,0.3)", borderRadius: 20, padding: "4px 14px", fontSize: 12, color: "#E85D26", fontWeight: 600, marginBottom: 20 }}>
-                🚗 Plataforma nº1 da região
+                🚗 Lançamento em Teixeira de Freitas e região
               </div>
               <h1 style={{ fontFamily: "Georgia, serif", fontSize: 42, fontWeight: 800, color: "#fff", lineHeight: 1.15, marginBottom: 16 }}>
                 Hora de vender?<br /><span style={{ color: "#E85D26" }}>A gente te ajuda!</span>
               </h1>
               <p style={{ fontSize: 16, color: "rgba(255,255,255,0.65)", lineHeight: 1.7, marginBottom: 32, maxWidth: 480 }}>
-                Anuncie seu veículo para milhares de compradores da sua região. Simples, rápido e eficiente.
+                Anuncie seu veículo para compradores da sua região, com contato direto pelo WhatsApp. Simples e rápido.
               </p>
               <div className="hero-btns" style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
                 <Link href="/cadastro" style={{ padding: "14px 28px", background: "#E85D26", borderRadius: 9, color: "#fff", fontFamily: "Georgia, serif", fontSize: 15, fontWeight: 700, textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 8 }}>
@@ -102,9 +101,9 @@ export default function Anunciar() {
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               {[
                 ["✅", "Cadastro simples e rápido", "Em menos de 5 minutos seu anúncio está no ar"],
-                ["📍", "Compradores da sua região", "Foco no interior de São Paulo"],
-                ["💬", "Contato direto via WhatsApp", "Sem intermediários, negocie direto"],
-                ["💬", "Contato direto", "Comprador fala com você no WhatsApp, sem intermediários"],
+                ["📍", "Compradores da sua região", "Teixeira de Freitas e cidades vizinhas"],
+                ["💬", "Contato direto via WhatsApp", "Sem intermediários: o comprador fala com você"],
+                ["📊", "Veja o resultado", "Quantas pessoas viram e chamaram no seu anúncio"],
               ].map(([icon, title, desc]) => (
                 <div key={title} style={{ display: "flex", alignItems: "flex-start", gap: 14, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 12, padding: "14px 16px" }}>
                   <span style={{ fontSize: 22, flexShrink: 0 }}>{icon}</span>
@@ -124,10 +123,10 @@ export default function Anunciar() {
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
           <div className="numeros-grid">
             {[
-              ["🏆", "Lançamento 2026", "Primeiro portal regional focado no interior paulista"],
-              ["📍", "Lençóis Paulista", "Cidade sede, com expansão para toda a região"],
-              ["🚗", "60 dias grátis", "Para lojas cadastradas no período de lançamento"],
-              ["👥", "Suporte humano", "Atendimento personalizado para cada lojista"],
+              ["🏆", "Lançamento 2026", "Portal de veículos focado na nossa região"],
+              ["📍", "Teixeira de Freitas", "Cidade sede, com expansão para as cidades vizinhas"],
+              ["🚗", `${DIAS_GRATIS} dias grátis`, "Para lojas cadastradas no período de lançamento"],
+              ["🆓", "Particular anuncia grátis", "1 veículo por pessoa no período de lançamento"],
             ].map(([icon, title, desc]) => (
               <div key={title} style={{ textAlign: "center", padding: "20px 16px" }}>
                 <div style={{ fontSize: 36, marginBottom: 12 }}>{icon}</div>
@@ -140,22 +139,18 @@ export default function Anunciar() {
       </section>
 
       {/* PLANOS LOJISTAS */}
-      <section style={{ padding: "64px 16px", background: "#F7F6F3" }}>
+      <section id="planos" style={{ padding: "64px 16px", background: "#F7F6F3", scrollMarginTop: 60 }}>
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 40 }}>
             <div style={{ fontSize: 12, fontWeight: 600, color: "#E85D26", letterSpacing: 1, textTransform: "uppercase", marginBottom: 10 }}>Para lojas e revendas</div>
             <h2 style={{ fontFamily: "Georgia, serif", fontSize: 32, fontWeight: 800, color: "#1A1917", marginBottom: 12 }}>Planos para lojistas</h2>
             <p style={{ fontSize: 15, color: "#7A7670", maxWidth: 520, margin: "0 auto", lineHeight: 1.6 }}>
-              Escolha o plano ideal para o tamanho da sua revenda. Todos incluem 60 dias grátis no lançamento.
+              Escolha o plano ideal para o tamanho da sua revenda. Toda loja nova começa com {DIAS_GRATIS} dias grátis. Pagamento por Pix, cartão ou boleto.
             </p>
           </div>
 
           <div className="planos-grid">
-            {[
-              { nome: "Básico", preco: "R$ 89", periodo: "/mês", anuncios: "Até 10 anúncios", recursos: ["Fotos ilimitadas", "WhatsApp direto", "Perfil da loja", "Suporte por e-mail"], destaque: false },
-              { nome: "Profissional", preco: "R$ 159", periodo: "/mês", anuncios: "Até 30 anúncios", recursos: ["Fotos ilimitadas", "WhatsApp direto", "Perfil da loja", "Destaque nos resultados", "Suporte prioritário", "Estatísticas avançadas"], destaque: true },
-              { nome: "Premium", preco: "R$ 299", periodo: "/mês", anuncios: "Anúncios ilimitados", recursos: ["Fotos ilimitadas", "WhatsApp direto", "Perfil da loja", "Destaque nos resultados", "Banner na cidade", "Suporte VIP 24h", "Relatórios mensais"], destaque: false },
-            ].map(plano => (
+            {PLANOS.map(p => ({ nome: p.nome, preco: `R$ ${p.precoMensal}`, periodo: "/mês", anuncios: p.limite === null ? "Anúncios ilimitados" : `Até ${p.limite} anúncios ativos`, recursos: p.recursos, destaque: p.id === "profissional" })).map(plano => (
               <div key={plano.nome} style={{ background: "#fff", borderRadius: 16, overflow: "hidden", border: plano.destaque ? "2px solid #E85D26" : "1.5px solid #E8E6E1", position: "relative" }}>
                 {plano.destaque && (
                   <div style={{ background: "#E85D26", padding: "6px 0", textAlign: "center", fontSize: 11, fontWeight: 700, color: "#fff", letterSpacing: 0.5 }}>
@@ -170,7 +165,7 @@ export default function Anunciar() {
                     <span style={{ fontSize: 13, color: "#7A7670", marginBottom: 4 }}>{plano.periodo}</span>
                   </div>
                   <div style={{ background: "rgba(232,93,38,0.08)", border: "1px solid rgba(232,93,38,0.15)", borderRadius: 8, padding: "8px 12px", fontSize: 12, color: "#E85D26", fontWeight: 600, marginBottom: 20, textAlign: "center" }}>
-                    🎁 60 dias grátis no lançamento
+                    🎁 {DIAS_GRATIS} dias grátis para começar
                   </div>
                   {plano.recursos.map(r => (
                     <div key={r} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, color: "#1A1917", marginBottom: 10 }}>
@@ -194,57 +189,13 @@ export default function Anunciar() {
             <div style={{ fontSize: 12, fontWeight: 600, color: "#E85D26", letterSpacing: 1, textTransform: "uppercase", marginBottom: 10 }}>Para pessoas físicas</div>
             <h2 style={{ fontFamily: "Georgia, serif", fontSize: 32, fontWeight: 800, color: "#1A1917", marginBottom: 12 }}>Quer vender seu carro?</h2>
             <p style={{ fontSize: 15, color: "#7A7670", maxWidth: 520, margin: "0 auto", lineHeight: 1.6 }}>
-              Anuncie seu veículo como particular. Simples, rápido e com visibilidade para toda a região.
+              Anuncie seu veículo como particular. No período de lançamento é <strong style={{ color: "#1A1917" }}>grátis</strong>: 1 veículo por pessoa, com fotos e contato direto pelo WhatsApp.
             </p>
           </div>
-
-          <div className="planos-grid">
-            {[
-              { dias: "30 dias", preco: "R$ 29,90", fotos: "Até 8 fotos", cor: "#F7F6F3", corBorda: "#E8E6E1" },
-              { dias: "60 dias", preco: "R$ 49,90", fotos: "Até 12 fotos", cor: "#FFF5F1", corBorda: "#E85D26", popular: true },
-              { dias: "90 dias", preco: "R$ 69,90", fotos: "Até 20 fotos", cor: "#F7F6F3", corBorda: "#E8E6E1" },
-            ].map(plano => (
-              <div key={plano.dias} style={{ background: plano.cor, borderRadius: 14, padding: "28px 24px", border: `1.5px solid ${plano.corBorda}`, textAlign: "center", position: "relative" }}>
-                {plano.popular && <div style={{ position: "absolute", top: -12, left: "50%", transform: "translateX(-50%)", background: "#E85D26", color: "#fff", fontSize: 10, fontWeight: 700, padding: "4px 14px", borderRadius: 20, whiteSpace: "nowrap" }}>MAIS ESCOLHIDO</div>}
-                <div style={{ fontFamily: "Georgia, serif", fontSize: 22, fontWeight: 800, color: "#1A1917", marginBottom: 4 }}>{plano.dias}</div>
-                <div style={{ fontFamily: "Georgia, serif", fontSize: 32, fontWeight: 800, color: "#E85D26", marginBottom: 8 }}>{plano.preco}</div>
-                <div style={{ fontSize: 13, color: "#7A7670", marginBottom: 20 }}>{plano.fotos}</div>
-                <Link href="/cadastro" style={{ display: "block", padding: "11px", background: "#E85D26", color: "#fff", borderRadius: 8, fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, textDecoration: "none" }}>
-                  Anunciar agora →
-                </Link>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* DEPOIMENTOS */}
-      <section style={{ padding: "64px 16px", background: "#F7F6F3" }}>
-        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
-          <div style={{ textAlign: "center", marginBottom: 40 }}>
-            <div style={{ fontSize: 12, fontWeight: 600, color: "#E85D26", letterSpacing: 1, textTransform: "uppercase", marginBottom: 10 }}>Quem já confia</div>
-            <h2 style={{ fontFamily: "Georgia, serif", fontSize: 32, fontWeight: 800, color: "#1A1917" }}>O que dizem sobre o AutoRegião</h2>
-          </div>
-          <div className="depoimentos-grid">
-            {[
-              { nome: "Carlos Mendes", cidade: "Lençóis Paulista", texto: "Vendi meu Onix em menos de uma semana! A plataforma é muito fácil de usar e os compradores da região respondem rápido.", estrelas: 5 },
-              { nome: "Ana Paula Silva", cidade: "Bauru", texto: "Cadastrei minha loja no lançamento e já recebi vários contatos. O suporte é excelente e o painel é muito intuitivo.", estrelas: 5 },
-              { nome: "Marcos Lima", cidade: "Jaú", texto: "Finalmente um portal focado na nossa região. Muito melhor do que os grandes portais nacionais para quem quer vender localmente.", estrelas: 5 },
-            ].map(dep => (
-              <div key={dep.nome} style={{ background: "#fff", borderRadius: 14, padding: "24px", border: "1.5px solid #E8E6E1" }}>
-                <div style={{ display: "flex", gap: 2, marginBottom: 14 }}>
-                  {[...Array(dep.estrelas)].map((_, i) => <span key={i} style={{ color: "#E85D26", fontSize: 16 }}>⭐</span>)}
-                </div>
-                <p style={{ fontSize: 14, color: "#1A1917", lineHeight: 1.7, marginBottom: 16 }}>"{dep.texto}"</p>
-                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                  <div style={{ width: 36, height: 36, background: "#E85D26", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700 }}>{dep.nome[0]}</div>
-                  <div>
-                    <div style={{ fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, color: "#1A1917" }}>{dep.nome}</div>
-                    <div style={{ fontSize: 11, color: "#7A7670" }}>📍 {dep.cidade}</div>
-                  </div>
-                </div>
-              </div>
-            ))}
+          <div style={{ textAlign: "center" }}>
+            <Link href="/cadastro" style={{ display: "inline-block", padding: "13px 32px", background: "#E85D26", color: "#fff", borderRadius: 9, fontFamily: "Georgia, serif", fontSize: 15, fontWeight: 700, textDecoration: "none" }}>
+              Anunciar meu carro grátis →
+            </Link>
           </div>
         </div>
       </section>

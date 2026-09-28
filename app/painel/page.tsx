@@ -9,7 +9,7 @@ import { listarVeiculosDoUsuario, definirAnuncioAtivo, excluirVeiculo } from "@/
 import { formatarPreco, formatarKm } from "@/lib/formatar";
 import { buscarEstatisticasPainel, type EstatisticasPainel } from "@/lib/dados/eventos";
 import type { Loja } from "@/lib/tipos";
-import { ehVitalicio } from "@/lib/planos";
+import { ehVitalicio, limiteDoPlano, mensagemErroAnuncio, nomeDoPlano, situacaoDoPlano } from "@/lib/planos";
 import PerfilLoja from "@/components/PerfilLoja";
 
 export default function Painel() {
@@ -54,7 +54,7 @@ export default function Painel() {
     setAcaoEmAndamento(car.id);
     const { error } = await definirAnuncioAtivo(car.id, reativar);
     setAcaoEmAndamento(null);
-    if (error) return alert("Não foi possível " + (reativar ? "reativar" : "pausar") + " o anúncio. Tente de novo.");
+    if (error) return alert(mensagemErroAnuncio(error.message) ?? "Não foi possível " + (reativar ? "reativar" : "pausar") + " o anúncio. Tente de novo.");
     setAnunciosReais(lista => lista.map(a => a.id === car.id ? { ...a, ativo: reativar, status: reativar ? "ativo" : "pausado" } : a));
   };
 
@@ -99,6 +99,7 @@ export default function Painel() {
       ativo: { bg: "rgba(22,163,74,0.08)", color: "#16A34A", label: "✅ Ativo" },
       pausado: { bg: "#F7F6F3", color: "#7A7670", label: "⏸ Pausado" },
       analise: { bg: "rgba(37,99,235,0.08)", color: "#2563EB", label: "🕐 Análise" },
+      fora: { bg: "#FEF2F2", color: "#DC2626", label: "⚠️ Fora do site" },
     };
     const s = (status && map[status]) || map["ativo"];
     return <span style={{ display: "inline-flex", alignItems: "center", fontSize: 10, fontWeight: 500, padding: "3px 8px", borderRadius: 20, background: s.bg, color: s.color, whiteSpace: "nowrap" }}>{s.label}</span>;
@@ -107,17 +108,21 @@ export default function Painel() {
   const msg = mensagemCupom();
   const hoje = new Date().toLocaleDateString("pt-BR", { weekday: "long", day: "2-digit", month: "long", year: "numeric" });
 
-  // Plano e período grátis reais (tabela lojas). A regra de bloqueio ao vencer fica para a Fase 4.
-  // Plano "vitalicio" (conta do dono): sem vencimento e sem limite de anúncios.
+  // Plano, vencimento e limite reais (tabela lojas). As regras valem no banco (supabase/fase4a.sql):
+  // venceu → 3 dias de carência → anúncios saem do site até renovar. Vitalício nunca vence.
   const vitalicio = ehVitalicio(loja?.plano);
-  const expiraEm = !vitalicio && loja?.expira_em ? new Date(loja.expira_em) : null;
-  const diasRestantes = expiraEm ? Math.ceil((expiraEm.getTime() - agora) / 86_400_000) : null;
-  const periodoVencido = diasRestantes !== null && diasRestantes <= 0;
-  const nomePlano = !lojaCarregada ? "…" : !loja ? "Sem loja" : vitalicio ? "Acesso vitalício" : loja.plano === "trial" || !loja.plano ? "Período grátis" : `Plano ${loja.plano.charAt(0).toUpperCase()}${loja.plano.slice(1)}`;
-  const dataFim = expiraEm ? expiraEm.toLocaleDateString("pt-BR") : "";
-  const textoPeriodo = diasRestantes === null ? "—"
-    : periodoVencido ? `Encerrado em ${dataFim}`
-    : `${diasRestantes} ${diasRestantes === 1 ? "dia restante" : "dias restantes"}`;
+  const situacao = situacaoDoPlano(loja?.plano, loja?.expira_em, agora);
+  const emTrial = !loja?.plano || loja.plano === "trial";
+  const nomePlano = !lojaCarregada ? "…" : !loja ? "Sem loja" : nomeDoPlano(loja.plano);
+  const limite = loja ? limiteDoPlano(loja.plano) : 1;
+  const ativos = anunciosReais.filter(a => a.ativo !== false).length;
+  const foraDoAr = situacao.tipo === "vencido";
+  const dataFim = loja?.expira_em ? new Date(loja.expira_em).toLocaleDateString("pt-BR") : "";
+  const textoPeriodo =
+    situacao.tipo === "em_dia" ? `${situacao.diasRestantes} ${situacao.diasRestantes === 1 ? "dia restante" : "dias restantes"} (até ${dataFim})`
+    : situacao.tipo === "carencia" ? `Venceu em ${dataFim}`
+    : situacao.tipo === "vencido" ? `Vencido desde ${dataFim}`
+    : "—";
 
   const variacao = (atual: number, anterior: number) => {
     if (!anterior) return atual > 0 ? { texto: "novo este mês", up: true } : { texto: "últimos 30 dias", up: false };
@@ -200,11 +205,11 @@ export default function Painel() {
         <div style={{ padding: "12px 10px", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
           <div style={{ background: "rgba(232,93,38,0.12)", border: "1px solid rgba(232,93,38,0.25)", borderRadius: 10, padding: 12, marginBottom: 8 }}>
             <div style={{ fontSize: 10, color: "#E85D26", fontWeight: 500, marginBottom: 4 }}>ANÚNCIOS ATIVOS</div>
-            <div style={{ fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, color: "#fff", marginBottom: 8 }}>{anunciosReais.length} cadastrado{anunciosReais.length !== 1 ? "s" : ""}</div>
+            <div style={{ fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, color: "#fff", marginBottom: 8 }}>{ativos} ativo{ativos !== 1 ? "s" : ""}{limite !== null ? ` de ${limite}` : ""}</div>
             <div style={{ background: "rgba(255,255,255,0.1)", borderRadius: 4, height: 4, marginBottom: 6 }}>
-              <div style={{ background: "#E85D26", height: 4, borderRadius: 4, width: `${Math.min((anunciosReais.length / 30) * 100, 100)}%` }}></div>
+              <div style={{ background: "#E85D26", height: 4, borderRadius: 4, width: limite === null ? "100%" : `${Math.min((ativos / limite) * 100, 100)}%` }}></div>
             </div>
-            <div style={{ fontSize: 10, color: "rgba(255,255,255,0.45)" }}>{vitalicio ? "Sem limite de anúncios" : `${Math.max(30 - anunciosReais.length, 0)} slots disponíveis`}</div>
+            <div style={{ fontSize: 10, color: "rgba(255,255,255,0.45)" }}>{limite === null ? "Sem limite de anúncios" : `${Math.max(limite - ativos, 0)} vaga${limite - ativos === 1 ? "" : "s"} disponíve${limite - ativos === 1 ? "l" : "is"}`}</div>
           </div>
           <button
             onClick={async () => { await sair(); window.location.href = "/login"; }}
@@ -225,9 +230,6 @@ export default function Painel() {
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <Link href="/painel/novo-anuncio" className="header-novo" style={{ padding: "7px 14px", background: "#E85D26", borderRadius: 7, fontFamily: "Georgia, serif", fontSize: 12, fontWeight: 700, color: "#fff", textDecoration: "none", alignItems: "center" }}>+ Novo Anúncio</Link>
-            <div style={{ width: 34, height: 34, border: "1.5px solid #E8E6E1", borderRadius: 8, background: "#F7F6F3", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: 15, position: "relative" }}>
-              🔔<span style={{ position: "absolute", top: 5, right: 5, width: 7, height: 7, background: "#E85D26", borderRadius: "50%", border: "1.5px solid #fff" }}></span>
-            </div>
             <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "5px 10px", border: "1.5px solid #E8E6E1", borderRadius: 8, background: "#F7F6F3", cursor: "pointer" }}>
               <div style={{ width: 26, height: 26, background: "#E85D26", borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13 }}>👤</div>
               <span style={{ fontSize: 12, fontWeight: 500, color: "#1A1917" }}>{nomeUsuario}</span>
@@ -241,23 +243,33 @@ export default function Painel() {
           ) : (<>
 
           {/* AVISO */}
-          {lojaCarregada && !vitalicio && <div style={{ background: "rgba(232,93,38,0.08)", border: "1px solid rgba(232,93,38,0.2)", borderRadius: 10, padding: "12px 14px", display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16, flexWrap: "wrap", gap: 8 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <span style={{ fontSize: 16 }}>⏳</span>
-              <div style={{ fontSize: 13, color: "#1A1917" }}>{diasRestantes === null ? "Sua conta ainda não tem uma loja vinculada." : periodoVencido ? <>Seu período gratuito <strong style={{ color: "#E85D26" }}>terminou em {dataFim}</strong>. Use um cupom em &quot;Meu plano&quot; ou assine um plano.</> : <>Período gratuito termina em <strong style={{ color: "#E85D26" }}>{diasRestantes} {diasRestantes === 1 ? "dia" : "dias"}</strong>.</>}</div>
-            </div>
-            <a href="#" style={{ fontSize: 12, fontWeight: 500, color: "#E85D26", textDecoration: "none" }}>Ver planos →</a>
-          </div>}
+          {lojaCarregada && (situacao.tipo === "sem_loja" || (situacao.tipo === "em_dia" && (situacao.avisar || emTrial)) || situacao.tipo === "carencia" || situacao.tipo === "vencido") && (() => {
+            const grave = situacao.tipo === "carencia" || situacao.tipo === "vencido";
+            return (
+              <div style={{ background: grave ? "#FEF2F2" : "rgba(232,93,38,0.08)", border: `1px solid ${grave ? "#FCA5A5" : "rgba(232,93,38,0.2)"}`, borderRadius: 10, padding: "12px 14px", display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16, flexWrap: "wrap", gap: 8 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <span style={{ fontSize: 16 }}>{grave ? "⚠️" : "⏳"}</span>
+                  <div style={{ fontSize: 13, color: "#1A1917", lineHeight: 1.5 }}>
+                    {situacao.tipo === "sem_loja" && "Sua conta ainda não tem uma loja vinculada. Você pode anunciar 1 veículo como particular."}
+                    {situacao.tipo === "em_dia" && <>{emTrial ? "Período grátis" : `Plano ${nomePlano}`} termina em <strong style={{ color: "#E85D26" }}>{situacao.diasRestantes} {situacao.diasRestantes === 1 ? "dia" : "dias"}</strong> ({dataFim}).</>}
+                    {situacao.tipo === "carencia" && <>Seu plano <strong>venceu em {dataFim}</strong>. Seus anúncios <strong style={{ color: "#DC2626" }}>saem do site em {situacao.diasAteSairDoAr} {situacao.diasAteSairDoAr === 1 ? "dia" : "dias"}</strong> se o plano não for renovado.</>}
+                    {situacao.tipo === "vencido" && <>Seu plano venceu em {dataFim}. <strong style={{ color: "#DC2626" }}>Seus anúncios estão fora do site</strong> e voltam assim que o plano for renovado.</>}
+                  </div>
+                </div>
+                {situacao.tipo !== "sem_loja" && <Link href="/anunciar#planos" style={{ fontSize: 12, fontWeight: 600, color: "#E85D26", textDecoration: "none" }}>Ver planos →</Link>}
+              </div>
+            );
+          })()}
 
           {/* STATS */}
           <div className="stats-grid" style={{ marginBottom: 16 }}>
             {[
               { label: "Visualizações (30 dias)", value: stats ? stats.visualizacoes_30d.toLocaleString("pt-BR") : "—", change: varVisitas.texto, up: varVisitas.up, icon: "👁️", bg: "rgba(232,93,38,0.08)" },
               { label: "Contatos (30 dias)", value: stats ? stats.contatos_30d.toLocaleString("pt-BR") : "—", change: varContatos.texto, up: varContatos.up, icon: "💬", bg: "rgba(22,163,74,0.08)" },
-              { label: "Anúncios ativos", value: String(anunciosReais.filter(a => a.ativo !== false).length), change: vitalicio ? "sem limite" : "30 limite", up: false, icon: "🚗", bg: "rgba(37,99,235,0.08)" },
+              { label: "Anúncios ativos", value: String(ativos), change: foraDoAr ? "fora do site (plano vencido)" : limite === null ? "sem limite" : `limite do plano: ${limite}`, up: false, icon: "🚗", bg: "rgba(37,99,235,0.08)" },
               vitalicio
                 ? { label: "Plano", value: "Vitalício", change: "sem vencimento", up: true, icon: "👑", bg: "rgba(232,93,38,0.08)" }
-                : { label: "Período grátis", value: diasRestantes === null ? "—" : periodoVencido ? "Encerrado" : String(diasRestantes), change: diasRestantes === null ? "sem loja" : periodoVencido ? `em ${dataFim}` : diasRestantes === 1 ? "dia restante" : "dias restantes", up: !periodoVencido, icon: "⏳", bg: "rgba(232,93,38,0.08)" },
+                : { label: emTrial ? "Período grátis" : `Plano ${nomePlano}`, value: situacao.tipo === "em_dia" ? String(situacao.diasRestantes) : situacao.tipo === "sem_loja" ? "—" : "Vencido", change: situacao.tipo === "em_dia" ? (situacao.diasRestantes === 1 ? "dia restante" : "dias restantes") : situacao.tipo === "carencia" ? `sai do site em ${situacao.diasAteSairDoAr}d` : situacao.tipo === "vencido" ? "anúncios fora do site" : "sem loja", up: situacao.tipo === "em_dia", icon: "⏳", bg: "rgba(232,93,38,0.08)" },
             ].map(stat => (
               <div key={stat.label} style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, padding: 14 }}>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
@@ -314,7 +326,7 @@ export default function Painel() {
                               </div>
                             </div>
                           </td>
-                          <td style={{ padding: "11px 14px" }}>{statusBadge(car.ativo === false ? "pausado" : car.status || "ativo")}</td>
+                          <td style={{ padding: "11px 14px" }}>{statusBadge(car.ativo === false ? "pausado" : foraDoAr ? "fora" : car.status || "ativo")}</td>
                           <td style={{ padding: "11px 14px", fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, color: "#1A1917" }}>{formatarPreco(car.preco)}</td>
                           <td style={{ padding: "11px 14px" }}>
                             <div style={{ display: "flex", gap: 5 }}>
@@ -341,7 +353,7 @@ export default function Painel() {
                         <div style={{ flex: 1 }}>
                           <div style={{ fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, color: "#1A1917", marginBottom: 2 }}>{car.nome}</div>
                           <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                            {statusBadge(car.ativo === false ? "pausado" : car.status || "ativo")}
+                            {statusBadge(car.ativo === false ? "pausado" : foraDoAr ? "fora" : car.status || "ativo")}
                           </div>
                         </div>
                         <div style={{ textAlign: "right" }}>
@@ -423,12 +435,12 @@ export default function Painel() {
             <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, overflow: "hidden" }}>
               <div style={{ padding: "14px 18px", borderBottom: "1px solid #E8E6E1", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                 <div style={{ fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, color: "#1A1917" }}>Meu plano</div>
-                <a href="#" style={{ fontSize: 12, color: "#E85D26", fontWeight: 500, textDecoration: "none" }}>Alterar →</a>
+                {!vitalicio && <Link href="/anunciar#planos" style={{ fontSize: 12, color: "#E85D26", fontWeight: 500, textDecoration: "none" }}>Ver planos →</Link>}
               </div>
               <div style={{ padding: "0 18px" }}>
                 {(vitalicio
                   ? [["Plano atual", "👑 Acesso vitalício", "#E85D26"], ["Anúncios usados", `${anunciosReais.length} (sem limite)`, "#1A1917"], ["Vencimento", "Nunca", "#16A34A"]]
-                  : [["Plano atual", nomePlano, "#E85D26"], ["Anúncios usados", `${anunciosReais.length} / 30`, "#1A1917"], ["Período gratuito", textoPeriodo, periodoVencido ? "#DC2626" : "#E85D26"], ["Destaque patrocinado", "Não contratado", "#7A7670"]]
+                  : [["Plano atual", nomePlano, "#E85D26"], ["Anúncios ativos", limite === null ? `${ativos} (sem limite)` : `${ativos} / ${limite}`, "#1A1917"], [emTrial ? "Período grátis" : "Validade", textoPeriodo, situacao.tipo === "em_dia" ? "#E85D26" : "#DC2626"], ["Destaque nos resultados", loja?.plano === "profissional" || loja?.plano === "premium" ? "✅ Incluído" : "Planos Profissional e Premium", "#7A7670"]]
                 ).map(([label, value, color]) => (
                   <div key={label} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 0", borderBottom: "1px solid #E8E6E1" }}>
                     <span style={{ fontSize: 12.5, color: "#7A7670" }}>{label}</span>
@@ -452,9 +464,9 @@ export default function Painel() {
                   </div>
                   {msg && <div style={{ fontSize: 11, color: msg.cor, marginTop: 6, fontWeight: 500 }}>{msg.texto}</div>}
                 </div>
-                <button style={{ width: "100%", padding: 10, background: "#E85D26", color: "#fff", border: "none", borderRadius: 8, fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
-                  Assinar plano — R$ 159/mês
-                </button>
+                <Link href="/anunciar#planos" style={{ display: "block", textAlign: "center", width: "100%", padding: 10, background: "#E85D26", color: "#fff", borderRadius: 8, fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, textDecoration: "none", boxSizing: "border-box" }}>
+                  Ver planos e renovar
+                </Link>
               </div>}
             </div>
           </div>

@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
 import { usuarioAtual } from "@/lib/dados/usuario";
+import { mensagemErroAnuncio } from "@/lib/planos";
 import { criarVeiculo, atualizarVeiculo, buscarVeiculoDoDono, enviarFotoVeiculo, apagarFotos } from "@/lib/dados/veiculos";
 
 const dadosVeiculos: Record<string, Record<string, Record<string, string[]>>> = {
@@ -313,7 +314,7 @@ export default function NovoAnuncio() {
 
     if (error) {
       console.error(error);
-      setErro("Erro ao publicar. Tente novamente.");
+      setErro(mensagemErroAnuncio(error.message) ?? "Erro ao publicar. Tente novamente.");
       return;
     }
 
@@ -546,7 +547,7 @@ export default function NovoAnuncio() {
                 </div>
                 {[["Nome / Loja", "nome", "text", "Ex: Auto Paulista"],
                   ["Telefone / WhatsApp", "telefone", "tel", "(14) 99999-9999"],
-                  ["Cidade", "cidade", "text", "Ex: Lençóis Paulista"]].map(([label, field, type, ph]) => (
+                  ["Cidade", "cidade", "text", "Ex: Teixeira de Freitas"]].map(([label, field, type, ph]) => (
                   <div key={field}>
                     <label style={labelStyle}>{label} <span style={{ color: "#E85D26" }}>*</span></label>
                     <input type={type} placeholder={ph} value={form[field as keyof typeof form] as string} onChange={e => set(field, e.target.value)} style={inputStyle} />

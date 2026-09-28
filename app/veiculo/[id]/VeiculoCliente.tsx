@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
+import BotoesConta from "@/components/BotoesConta";
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { buscarVeiculo as buscarVeiculoPorId } from "@/lib/dados/veiculos";
@@ -215,8 +216,7 @@ export default function Veiculo() {
             <span style={{ color: "#1A1917", fontWeight: 500 }}>{veiculo.nome}</span>
           </div>
           <div style={{ display: "flex", gap: 8 }} className="nav-desktop">
-            <Link href="/login" style={{ padding: "7px 16px", border: "1.5px solid #E8E6E1", borderRadius: 7, background: "transparent", fontSize: 13, fontWeight: 500, color: "#1A1917", textDecoration: "none", display: "flex", alignItems: "center" }}>Entrar</Link>
-            <Link href="/cadastro" style={{ padding: "7px 16px", background: "#E85D26", borderRadius: 7, color: "#fff", fontSize: 13, fontWeight: 500, textDecoration: "none", display: "flex", alignItems: "center" }}>Cadastrar loja</Link>
+            <BotoesConta />
           </div>
           <button className="nav-mobile-btn" onClick={() => setMenuAberto(!menuAberto)}
             style={{ background: "none", border: "none", cursor: "pointer", padding: 8, flexDirection: "column", gap: 5 }}>
@@ -231,8 +231,7 @@ export default function Veiculo() {
               <a key={item} href="#" style={{ textDecoration: "none", color: "#1A1917", fontSize: 15, fontWeight: 500 }}>{item}</a>
             ))}
             <div style={{ display: "flex", gap: 8, paddingTop: 8, borderTop: "1px solid #E8E6E1" }}>
-              <Link href="/login" style={{ flex: 1, padding: "10px", border: "1.5px solid #E8E6E1", borderRadius: 7, fontSize: 14, fontWeight: 500, color: "#1A1917", textDecoration: "none", textAlign: "center" }}>Entrar</Link>
-              <Link href="/cadastro" style={{ flex: 1, padding: "10px", background: "#E85D26", borderRadius: 7, color: "#fff", fontSize: 14, fontWeight: 500, textDecoration: "none", textAlign: "center" }}>Cadastrar loja</Link>
+              <BotoesConta celular />
             </div>
           </div>
         )}

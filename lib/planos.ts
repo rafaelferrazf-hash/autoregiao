@@ -36,6 +36,28 @@ export const PLANOS: PlanoPago[] = [
   },
 ];
 
+// Períodos de pagamento (renovação manual). Desconto para pagar adiantado.
+export const PERIODOS = [
+  { meses: 1, desconto: 0, rotulo: "Mensal" },
+  { meses: 3, desconto: 0.05, rotulo: "Trimestral" },
+  { meses: 6, desconto: 0.1, rotulo: "Semestral" },
+] as const;
+export type MesesPeriodo = (typeof PERIODOS)[number]["meses"];
+
+export function planoPorId(id: string | null | undefined): PlanoPago | undefined {
+  return PLANOS.find(p => p.id === id);
+}
+
+// Valor total do período, já com desconto, arredondado em centavos.
+export function valorDoPeriodo(plano: PlanoPago, meses: MesesPeriodo): number {
+  const periodo = PERIODOS.find(p => p.meses === meses)!;
+  return Math.round(plano.precoMensal * meses * (1 - periodo.desconto) * 100) / 100;
+}
+
+export function formatarReais(valor: number): string {
+  return valor.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+}
+
 export const DIAS_GRATIS = 60;
 export const DIAS_CARENCIA = 3;
 export const LIMITE_PARTICULAR = 1;

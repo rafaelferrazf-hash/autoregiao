@@ -14,13 +14,16 @@ export async function GET() {
   const agora = Date.now();
   const dias = (n: number) => new Date(agora - n * 86_400_000).toISOString();
 
-  const [lojasRes, veiculosRes, usuariosRes, visRes, contRes] = await Promise.all([
+  const [lojasRes, veiculosRes, usuariosRes, visRes, contRes, pagRes] = await Promise.all([
     admin.from("lojas").select("id, nome, cidade, plano, expira_em, criado_em, ativo, usuario_id").order("criado_em", { ascending: false }),
     admin.from("veiculos").select("id, nome, preco, status, ativo, loja_id, criado_em, lojas(nome)").order("criado_em", { ascending: false }),
     admin.auth.admin.listUsers({ perPage: 1000 }),
     admin.from("eventos_veiculo").select("id", { count: "exact", head: true }).eq("tipo", "visualizacao").gte("criado_em", dias(30)),
     admin.from("eventos_veiculo").select("id", { count: "exact", head: true }).neq("tipo", "visualizacao").gte("criado_em", dias(30)),
+    admin.from("pagamentos").select("valor, aprovado_em").eq("status", "approved"),
   ]);
+  const aprovados = pagRes.data ?? [];
+  const soma = (lista: { valor: number }[]) => Math.round(lista.reduce((t, p) => t + Number(p.valor), 0) * 100) / 100;
 
   const lojas = lojasRes.data ?? [];
   const veiculos = veiculosRes.data ?? [];
@@ -65,6 +68,9 @@ export async function GET() {
       usuarios_30d: usuarios.filter(u => u.created_at >= dias(30)).length,
       visualizacoes_30d: visRes.count ?? 0,
       contatos_30d: contRes.count ?? 0,
+      receita_30d: soma(aprovados.filter(p => p.aprovado_em && p.aprovado_em >= dias(30))),
+      receita_total: soma(aprovados),
+      pagamentos_30d: aprovados.filter(p => p.aprovado_em && p.aprovado_em >= dias(30)).length,
     },
     status: {
       vitalicio: lojasDetalhe.filter(l => l.status === "vitalicio").length,

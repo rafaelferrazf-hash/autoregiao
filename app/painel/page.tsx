@@ -266,7 +266,7 @@ export default function Painel() {
                     {situacao.tipo === "vencido" && <>Seu plano venceu em {dataFim}. <strong style={{ color: "#DC2626" }}>Seus anúncios estão fora do site</strong> e voltam assim que o plano for renovado.</>}
                   </div>
                 </div>
-                {situacao.tipo !== "sem_loja" && <Link href="/anunciar#planos" style={{ fontSize: 12, fontWeight: 600, color: "#E85D26", textDecoration: "none" }}>Ver planos →</Link>}
+                {situacao.tipo !== "sem_loja" && <Link href="/painel/planos" style={{ fontSize: 12, fontWeight: 600, color: "#E85D26", textDecoration: "none" }}>Ver planos →</Link>}
               </div>
             );
           })()}
@@ -445,7 +445,7 @@ export default function Painel() {
             <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, overflow: "hidden" }}>
               <div style={{ padding: "14px 18px", borderBottom: "1px solid #E8E6E1", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                 <div style={{ fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, color: "#1A1917" }}>Meu plano</div>
-                {!vitalicio && <Link href="/anunciar#planos" style={{ fontSize: 12, color: "#E85D26", fontWeight: 500, textDecoration: "none" }}>Ver planos →</Link>}
+                {!vitalicio && <Link href="/painel/planos" style={{ fontSize: 12, color: "#E85D26", fontWeight: 500, textDecoration: "none" }}>Ver planos →</Link>}
               </div>
               <div style={{ padding: "0 18px" }}>
                 {(vitalicio
@@ -474,7 +474,7 @@ export default function Painel() {
                   </div>
                   {msg && <div style={{ fontSize: 11, color: msg.cor, marginTop: 6, fontWeight: 500 }}>{msg.texto}</div>}
                 </div>
-                <Link href="/anunciar#planos" style={{ display: "block", textAlign: "center", width: "100%", padding: 10, background: "#E85D26", color: "#fff", borderRadius: 8, fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, textDecoration: "none", boxSizing: "border-box" }}>
+                <Link href="/painel/planos" style={{ display: "block", textAlign: "center", width: "100%", padding: 10, background: "#E85D26", color: "#fff", borderRadius: 8, fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, textDecoration: "none", boxSizing: "border-box" }}>
                   Ver planos e renovar
                 </Link>
               </div>}

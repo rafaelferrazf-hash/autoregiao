@@ -3,7 +3,7 @@
 export type StatusLoja = "vitalicio" | "desativada" | "assinante" | "trial" | "vencida";
 
 export type ResumoAdmin = {
-  totais: { lojas: number; lojas_7d: number; veiculos_ativos: number; veiculos_7d: number; usuarios: number; usuarios_30d: number; visualizacoes_30d: number; contatos_30d: number };
+  totais: { lojas: number; lojas_7d: number; veiculos_ativos: number; veiculos_7d: number; usuarios: number; usuarios_30d: number; visualizacoes_30d: number; contatos_30d: number; receita_30d: number; receita_total: number; pagamentos_30d: number };
   status: { vitalicio: number; assinante: number; trial: number; vencida: number; desativada: number };
   lojas: { id: string; nome: string; cidade: string; plano: string; veiculos: number; status: StatusLoja; protegida: boolean; ativo: boolean; vencimento: string }[];
   anuncios: { id: string; nome: string; loja: string; preco: number | null; ativo: boolean; criado_em: string | null }[];

@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function Termos() {
   return (
-    <PaginaLegal titulo="Termos de Uso" atualizadoEm="28 de setembro de 2026">
+    <PaginaLegal titulo="Termos de Uso" atualizadoEm="28 de setembro de 2026 (planos e pagamentos)">
       <p>
         Estes Termos regulam o uso do <strong>AutoRegião</strong> (site autoregiao.com.br), plataforma de anúncios de veículos
         operada por <strong>{RESPONSAVEL}</strong>, com sede em {CIDADE_RESPONSAVEL}. Ao usar o site ou criar uma conta, você
@@ -66,9 +66,14 @@ export default function Termos() {
       <ul>
         <li>Lojas novas têm um período gratuito informado no cadastro. Depois dele, a continuidade dos anúncios depende da
           contratação de um plano, com valores e condições informados no site antes da contratação.</li>
-        <li>Planos pagos são cobrados de forma recorrente e podem ser cancelados a qualquer momento; o cancelamento vale a
-          partir do próximo ciclo de cobrança.</li>
-        <li>Anúncios avulsos de particulares, quando pagos, valem pelo período informado na contratação.</li>
+        <li>Os planos são pagos por período (1, 3 ou 6 meses), pelo Mercado Pago (Pix, cartão ou boleto). Os dias pagos são
+          somados ao prazo que a loja ainda tem. A renovação não é automática: avisamos no painel antes do vencimento.</li>
+        <li>Após o vencimento há 3 dias de carência. Depois disso, os anúncios da loja deixam de aparecer no site (não são
+          apagados) e voltam assim que o plano for renovado.</li>
+        <li><strong>Arrependimento:</strong> você pode desistir da compra em até 7 dias após o pagamento, com reembolso
+          integral (art. 49 do Código de Defesa do Consumidor), pedindo pelo e-mail de contato abaixo. Depois desse prazo,
+          não há reembolso proporcional do período já pago, que continua valendo até o fim.</li>
+        <li>Particulares podem anunciar 1 veículo gratuitamente durante o período de lançamento.</li>
         <li>Cupons promocionais são pessoais, de uso único e podem ter validade.</li>
       </ul>
 

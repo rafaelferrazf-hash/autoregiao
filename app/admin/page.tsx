@@ -195,7 +195,16 @@ export default function Admin() {
                     <span style={{ fontFamily: "Georgia, serif", fontSize: 18, fontWeight: 800, color: "#1A1917" }}>{n(r.valor)}</span>
                   </div>
                 ))}
-                <div style={{ fontSize: 11, color: "#7A7670", marginTop: 10 }}>Receita aparece aqui quando os pagamentos (Mercado Pago) estiverem ativos.</div>
+                <div style={{ ...tituloCartao, marginTop: 18, marginBottom: 8 }}>Receita (Mercado Pago)</div>
+                {[
+                  { label: "Últimos 30 dias", valor: t ? t.receita_30d.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }) : "…", extra: t ? `${t.pagamentos_30d} pagamento${t.pagamentos_30d === 1 ? "" : "s"}` : "" },
+                  { label: "Total recebido", valor: t ? t.receita_total.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }) : "…", extra: "" },
+                ].map(r => (
+                  <div key={r.label} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 0", borderBottom: "1px solid #F7F6F3" }}>
+                    <span style={{ fontSize: 13, color: "#1A1917", fontWeight: 500 }}>{r.label} {r.extra && <span style={{ fontSize: 11, color: "#7A7670", fontWeight: 400 }}>· {r.extra}</span>}</span>
+                    <span style={{ fontFamily: "Georgia, serif", fontSize: 18, fontWeight: 800, color: "#16A34A" }}>{r.valor}</span>
+                  </div>
+                ))}
               </div>
               <div style={{ ...cartao, marginBottom: 0 }}>
                 <div style={tituloCartao}>Lojas por status</div>

@@ -56,6 +56,35 @@ export default function Veiculo() {
     window.open(`https://wa.me/55${tel}?text=${msg}`, "_blank");
   }
 
+  // Compartilhar: no celular usa o menu nativo (WhatsApp, Instagram...); no computador,
+  // oferece WhatsApp Web e copiar link. O link já sai com foto e título (og:tags no servidor).
+  const [avisoCompartilhar, setAvisoCompartilhar] = useState("");
+  async function compartilhar() {
+    if (!veiculo) return;
+    const url = `${window.location.origin}/veiculo/${veiculo.id}`;
+    const texto = `${veiculo.nome} por ${formatarPreco(veiculo.preco)} no AutoRegião`;
+    if (navigator.share) {
+      try { await navigator.share({ title: texto, text: texto, url }); } catch { /* cancelado */ }
+      return;
+    }
+    setAvisoCompartilhar("escolher");
+  }
+  function compartilharWhatsApp() {
+    if (!veiculo) return;
+    const url = `${window.location.origin}/veiculo/${veiculo.id}`;
+    window.open(`https://wa.me/?text=${encodeURIComponent(`${veiculo.nome} por ${formatarPreco(veiculo.preco)} no AutoRegião: ${url}`)}`, "_blank");
+    setAvisoCompartilhar("");
+  }
+  async function copiarLink() {
+    if (!veiculo) return;
+    try {
+      await navigator.clipboard.writeText(`${window.location.origin}/veiculo/${veiculo.id}`);
+      setAvisoCompartilhar("copiado");
+    } catch {
+      setAvisoCompartilhar("erro");
+    }
+  }
+
   function ligar() {
     if (!veiculo) return;
     registrarEvento(veiculo.id, "ligacao");
@@ -363,18 +392,28 @@ export default function Veiculo() {
                 </button>
               </div>
             </div>
-            <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, padding: 14, display: "flex", gap: 8 }}>
-              {[["🤍", "Favoritar"], ["📤", "Compartilhar"], ["📋", "Comparar"], ["🔔", "Alertar"]].map(([icon, label]) => (
-                <button key={label} style={{ flex: 1, padding: "10px 6px", border: "1.5px solid #E8E6E1", borderRadius: 8, background: "#F7F6F3", cursor: "pointer", textAlign: "center", fontSize: 11, fontWeight: 500, color: "#1A1917", display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
-                  <span style={{ fontSize: 18 }}>{icon}</span>{label}
+            <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, padding: 14 }}>
+              {avisoCompartilhar === "" && (
+                <button onClick={compartilhar} style={{ width: "100%", padding: "10px", border: "1.5px solid #E8E6E1", borderRadius: 8, background: "#F7F6F3", cursor: "pointer", fontSize: 13, fontWeight: 600, color: "#1A1917" }}>
+                  📤 Compartilhar anúncio
                 </button>
-              ))}
+              )}
+              {avisoCompartilhar !== "" && (
+                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                  <div style={{ display: "flex", gap: 8 }}>
+                    <button onClick={compartilharWhatsApp} style={{ flex: 1, padding: "10px 6px", border: "none", borderRadius: 8, background: "#25D366", color: "#fff", cursor: "pointer", fontSize: 12, fontWeight: 700 }}>💬 Enviar no WhatsApp</button>
+                    <button onClick={copiarLink} style={{ flex: 1, padding: "10px 6px", border: "1.5px solid #E8E6E1", borderRadius: 8, background: "#F7F6F3", color: "#1A1917", cursor: "pointer", fontSize: 12, fontWeight: 600 }}>🔗 Copiar link</button>
+                  </div>
+                  {avisoCompartilhar === "copiado" && <div style={{ fontSize: 12, color: "#16A34A", textAlign: "center" }}>✅ Link copiado! É só colar onde quiser.</div>}
+                  {avisoCompartilhar === "erro" && <div style={{ fontSize: 12, color: "#991B1B", textAlign: "center" }}>Não deu para copiar. Copie o endereço lá em cima no navegador.</div>}
+                </div>
+              )}
             </div>
             <div style={{ background: "rgba(22,163,74,0.08)", border: "1.5px solid rgba(22,163,74,0.15)", borderRadius: 12, padding: "14px 16px" }}>
               <div style={{ fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, color: "#16A34A", marginBottom: 10 }}>🛡️ Compre com segurança</div>
-              {["Loja verificada pela AutoRegião", "Anúncio com fotos reais", "Negocie direto com o lojista", "Solicite laudo cautelar"].map(item => (
+              {["Veja o veículo pessoalmente antes de pagar", "Confira documentos e débitos no Detran", "Desconfie de sinal ou depósito antecipado", "Solicite laudo cautelar"].map(item => (
                 <div key={item} style={{ display: "flex", alignItems: "center", gap: 7, fontSize: 12, color: "#1A1917", marginBottom: 6 }}>
-                  <span style={{ color: "#16A34A" }}>✅</span> {item}
+                  <span style={{ color: "#16A34A" }}>✔</span> {item}
                 </div>
               ))}
             </div>
@@ -386,6 +425,8 @@ export default function Veiculo() {
       <div className="contato-fixo-mobile" style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: "#fff", borderTop: "1px solid #E8E6E1", padding: "12px 16px", gap: 10, zIndex: 50 }}>
         <button onClick={abrirWhatsApp} style={{ flex: 1, padding: "13px", background: "#25D366", color: "#fff", border: "none", borderRadius: 9, fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, cursor: "pointer" }}>📱 WhatsApp</button>
         <button onClick={ligar} style={{ flex: 1, padding: "13px", background: "#E85D26", color: "#fff", border: "none", borderRadius: 9, fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, cursor: "pointer" }}>📞 Ligar</button>
+        <button onClick={() => (typeof navigator.share === "function" ? compartilhar() : compartilharWhatsApp())} aria-label="Compartilhar anúncio"
+          style={{ width: 50, padding: "13px 0", background: "#F7F6F3", color: "#1A1917", border: "1.5px solid #E8E6E1", borderRadius: 9, fontSize: 16, cursor: "pointer" }}>📤</button>
       </div>
 
     </main>

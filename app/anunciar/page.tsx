@@ -104,7 +104,7 @@ export default function Anunciar() {
                 ["✅", "Cadastro simples e rápido", "Em menos de 5 minutos seu anúncio está no ar"],
                 ["📍", "Compradores da sua região", "Foco no interior de São Paulo"],
                 ["💬", "Contato direto via WhatsApp", "Sem intermediários, negocie direto"],
-                ["🔒", "Plataforma segura", "Lojas e anunciantes verificados"],
+                ["💬", "Contato direto", "Comprador fala com você no WhatsApp, sem intermediários"],
               ].map(([icon, title, desc]) => (
                 <div key={title} style={{ display: "flex", alignItems: "flex-start", gap: 14, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 12, padding: "14px 16px" }}>
                   <span style={{ fontSize: 22, flexShrink: 0 }}>{icon}</span>

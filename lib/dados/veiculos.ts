@@ -1,6 +1,6 @@
 import { supabase } from "@/lib/supabase";
 import type { NovoVeiculo, Veiculo, VeiculoComLoja } from "@/lib/tipos";
-import { escaparLike, limparTextoBusca, type Filtros } from "@/lib/busca";
+import { aplicarFiltros, type Filtros } from "@/lib/busca";
 
 export async function listarVeiculosAtivos() {
   const { data, error, count } = await supabase
@@ -19,21 +19,7 @@ export async function buscarVeiculosFiltrados(f: Filtros) {
     .select("*, lojas(nome, cidade)", { count: "exact" })
     .eq("ativo", true);
 
-  if (f.q) {
-    const termo = limparTextoBusca(f.q);
-    if (termo) consulta = consulta.or(["nome", "marca", "modelo", "versao"].map(c => `${c}.ilike.%${termo}%`).join(","));
-  }
-  // Anúncio antigo sem tipo conta como carro.
-  if (f.tipo === "carro") consulta = consulta.or("tipo.eq.carro,tipo.is.null");
-  else if (f.tipo) consulta = consulta.eq("tipo", f.tipo);
-  if (f.marca) consulta = consulta.ilike("marca", escaparLike(f.marca));
-  if (f.cidade) consulta = consulta.ilike("cidade", escaparLike(f.cidade));
-  if (f.cambio) consulta = consulta.ilike("cambio", escaparLike(f.cambio));
-  if (f.combustivel) consulta = consulta.ilike("combustivel", escaparLike(f.combustivel));
-  if (f.ano_min) consulta = consulta.gte("ano_num", f.ano_min);
-  if (f.preco_min) consulta = consulta.gte("preco", f.preco_min);
-  if (f.preco_max) consulta = consulta.lte("preco", f.preco_max);
-  if (f.km_max) consulta = consulta.lte("km_num", f.km_max);
+  consulta = aplicarFiltros(consulta, f);
 
   switch (f.ordem) {
     case "menor_preco": consulta = consulta.order("preco", { ascending: true, nullsFirst: false }); break;

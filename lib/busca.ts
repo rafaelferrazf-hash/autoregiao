@@ -71,3 +71,52 @@ export function limparTextoBusca(v: string): string {
 export function escaparLike(v: string): string {
   return v.replace(/[%_\\]/g, m => `\\${m}`);
 }
+
+// O mínimo que uma consulta do Supabase precisa ter para receber os filtros. Serve tanto para a
+// busca do site quanto para o envio diário dos alertas (que roda no servidor).
+type ConsultaFiltravel<Q> = {
+  or(filtro: string): Q;
+  eq(coluna: string, valor: string): Q;
+  ilike(coluna: string, padrao: string): Q;
+  gte(coluna: string, valor: number): Q;
+  lte(coluna: string, valor: number): Q;
+};
+
+export function aplicarFiltros<Q extends ConsultaFiltravel<Q>>(consulta: Q, f: Filtros): Q {
+  if (f.q) {
+    const termo = limparTextoBusca(f.q);
+    if (termo) consulta = consulta.or(["nome", "marca", "modelo", "versao"].map(c => `${c}.ilike.%${termo}%`).join(","));
+  }
+  // Anúncio antigo sem tipo conta como carro.
+  if (f.tipo === "carro") consulta = consulta.or("tipo.eq.carro,tipo.is.null");
+  else if (f.tipo) consulta = consulta.eq("tipo", f.tipo);
+  if (f.marca) consulta = consulta.ilike("marca", escaparLike(f.marca));
+  if (f.cidade) consulta = consulta.ilike("cidade", escaparLike(f.cidade));
+  if (f.cambio) consulta = consulta.ilike("cambio", escaparLike(f.cambio));
+  if (f.combustivel) consulta = consulta.ilike("combustivel", escaparLike(f.combustivel));
+  if (f.ano_min) consulta = consulta.gte("ano_num", f.ano_min);
+  if (f.preco_min) consulta = consulta.gte("preco", f.preco_min);
+  if (f.preco_max) consulta = consulta.lte("preco", f.preco_max);
+  if (f.km_max) consulta = consulta.lte("km_num", f.km_max);
+  return consulta;
+}
+
+const NOME_TIPO: Record<TipoVeiculo, string> = { carro: "Carros", moto: "Motos", utilitario: "Utilitários" };
+const milhar = (n: number) => n.toLocaleString("pt-BR");
+
+// "Carros · Toyota · até R$ 200.000 · 2018 ou mais novo" — usado no alerta e nos e-mails.
+export function descreverFiltros(f: Filtros): string {
+  const partes: string[] = [];
+  if (f.tipo) partes.push(NOME_TIPO[f.tipo]);
+  if (f.q) partes.push(`"${f.q}"`);
+  if (f.marca) partes.push(f.marca);
+  if (f.cidade) partes.push(`em ${f.cidade}`);
+  if (f.preco_min && f.preco_max) partes.push(`R$ ${milhar(f.preco_min)} a R$ ${milhar(f.preco_max)}`);
+  else if (f.preco_max) partes.push(`até R$ ${milhar(f.preco_max)}`);
+  else if (f.preco_min) partes.push(`a partir de R$ ${milhar(f.preco_min)}`);
+  if (f.ano_min) partes.push(`${f.ano_min} ou mais novo`);
+  if (f.km_max) partes.push(`até ${milhar(f.km_max)} km`);
+  if (f.cambio) partes.push(`câmbio ${f.cambio.toLowerCase()}`);
+  if (f.combustivel) partes.push(f.combustivel);
+  return partes.length ? partes.join(" · ") : "Todos os veículos";
+}

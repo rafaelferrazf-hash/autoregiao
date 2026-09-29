@@ -7,6 +7,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { buscarVeiculosFiltrados, opcoesDeFiltro } from "@/lib/dados/veiculos";
 import { formatarPreco, formatarKm } from "@/lib/formatar";
 import BarraBusca, { ANOS } from "@/components/BarraBusca";
+import CriarAlerta from "@/components/CriarAlerta";
 import { lerFiltros, filtrosParaQuery, temFiltroAtivo, paraNumero, type Filtros, type Ordem, type TipoVeiculo } from "@/lib/busca";
 import type { VeiculoComLoja } from "@/lib/tipos";
 
@@ -113,6 +114,7 @@ function Veiculos() {
         .cars-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
         .filtros-sidebar { display: block; }
         .filtros-mobile-btn { display: none !important; }
+        .alerta-celular { display: none; }
         @media (max-width: 768px) {
           .nav-desktop { display: none !important; }
           .nav-mobile { display: flex !important; }
@@ -120,6 +122,7 @@ function Veiculos() {
           .cars-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 10px !important; }
           .filtros-sidebar { display: none !important; }
           .filtros-mobile-btn { display: flex !important; }
+          .alerta-celular { display: block; }
         }
         @media (max-width: 480px) {
           .cars-grid { grid-template-columns: 1fr !important; }
@@ -187,7 +190,7 @@ function Veiculos() {
               <div style={{ fontSize: 14, fontWeight: 700, color: "#1A1917", marginBottom: 16 }}>Filtros</div>
               {formularioFiltros}
             </div>
-            {/* "Criar alerta" escondido até existir serviço de e-mail próprio (pendente, não esquecer). */}
+            <CriarAlerta key={chave} filtros={filtros} busca={chave} />
           </aside>
 
           {/* LISTA */}
@@ -262,6 +265,13 @@ function Veiculos() {
                     </div>
                   </Link>
                 ))}
+              </div>
+            )}
+
+            {/* No celular a coluna de filtros some: o alerta aparece depois dos resultados. */}
+            {!carregando && (
+              <div className="alerta-celular" style={{ marginTop: 16 }}>
+                <CriarAlerta key={chave} filtros={filtros} busca={chave} />
               </div>
             )}
           </div>

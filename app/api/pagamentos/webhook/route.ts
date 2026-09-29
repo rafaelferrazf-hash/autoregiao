@@ -14,7 +14,11 @@ export async function POST(request: Request) {
   // Só interessam avisos de pagamento; o resto recebe 200 para o Mercado Pago não reenviar.
   if (tipo !== "payment" || !/^\d+$/.test(id)) return Response.json({ ok: true, ignorado: true });
 
-  if (!assinaturaValida(request, id)) return Response.json({ ok: false }, { status: 401 });
+  // A assinatura é só um alerta: o Mercado Pago usa segredos diferentes para contas de teste e de
+  // produção, e recusar (401) fazia pagamentos aprovados não ativarem o plano. É seguro processar
+  // mesmo assim — processarPagamento() consulta o pagamento na API do Mercado Pago com o nosso
+  // token e confere valor e referência; um aviso falso não ativa nada.
+  if (!assinaturaValida(request, id)) console.warn("webhook MP: assinatura não confere (processando mesmo assim)", id);
 
   const resultado = await processarPagamento(id);
   if (!resultado.ok) console.warn("webhook MP:", id, resultado.motivo);

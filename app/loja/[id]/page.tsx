@@ -70,7 +70,7 @@ export default async function PerfilLoja({ params }: { params: Promise<{ id: str
   ].filter(([, , valor]) => valor) as [string, string, string][];
 
   return (
-    <main style={{ fontFamily: "'DM Sans', sans-serif", background: "#F7F6F3", minHeight: "100vh" }}>
+    <main style={{ background: "#F7F6F3", minHeight: "100vh" }}>
 
       <style>{`
         .loja-grid { display: grid; grid-template-columns: 1fr 280px; gap: 20px; }
@@ -87,7 +87,7 @@ export default async function PerfilLoja({ params }: { params: Promise<{ id: str
       <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, background: "#fff", borderBottom: "1px solid #E8E6E1", height: 60, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 16px" }}>
         <Link href="/" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
           <Image src="/logo.png" alt="AutoRegião" width={36} height={36} style={{ objectFit: "contain" }} />
-          <span style={{ fontFamily: "Georgia, serif", fontSize: 20, fontWeight: 800, color: "#1A1917" }}>
+          <span style={{ fontSize: 20, fontWeight: 800, color: "#1A1917" }}>
             <span style={{ color: "#E85D26" }}>Auto</span>Região
           </span>
         </Link>
@@ -103,12 +103,12 @@ export default async function PerfilLoja({ params }: { params: Promise<{ id: str
               🏪
             </div>
             <div style={{ flex: 1, minWidth: 200 }}>
-              <div style={{ fontFamily: "Georgia, serif", fontSize: 22, fontWeight: 800, color: "#fff", marginBottom: 4 }}>{loja.nome}</div>
+              <div style={{ fontSize: 22, fontWeight: 800, color: "#fff", marginBottom: 4 }}>{loja.nome}</div>
               <div style={{ fontSize: 13, color: "rgba(255,255,255,0.6)", marginBottom: 10 }}>
                 {local && <>📍 {local}</>}{local && desde && " · "}{desde && <>Na plataforma desde {desde}</>}
               </div>
               <div>
-                <span style={{ fontFamily: "Georgia, serif", fontSize: 15, fontWeight: 700, color: "#fff" }}>🚗 {veiculos.length}</span>
+                <span style={{ fontSize: 15, fontWeight: 700, color: "#fff" }}>🚗 {veiculos.length}</span>
                 <span style={{ fontSize: 12, color: "rgba(255,255,255,0.5)", marginLeft: 4 }}>{veiculos.length === 1 ? "veículo à venda" : "veículos à venda"}</span>
               </div>
             </div>
@@ -135,8 +135,8 @@ export default async function PerfilLoja({ params }: { params: Promise<{ id: str
 
           {/* VEÍCULOS */}
           <div>
-            <div style={{ fontFamily: "Georgia, serif", fontSize: 17, fontWeight: 800, color: "#1A1917", marginBottom: 14 }}>
-              Veículos à venda <span style={{ fontSize: 13, color: "#7A7670", fontFamily: "DM Sans, sans-serif", fontWeight: 400 }}>({veiculos.length} {veiculos.length === 1 ? "anúncio" : "anúncios"})</span>
+            <div style={{ fontSize: 17, fontWeight: 800, color: "#1A1917", marginBottom: 14 }}>
+              Veículos à venda <span style={{ fontSize: 13, color: "#7A7670", fontWeight: 400 }}>({veiculos.length} {veiculos.length === 1 ? "anúncio" : "anúncios"})</span>
             </div>
             {veiculos.length === 0 ? (
               <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, padding: 32, textAlign: "center", fontSize: 13, color: "#7A7670" }}>
@@ -155,9 +155,9 @@ export default async function PerfilLoja({ params }: { params: Promise<{ id: str
                         }
                       </div>
                       <div style={{ padding: "10px 12px" }}>
-                        <div style={{ fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, color: "#1A1917", marginBottom: 3 }}>{car.nome}</div>
+                        <div style={{ fontSize: 13, fontWeight: 700, color: "#1A1917", marginBottom: 3 }}>{car.nome}</div>
                         <div style={{ fontSize: 11, color: "#7A7670", marginBottom: 6 }}>{[car.ano, formatarKm(car.km)].filter(Boolean).join(" · ")}</div>
-                        <div style={{ fontFamily: "Georgia, serif", fontSize: 15, fontWeight: 800, color: "#1A1917" }}>{formatarPreco(car.preco)}</div>
+                        <div style={{ fontSize: 15, fontWeight: 800, color: "#1A1917" }}>{formatarPreco(car.preco)}</div>
                       </div>
                     </div>
                   </Link>
@@ -170,14 +170,14 @@ export default async function PerfilLoja({ params }: { params: Promise<{ id: str
           <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
             {loja.descricao && (
               <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, padding: "16px" }}>
-                <div style={{ fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, color: "#1A1917", marginBottom: 10 }}>Sobre a loja</div>
+                <div style={{ fontSize: 14, fontWeight: 700, color: "#1A1917", marginBottom: 10 }}>Sobre a loja</div>
                 <p style={{ fontSize: 13, color: "#7A7670", lineHeight: 1.6, margin: 0 }}>{loja.descricao}</p>
               </div>
             )}
 
             {informacoes.length > 0 && (
               <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, padding: "16px" }}>
-                <div style={{ fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, color: "#1A1917", marginBottom: 12 }}>Informações</div>
+                <div style={{ fontSize: 14, fontWeight: 700, color: "#1A1917", marginBottom: 12 }}>Informações</div>
                 {informacoes.map(([icon, label, value]) => (
                   <div key={label} style={{ display: "flex", gap: 10, marginBottom: 12 }}>
                     <span style={{ fontSize: 16 }}>{icon}</span>
@@ -194,7 +194,7 @@ export default async function PerfilLoja({ params }: { params: Promise<{ id: str
               <a href={`https://wa.me/55${whatsapp}`} target="_blank" rel="noopener noreferrer"
                 style={{ display: "block", background: "#25D366", borderRadius: 12, padding: "16px", textAlign: "center", textDecoration: "none" }}>
                 <div style={{ fontSize: 24, marginBottom: 6 }}>💬</div>
-                <div style={{ fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, color: "#fff", marginBottom: 3 }}>Falar com a loja</div>
+                <div style={{ fontSize: 14, fontWeight: 700, color: "#fff", marginBottom: 3 }}>Falar com a loja</div>
                 <div style={{ fontSize: 12, color: "rgba(255,255,255,0.8)" }}>Responde pelo WhatsApp</div>
               </a>
             )}

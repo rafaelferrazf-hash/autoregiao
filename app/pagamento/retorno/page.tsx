@@ -41,10 +41,10 @@ export default function RetornoPagamento() {
   const c = conteudo[estado];
 
   return (
-    <main style={{ fontFamily: "'DM Sans', sans-serif", background: "#F7F6F3", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
+    <main style={{ background: "#F7F6F3", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
       <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 16, padding: "36px 28px", maxWidth: 460, textAlign: "center" }}>
         <div style={{ fontSize: 52, marginBottom: 12 }}>{c.icone}</div>
-        <h1 style={{ fontFamily: "Georgia, serif", fontSize: 22, fontWeight: 800, color: "#1A1917", marginBottom: 10 }}>{c.titulo}</h1>
+        <h1 style={{ fontSize: 22, fontWeight: 800, color: "#1A1917", marginBottom: 10 }}>{c.titulo}</h1>
         <p style={{ fontSize: 14, color: "#7A7670", lineHeight: 1.6, marginBottom: 24 }}>{c.texto}</p>
         <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
           <Link href="/painel" style={{ padding: "10px 20px", background: "#E85D26", color: "#fff", borderRadius: 8, textDecoration: "none", fontWeight: 600, fontSize: 14 }}>Ir para o painel</Link>

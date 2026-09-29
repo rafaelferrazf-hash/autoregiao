@@ -96,7 +96,7 @@ function Veiculos() {
           <input inputMode="numeric" placeholder="Máx" value={rascunho.preco_max ?? ""} onChange={e => mudaNumero("preco_max", e.target.value)} style={{ ...estiloSelect, padding: "8px 10px", boxSizing: "border-box" }} />
         </div>
       </div>
-      <button onClick={() => aplicar(rascunho)} style={{ width: "100%", padding: "10px", background: "#E85D26", color: "#fff", border: "none", borderRadius: 8, fontFamily: "Georgia, serif", fontSize: 13.5, fontWeight: 700, cursor: "pointer" }}>Aplicar filtros</button>
+      <button onClick={() => aplicar(rascunho)} style={{ width: "100%", padding: "10px", background: "#E85D26", color: "#fff", border: "none", borderRadius: 8, fontSize: 13.5, fontWeight: 700, cursor: "pointer" }}>Aplicar filtros</button>
       {temFiltroAtivo(filtros) && (
         <button onClick={() => aplicar({ tipo: filtros.tipo, ordem: filtros.ordem })} style={{ width: "100%", padding: "8px", background: "transparent", color: "#7A7670", border: "none", fontSize: 12, cursor: "pointer", marginTop: 8 }}>Limpar filtros</button>
       )}
@@ -104,7 +104,7 @@ function Veiculos() {
   );
 
   return (
-    <main style={{ fontFamily: "'DM Sans', sans-serif", background: "#F7F6F3", minHeight: "100vh" }}>
+    <main style={{ background: "#F7F6F3", minHeight: "100vh" }}>
 
       <style>{`
         .nav-desktop { display: flex !important; }
@@ -131,7 +131,7 @@ function Veiculos() {
         <div style={{ height: 60, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 16px" }}>
           <Link href="/" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none" }}>
             <Image src="/logo.png" alt="AutoRegião" width={32} height={32} style={{ objectFit: "contain" }} />
-            <span style={{ fontFamily: "Georgia, serif", fontSize: 18, fontWeight: 800, color: "#1A1917" }}>
+            <span style={{ fontSize: 18, fontWeight: 800, color: "#1A1917" }}>
               <span style={{ color: "#E85D26" }}>Auto</span>Região
             </span>
           </Link>
@@ -174,7 +174,7 @@ function Veiculos() {
 
         {filtrosAbertos && (
           <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, padding: "18px", marginBottom: 14 }}>
-            <div style={{ fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, color: "#1A1917", marginBottom: 16 }}>Filtros</div>
+            <div style={{ fontSize: 14, fontWeight: 700, color: "#1A1917", marginBottom: 16 }}>Filtros</div>
             {formularioFiltros}
           </div>
         )}
@@ -184,7 +184,7 @@ function Veiculos() {
           {/* FILTROS DESKTOP */}
           <aside className="filtros-sidebar">
             <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, padding: "18px", marginBottom: 14 }}>
-              <div style={{ fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, color: "#1A1917", marginBottom: 16 }}>Filtros</div>
+              <div style={{ fontSize: 14, fontWeight: 700, color: "#1A1917", marginBottom: 16 }}>Filtros</div>
               {formularioFiltros}
             </div>
             {/* "Criar alerta" escondido até existir serviço de e-mail próprio (pendente, não esquecer). */}
@@ -194,7 +194,7 @@ function Veiculos() {
           <div>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14, flexWrap: "wrap", gap: 8 }}>
               <div>
-                <span style={{ fontFamily: "Georgia, serif", fontSize: 16, fontWeight: 800, color: "#1A1917" }}>
+                <span style={{ fontSize: 16, fontWeight: 800, color: "#1A1917" }}>
                   {carregando ? "..." : total}
                 </span>
                 <span style={{ fontSize: 12, color: "#7A7670", marginLeft: 6 }}>
@@ -224,7 +224,7 @@ function Veiculos() {
             ) : veiculos.length === 0 ? (
               <div style={{ textAlign: "center", padding: "60px 20px", background: "#fff", borderRadius: 12, border: "1.5px solid #E8E6E1" }}>
                 <div style={{ fontSize: 40, marginBottom: 12 }}>🚗</div>
-                <div style={{ fontFamily: "Georgia, serif", fontSize: 16, fontWeight: 700, color: "#1A1917", marginBottom: 6 }}>{erro ? "Não foi possível buscar agora" : "Nenhum veículo encontrado"}</div>
+                <div style={{ fontSize: 16, fontWeight: 700, color: "#1A1917", marginBottom: 6 }}>{erro ? "Não foi possível buscar agora" : "Nenhum veículo encontrado"}</div>
                 <div style={{ fontSize: 13, color: "#7A7670" }}>{erro ? "Tente de novo em instantes." : temFiltroAtivo(filtros) ? "Tente ajustar ou limpar os filtros." : "Volte mais tarde."}</div>
               </div>
             ) : (
@@ -241,7 +241,7 @@ function Veiculos() {
                         )}
                       </div>
                       <div style={{ padding: "10px 12px" }}>
-                        <div style={{ fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, color: "#1A1917", marginBottom: 4 }}>{car.nome}</div>
+                        <div style={{ fontSize: 13, fontWeight: 700, color: "#1A1917", marginBottom: 4 }}>{car.nome}</div>
                         <div style={{ display: "flex", flexWrap: "wrap", gap: 3, marginBottom: 8 }}>
                           {[car.ano, formatarKm(car.km), car.combustivel].filter(Boolean).map(tag => (
                             <span key={tag} style={{ fontSize: 10, color: "#7A7670", background: "#F7F6F3", padding: "2px 5px", borderRadius: 4 }}>{tag}</span>
@@ -249,7 +249,7 @@ function Veiculos() {
                         </div>
                         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: 8, borderTop: "1px solid #E8E6E1" }}>
                           <div>
-                            <div style={{ fontFamily: "Georgia, serif", fontSize: 15, fontWeight: 800, color: "#1A1917" }}>{formatarPreco(car.preco)}</div>
+                            <div style={{ fontSize: 15, fontWeight: 800, color: "#1A1917" }}>{formatarPreco(car.preco)}</div>
                           </div>
                         </div>
                         {car.lojas && (

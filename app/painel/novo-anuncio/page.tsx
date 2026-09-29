@@ -327,10 +327,10 @@ export default function NovoAnuncio() {
   }
 
   if (etapa === 4) return (
-    <main style={{ fontFamily: "'DM Sans', sans-serif", background: "#F7F6F3", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <main style={{ background: "#F7F6F3", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
       <div style={{ textAlign: "center", padding: 40 }}>
         <div style={{ fontSize: 64, marginBottom: 16 }}>🚗</div>
-        <div style={{ fontFamily: "Georgia, serif", fontSize: 26, fontWeight: 800, color: "#1A1917", marginBottom: 8 }}>{editandoId ? "Anúncio atualizado!" : "Anúncio publicado!"}</div>
+        <div style={{ fontSize: 26, fontWeight: 800, color: "#1A1917", marginBottom: 8 }}>{editandoId ? "Anúncio atualizado!" : "Anúncio publicado!"}</div>
         <p style={{ fontSize: 15, color: "#7A7670", marginBottom: 24 }}>{editandoId ? "As alterações já estão no site." : "Seu veículo já está visível para compradores da região."}</p>
         <div style={{ display: "flex", gap: 10, justifyContent: "center" }}>
           <Link href="/painel" style={{ padding: "10px 24px", border: "1.5px solid #E8E6E1", borderRadius: 8, textDecoration: "none", color: "#1A1917", fontWeight: 500, fontSize: 14 }}>Ver painel</Link>
@@ -341,11 +341,11 @@ export default function NovoAnuncio() {
   );
 
   return (
-    <main style={{ fontFamily: "'DM Sans', sans-serif", background: "#F7F6F3", minHeight: "100vh" }}>
+    <main style={{ background: "#F7F6F3", minHeight: "100vh" }}>
       <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, background: "#fff", borderBottom: "1px solid #E8E6E1", height: 60, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 24px" }}>
         <Link href="/" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
           <Image src="/logo.png" alt="AutoRegião" width={36} height={36} style={{ objectFit: "contain" }} />
-          <span style={{ fontFamily: "Georgia, serif", fontSize: 20, fontWeight: 800, color: "#1A1917" }}><span style={{ color: "#E85D26" }}>Auto</span>Região</span>
+          <span style={{ fontSize: 20, fontWeight: 800, color: "#1A1917" }}><span style={{ color: "#E85D26" }}>Auto</span>Região</span>
         </Link>
         <Link href="/painel" style={{ fontSize: 13, color: "#7A7670", textDecoration: "none" }}>← Voltar ao painel</Link>
       </nav>
@@ -353,7 +353,7 @@ export default function NovoAnuncio() {
       <div style={{ paddingTop: 80, paddingBottom: 60, display: "flex", justifyContent: "center", padding: "80px 24px 60px" }}>
         <div style={{ width: "100%", maxWidth: 600 }}>
           <div style={{ marginBottom: 24 }}>
-            <div style={{ fontFamily: "Georgia, serif", fontSize: 24, fontWeight: 800, color: "#1A1917", marginBottom: 4 }}>{editandoId ? "Editar anúncio" : "Novo anúncio"}</div>
+            <div style={{ fontSize: 24, fontWeight: 800, color: "#1A1917", marginBottom: 4 }}>{editandoId ? "Editar anúncio" : "Novo anúncio"}</div>
             <p style={{ fontSize: 14, color: "#7A7670" }}>{carregandoEdicao ? "Carregando o anúncio..." : editandoId ? "Altere o que precisar e salve" : "Preencha os dados do veículo para publicar"}</p>
           </div>
 
@@ -564,7 +564,7 @@ export default function NovoAnuncio() {
                   {fotos.length > 0 && (
                     <div style={{ fontSize: 11, color: "#16A34A", marginBottom: 6 }}>📷 {fotos.length} foto{fotos.length > 1 ? "s" : ""} adicionada{fotos.length > 1 ? "s" : ""}</div>
                   )}
-                  {form.preco && <div style={{ fontFamily: "Georgia, serif", fontSize: 18, fontWeight: 800, color: "#E85D26" }}>R$ {form.preco}</div>}
+                  {form.preco && <div style={{ fontSize: 18, fontWeight: 800, color: "#E85D26" }}>R$ {form.preco}</div>}
                 </div>
               </div>
             )}
@@ -577,7 +577,7 @@ export default function NovoAnuncio() {
                 </button>
               )}
               <button onClick={etapa === 3 ? publicar : avancar} disabled={carregando || uploadando}
-                style={{ flex: 2, padding: "10px", background: carregando || uploadando ? "#C44818" : "#E85D26", border: "none", borderRadius: 8, color: "#fff", fontFamily: "Georgia, serif", fontSize: 15, fontWeight: 700, cursor: carregando || uploadando ? "not-allowed" : "pointer", opacity: carregando || uploadando ? 0.8 : 1 }}>
+                style={{ flex: 2, padding: "10px", background: carregando || uploadando ? "#C44818" : "#E85D26", border: "none", borderRadius: 8, color: "#fff", fontSize: 15, fontWeight: 700, cursor: carregando || uploadando ? "not-allowed" : "pointer", opacity: carregando || uploadando ? 0.8 : 1 }}>
                 {uploadando ? "Enviando fotos..." : carregando ? (editandoId ? "Salvando..." : "Publicando...") : etapa === 3 ? (editandoId ? "Salvar alterações ✓" : "Publicar anúncio 🚀") : "Continuar →"}
               </button>
             </div>

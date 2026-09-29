@@ -20,7 +20,7 @@ export default function Anunciar() {
   const [menuAberto, setMenuAberto] = useState(false);
 
   return (
-    <main style={{ fontFamily: "'DM Sans', sans-serif", background: "#F7F6F3", minHeight: "100vh" }}>
+    <main style={{ background: "#F7F6F3", minHeight: "100vh" }}>
 
       <style>{`
         .nav-desktop { display: flex !important; }
@@ -43,7 +43,7 @@ export default function Anunciar() {
         <div style={{ height: 60, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 16px" }}>
           <Link href="/" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none" }}>
             <Image src="/logo.png" alt="AutoRegião" width={32} height={32} style={{ objectFit: "contain" }} />
-            <span style={{ fontFamily: "Georgia, serif", fontSize: 18, fontWeight: 800, color: "#1A1917" }}>
+            <span style={{ fontSize: 18, fontWeight: 800, color: "#1A1917" }}>
               <span style={{ color: "#E85D26" }}>Auto</span>Região
             </span>
           </Link>
@@ -82,17 +82,17 @@ export default function Anunciar() {
               <div style={{ display: "inline-block", background: "rgba(232,93,38,0.15)", border: "1px solid rgba(232,93,38,0.3)", borderRadius: 20, padding: "4px 14px", fontSize: 12, color: "#E85D26", fontWeight: 600, marginBottom: 20 }}>
                 🚗 Lançamento em Teixeira de Freitas e região
               </div>
-              <h1 style={{ fontFamily: "Georgia, serif", fontSize: 42, fontWeight: 800, color: "#fff", lineHeight: 1.15, marginBottom: 16 }}>
+              <h1 style={{ fontSize: 42, fontWeight: 800, color: "#fff", lineHeight: 1.15, marginBottom: 16 }}>
                 Hora de vender?<br /><span style={{ color: "#E85D26" }}>A gente te ajuda!</span>
               </h1>
               <p style={{ fontSize: 16, color: "rgba(255,255,255,0.65)", lineHeight: 1.7, marginBottom: 32, maxWidth: 480 }}>
                 Anuncie seu veículo para compradores da sua região, com contato direto pelo WhatsApp. Simples e rápido.
               </p>
               <div className="hero-btns" style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-                <Link href="/cadastro" style={{ padding: "14px 28px", background: "#E85D26", borderRadius: 9, color: "#fff", fontFamily: "Georgia, serif", fontSize: 15, fontWeight: 700, textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 8 }}>
+                <Link href="/cadastro" style={{ padding: "14px 28px", background: "#E85D26", borderRadius: 9, color: "#fff", fontSize: 15, fontWeight: 700, textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 8 }}>
                   🚀 Criar conta grátis
                 </Link>
-                <Link href="/login" style={{ padding: "14px 28px", background: "transparent", border: "1.5px solid rgba(255,255,255,0.2)", borderRadius: 9, color: "#fff", fontFamily: "Georgia, serif", fontSize: 15, fontWeight: 600, textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 8 }}>
+                <Link href="/login" style={{ padding: "14px 28px", background: "transparent", border: "1.5px solid rgba(255,255,255,0.2)", borderRadius: 9, color: "#fff", fontSize: 15, fontWeight: 600, textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 8 }}>
                   Já tenho conta →
                 </Link>
               </div>
@@ -107,7 +107,7 @@ export default function Anunciar() {
                 <div key={title} style={{ display: "flex", alignItems: "flex-start", gap: 14, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 12, padding: "14px 16px" }}>
                   <span style={{ fontSize: 22, flexShrink: 0 }}>{icon}</span>
                   <div>
-                    <div style={{ fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, color: "#fff", marginBottom: 3 }}>{title}</div>
+                    <div style={{ fontSize: 14, fontWeight: 700, color: "#fff", marginBottom: 3 }}>{title}</div>
                     <div style={{ fontSize: 12.5, color: "rgba(255,255,255,0.5)", lineHeight: 1.5 }}>{desc}</div>
                   </div>
                 </div>
@@ -129,7 +129,7 @@ export default function Anunciar() {
             ].map(([icon, title, desc]) => (
               <div key={title} style={{ textAlign: "center", padding: "20px 16px" }}>
                 <div style={{ fontSize: 36, marginBottom: 12 }}>{icon}</div>
-                <div style={{ fontFamily: "Georgia, serif", fontSize: 18, fontWeight: 800, color: "#1A1917", marginBottom: 6 }}>{title}</div>
+                <div style={{ fontSize: 18, fontWeight: 800, color: "#1A1917", marginBottom: 6 }}>{title}</div>
                 <div style={{ fontSize: 13, color: "#7A7670", lineHeight: 1.5 }}>{desc}</div>
               </div>
             ))}
@@ -142,7 +142,7 @@ export default function Anunciar() {
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 40 }}>
             <div style={{ fontSize: 12, fontWeight: 600, color: "#E85D26", letterSpacing: 1, textTransform: "uppercase", marginBottom: 10 }}>Para lojas e revendas</div>
-            <h2 style={{ fontFamily: "Georgia, serif", fontSize: 32, fontWeight: 800, color: "#1A1917", marginBottom: 12 }}>Planos para lojistas</h2>
+            <h2 style={{ fontSize: 32, fontWeight: 800, color: "#1A1917", marginBottom: 12 }}>Planos para lojistas</h2>
             <p style={{ fontSize: 15, color: "#7A7670", maxWidth: 520, margin: "0 auto", lineHeight: 1.6 }}>
               Escolha o plano ideal para o tamanho da sua revenda. Toda loja nova começa com {DIAS_GRATIS} dias grátis. Pagamento por Pix, cartão ou boleto.
             </p>
@@ -157,10 +157,10 @@ export default function Anunciar() {
                   </div>
                 )}
                 <div style={{ padding: "28px 24px" }}>
-                  <div style={{ fontFamily: "Georgia, serif", fontSize: 20, fontWeight: 800, color: "#1A1917", marginBottom: 4 }}>{plano.nome}</div>
+                  <div style={{ fontSize: 20, fontWeight: 800, color: "#1A1917", marginBottom: 4 }}>{plano.nome}</div>
                   <div style={{ fontSize: 12, color: "#7A7670", marginBottom: 16 }}>{plano.anuncios}</div>
                   <div style={{ display: "flex", alignItems: "flex-end", gap: 4, marginBottom: 20 }}>
-                    <span style={{ fontFamily: "Georgia, serif", fontSize: 36, fontWeight: 800, color: plano.destaque ? "#E85D26" : "#1A1917", lineHeight: 1 }}>{plano.preco}</span>
+                    <span style={{ fontSize: 36, fontWeight: 800, color: plano.destaque ? "#E85D26" : "#1A1917", lineHeight: 1 }}>{plano.preco}</span>
                     <span style={{ fontSize: 13, color: "#7A7670", marginBottom: 4 }}>{plano.periodo}</span>
                   </div>
                   <div style={{ background: "rgba(232,93,38,0.08)", border: "1px solid rgba(232,93,38,0.15)", borderRadius: 8, padding: "8px 12px", fontSize: 12, color: "#E85D26", fontWeight: 600, marginBottom: 20, textAlign: "center" }}>
@@ -171,7 +171,7 @@ export default function Anunciar() {
                       <span style={{ color: "#16A34A", fontSize: 14 }}>✅</span> {r}
                     </div>
                   ))}
-                  <Link href="/cadastro" style={{ display: "block", width: "100%", padding: "12px", background: plano.destaque ? "#E85D26" : "#1A1917", color: "#fff", borderRadius: 9, fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, textDecoration: "none", textAlign: "center", marginTop: 20, boxSizing: "border-box" }}>
+                  <Link href="/cadastro" style={{ display: "block", width: "100%", padding: "12px", background: plano.destaque ? "#E85D26" : "#1A1917", color: "#fff", borderRadius: 9, fontSize: 14, fontWeight: 700, textDecoration: "none", textAlign: "center", marginTop: 20, boxSizing: "border-box" }}>
                     Começar grátis →
                   </Link>
                 </div>
@@ -186,13 +186,13 @@ export default function Anunciar() {
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 40 }}>
             <div style={{ fontSize: 12, fontWeight: 600, color: "#E85D26", letterSpacing: 1, textTransform: "uppercase", marginBottom: 10 }}>Para pessoas físicas</div>
-            <h2 style={{ fontFamily: "Georgia, serif", fontSize: 32, fontWeight: 800, color: "#1A1917", marginBottom: 12 }}>Quer vender seu carro?</h2>
+            <h2 style={{ fontSize: 32, fontWeight: 800, color: "#1A1917", marginBottom: 12 }}>Quer vender seu carro?</h2>
             <p style={{ fontSize: 15, color: "#7A7670", maxWidth: 520, margin: "0 auto", lineHeight: 1.6 }}>
               Anuncie seu veículo como particular. No período de lançamento é <strong style={{ color: "#1A1917" }}>grátis</strong>: 1 veículo por pessoa, com fotos e contato direto pelo WhatsApp.
             </p>
           </div>
           <div style={{ textAlign: "center" }}>
-            <Link href="/cadastro" style={{ display: "inline-block", padding: "13px 32px", background: "#E85D26", color: "#fff", borderRadius: 9, fontFamily: "Georgia, serif", fontSize: 15, fontWeight: 700, textDecoration: "none" }}>
+            <Link href="/cadastro" style={{ display: "inline-block", padding: "13px 32px", background: "#E85D26", color: "#fff", borderRadius: 9, fontSize: 15, fontWeight: 700, textDecoration: "none" }}>
               Anunciar meu carro grátis →
             </Link>
           </div>
@@ -203,17 +203,17 @@ export default function Anunciar() {
       <section style={{ background: "#1A1917", padding: "64px 16px" }}>
         <div style={{ maxWidth: 600, margin: "0 auto", textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 16 }}>🚗</div>
-          <h2 style={{ fontFamily: "Georgia, serif", fontSize: 32, fontWeight: 800, color: "#fff", marginBottom: 14, lineHeight: 1.2 }}>
+          <h2 style={{ fontSize: 32, fontWeight: 800, color: "#fff", marginBottom: 14, lineHeight: 1.2 }}>
             Pronto para vender<br /><span style={{ color: "#E85D26" }}>mais rápido?</span>
           </h2>
           <p style={{ fontSize: 15, color: "rgba(255,255,255,0.6)", marginBottom: 32, lineHeight: 1.6 }}>
             Cadastre sua loja agora e aproveite 60 dias grátis. Sem cartão de crédito.
           </p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-            <Link href="/cadastro" style={{ padding: "14px 32px", background: "#E85D26", borderRadius: 9, color: "#fff", fontFamily: "Georgia, serif", fontSize: 16, fontWeight: 700, textDecoration: "none" }}>
+            <Link href="/cadastro" style={{ padding: "14px 32px", background: "#E85D26", borderRadius: 9, color: "#fff", fontSize: 16, fontWeight: 700, textDecoration: "none" }}>
               Começar grátis →
             </Link>
-            <Link href="/veiculos" style={{ padding: "14px 32px", background: "transparent", border: "1.5px solid rgba(255,255,255,0.2)", borderRadius: 9, color: "#fff", fontFamily: "Georgia, serif", fontSize: 15, fontWeight: 600, textDecoration: "none" }}>
+            <Link href="/veiculos" style={{ padding: "14px 32px", background: "transparent", border: "1.5px solid rgba(255,255,255,0.2)", borderRadius: 9, color: "#fff", fontSize: 15, fontWeight: 600, textDecoration: "none" }}>
               Ver anúncios
             </Link>
           </div>

@@ -58,7 +58,7 @@ export default function BarraBusca({ filtros, cidades, onBuscar }: {
           </div>
           <div>{rotulo("Preço até")}<input inputMode="numeric" placeholder="Qualquer valor" value={rascunho.preco_max ? rascunho.preco_max.toLocaleString("pt-BR") : ""} onChange={e => mudaNumero("preco_max", e.target.value)} style={campo} /></div>
           <div>{rotulo("KM até")}<input inputMode="numeric" placeholder="Qualquer km" value={rascunho.km_max ? rascunho.km_max.toLocaleString("pt-BR") : ""} onChange={e => mudaNumero("km_max", e.target.value)} style={campo} /></div>
-          <button type="submit" style={{ padding: "10px 22px", background: "#E85D26", color: "#fff", border: "none", borderRadius: 7, fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, cursor: "pointer", whiteSpace: "nowrap" }}>🔍 Buscar</button>
+          <button type="submit" style={{ padding: "10px 22px", background: "#E85D26", color: "#fff", border: "none", borderRadius: 7, fontSize: 14, fontWeight: 700, cursor: "pointer", whiteSpace: "nowrap" }}>🔍 Buscar</button>
         </form>
       </div>
     </section>

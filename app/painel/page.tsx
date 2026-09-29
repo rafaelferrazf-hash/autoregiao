@@ -147,7 +147,7 @@ export default function Painel() {
   };
 
   return (
-    <div style={{ fontFamily: "'DM Sans', sans-serif", display: "flex", minHeight: "100vh", background: "#F7F6F3" }}>
+    <div style={{ display: "flex", minHeight: "100vh", background: "#F7F6F3" }}>
 
       <style>{`
         .sidebar-desktop { display: flex !important; }
@@ -176,12 +176,12 @@ export default function Painel() {
       <aside className="sidebar-desktop" style={{ width: 240, background: "#111009", minHeight: "100vh", position: "fixed", top: 0, left: 0, flexDirection: "column", zIndex: 50 }}>
         <Link href="/" style={{ padding: "18px 20px", borderBottom: "1px solid rgba(255,255,255,0.06)", display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
           <Image src="/logo.png" alt="AutoRegião" width={32} height={32} style={{ objectFit: "contain" }} />
-          <span style={{ fontFamily: "Georgia, serif", fontSize: 17, fontWeight: 800, color: "#fff" }}><span style={{ color: "#E85D26" }}>Auto</span>Região</span>
+          <span style={{ fontSize: 17, fontWeight: 800, color: "#fff" }}><span style={{ color: "#E85D26" }}>Auto</span>Região</span>
         </Link>
         <div style={{ padding: "14px 20px", borderBottom: "1px solid rgba(255,255,255,0.06)", display: "flex", alignItems: "center", gap: 10 }}>
           <div style={{ width: 40, height: 40, background: "#E85D26", borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, flexShrink: 0 }}>🏪</div>
           <div>
-            <div style={{ fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, color: "#fff" }}>{nomeLoja}</div>
+            <div style={{ fontSize: 13, fontWeight: 700, color: "#fff" }}>{nomeLoja}</div>
             <div style={{ fontSize: 10, color: "#E85D26", fontWeight: 500, marginTop: 1 }}>{nomePlano}</div>
           </div>
         </div>
@@ -199,7 +199,7 @@ export default function Painel() {
                   <span style={{ fontSize: 15, width: 20, textAlign: "center", flexShrink: 0 }}>➕</span>
                   <span>Novo Anúncio</span>
                 </Link>
-              : <button key={item.id} onClick={() => setAbaAtiva(item.id)} style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 10px", borderRadius: 8, border: "none", background: abaAtiva === item.id ? "#E85D26" : "transparent", color: abaAtiva === item.id ? "#fff" : "rgba(255,255,255,0.5)", fontSize: 13.5, fontWeight: 500, cursor: "pointer", width: "100%", textAlign: "left", fontFamily: "'DM Sans', sans-serif" }}>
+              : <button key={item.id} onClick={() => setAbaAtiva(item.id)} style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 10px", borderRadius: 8, border: "none", background: abaAtiva === item.id ? "#E85D26" : "transparent", color: abaAtiva === item.id ? "#fff" : "rgba(255,255,255,0.5)", fontSize: 13.5, fontWeight: 500, cursor: "pointer", width: "100%", textAlign: "left" }}>
                 <span style={{ fontSize: 15, width: 20, textAlign: "center", flexShrink: 0 }}>{item.icon}</span>
                 <span style={{ flex: 1 }}>{item.label}</span>
                 {item.badge && <span style={{ background: abaAtiva === item.id ? "rgba(255,255,255,0.25)" : "#E85D26", color: "#fff", fontSize: 10, fontWeight: 700, padding: "1px 6px", borderRadius: 10 }}>{item.badge}</span>}
@@ -215,7 +215,7 @@ export default function Painel() {
         <div style={{ padding: "12px 10px", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
           <div style={{ background: "rgba(232,93,38,0.12)", border: "1px solid rgba(232,93,38,0.25)", borderRadius: 10, padding: 12, marginBottom: 8 }}>
             <div style={{ fontSize: 10, color: "#E85D26", fontWeight: 500, marginBottom: 4 }}>ANÚNCIOS ATIVOS</div>
-            <div style={{ fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, color: "#fff", marginBottom: 8 }}>{ativos} ativo{ativos !== 1 ? "s" : ""}{limite !== null ? ` de ${limite}` : ""}</div>
+            <div style={{ fontSize: 13, fontWeight: 700, color: "#fff", marginBottom: 8 }}>{ativos} ativo{ativos !== 1 ? "s" : ""}{limite !== null ? ` de ${limite}` : ""}</div>
             <div style={{ background: "rgba(255,255,255,0.1)", borderRadius: 4, height: 4, marginBottom: 6 }}>
               <div style={{ background: "#E85D26", height: 4, borderRadius: 4, width: limite === null ? "100%" : `${Math.min((ativos / limite) * 100, 100)}%` }}></div>
             </div>
@@ -223,7 +223,7 @@ export default function Painel() {
           </div>
           <button
             onClick={async () => { await sair(); window.location.href = "/login"; }}
-            style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 10px", borderRadius: 8, border: "none", background: "transparent", color: "rgba(255,255,255,0.35)", fontSize: 12.5, cursor: "pointer", width: "100%", fontFamily: "'DM Sans', sans-serif" }}>
+            style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 10px", borderRadius: 8, border: "none", background: "transparent", color: "rgba(255,255,255,0.35)", fontSize: 12.5, cursor: "pointer", width: "100%" }}>
             <span>🚪</span> Sair
           </button>
         </div>
@@ -235,11 +235,11 @@ export default function Painel() {
         {/* HEADER */}
         <header style={{ background: "#fff", borderBottom: "1px solid #E8E6E1", padding: "0 16px", height: 58, display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, zIndex: 40 }}>
           <div>
-            <div style={{ fontFamily: "Georgia, serif", fontSize: 15, fontWeight: 800, color: "#1A1917" }}>{abaAtiva === "perfil" ? "Perfil da loja" : abaAtiva === "anuncios" ? "Meus anúncios" : "Dashboard"}</div>
+            <div style={{ fontSize: 15, fontWeight: 800, color: "#1A1917" }}>{abaAtiva === "perfil" ? "Perfil da loja" : abaAtiva === "anuncios" ? "Meus anúncios" : "Dashboard"}</div>
             <div style={{ fontSize: 10, color: "#7A7670", textTransform: "capitalize" }}>{hoje}</div>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <Link href="/painel/novo-anuncio" className="header-novo" style={{ padding: "7px 14px", background: "#E85D26", borderRadius: 7, fontFamily: "Georgia, serif", fontSize: 12, fontWeight: 700, color: "#fff", textDecoration: "none", alignItems: "center" }}>+ Novo Anúncio</Link>
+            <Link href="/painel/novo-anuncio" className="header-novo" style={{ padding: "7px 14px", background: "#E85D26", borderRadius: 7, fontSize: 12, fontWeight: 700, color: "#fff", textDecoration: "none", alignItems: "center" }}>+ Novo Anúncio</Link>
             <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "5px 10px", border: "1.5px solid #E8E6E1", borderRadius: 8, background: "#F7F6F3", cursor: "pointer" }}>
               <div style={{ width: 26, height: 26, background: "#E85D26", borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13 }}>👤</div>
               <span style={{ fontSize: 12, fontWeight: 500, color: "#1A1917" }}>{nomeUsuario}</span>
@@ -286,7 +286,7 @@ export default function Painel() {
                   <span style={{ fontSize: 11, color: "#7A7670", fontWeight: 500 }}>{stat.label}</span>
                   <div style={{ width: 28, height: 28, borderRadius: 7, background: stat.bg, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13 }}>{stat.icon}</div>
                 </div>
-                <div style={{ fontFamily: "Georgia, serif", fontSize: 22, fontWeight: 800, color: "#1A1917", lineHeight: 1, marginBottom: 4 }}>{stat.value}</div>
+                <div style={{ fontSize: 22, fontWeight: 800, color: "#1A1917", lineHeight: 1, marginBottom: 4 }}>{stat.value}</div>
                 <div style={{ fontSize: 11, fontWeight: 500, color: stat.up ? "#16A34A" : "#7A7670" }}>{stat.change}</div>
               </div>
             ))}
@@ -297,7 +297,7 @@ export default function Painel() {
 
             <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, overflow: "hidden" }}>
               <div style={{ padding: "14px 18px", borderBottom: "1px solid #E8E6E1", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                <div style={{ fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, color: "#1A1917" }}>{verTodos ? `Meus anúncios (${anunciosReais.length})` : "Anúncios recentes"}</div>
+                <div style={{ fontSize: 14, fontWeight: 700, color: "#1A1917" }}>{verTodos ? `Meus anúncios (${anunciosReais.length})` : "Anúncios recentes"}</div>
                 {verTodos
                   ? <button onClick={() => setAbaAtiva("dashboard")} style={{ fontSize: 12, color: "#E85D26", fontWeight: 500, background: "none", border: "none", cursor: "pointer" }}>← Voltar ao resumo</button>
                   : anunciosReais.length > 5 && <button onClick={() => setAbaAtiva("anuncios")} style={{ fontSize: 12, color: "#E85D26", fontWeight: 500, background: "none", border: "none", cursor: "pointer" }}>Ver todos ({anunciosReais.length}) →</button>}
@@ -331,13 +331,13 @@ export default function Painel() {
                                 }
                               </div>
                               <div>
-                                <div style={{ fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, color: "#1A1917" }}>{car.nome}</div>
+                                <div style={{ fontSize: 13, fontWeight: 700, color: "#1A1917" }}>{car.nome}</div>
                                 <div style={{ fontSize: 11, color: "#7A7670" }}>{car.ano} · {formatarKm(car.km)}</div>
                               </div>
                             </div>
                           </td>
                           <td style={{ padding: "11px 14px" }}>{statusBadge(car.ativo === false ? "pausado" : foraDoAr ? "fora" : car.status || "ativo")}</td>
-                          <td style={{ padding: "11px 14px", fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, color: "#1A1917" }}>{formatarPreco(car.preco)}</td>
+                          <td style={{ padding: "11px 14px", fontSize: 13, fontWeight: 700, color: "#1A1917" }}>{formatarPreco(car.preco)}</td>
                           <td style={{ padding: "11px 14px" }}>
                             <div style={{ display: "flex", gap: 5 }}>
                               <Link href={`/veiculo/${car.id}`} style={{ width: 28, height: 28, borderRadius: 6, border: "1.5px solid #E8E6E1", background: "#F7F6F3", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, textDecoration: "none" }}>👁️</Link>
@@ -361,13 +361,13 @@ export default function Painel() {
                           }
                         </div>
                         <div style={{ flex: 1 }}>
-                          <div style={{ fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, color: "#1A1917", marginBottom: 2 }}>{car.nome}</div>
+                          <div style={{ fontSize: 13, fontWeight: 700, color: "#1A1917", marginBottom: 2 }}>{car.nome}</div>
                           <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
                             {statusBadge(car.ativo === false ? "pausado" : foraDoAr ? "fora" : car.status || "ativo")}
                           </div>
                         </div>
                         <div style={{ textAlign: "right" }}>
-                          <div style={{ fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, color: "#1A1917" }}>{formatarPreco(car.preco)}</div>
+                          <div style={{ fontSize: 13, fontWeight: 700, color: "#1A1917" }}>{formatarPreco(car.preco)}</div>
                           <div style={{ display: "flex", gap: 4, marginTop: 4 }}>
                             <Link href={`/veiculo/${car.id}`} style={{ width: 26, height: 26, borderRadius: 5, border: "1.5px solid #E8E6E1", background: "#F7F6F3", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, textDecoration: "none" }}>👁️</Link>
                             <Link href={`/painel/novo-anuncio?editar=${car.id}`} title="Editar" style={{ width: 26, height: 26, borderRadius: 5, border: "1.5px solid #E8E6E1", background: "#F7F6F3", cursor: "pointer", fontSize: 11, display: "flex", alignItems: "center", justifyContent: "center", textDecoration: "none" }}>✏️</Link>
@@ -385,7 +385,7 @@ export default function Painel() {
             <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
               <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, overflow: "hidden" }}>
                 <div style={{ padding: "14px 18px", borderBottom: "1px solid #E8E6E1", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                  <div style={{ fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, color: "#1A1917" }}>Contatos recentes</div>
+                  <div style={{ fontSize: 14, fontWeight: 700, color: "#1A1917" }}>Contatos recentes</div>
                 </div>
                 {contatosRecentes.length === 0 ? (
                   <div style={{ padding: "18px 16px", fontSize: 12, color: "#7A7670", lineHeight: 1.5 }}>Nenhum contato ainda. Quando alguém clicar em WhatsApp ou Ligar nos seus anúncios, aparece aqui.</div>
@@ -402,7 +402,7 @@ export default function Painel() {
               </div>
               <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, overflow: "hidden" }}>
                 <div style={{ padding: "14px 18px", borderBottom: "1px solid #E8E6E1" }}>
-                  <div style={{ fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, color: "#1A1917" }}>Visitas esta semana</div>
+                  <div style={{ fontSize: 14, fontWeight: 700, color: "#1A1917" }}>Visitas esta semana</div>
                 </div>
                 <div style={{ padding: "14px 18px" }}>
                   <div style={{ display: "flex", alignItems: "flex-end", gap: 6, height: 70, marginBottom: 8 }}>
@@ -430,7 +430,7 @@ export default function Painel() {
           <div className="bottom-grid">
             <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, overflow: "hidden" }}>
               <div style={{ padding: "14px 18px", borderBottom: "1px solid #E8E6E1" }}>
-                <div style={{ fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, color: "#1A1917" }}>Ações rápidas</div>
+                <div style={{ fontSize: 14, fontWeight: 700, color: "#1A1917" }}>Ações rápidas</div>
               </div>
               <div style={{ padding: 14, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
                 {[["➕", "Novo anúncio"], ["⭐", "Destaque"], ["📊", "Estatísticas"], ["🏪", "Editar perfil"], ["📱", "QR Code"], ["💬", "Mensagens"]].map(([icon, label]) => (
@@ -444,7 +444,7 @@ export default function Painel() {
 
             <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, overflow: "hidden" }}>
               <div style={{ padding: "14px 18px", borderBottom: "1px solid #E8E6E1", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                <div style={{ fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, color: "#1A1917" }}>Meu plano</div>
+                <div style={{ fontSize: 14, fontWeight: 700, color: "#1A1917" }}>Meu plano</div>
                 {!vitalicio && <Link href="/painel/planos" style={{ fontSize: 12, color: "#E85D26", fontWeight: 500, textDecoration: "none" }}>Ver planos →</Link>}
               </div>
               <div style={{ padding: "0 18px" }}>
@@ -465,16 +465,16 @@ export default function Painel() {
                     <input type="text" placeholder="AR-XXXXXX" value={cupom}
                       onChange={e => { setCupom(e.target.value.toUpperCase()); setCupomStatus(null); }}
                       maxLength={9} disabled={cupomStatus === "ok"}
-                      style={{ flex: 1, padding: "8px 12px", border: `1.5px solid ${cupomStatus === "invalido" || cupomStatus === "erro" || cupomStatus === "usado" ? "#DC2626" : "#E8E6E1"}`, borderRadius: 7, fontSize: 13, fontFamily: "'DM Sans', sans-serif", background: "#fff", color: "#1A1917", outline: "none", letterSpacing: 1 }}
+                      style={{ flex: 1, padding: "8px 12px", border: `1.5px solid ${cupomStatus === "invalido" || cupomStatus === "erro" || cupomStatus === "usado" ? "#DC2626" : "#E8E6E1"}`, borderRadius: 7, fontSize: 13, background: "#fff", color: "#1A1917", outline: "none", letterSpacing: 1 }}
                     />
                     <button onClick={resgatarCupom} disabled={cupomStatus === "loading" || cupomStatus === "ok"}
-                      style={{ padding: "8px 14px", background: cupomStatus === "ok" ? "#16A34A" : "#E85D26", color: "#fff", border: "none", borderRadius: 7, fontSize: 12, fontWeight: 600, cursor: cupomStatus === "loading" || cupomStatus === "ok" ? "default" : "pointer", fontFamily: "'DM Sans', sans-serif", whiteSpace: "nowrap" as const, opacity: cupomStatus === "loading" ? 0.7 : 1 }}>
+                      style={{ padding: "8px 14px", background: cupomStatus === "ok" ? "#16A34A" : "#E85D26", color: "#fff", border: "none", borderRadius: 7, fontSize: 12, fontWeight: 600, cursor: cupomStatus === "loading" || cupomStatus === "ok" ? "default" : "pointer", whiteSpace: "nowrap" as const, opacity: cupomStatus === "loading" ? 0.7 : 1 }}>
                       {cupomStatus === "loading" ? "..." : cupomStatus === "ok" ? "✅ Ok" : "Resgatar"}
                     </button>
                   </div>
                   {msg && <div style={{ fontSize: 11, color: msg.cor, marginTop: 6, fontWeight: 500 }}>{msg.texto}</div>}
                 </div>
-                <Link href="/painel/planos" style={{ display: "block", textAlign: "center", width: "100%", padding: 10, background: "#E85D26", color: "#fff", borderRadius: 8, fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, textDecoration: "none", boxSizing: "border-box" }}>
+                <Link href="/painel/planos" style={{ display: "block", textAlign: "center", width: "100%", padding: 10, background: "#E85D26", color: "#fff", borderRadius: 8, fontSize: 13, fontWeight: 700, textDecoration: "none", boxSizing: "border-box" }}>
                   Ver planos e renovar
                 </Link>
               </div>}

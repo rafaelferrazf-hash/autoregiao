@@ -62,7 +62,7 @@ export default function PerfilLoja({ loja, onSalvo }: { loja: Loja | null; onSal
       `}</style>
       <div style={{ padding: "14px 18px", borderBottom: "1px solid #E8E6E1", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, flexWrap: "wrap" }}>
         <div>
-          <div style={{ fontFamily: "Georgia, serif", fontSize: 15, fontWeight: 700, color: "#1A1917" }}>Perfil da loja</div>
+          <div style={{ fontSize: 15, fontWeight: 700, color: "#1A1917" }}>Perfil da loja</div>
           <div style={{ fontSize: 12, color: "#7A7670" }}>Estes dados aparecem na página pública da sua loja.</div>
         </div>
         <Link href={`/loja/${loja.id}`} target="_blank" style={{ fontSize: 12, color: "#E85D26", fontWeight: 600, textDecoration: "none" }}>Ver minha página →</Link>
@@ -115,7 +115,7 @@ export default function PerfilLoja({ loja, onSalvo }: { loja: Loja | null; onSal
           <label style={rotulo}>Sobre a loja</label>
           <textarea value={form.descricao} onChange={e => muda("descricao", e.target.value)} maxLength={600} rows={4}
             placeholder="Conte há quanto tempo a loja existe, o que oferece (financiamento, troca, garantia...)"
-            style={{ ...campo, resize: "vertical", fontFamily: "inherit" }} />
+            style={{ ...campo, resize: "vertical" }} />
           <div style={ajuda}>{form.descricao.length}/600</div>
         </div>
 
@@ -127,7 +127,7 @@ export default function PerfilLoja({ loja, onSalvo }: { loja: Loja | null; onSal
 
         <div>
           <button onClick={salvar} disabled={salvando}
-            style={{ padding: "11px 22px", background: "#E85D26", color: "#fff", border: "none", borderRadius: 8, fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, cursor: salvando ? "default" : "pointer", opacity: salvando ? 0.7 : 1 }}>
+            style={{ padding: "11px 22px", background: "#E85D26", color: "#fff", border: "none", borderRadius: 8, fontSize: 14, fontWeight: 700, cursor: salvando ? "default" : "pointer", opacity: salvando ? 0.7 : 1 }}>
             {salvando ? "Salvando..." : "Salvar perfil"}
           </button>
         </div>

@@ -37,7 +37,7 @@ export default function Login() {
   }
 
   return (
-    <main style={{ fontFamily: "'DM Sans', sans-serif", background: "#F7F6F3", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+    <main style={{ background: "#F7F6F3", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
 
       <style>{`
         .login-grid { display: grid; grid-template-columns: 1fr 1fr; }
@@ -52,7 +52,7 @@ export default function Login() {
       <nav style={{ background: "#fff", borderBottom: "1px solid #E8E6E1", height: 60, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 16px", flexShrink: 0 }}>
         <Link href="/" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none" }}>
           <Image src="/logo.png" alt="AutoRegião" width={32} height={32} style={{ objectFit: "contain" }} />
-          <span style={{ fontFamily: "Georgia, serif", fontSize: 18, fontWeight: 800, color: "#1A1917" }}>
+          <span style={{ fontSize: 18, fontWeight: 800, color: "#1A1917" }}>
             <span style={{ color: "#E85D26" }}>Auto</span>Região
           </span>
         </Link>
@@ -66,7 +66,7 @@ export default function Login() {
 
           {/* FORMULÁRIO */}
           <div className="login-form" style={{ padding: "40px 36px" }}>
-            <h1 style={{ fontFamily: "Georgia, serif", fontSize: 24, fontWeight: 800, color: "#1A1917", marginBottom: 6 }}>Bem-vindo de volta!</h1>
+            <h1 style={{ fontSize: 24, fontWeight: 800, color: "#1A1917", marginBottom: 6 }}>Bem-vindo de volta!</h1>
             <p style={{ fontSize: 14, color: "#7A7670", marginBottom: 24, lineHeight: 1.5 }}>Entre na sua conta para gerenciar seus anúncios.</p>
 
             <div style={{ display: "flex", gap: 0, marginBottom: 24, background: "#F7F6F3", borderRadius: 8, padding: 4 }}>
@@ -92,7 +92,7 @@ export default function Login() {
                   style={{ width: "100%", padding: "12px 14px", border: "1.5px solid #E8E6E1", borderRadius: 8, fontSize: 15, color: "#1A1917", background: "#F7F6F3", outline: "none", boxSizing: "border-box" }} />
               </div>
               <button onClick={handleLogin} disabled={carregando}
-                style={{ width: "100%", padding: "14px", background: carregando ? "#C44818" : "#E85D26", color: "#fff", border: "none", borderRadius: 9, fontFamily: "Georgia, serif", fontSize: 16, fontWeight: 700, cursor: carregando ? "not-allowed" : "pointer", opacity: carregando ? 0.8 : 1 }}>
+                style={{ width: "100%", padding: "14px", background: carregando ? "#C44818" : "#E85D26", color: "#fff", border: "none", borderRadius: 9, fontSize: 16, fontWeight: 700, cursor: carregando ? "not-allowed" : "pointer", opacity: carregando ? 0.8 : 1 }}>
                 {carregando ? "Entrando..." : "Entrar na minha conta"}
               </button>
             </div>
@@ -107,7 +107,7 @@ export default function Login() {
             <div style={{ position: "absolute", top: -60, right: -60, width: 280, height: 280, background: "radial-gradient(circle, rgba(232,93,38,0.2) 0%, transparent 70%)", pointerEvents: "none" }}></div>
             <div style={{ position: "relative", zIndex: 1 }}>
               <div style={{ fontSize: 48, marginBottom: 20 }}>🚗</div>
-              <h2 style={{ fontFamily: "Georgia, serif", fontSize: 24, fontWeight: 800, color: "#fff", lineHeight: 1.2, marginBottom: 16 }}>
+              <h2 style={{ fontSize: 24, fontWeight: 800, color: "#fff", lineHeight: 1.2, marginBottom: 16 }}>
                 O carro certo,<br /><span style={{ color: "#E85D26" }}>perto de você.</span>
               </h2>
               <p style={{ fontSize: 14, color: "#7A7670", lineHeight: 1.65, marginBottom: 32 }}>Veículos de lojistas da sua região, com contato direto pelo WhatsApp.</p>

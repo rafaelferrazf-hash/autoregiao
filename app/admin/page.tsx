@@ -27,7 +27,7 @@ const COR_STATUS: Record<string, { bg: string; color: string }> = {
 const ROTULO_STATUS: Record<string, string> = { vitalicio: "vitalícia", assinante: "assinante", trial: "grátis", vencida: "vencida", desativada: "desativada", ativo: "ativo", pausado: "pausado" };
 
 const cartao = { background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, padding: "20px", marginBottom: 24 } as const;
-const tituloCartao = { fontFamily: "Georgia, serif", fontSize: 15, fontWeight: 700, color: "#1A1917", marginBottom: 16 } as const;
+const tituloCartao = { fontSize: 15, fontWeight: 700, color: "#1A1917", marginBottom: 16 } as const;
 const th = { textAlign: "left", fontSize: 11, fontWeight: 600, color: "#7A7670", textTransform: "uppercase", letterSpacing: 0.4, padding: "0 8px 10px" } as const;
 const td = { padding: "12px 8px", fontSize: 13, color: "#1A1917", verticalAlign: "middle" } as const;
 const botao = { padding: "5px 10px", borderRadius: 6, border: "1.5px solid #E8E6E1", background: "#F7F6F3", fontSize: 12, fontWeight: 500, color: "#1A1917", cursor: "pointer", whiteSpace: "nowrap" } as const;
@@ -72,7 +72,7 @@ export default function Admin() {
 
   if (verificando || !autorizado) {
     return (
-      <main style={{ fontFamily: "'DM Sans', sans-serif", background: "#F7F6F3", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <main style={{ background: "#F7F6F3", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
         <div style={{ fontSize: 13, color: "#7A7670" }}>{verificando ? "Verificando acesso..." : "Redirecionando..."}</div>
       </main>
     );
@@ -106,7 +106,7 @@ export default function Admin() {
   };
 
   return (
-    <main style={{ fontFamily: "'DM Sans', sans-serif", background: "#F7F6F3", minHeight: "100vh" }}>
+    <main style={{ background: "#F7F6F3", minHeight: "100vh" }}>
 
       <style>{`
         .admin-nav-links { display: flex !important; }
@@ -126,7 +126,7 @@ export default function Admin() {
       <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, background: "#1A1917", height: 60, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 16px" }}>
         <Link href="/" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none" }}>
           <Image src="/logo.png" alt="AutoRegião" width={28} height={28} style={{ objectFit: "contain" }} />
-          <span style={{ fontFamily: "Georgia, serif", fontSize: 16, fontWeight: 800, color: "#fff" }}>
+          <span style={{ fontSize: 16, fontWeight: 800, color: "#fff" }}>
             <span style={{ color: "#E85D26" }}>Auto</span>Região
           </span>
           <span style={{ background: "#E85D26", color: "#fff", fontSize: 10, fontWeight: 600, padding: "2px 7px", borderRadius: 4, marginLeft: 4 }}>ADMIN</span>
@@ -157,7 +157,7 @@ export default function Admin() {
       <div style={{ padding: "76px 16px 40px", maxWidth: 1100, margin: "0 auto" }}>
 
         <div style={{ marginBottom: 20 }}>
-          <div style={{ fontFamily: "Georgia, serif", fontSize: 20, fontWeight: 800, color: "#1A1917" }}>{aba}</div>
+          <div style={{ fontSize: 20, fontWeight: 800, color: "#1A1917" }}>{aba}</div>
           <div style={{ fontSize: 13, color: "#7A7670" }}>{subtitulo[aba]}</div>
           {erroResumo && <div style={{ fontSize: 13, color: "#991B1B", marginTop: 6 }}>⚠️ {erroResumo}</div>}
         </div>
@@ -177,7 +177,7 @@ export default function Admin() {
                     <div style={{ fontSize: 11, fontWeight: 600, color: "#7A7670", textTransform: "uppercase", letterSpacing: 0.4 }}>{s.label}</div>
                     <span style={{ fontSize: 18 }}>{s.icon}</span>
                   </div>
-                  <div style={{ fontFamily: "Georgia, serif", fontSize: 24, fontWeight: 800, color: "#1A1917", marginBottom: 4 }}>{s.value}</div>
+                  <div style={{ fontSize: 24, fontWeight: 800, color: "#1A1917", marginBottom: 4 }}>{s.value}</div>
                   <div style={{ fontSize: 11, color: "#E85D26" }}>{s.change}</div>
                 </div>
               ))}
@@ -192,7 +192,7 @@ export default function Admin() {
                 ].map(r => (
                   <div key={r.label} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 0", borderBottom: "1px solid #F7F6F3" }}>
                     <span style={{ fontSize: 13, color: "#1A1917", fontWeight: 500 }}>{r.label}</span>
-                    <span style={{ fontFamily: "Georgia, serif", fontSize: 18, fontWeight: 800, color: "#1A1917" }}>{n(r.valor)}</span>
+                    <span style={{ fontSize: 18, fontWeight: 800, color: "#1A1917" }}>{n(r.valor)}</span>
                   </div>
                 ))}
                 <div style={{ ...tituloCartao, marginTop: 18, marginBottom: 8 }}>Receita (Mercado Pago)</div>
@@ -202,7 +202,7 @@ export default function Admin() {
                 ].map(r => (
                   <div key={r.label} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 0", borderBottom: "1px solid #F7F6F3" }}>
                     <span style={{ fontSize: 13, color: "#1A1917", fontWeight: 500 }}>{r.label} {r.extra && <span style={{ fontSize: 11, color: "#7A7670", fontWeight: 400 }}>· {r.extra}</span>}</span>
-                    <span style={{ fontFamily: "Georgia, serif", fontSize: 18, fontWeight: 800, color: "#16A34A" }}>{r.valor}</span>
+                    <span style={{ fontSize: 18, fontWeight: 800, color: "#16A34A" }}>{r.valor}</span>
                   </div>
                 ))}
               </div>
@@ -217,7 +217,7 @@ export default function Admin() {
                 ].map(s => (
                   <div key={s.label} onClick={() => setAba("Lojas")} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 12px", background: COR_STATUS[s.s].bg, borderRadius: 8, marginBottom: 8, cursor: "pointer" }}>
                     <span style={{ fontSize: 13, color: COR_STATUS[s.s].color, fontWeight: 500 }}>{s.label}</span>
-                    <span style={{ fontFamily: "Georgia, serif", fontSize: 18, fontWeight: 800, color: COR_STATUS[s.s].color }}>{n(s.valor)}</span>
+                    <span style={{ fontSize: 18, fontWeight: 800, color: COR_STATUS[s.s].color }}>{n(s.valor)}</span>
                   </div>
                 ))}
               </div>
@@ -236,7 +236,7 @@ export default function Admin() {
                 <div style={{ background: "#D1FAE5", border: "1.5px solid #6EE7B7", borderRadius: 10, padding: "16px", marginBottom: 16, display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 10 }}>
                   <div>
                     <div style={{ fontSize: 11, color: "#065F46", fontWeight: 600, marginBottom: 4 }}>CUPOM GERADO E SALVO</div>
-                    <div style={{ fontFamily: "Georgia, serif", fontSize: 24, fontWeight: 800, color: "#065F46", letterSpacing: 2 }}>{cupomGerado}</div>
+                    <div style={{ fontSize: 24, fontWeight: 800, color: "#065F46", letterSpacing: 2 }}>{cupomGerado}</div>
                     <div style={{ fontSize: 12, color: "#065F46", marginTop: 4 }}>Válido para 1 uso · Estende por 30 dias</div>
                   </div>
                   <button onClick={() => { navigator.clipboard.writeText(cupomGerado); alert("Copiado!"); }}
@@ -325,7 +325,7 @@ export default function Admin() {
                       <tr key={a.id} style={{ borderBottom: "1px solid #F7F6F3", opacity: trabalhando ? 0.5 : 1 }}>
                         <td style={{ ...td, fontWeight: 600 }}>{a.nome}</td>
                         <td style={{ ...td, color: "#7A7670" }}>{a.loja}</td>
-                        <td style={{ ...td, fontFamily: "Georgia, serif", fontWeight: 700 }}>{formatarPreco(a.preco)}</td>
+                        <td style={{ ...td, fontWeight: 700 }}>{formatarPreco(a.preco)}</td>
                         <td style={td}><Etiqueta status={a.ativo ? "ativo" : "pausado"} /></td>
                         <td style={{ ...td, fontSize: 12, color: "#7A7670" }}>{data(a.criado_em)}</td>
                         <td style={td}>

@@ -98,7 +98,7 @@ export default function Veiculo() {
     : 0;
 
   if (carregando) return (
-    <main style={{ fontFamily: "'DM Sans', sans-serif", background: "#F7F6F3", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <main style={{ background: "#F7F6F3", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
       <div style={{ textAlign: "center" }}>
         <div style={{ fontSize: 40, marginBottom: 12 }}>🚗</div>
         <div style={{ fontSize: 14, color: "#7A7670" }}>Carregando anúncio...</div>
@@ -107,17 +107,17 @@ export default function Veiculo() {
   );
 
   if (!veiculo) return (
-    <main style={{ fontFamily: "'DM Sans', sans-serif", background: "#F7F6F3", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <main style={{ background: "#F7F6F3", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
       <div style={{ textAlign: "center" }}>
         <div style={{ fontSize: 40, marginBottom: 12 }}>😕</div>
-        <div style={{ fontFamily: "Georgia, serif", fontSize: 18, fontWeight: 700, color: "#1A1917", marginBottom: 8 }}>Anúncio não encontrado</div>
+        <div style={{ fontSize: 18, fontWeight: 700, color: "#1A1917", marginBottom: 8 }}>Anúncio não encontrado</div>
         <Link href="/veiculos" style={{ color: "#E85D26", fontSize: 14 }}>← Ver outros veículos</Link>
       </div>
     </main>
   );
 
   return (
-    <main style={{ fontFamily: "'DM Sans', sans-serif", background: "#F7F6F3", minHeight: "100vh" }}>
+    <main style={{ background: "#F7F6F3", minHeight: "100vh" }}>
 
       <style>{`
         .nav-desktop { display: flex !important; }
@@ -204,7 +204,7 @@ export default function Veiculo() {
         <div style={{ height: 60, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 16px" }}>
           <Link href="/" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none" }}>
             <Image src="/logo.png" alt="AutoRegião" width={32} height={32} style={{ objectFit: "contain" }} />
-            <span style={{ fontFamily: "Georgia, serif", fontSize: 18, fontWeight: 800, color: "#1A1917" }}>
+            <span style={{ fontSize: 18, fontWeight: 800, color: "#1A1917" }}>
               <span style={{ color: "#E85D26" }}>Auto</span>Região
             </span>
           </Link>
@@ -281,13 +281,13 @@ export default function Veiculo() {
                 {veiculo.destaque && <span style={{ fontSize: 11, fontWeight: 500, padding: "3px 9px", borderRadius: 4, background: "rgba(232,93,38,0.08)", color: "#E85D26" }}>⭐ Destaque</span>}
                 <span style={{ fontSize: 11, fontWeight: 500, padding: "3px 9px", borderRadius: 4, background: "#F7F6F3", color: "#7A7670", border: "1px solid #E8E6E1" }}>📍 {veiculo.cidade}</span>
               </div>
-              <h1 style={{ fontFamily: "Georgia, serif", fontSize: 24, fontWeight: 800, color: "#1A1917", marginBottom: 6 }}>{veiculo.nome}</h1>
+              <h1 style={{ fontSize: 24, fontWeight: 800, color: "#1A1917", marginBottom: 6 }}>{veiculo.nome}</h1>
               <p style={{ fontSize: 14, color: "#7A7670", marginBottom: 14 }}>
                 {[veiculo.ano, formatarKm(veiculo.km), veiculo.combustivel, veiculo.cambio, veiculo.cor].filter(Boolean).join(" · ")}
               </p>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12, padding: 16, background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, marginBottom: 16 }}>
                 <div>
-                  <div style={{ fontFamily: "Georgia, serif", fontSize: 28, fontWeight: 800, color: "#1A1917", lineHeight: 1 }}>{formatarPreco(veiculo.preco)}</div>
+                  <div style={{ fontSize: 28, fontWeight: 800, color: "#1A1917", lineHeight: 1 }}>{formatarPreco(veiculo.preco)}</div>
                   {veiculo.aceita_troca && <div style={{ fontSize: 12, color: "#16A34A", marginTop: 6, fontWeight: 500 }}>✅ Aceita troca</div>}
                 </div>
               </div>
@@ -295,7 +295,7 @@ export default function Veiculo() {
 
             {/* CARACTERÍSTICAS */}
             <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, marginBottom: 16, overflow: "hidden" }}>
-              <div style={{ padding: "14px 18px", borderBottom: "1px solid #E8E6E1", fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, color: "#1A1917" }}>Características</div>
+              <div style={{ padding: "14px 18px", borderBottom: "1px solid #E8E6E1", fontSize: 14, fontWeight: 700, color: "#1A1917" }}>Características</div>
               <div className="caracteristicas-grid">
                 {[
                   ["📅", "Ano", veiculo.ano],
@@ -308,7 +308,7 @@ export default function Veiculo() {
                   <div key={label as string} style={{ padding: "12px 14px", borderRight: (i + 1) % 3 !== 0 ? "1px solid #E8E6E1" : "none", borderBottom: i < 3 ? "1px solid #E8E6E1" : "none" }}>
                     <div style={{ fontSize: 16, marginBottom: 4 }}>{icon}</div>
                     <div style={{ fontSize: 10, color: "#7A7670", textTransform: "uppercase", letterSpacing: 0.4, marginBottom: 2 }}>{label as string}</div>
-                    <div style={{ fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, color: "#1A1917" }}>{value as string}</div>
+                    <div style={{ fontSize: 13, fontWeight: 700, color: "#1A1917" }}>{value as string}</div>
                   </div>
                 ))}
               </div>
@@ -317,7 +317,7 @@ export default function Veiculo() {
             {/* DESCRIÇÃO */}
             {veiculo.descricao && (
               <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, marginBottom: 16, overflow: "hidden" }}>
-                <div style={{ padding: "14px 18px", borderBottom: "1px solid #E8E6E1", fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, color: "#1A1917" }}>Descrição</div>
+                <div style={{ padding: "14px 18px", borderBottom: "1px solid #E8E6E1", fontSize: 14, fontWeight: 700, color: "#1A1917" }}>Descrição</div>
                 <div style={{ padding: "16px 18px", fontSize: 14, lineHeight: 1.7, color: "#1A1917", whiteSpace: "pre-wrap" }}>{veiculo.descricao}</div>
               </div>
             )}
@@ -325,7 +325,7 @@ export default function Veiculo() {
             {/* OPCIONAIS */}
             {veiculo.opcionais && veiculo.opcionais.length > 0 && (
               <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, marginBottom: 16, overflow: "hidden" }}>
-                <div style={{ padding: "14px 18px", borderBottom: "1px solid #E8E6E1", fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, color: "#1A1917" }}>Opcionais</div>
+                <div style={{ padding: "14px 18px", borderBottom: "1px solid #E8E6E1", fontSize: 14, fontWeight: 700, color: "#1A1917" }}>Opcionais</div>
                 <div style={{ padding: "14px 18px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
                   {veiculo.opcionais.map(item => (
                     <div key={item} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, color: "#1A1917" }}>
@@ -338,7 +338,7 @@ export default function Veiculo() {
 
             {/* SIMULADOR */}
             <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, overflow: "hidden" }}>
-              <div style={{ padding: "14px 18px", borderBottom: "1px solid #E8E6E1", fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, color: "#1A1917" }}>💰 Simular financiamento</div>
+              <div style={{ padding: "14px 18px", borderBottom: "1px solid #E8E6E1", fontSize: 14, fontWeight: 700, color: "#1A1917" }}>💰 Simular financiamento</div>
               <div style={{ padding: "16px 18px" }}>
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
                   <div>
@@ -360,11 +360,11 @@ export default function Veiculo() {
                     <div style={{ fontSize: 12, color: "#7A7670" }}>Parcela estimada</div>
                     <div style={{ fontSize: 10.5, color: "#7A7670", marginTop: 2 }}>Taxa aprox. 1,49% a.m. · {prazo}x</div>
                   </div>
-                  <div style={{ fontFamily: "Georgia, serif", fontSize: 22, fontWeight: 800, color: "#E85D26" }}>
+                  <div style={{ fontSize: 22, fontWeight: 800, color: "#E85D26" }}>
                     {parcela > 0 ? `R$ ${parcela.toLocaleString("pt-BR")}` : "---"}
                   </div>
                 </div>
-                <button style={{ width: "100%", marginTop: 12, padding: 10, background: "#1A1917", color: "#fff", border: "none", borderRadius: 8, fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>Solicitar financiamento →</button>
+                <button style={{ width: "100%", marginTop: 12, padding: 10, background: "#1A1917", color: "#fff", border: "none", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>Solicitar financiamento →</button>
               </div>
             </div>
           </div>
@@ -375,7 +375,7 @@ export default function Veiculo() {
               <div style={{ background: "#1A1917", padding: "16px 18px", display: "flex", alignItems: "center", gap: 12 }}>
                 <div style={{ width: 44, height: 44, background: "#E85D26", borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, flexShrink: 0 }}>🏪</div>
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, color: "#fff" }}>{veiculo.lojas?.nome || veiculo.nome_contato}</div>
+                  <div style={{ fontSize: 14, fontWeight: 700, color: "#fff" }}>{veiculo.lojas?.nome || veiculo.nome_contato}</div>
                   <div style={{ fontSize: 11.5, color: "#7A7670", marginTop: 2 }}>📍 {veiculo.lojas?.cidade || veiculo.cidade}</div>
                   {veiculo.loja_id && (
                     <Link href={`/loja/${veiculo.loja_id}`} style={{ display: "inline-block", fontSize: 11.5, color: "#E85D26", fontWeight: 600, textDecoration: "none", marginTop: 4 }}>Ver loja e outros anúncios →</Link>
@@ -383,10 +383,10 @@ export default function Veiculo() {
                 </div>
               </div>
               <div style={{ padding: "16px 18px", display: "flex", flexDirection: "column", gap: 8 }}>
-                <button onClick={abrirWhatsApp} style={{ width: "100%", padding: 13, background: "#25D366", color: "#fff", border: "none", borderRadius: 9, fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, cursor: "pointer" }}>
+                <button onClick={abrirWhatsApp} style={{ width: "100%", padding: 13, background: "#25D366", color: "#fff", border: "none", borderRadius: 9, fontSize: 14, fontWeight: 700, cursor: "pointer" }}>
                   📱 Chamar no WhatsApp
                 </button>
-                <button onClick={ligar} style={{ width: "100%", padding: 11, background: "#F7F6F3", color: "#1A1917", border: "1.5px solid #E8E6E1", borderRadius: 9, fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
+                <button onClick={ligar} style={{ width: "100%", padding: 11, background: "#F7F6F3", color: "#1A1917", border: "1.5px solid #E8E6E1", borderRadius: 9, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
                   📞 Ligar: {veiculo.telefone}
                 </button>
               </div>
@@ -409,7 +409,7 @@ export default function Veiculo() {
               )}
             </div>
             <div style={{ background: "rgba(22,163,74,0.08)", border: "1.5px solid rgba(22,163,74,0.15)", borderRadius: 12, padding: "14px 16px" }}>
-              <div style={{ fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, color: "#16A34A", marginBottom: 10 }}>🛡️ Compre com segurança</div>
+              <div style={{ fontSize: 13, fontWeight: 700, color: "#16A34A", marginBottom: 10 }}>🛡️ Compre com segurança</div>
               {["Veja o veículo pessoalmente antes de pagar", "Confira documentos e débitos no Detran", "Desconfie de sinal ou depósito antecipado", "Solicite laudo cautelar"].map(item => (
                 <div key={item} style={{ display: "flex", alignItems: "center", gap: 7, fontSize: 12, color: "#1A1917", marginBottom: 6 }}>
                   <span style={{ color: "#16A34A" }}>✔</span> {item}
@@ -422,8 +422,8 @@ export default function Veiculo() {
 
       {/* BOTÕES FIXOS MOBILE */}
       <div className="contato-fixo-mobile" style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: "#fff", borderTop: "1px solid #E8E6E1", padding: "12px 16px", gap: 10, zIndex: 50 }}>
-        <button onClick={abrirWhatsApp} style={{ flex: 1, padding: "13px", background: "#25D366", color: "#fff", border: "none", borderRadius: 9, fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, cursor: "pointer" }}>📱 WhatsApp</button>
-        <button onClick={ligar} style={{ flex: 1, padding: "13px", background: "#E85D26", color: "#fff", border: "none", borderRadius: 9, fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, cursor: "pointer" }}>📞 Ligar</button>
+        <button onClick={abrirWhatsApp} style={{ flex: 1, padding: "13px", background: "#25D366", color: "#fff", border: "none", borderRadius: 9, fontSize: 14, fontWeight: 700, cursor: "pointer" }}>📱 WhatsApp</button>
+        <button onClick={ligar} style={{ flex: 1, padding: "13px", background: "#E85D26", color: "#fff", border: "none", borderRadius: 9, fontSize: 14, fontWeight: 700, cursor: "pointer" }}>📞 Ligar</button>
         <button onClick={() => (typeof navigator.share === "function" ? compartilhar() : compartilharWhatsApp())} aria-label="Compartilhar anúncio"
           style={{ width: 50, padding: "13px 0", background: "#F7F6F3", color: "#1A1917", border: "1.5px solid #E8E6E1", borderRadius: 9, fontSize: 16, cursor: "pointer" }}>📤</button>
       </div>

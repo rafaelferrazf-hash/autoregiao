@@ -48,7 +48,7 @@ export default function Planos() {
   const dataFim = loja?.expira_em ? new Date(loja.expira_em).toLocaleDateString("pt-BR") : "";
 
   return (
-    <main style={{ fontFamily: "'DM Sans', sans-serif", background: "#F7F6F3", minHeight: "100vh" }}>
+    <main style={{ background: "#F7F6F3", minHeight: "100vh" }}>
       <style>{`
         .planos-painel { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
         @media (max-width: 860px) { .planos-painel { grid-template-columns: 1fr !important; } }
@@ -57,13 +57,13 @@ export default function Planos() {
       <nav style={{ background: "#fff", borderBottom: "1px solid #E8E6E1", height: 60, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 16px" }}>
         <Link href="/" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none" }}>
           <Image src="/logo.png" alt="AutoRegião" width={32} height={32} style={{ objectFit: "contain" }} />
-          <span style={{ fontFamily: "Georgia, serif", fontSize: 18, fontWeight: 800, color: "#1A1917" }}><span style={{ color: "#E85D26" }}>Auto</span>Região</span>
+          <span style={{ fontSize: 18, fontWeight: 800, color: "#1A1917" }}><span style={{ color: "#E85D26" }}>Auto</span>Região</span>
         </Link>
         <Link href="/painel" style={{ fontSize: 13, color: "#7A7670", textDecoration: "none" }}>← Voltar ao painel</Link>
       </nav>
 
       <div style={{ maxWidth: 1000, margin: "0 auto", padding: "28px 16px 56px" }}>
-        <h1 style={{ fontFamily: "Georgia, serif", fontSize: 26, fontWeight: 800, color: "#1A1917", marginBottom: 6 }}>Planos</h1>
+        <h1 style={{ fontSize: 26, fontWeight: 800, color: "#1A1917", marginBottom: 6 }}>Planos</h1>
 
         {!carregado ? (
           <p style={{ fontSize: 14, color: "#7A7670" }}>Carregando...</p>
@@ -107,11 +107,11 @@ export default function Planos() {
                 return (
                   <div key={p.id} style={{ background: "#fff", borderRadius: 14, border: p.id === "profissional" ? "2px solid #E85D26" : "1.5px solid #E8E6E1", padding: 20, display: "flex", flexDirection: "column" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
-                      <div style={{ fontFamily: "Georgia, serif", fontSize: 19, fontWeight: 800, color: "#1A1917" }}>{p.nome}</div>
+                      <div style={{ fontSize: 19, fontWeight: 800, color: "#1A1917" }}>{p.nome}</div>
                       {atual && <span style={{ fontSize: 10, fontWeight: 700, background: "#1A1917", color: "#fff", padding: "2px 8px", borderRadius: 20 }}>SEU PLANO</span>}
                     </div>
                     <div style={{ fontSize: 12, color: "#7A7670", marginBottom: 14 }}>{p.limite === null ? "Anúncios ilimitados" : `Até ${p.limite} anúncios ativos`}</div>
-                    <div style={{ fontFamily: "Georgia, serif", fontSize: 30, fontWeight: 800, color: "#1A1917", lineHeight: 1 }}>{formatarReais(total)}</div>
+                    <div style={{ fontSize: 30, fontWeight: 800, color: "#1A1917", lineHeight: 1 }}>{formatarReais(total)}</div>
                     <div style={{ fontSize: 12, color: "#7A7670", marginTop: 4, marginBottom: 14, minHeight: 32 }}>
                       {meses === 1 ? "por mês" : <>por {meses} meses · <s>{formatarReais(cheio)}</s> <span style={{ color: "#16A34A", fontWeight: 600 }}>economize {formatarReais(cheio - total)}</span></>}
                     </div>
@@ -119,7 +119,7 @@ export default function Planos() {
                       <div key={r} style={{ fontSize: 12.5, color: "#1A1917", marginBottom: 7, display: "flex", gap: 6 }}><span style={{ color: "#16A34A" }}>✔</span>{r}</div>
                     ))}
                     <button onClick={() => pagar(p.id)} disabled={pagando !== null}
-                      style={{ marginTop: "auto", paddingTop: 12, paddingBottom: 12, background: p.id === "profissional" ? "#E85D26" : "#1A1917", color: "#fff", border: "none", borderRadius: 9, fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, cursor: pagando ? "default" : "pointer", opacity: pagando && pagando !== p.id ? 0.5 : 1 }}>
+                      style={{ marginTop: "auto", paddingTop: 12, paddingBottom: 12, background: p.id === "profissional" ? "#E85D26" : "#1A1917", color: "#fff", border: "none", borderRadius: 9, fontSize: 14, fontWeight: 700, cursor: pagando ? "default" : "pointer", opacity: pagando && pagando !== p.id ? 0.5 : 1 }}>
                       {pagando === p.id ? "Abrindo o Mercado Pago..." : atual ? "Renovar" : "Assinar"} {pagando !== p.id && `— ${formatarReais(total)}`}
                     </button>
                   </div>
@@ -136,7 +136,7 @@ export default function Planos() {
         {/* HISTÓRICO */}
         {historico.length > 0 && (
           <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, marginTop: 28, overflowX: "auto" }}>
-            <div style={{ padding: "14px 18px", borderBottom: "1px solid #E8E6E1", fontFamily: "Georgia, serif", fontSize: 15, fontWeight: 700, color: "#1A1917" }}>Meus pagamentos</div>
+            <div style={{ padding: "14px 18px", borderBottom: "1px solid #E8E6E1", fontSize: 15, fontWeight: 700, color: "#1A1917" }}>Meus pagamentos</div>
             <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 560 }}>
               <thead>
                 <tr>{["Data", "Plano", "Valor", "Forma", "Situação"].map(h => <th key={h} style={{ textAlign: "left", fontSize: 11, color: "#7A7670", textTransform: "uppercase", padding: "10px 18px" }}>{h}</th>)}</tr>

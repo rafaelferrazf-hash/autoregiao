@@ -44,10 +44,10 @@ export default function Cadastro() {
   }
 
   if (sucesso) return (
-    <main style={{ fontFamily: "'DM Sans', sans-serif", background: "#F7F6F3", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "24px" }}>
+    <main style={{ background: "#F7F6F3", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "24px" }}>
       <div style={{ textAlign: "center", padding: "40px 24px" }}>
         <div style={{ fontSize: 64, marginBottom: 16 }}>🎉</div>
-        <div style={{ fontFamily: "Georgia, serif", fontSize: 26, fontWeight: 800, color: "#1A1917", marginBottom: 8 }}>Cadastro realizado!</div>
+        <div style={{ fontSize: 26, fontWeight: 800, color: "#1A1917", marginBottom: 8 }}>Cadastro realizado!</div>
         <p style={{ fontSize: 15, color: "#7A7670", marginBottom: 8 }}>Bem-vindo ao AutoRegião, {form.nome.split(" ")[0]}!</p>
         <p style={{ fontSize: 13, color: "#7A7670", marginBottom: 24 }}>Verifique seu e-mail para confirmar a conta.</p>
         <Link href="/login" style={{ padding: "12px 28px", background: "#E85D26", color: "#fff", borderRadius: 8, textDecoration: "none", fontWeight: 600, fontSize: 15 }}>Ir para o login</Link>
@@ -56,7 +56,7 @@ export default function Cadastro() {
   );
 
   return (
-    <main style={{ fontFamily: "'DM Sans', sans-serif", background: "#F7F6F3", minHeight: "100vh" }}>
+    <main style={{ background: "#F7F6F3", minHeight: "100vh" }}>
 
       <style>{`
         .nav-desktop-cad { display: block !important; }
@@ -72,7 +72,7 @@ export default function Cadastro() {
         <div style={{ height: 60, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 16px" }}>
           <Link href="/" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none" }}>
             <Image src="/logo.png" alt="AutoRegião" width={32} height={32} style={{ objectFit: "contain" }} />
-            <span style={{ fontFamily: "Georgia, serif", fontSize: 18, fontWeight: 800, color: "#1A1917" }}>
+            <span style={{ fontSize: 18, fontWeight: 800, color: "#1A1917" }}>
               <span style={{ color: "#E85D26" }}>Auto</span>Região
             </span>
           </Link>
@@ -102,7 +102,7 @@ export default function Cadastro() {
         <div style={{ width: "100%", maxWidth: 480 }}>
 
           <div style={{ textAlign: "center", marginBottom: 24 }}>
-            <div style={{ fontFamily: "Georgia, serif", fontSize: 26, fontWeight: 800, color: "#1A1917", marginBottom: 6 }}>Criar conta</div>
+            <div style={{ fontSize: 26, fontWeight: 800, color: "#1A1917", marginBottom: 6 }}>Criar conta</div>
             <p style={{ fontSize: 14, color: "#7A7670" }}>Encontre o carro certo perto de você</p>
           </div>
 
@@ -188,7 +188,7 @@ export default function Cadastro() {
             </div>
 
             <button onClick={handleSubmit} disabled={carregando}
-              style={{ width: "100%", padding: "14px", background: carregando ? "#C44818" : "#E85D26", color: "#fff", border: "none", borderRadius: 8, fontFamily: "Georgia, serif", fontSize: 16, fontWeight: 700, cursor: carregando ? "not-allowed" : "pointer", opacity: carregando ? 0.8 : 1 }}>
+              style={{ width: "100%", padding: "14px", background: carregando ? "#C44818" : "#E85D26", color: "#fff", border: "none", borderRadius: 8, fontSize: 16, fontWeight: 700, cursor: carregando ? "not-allowed" : "pointer", opacity: carregando ? 0.8 : 1 }}>
               {carregando ? "Criando conta..." : "Criar minha conta"}
             </button>
 
@@ -208,7 +208,7 @@ export default function Cadastro() {
             <div style={{ marginTop: 16, background: "#1A1917", borderRadius: 12, padding: "16px 20px", display: "flex", alignItems: "center", gap: 14 }}>
               <div style={{ fontSize: 28 }}>🎁</div>
               <div>
-                <div style={{ fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, color: "#fff", marginBottom: 3 }}>60 dias grátis para lojistas</div>
+                <div style={{ fontSize: 13, fontWeight: 700, color: "#fff", marginBottom: 3 }}>60 dias grátis para lojistas</div>
                 <div style={{ fontSize: 12, color: "rgba(255,255,255,0.6)" }}>Anuncie todos os seus veículos sem custo durante o período de lançamento.</div>
               </div>
             </div>

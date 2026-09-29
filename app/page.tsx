@@ -35,7 +35,7 @@ export default function Home() {
   }, []);
 
   return (
-    <main style={{ fontFamily: "'DM Sans', sans-serif", background: "#F7F6F3", minHeight: "100vh" }}>
+    <main style={{ background: "#F7F6F3", minHeight: "100vh" }}>
 
       {/* CSS RESPONSIVO */}
       <style>{`
@@ -57,7 +57,7 @@ export default function Home() {
         <div style={{ height: 60, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 16px" }}>
           <Link href="/" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none" }}>
             <Image src="/logo.png" alt="AutoRegião" width={32} height={32} style={{ objectFit: "contain" }} />
-            <span style={{ fontFamily: "Georgia, serif", fontSize: 18, fontWeight: 800, color: "#1A1917" }}>
+            <span style={{ fontSize: 18, fontWeight: 800, color: "#1A1917" }}>
               <span style={{ color: "#E85D26" }}>Auto</span>Região
             </span>
           </Link>
@@ -101,7 +101,7 @@ export default function Home() {
         <div>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14, flexWrap: "wrap", gap: 8 }}>
               <div>
-                <span style={{ fontFamily: "Georgia, serif", fontSize: 16, fontWeight: 800, color: "#1A1917" }}>{carregando ? "..." : `${total} ${total === 1 ? "veículo" : "veículos"}`}</span>
+                <span style={{ fontSize: 16, fontWeight: 800, color: "#1A1917" }}>{carregando ? "..." : `${total} ${total === 1 ? "veículo" : "veículos"}`}</span>
                 <span style={{ fontSize: 12, color: "#7A7670", marginLeft: 6 }}>anunciados · mais recentes</span>
               </div>
               <Link href="/veiculos" style={{ fontSize: 13, color: "#E85D26", fontWeight: 600, textDecoration: "none" }}>Buscar com filtros →</Link>
@@ -125,14 +125,14 @@ export default function Home() {
                       }
                     </div>
                     <div style={{ padding: "10px 12px" }}>
-                      <div style={{ fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, color: "#1A1917", marginBottom: 4 }}>{car.nome}</div>
+                      <div style={{ fontSize: 13, fontWeight: 700, color: "#1A1917", marginBottom: 4 }}>{car.nome}</div>
                       <div style={{ display: "flex", flexWrap: "wrap", gap: 3, marginBottom: 8 }}>
                         {[car.ano, formatarKm(car.km), car.combustivel].filter(Boolean).map(tag => (
                           <span key={tag} style={{ fontSize: 10, color: "#7A7670", background: "#F7F6F3", padding: "2px 5px", borderRadius: 4 }}>{tag}</span>
                         ))}
                       </div>
                       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: 8, borderTop: "1px solid #E8E6E1" }}>
-                        <div style={{ fontFamily: "Georgia, serif", fontSize: 15, fontWeight: 800, color: "#1A1917" }}>{formatarPreco(car.preco)}</div>
+                        <div style={{ fontSize: 15, fontWeight: 800, color: "#1A1917" }}>{formatarPreco(car.preco)}</div>
                       </div>
                       {(car.lojas?.nome || car.cidade) && (
                         <div style={{ fontSize: 10.5, color: "#7A7670", marginTop: 5, display: "flex", alignItems: "center", gap: 3 }}>

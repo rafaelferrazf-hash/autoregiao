@@ -34,12 +34,12 @@ export default function RecuperarSenha() {
   }
 
   return (
-    <main style={{ fontFamily: "'DM Sans', sans-serif", background: "#F7F6F3", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+    <main style={{ background: "#F7F6F3", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
 
       <nav style={{ background: "#fff", borderBottom: "1px solid #E8E6E1", height: 60, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 16px", flexShrink: 0 }}>
         <Link href="/" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none" }}>
           <Image src="/logo.png" alt="AutoRegião" width={32} height={32} style={{ objectFit: "contain" }} />
-          <span style={{ fontFamily: "Georgia, serif", fontSize: 18, fontWeight: 800, color: "#1A1917" }}>
+          <span style={{ fontSize: 18, fontWeight: 800, color: "#1A1917" }}>
             <span style={{ color: "#E85D26" }}>Auto</span>Região
           </span>
         </Link>
@@ -48,7 +48,7 @@ export default function RecuperarSenha() {
 
       <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "24px 16px" }}>
         <div style={{ maxWidth: 440, width: "100%", background: "#fff", borderRadius: 16, boxShadow: "0 4px 32px rgba(0,0,0,0.08)", border: "1px solid #E8E6E1", padding: "40px 36px", boxSizing: "border-box" }}>
-          <h1 style={{ fontFamily: "Georgia, serif", fontSize: 24, fontWeight: 800, color: "#1A1917", marginBottom: 6 }}>Esqueceu a senha?</h1>
+          <h1 style={{ fontSize: 24, fontWeight: 800, color: "#1A1917", marginBottom: 6 }}>Esqueceu a senha?</h1>
           <p style={{ fontSize: 14, color: "#7A7670", marginBottom: 24, lineHeight: 1.5 }}>Informe o e-mail da sua conta e enviaremos um link para você criar uma senha nova.</p>
 
           {enviado ? (
@@ -69,7 +69,7 @@ export default function RecuperarSenha() {
                     style={{ width: "100%", padding: "12px 14px", border: "1.5px solid #E8E6E1", borderRadius: 8, fontSize: 15, color: "#1A1917", background: "#F7F6F3", outline: "none", boxSizing: "border-box" }} />
                 </div>
                 <button onClick={handleEnviar} disabled={carregando}
-                  style={{ width: "100%", padding: "14px", background: carregando ? "#C44818" : "#E85D26", color: "#fff", border: "none", borderRadius: 9, fontFamily: "Georgia, serif", fontSize: 16, fontWeight: 700, cursor: carregando ? "not-allowed" : "pointer", opacity: carregando ? 0.8 : 1 }}>
+                  style={{ width: "100%", padding: "14px", background: carregando ? "#C44818" : "#E85D26", color: "#fff", border: "none", borderRadius: 9, fontSize: 16, fontWeight: 700, cursor: carregando ? "not-allowed" : "pointer", opacity: carregando ? 0.8 : 1 }}>
                   {carregando ? "Enviando..." : "Enviar link de recuperação"}
                 </button>
               </div>

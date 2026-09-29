@@ -135,7 +135,7 @@ export default function Admin() {
           {ABAS.map(item => (
             <button key={item} onClick={() => setAba(item)} style={{ fontSize: 13, color: aba === item ? "#fff" : "rgba(255,255,255,0.5)", background: "none", border: "none", cursor: "pointer", fontWeight: aba === item ? 600 : 400, padding: 0 }}>{item}</button>
           ))}
-          <Link href="/painel" title="Meu painel de lojista" style={{ width: 32, height: 32, borderRadius: "50%", background: "#E85D26", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontWeight: 700, fontSize: 13, textDecoration: "none" }}>R</Link>
+          <button title="Sair da conta de admin" onClick={async () => { await supabase.auth.signOut(); window.location.href = "/login"; }} style={{ padding: "6px 12px", borderRadius: 7, border: "1px solid rgba(255,255,255,0.25)", background: "transparent", color: "rgba(255,255,255,0.8)", fontSize: 12, cursor: "pointer" }}>Sair</button>
         </div>
         <button className="admin-hamburger" onClick={() => setMenuAberto(!menuAberto)}
           style={{ background: "none", border: "none", cursor: "pointer", padding: 8, flexDirection: "column", gap: 5 }}>
@@ -150,7 +150,7 @@ export default function Admin() {
           {ABAS.map(item => (
             <button key={item} onClick={() => { setAba(item); setMenuAberto(false); }} style={{ fontSize: 15, color: "#fff", background: "none", border: "none", textAlign: "left", fontWeight: aba === item ? 700 : 500, cursor: "pointer", padding: 0 }}>{item}</button>
           ))}
-          <Link href="/painel" style={{ fontSize: 15, color: "#E85D26", textDecoration: "none", fontWeight: 500 }}>Meu painel de lojista →</Link>
+          <button onClick={async () => { await supabase.auth.signOut(); window.location.href = "/login"; }} style={{ fontSize: 15, color: "#E85D26", background: "none", border: "none", textAlign: "left", fontWeight: 500, cursor: "pointer", padding: 0 }}>Sair</button>
         </div>
       )}
 

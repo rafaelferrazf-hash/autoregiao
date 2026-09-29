@@ -5,7 +5,7 @@ import { supabase } from "@/lib/supabase";
 import { ehAdmin } from "@/lib/admin";
 
 // Botões do topo das páginas públicas: "Entrar / Cadastrar loja" para visitante,
-// "Meu painel" (e "Admin", para o dono) para quem já está logado.
+// "Meu painel" para lojista logado e só "Admin" para a conta de admin.
 export default function BotoesConta({ celular = false }: { celular?: boolean }) {
   const [conta, setConta] = useState<"carregando" | "visitante" | "lojista" | "admin">("carregando");
 
@@ -33,10 +33,7 @@ export default function BotoesConta({ celular = false }: { celular?: boolean }) 
     );
   }
 
-  return (
-    <>
-      {conta === "admin" && <Link href="/admin" style={cheio}>🛡️ Admin</Link>}
-      <Link href="/painel" style={conta === "admin" ? contorno : cheio}>Meu painel</Link>
-    </>
-  );
+  // Conta de admin é só admin (a loja do dono fica numa conta de lojista separada).
+  if (conta === "admin") return <Link href="/admin" style={cheio}>🛡️ Admin</Link>;
+  return <Link href="/painel" style={cheio}>Meu painel</Link>;
 }

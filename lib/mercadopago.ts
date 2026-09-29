@@ -34,9 +34,9 @@ export async function criarPreferencia(p: NovaPreferencia) {
       external_reference: p.pagamentoId,
       ...(p.emailPagador ? { payer: { email: p.emailPagador } } : {}),
       back_urls: {
-        success: `${p.urlSite}/painel/planos/retorno`,
-        pending: `${p.urlSite}/painel/planos/retorno`,
-        failure: `${p.urlSite}/painel/planos/retorno`,
+        success: `${p.urlSite}/pagamento/retorno`,
+        pending: `${p.urlSite}/pagamento/retorno`,
+        failure: `${p.urlSite}/pagamento/retorno`,
       },
       auto_return: "approved",
       notification_url: `${p.urlSite}/api/pagamentos/webhook`,
@@ -94,6 +94,37 @@ export function assinaturaValida(request: Request, dataId: string): boolean {
 export type ResultadoProcessamento =
   | { ok: true; status: string; aplicado: string | null; pagamentoId: string }
   | { ok: false; motivo: string };
+
+// Rede de segurança: procura no Mercado Pago os pagamentos que ainda estão pendentes no site
+// (pela external_reference) e processa os que já mudaram de status. Não depende do webhook.
+// Sem `usuarioId`: confere todos os pendentes dos últimos 10 dias (rotina diária).
+export async function reconciliarPendentes(usuarioId?: string) {
+  const admin = criarClienteAdmin();
+  let consulta = admin
+    .from("pagamentos")
+    .select("id")
+    .in("status", ["pendente", "pending", "in_process", "authorized"])
+    .gte("criado_em", new Date(Date.now() - 10 * 86_400_000).toISOString())
+    .limit(50);
+  if (usuarioId) consulta = consulta.eq("usuario_id", usuarioId);
+  const { data: pendentes } = await consulta;
+
+  let processados = 0;
+  for (const p of pendentes ?? []) {
+    const resp = await fetch(`${API}/v1/payments/search?external_reference=${p.id}&sort=date_created&criteria=desc`, {
+      headers: { Authorization: `Bearer ${token()}` },
+      cache: "no-store",
+    });
+    if (!resp.ok) continue;
+    const { results } = (await resp.json()) as { results?: { id: number; status: string }[] };
+    // Prefere um aprovado; senão o mais recente.
+    const escolhido = results?.find(r => r.status === "approved") ?? results?.[0];
+    if (!escolhido) continue;
+    const r = await processarPagamento(String(escolhido.id));
+    if (r.ok) processados++;
+  }
+  return { conferidos: pendentes?.length ?? 0, processados };
+}
 
 // Consulta o pagamento no Mercado Pago, atualiza o histórico e, se aprovado, ativa o plano.
 // Usado pelo webhook e pela página de retorno do checkout (o que chegar primeiro).

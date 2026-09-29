@@ -22,6 +22,8 @@ export default function Planos() {
     (async () => {
       const user = await usuarioAtual();
       if (user) {
+        // Rede de segurança: ativa pagamentos já aprovados cujo aviso ainda não chegou.
+        await fetch("/api/pagamentos/sincronizar", { method: "POST" }).catch(() => {});
         const { loja } = await buscarLojaDoUsuario(user.id);
         setLoja(loja);
         setHistorico(await listarMeusPagamentos());

@@ -70,12 +70,15 @@ async function buscarPagamento(id: string): Promise<PagamentoMP | null> {
 }
 
 // Confere a assinatura do aviso (x-signature) quando MP_WEBHOOK_SECRET estiver configurado.
-// Sem o segredo, o aviso é aceito — seguro mesmo assim, porque o status é sempre
-// confirmado direto na API do Mercado Pago em processarPagamento().
+// Aviso SEM assinatura é aceito: o Mercado Pago manda avisos no formato antigo (IPN) para o
+// notification_url da preferência sem x-signature. É seguro porque processarPagamento() nunca
+// confia no aviso — sempre consulta o pagamento na API do Mercado Pago e confere valor/referência.
+// Aviso COM assinatura inválida é recusado (alguém tentando se passar pelo Mercado Pago).
 export function assinaturaValida(request: Request, dataId: string): boolean {
   const segredo = process.env.MP_WEBHOOK_SECRET;
   if (!segredo) return true;
   const assinatura = request.headers.get("x-signature") || "";
+  if (!assinatura) return true;
   const requestId = request.headers.get("x-request-id") || "";
   const partes = Object.fromEntries(assinatura.split(",").map(p => p.trim().split("=") as [string, string]));
   if (!partes.ts || !partes.v1) return false;

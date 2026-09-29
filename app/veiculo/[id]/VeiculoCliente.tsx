@@ -7,9 +7,11 @@ import { useParams } from "next/navigation";
 import { buscarSemelhantes, buscarVeiculo as buscarVeiculoPorId } from "@/lib/dados/veiculos";
 import BotaoFavorito from "@/components/BotaoFavorito";
 import CartaoVeiculo from "@/components/CartaoVeiculo";
+import Rodape from "@/components/Rodape";
 import { formatarPreco, formatarKm } from "@/lib/formatar";
 import { registrarEvento } from "@/lib/dados/eventos";
 import type { VeiculoComLoja } from "@/lib/tipos";
+import { EMAIL_CONTATO, URL_SITE } from "@/lib/site";
 
 export default function Veiculo() {
   const { id } = useParams<{ id: string }>();
@@ -99,6 +101,32 @@ export default function Veiculo() {
     window.open(`tel:${formatarTelefone(veiculo.telefone)}`);
   }
 
+  // Endereço da loja no Google Maps (só quando a loja cadastrou o endereço).
+  const linkMapa = veiculo?.lojas?.endereco
+    ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent([veiculo.lojas.endereco, veiculo.lojas.cidade, veiculo.lojas.estado].filter(Boolean).join(", "))}`
+    : null;
+  const anuncianteDesde = veiculo?.lojas?.criado_em
+    ? new Date(veiculo.lojas.criado_em).toLocaleDateString("pt-BR", { month: "long", year: "numeric" })
+    : null;
+  // Denúncia vai por e-mail para o contato@ (chega no Gmail do dono), já com o link do anúncio.
+  const linkDenuncia = veiculo
+    ? `mailto:${EMAIL_CONTATO}?subject=${encodeURIComponent(`Denúncia de anúncio: ${veiculo.nome}`)}&body=${encodeURIComponent(`Anúncio: ${typeof window !== "undefined" ? window.location.origin : URL_SITE}/veiculo/${veiculo.id}
+
+Motivo da denúncia:
+`)}`
+    : "";
+  const caixaSeguranca = veiculo && (
+    <div style={{ background: "rgba(22,163,74,0.08)", border: "1.5px solid rgba(22,163,74,0.15)", borderRadius: 12, padding: "14px 16px" }}>
+      <div style={{ fontSize: 13, fontWeight: 700, color: "#16A34A", marginBottom: 10 }}>🛡️ Compre com segurança</div>
+      {["Veja o veículo pessoalmente antes de pagar", "Confira documentos e débitos no Detran", "Desconfie de sinal ou depósito antecipado", "Solicite laudo cautelar", "A AutoRegião nunca pede código, senha ou pagamento"].map(item => (
+        <div key={item} style={{ display: "flex", alignItems: "center", gap: 7, fontSize: 12, color: "#1A1917", marginBottom: 6 }}>
+          <span style={{ color: "#16A34A" }}>✔</span> {item}
+        </div>
+      ))}
+      <a href={linkDenuncia} style={{ display: "inline-block", marginTop: 6, fontSize: 12, color: "#7A7670", textDecoration: "underline" }}>🚩 Denunciar este anúncio</a>
+    </div>
+  );
+
   const parcela = entrada && prazo
     ? Math.round(((veiculo?.preco || 0) - Number(entrada)) * (0.0149 / (1 - Math.pow(1.0149, -Number(prazo)))))
     : 0;
@@ -129,6 +157,8 @@ export default function Veiculo() {
         .nav-desktop { display: flex !important; }
         .nav-mobile-btn { display: none !important; }
         .veiculo-grid { display: grid; grid-template-columns: 1fr 340px; gap: 24px; align-items: start; }
+        .contato-fixo-espaco { display: none; }
+        .so-celular { display: none; }
         .semelhantes-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
         @media (max-width: 900px) { .semelhantes-grid { grid-template-columns: repeat(3, 1fr); } }
         @media (max-width: 768px) { .semelhantes-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; } }
@@ -144,6 +174,8 @@ export default function Veiculo() {
           .veiculo-grid { grid-template-columns: 1fr !important; }
           .contato-sticky { display: none !important; }
           .contato-fixo-mobile { display: flex !important; }
+          .contato-fixo-espaco { display: block !important; height: 76px; }
+          .so-celular { display: flex !important; }
           .thumbnails-grid { grid-template-columns: repeat(4, 1fr) !important; }
           .caracteristicas-grid { grid-template-columns: repeat(2, 1fr) !important; }
           .breadcrumb { display: none !important; }
@@ -377,6 +409,15 @@ export default function Veiculo() {
                 <button onClick={() => abrirWhatsApp(`Olá! Vi o anúncio do ${veiculo.nome} por ${formatarPreco(veiculo.preco)} no AutoRegião e gostaria de uma simulação de financiamento.`)} style={{ width: "100%", marginTop: 12, padding: 10, background: "#1A1917", color: "#fff", border: "none", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>Solicitar financiamento →</button>
               </div>
             </div>
+            {/* No celular a coluna da direita some: mapa e segurança aparecem aqui. */}
+            <div className="so-celular" style={{ flexDirection: "column", gap: 12, marginTop: 16 }}>
+              {linkMapa && (
+                <a href={linkMapa} target="_blank" rel="noopener noreferrer" style={{ display: "block", textAlign: "center", padding: 11, background: "#fff", color: "#1A1917", border: "1.5px solid #E8E6E1", borderRadius: 9, fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
+                  🗺️ Ver endereço da loja no mapa
+                </a>
+              )}
+              {caixaSeguranca}
+            </div>
           </div>
 
           {/* COLUNA DIREITA — desktop */}
@@ -387,6 +428,7 @@ export default function Veiculo() {
                 <div style={{ flex: 1 }}>
                   <div style={{ fontSize: 14, fontWeight: 700, color: "#fff" }}>{veiculo.lojas?.nome || veiculo.nome_contato}</div>
                   <div style={{ fontSize: 11.5, color: "#7A7670", marginTop: 2 }}>📍 {veiculo.lojas?.cidade || veiculo.cidade}</div>
+                  {anuncianteDesde && <div style={{ fontSize: 11.5, color: "#A8A49D", marginTop: 2 }}>✔ Anunciante desde {anuncianteDesde}</div>}
                   {veiculo.loja_id && (
                     <Link href={`/loja/${veiculo.loja_id}`} style={{ display: "inline-block", fontSize: 11.5, color: "#E85D26", fontWeight: 600, textDecoration: "none", marginTop: 4 }}>Ver loja e outros anúncios →</Link>
                   )}
@@ -396,6 +438,11 @@ export default function Veiculo() {
                 <button onClick={() => abrirWhatsApp()} style={{ width: "100%", padding: 13, background: "#25D366", color: "#fff", border: "none", borderRadius: 9, fontSize: 14, fontWeight: 700, cursor: "pointer" }}>
                   📱 Chamar no WhatsApp
                 </button>
+                {linkMapa && (
+                  <a href={linkMapa} target="_blank" rel="noopener noreferrer" style={{ display: "block", textAlign: "center", width: "100%", boxSizing: "border-box", padding: 11, background: "#fff", color: "#1A1917", border: "1.5px solid #E8E6E1", borderRadius: 9, fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
+                    🗺️ Ver endereço no mapa
+                  </a>
+                )}
                 <button onClick={ligar} style={{ width: "100%", padding: 11, background: "#F7F6F3", color: "#1A1917", border: "1.5px solid #E8E6E1", borderRadius: 9, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
                   📞 Ligar: {veiculo.telefone}
                 </button>
@@ -419,14 +466,7 @@ export default function Veiculo() {
                 </div>
               )}
             </div>
-            <div style={{ background: "rgba(22,163,74,0.08)", border: "1.5px solid rgba(22,163,74,0.15)", borderRadius: 12, padding: "14px 16px" }}>
-              <div style={{ fontSize: 13, fontWeight: 700, color: "#16A34A", marginBottom: 10 }}>🛡️ Compre com segurança</div>
-              {["Veja o veículo pessoalmente antes de pagar", "Confira documentos e débitos no Detran", "Desconfie de sinal ou depósito antecipado", "Solicite laudo cautelar"].map(item => (
-                <div key={item} style={{ display: "flex", alignItems: "center", gap: 7, fontSize: 12, color: "#1A1917", marginBottom: 6 }}>
-                  <span style={{ color: "#16A34A" }}>✔</span> {item}
-                </div>
-              ))}
-            </div>
+            {caixaSeguranca}
           </div>
         </div>
 
@@ -454,6 +494,8 @@ export default function Veiculo() {
           style={{ width: 50, padding: "13px 0", background: "#F7F6F3", color: "#1A1917", border: "1.5px solid #E8E6E1", borderRadius: 9, fontSize: 16, cursor: "pointer" }}>📤</button>
       </div>
 
+      <Rodape />
+      <div className="contato-fixo-espaco" />
     </main>
   );
 }

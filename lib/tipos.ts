@@ -33,7 +33,8 @@ export type Veiculo = {
 
 // Veículo com o join `lojas(nome, cidade)`.
 export type VeiculoComLoja = Veiculo & {
-  lojas: { nome: string; cidade: string } | null;
+  // estado/endereco/criado_em só vêm na página do anúncio (buscarVeiculo).
+  lojas: { nome: string; cidade: string; estado?: string | null; endereco?: string | null; criado_em?: string | null } | null;
 };
 
 export type NovoVeiculo = Omit<Veiculo, "id" | "loja_id" | "destaque" | "criado_em" | "created_at">;

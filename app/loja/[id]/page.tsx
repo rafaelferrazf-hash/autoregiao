@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import CartaoVeiculo from "@/components/CartaoVeiculo";
+import Rodape from "@/components/Rodape";
 import { notFound } from "next/navigation";
 import { criarClienteAnonimo } from "@/lib/supabase-servidor";
 import type { Loja, Veiculo } from "@/lib/tipos";
@@ -63,6 +64,9 @@ export default async function PerfilLoja({ params }: { params: Promise<{ id: str
   const whatsapp = (loja.whatsapp || loja.telefone || "").replace(/\D/g, "");
   const desde = loja.criado_em ? new Date(loja.criado_em).getFullYear() : null;
   const local = [loja.cidade, loja.estado].filter(Boolean).join(", ");
+  const linkMapa = loja.endereco
+    ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent([loja.endereco, loja.cidade, loja.estado].filter(Boolean).join(", "))}`
+    : null;
   const informacoes = [
     ["📍", "Endereço", loja.endereco],
     ["🕐", "Horário", loja.horario],
@@ -172,6 +176,9 @@ export default async function PerfilLoja({ params }: { params: Promise<{ id: str
                     </div>
                   </div>
                 ))}
+                {linkMapa && (
+                  <a href={linkMapa} target="_blank" rel="noopener noreferrer" style={{ display: "block", textAlign: "center", padding: "9px", border: "1.5px solid #E8E6E1", borderRadius: 8, fontSize: 13, fontWeight: 700, color: "#1A1917", textDecoration: "none" }}>🗺️ Ver no mapa</a>
+                )}
               </div>
             )}
 
@@ -186,6 +193,7 @@ export default async function PerfilLoja({ params }: { params: Promise<{ id: str
           </div>
         </div>
       </div>
+      <Rodape />
     </main>
   );
 }

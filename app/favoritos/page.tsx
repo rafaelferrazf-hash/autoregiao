@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import BotoesConta from "@/components/BotoesConta";
 import CartaoVeiculo from "@/components/CartaoVeiculo";
+import Rodape from "@/components/Rodape";
 import { buscarVeiculosPorIds } from "@/lib/dados/veiculos";
 import { manterFavoritos, useFavoritos } from "@/lib/favoritos";
 import type { VeiculoComLoja } from "@/lib/tipos";
@@ -79,6 +80,7 @@ export default function Favoritos() {
           </div>
         )}
       </div>
+      <Rodape />
     </main>
   );
 }

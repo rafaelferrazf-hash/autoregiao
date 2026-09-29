@@ -2,6 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import CartaoVeiculo from "@/components/CartaoVeiculo";
+import Rodape from "@/components/Rodape";
 import BotoesConta from "@/components/BotoesConta";
 import { Suspense, useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -247,6 +248,7 @@ function Veiculos() {
           </div>
         </div>
       </div>
+      <Rodape />
     </main>
   );
 }

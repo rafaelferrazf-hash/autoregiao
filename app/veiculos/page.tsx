@@ -1,11 +1,11 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
+import CartaoVeiculo from "@/components/CartaoVeiculo";
 import BotoesConta from "@/components/BotoesConta";
 import { Suspense, useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { buscarVeiculosFiltrados, opcoesDeFiltro } from "@/lib/dados/veiculos";
-import { formatarPreco, formatarKm } from "@/lib/formatar";
 import BarraBusca, { ANOS } from "@/components/BarraBusca";
 import CriarAlerta from "@/components/CriarAlerta";
 import { lerFiltros, filtrosParaQuery, temFiltroAtivo, paraNumero, type Filtros, type Ordem, type TipoVeiculo } from "@/lib/busca";
@@ -139,7 +139,7 @@ function Veiculos() {
             </span>
           </Link>
           <div style={{ display: "flex", gap: 24 }} className="nav-desktop">
-            {[["Buscar veículos", "/veiculos"], ["Anunciar", "/anunciar"]].map(([item, href]) => (
+            {[["Buscar veículos", "/veiculos"], ["★ Favoritos", "/favoritos"], ["Anunciar", "/anunciar"]].map(([item, href]) => (
               <Link key={item} href={href} style={{ textDecoration: "none", color: "#7A7670", fontSize: 13.5, fontWeight: 500 }}>{item}</Link>
             ))}
           </div>
@@ -155,7 +155,7 @@ function Veiculos() {
         </div>
         {menuAberto && (
           <div className="nav-mobile" style={{ borderTop: "1px solid #E8E6E1", background: "#fff", padding: "16px", display: "flex", flexDirection: "column", gap: 14 }}>
-            {[["Buscar veículos", "/veiculos"], ["Anunciar", "/anunciar"]].map(([item, href]) => (
+            {[["Buscar veículos", "/veiculos"], ["★ Favoritos", "/favoritos"], ["Anunciar", "/anunciar"]].map(([item, href]) => (
               <Link key={item} href={href} style={{ textDecoration: "none", color: "#1A1917", fontSize: 15, fontWeight: 500 }}>{item}</Link>
             ))}
             <div style={{ display: "flex", gap: 8, paddingTop: 8, borderTop: "1px solid #E8E6E1" }}>
@@ -233,37 +233,7 @@ function Veiculos() {
             ) : (
               <div className="cars-grid">
                 {veiculos.map(car => (
-                  <Link key={car.id} href={`/veiculo/${car.id}`} style={{ textDecoration: "none" }}>
-                    <div style={{ background: "#fff", borderRadius: 12, overflow: "hidden", border: car.destaque ? "1.5px solid #E85D26" : "1.5px solid #E8E6E1", position: "relative" }}>
-                      {car.destaque && <span style={{ position: "absolute", top: 8, left: 8, background: "#E85D26", color: "#fff", fontSize: 10, fontWeight: 500, padding: "3px 8px", borderRadius: 20, zIndex: 2 }}>⭐ Destaque</span>}
-                      <div style={{ position: "relative", height: 150, width: "100%", background: "#F7F6F3" }}>
-                        {car.fotos && car.fotos.length > 0 ? (
-                          <img src={car.fotos[0]} alt={car.nome} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                        ) : (
-                          <Image src="/sem-foto.png" alt={car.nome} fill style={{ objectFit: "cover" }} sizes="(max-width: 480px) 100vw, (max-width: 768px) 50vw, 33vw" />
-                        )}
-                      </div>
-                      <div style={{ padding: "10px 12px" }}>
-                        <div style={{ fontSize: 13, fontWeight: 700, color: "#1A1917", marginBottom: 4 }}>{car.nome}</div>
-                        <div style={{ display: "flex", flexWrap: "wrap", gap: 3, marginBottom: 8 }}>
-                          {[car.ano, formatarKm(car.km), car.combustivel].filter(Boolean).map(tag => (
-                            <span key={tag} style={{ fontSize: 10, color: "#7A7670", background: "#F7F6F3", padding: "2px 5px", borderRadius: 4 }}>{tag}</span>
-                          ))}
-                        </div>
-                        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: 8, borderTop: "1px solid #E8E6E1" }}>
-                          <div>
-                            <div style={{ fontSize: 15, fontWeight: 800, color: "#1A1917" }}>{formatarPreco(car.preco)}</div>
-                          </div>
-                        </div>
-                        {car.lojas && (
-                          <div style={{ fontSize: 10.5, color: "#7A7670", marginTop: 5, display: "flex", alignItems: "center", gap: 3 }}>
-                            <span style={{ width: 5, height: 5, background: "#E85D26", borderRadius: "50%", display: "inline-block", flexShrink: 0 }}></span>
-                            {car.lojas.nome} · {car.lojas.cidade}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </Link>
+                  <CartaoVeiculo key={car.id} car={car} />
                 ))}
               </div>
             )}

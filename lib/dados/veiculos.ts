@@ -1,6 +1,6 @@
 import { supabase } from "@/lib/supabase";
 import type { NovoVeiculo, Veiculo, VeiculoComLoja } from "@/lib/tipos";
-import { aplicarFiltros, type Filtros } from "@/lib/busca";
+import { aplicarFiltros, escaparLike, type Filtros } from "@/lib/busca";
 
 export async function listarVeiculosAtivos() {
   const { data, error, count } = await supabase
@@ -57,6 +57,45 @@ export async function buscarVeiculo(id: string) {
     .eq("id", id)
     .single();
   return { veiculo: data as VeiculoComLoja | null, error };
+}
+
+// "Veículos parecidos" no fim do anúncio: primeiro o mesmo modelo, depois a mesma marca, e por
+// fim o mesmo tipo (carro/moto/utilitário) numa faixa de preço próxima (±30%).
+export async function buscarSemelhantes(v: Veiculo, limite = 6) {
+  const achados: VeiculoComLoja[] = [];
+  const base = () => supabase.from("veiculos").select("*, lojas(nome, cidade)").eq("ativo", true).neq("id", v.id);
+  const juntar = (lista: unknown[] | null) => {
+    for (const item of (lista ?? []) as VeiculoComLoja[]) {
+      if (achados.length < limite && !achados.some(a => a.id === item.id)) achados.push(item);
+    }
+  };
+
+  if (v.marca && v.modelo) {
+    const { data } = await base().ilike("marca", escaparLike(v.marca)).ilike("modelo", escaparLike(v.modelo)).order("criado_em", { ascending: false }).limit(limite);
+    juntar(data);
+  }
+  if (achados.length < limite && v.marca) {
+    const { data } = await base().ilike("marca", escaparLike(v.marca)).order("criado_em", { ascending: false }).limit(limite);
+    juntar(data);
+  }
+  if (achados.length < limite) {
+    let consulta = base();
+    if (v.tipo === "moto" || v.tipo === "utilitario") consulta = consulta.eq("tipo", v.tipo);
+    else consulta = consulta.or("tipo.eq.carro,tipo.is.null");
+    if (v.preco) consulta = consulta.gte("preco", Math.round(v.preco * 0.7)).lte("preco", Math.round(v.preco * 1.3));
+    const { data } = await consulta.order("criado_em", { ascending: false }).limit(limite * 2);
+    juntar(data);
+  }
+  return achados;
+}
+
+// Página /favoritos: só os anúncios que ainda estão ativos.
+export async function buscarVeiculosPorIds(ids: string[]) {
+  if (!ids.length) return { veiculos: [] as VeiculoComLoja[], error: null };
+  const { data, error } = await supabase.from("veiculos").select("*, lojas(nome, cidade)").eq("ativo", true).in("id", ids.slice(0, 100));
+  const porId = new Map(((data ?? []) as VeiculoComLoja[]).map(v => [v.id, v]));
+  // Mantém a ordem em que foram salvos (o mais recente primeiro).
+  return { veiculos: ids.map(id => porId.get(id)).filter((v): v is VeiculoComLoja => !!v), error };
 }
 
 // Anúncios do lojista: os criados pelo usuário e os vinculados à loja dele.

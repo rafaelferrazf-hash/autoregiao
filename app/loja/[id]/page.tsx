@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
+import CartaoVeiculo from "@/components/CartaoVeiculo";
 import { notFound } from "next/navigation";
 import { criarClienteAnonimo } from "@/lib/supabase-servidor";
-import { formatarPreco, formatarKm } from "@/lib/formatar";
 import type { Loja, Veiculo } from "@/lib/tipos";
 import type { Metadata } from "next";
 
@@ -145,22 +145,7 @@ export default async function PerfilLoja({ params }: { params: Promise<{ id: str
             ) : (
               <div className="loja-carros">
                 {veiculos.map(car => (
-                  <Link key={car.id} href={`/veiculo/${car.id}`} style={{ textDecoration: "none" }}>
-                    <div style={{ background: "#fff", borderRadius: 12, overflow: "hidden", border: car.destaque ? "1.5px solid #E85D26" : "1.5px solid #E8E6E1", position: "relative" }}>
-                      {car.destaque && <span style={{ position: "absolute", top: 8, left: 8, background: "#E85D26", color: "#fff", fontSize: 10, padding: "2px 7px", borderRadius: 20, zIndex: 2 }}>⭐ Destaque</span>}
-                      <div style={{ position: "relative", height: 150, background: "#F7F6F3" }}>
-                        {car.fotos && car.fotos.length > 0
-                          ? <img src={car.fotos[0]} alt={car.nome} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                          : <Image src="/sem-foto.png" alt={car.nome} fill style={{ objectFit: "cover" }} sizes="50vw" />
-                        }
-                      </div>
-                      <div style={{ padding: "10px 12px" }}>
-                        <div style={{ fontSize: 13, fontWeight: 700, color: "#1A1917", marginBottom: 3 }}>{car.nome}</div>
-                        <div style={{ fontSize: 11, color: "#7A7670", marginBottom: 6 }}>{[car.ano, formatarKm(car.km)].filter(Boolean).join(" · ")}</div>
-                        <div style={{ fontSize: 15, fontWeight: 800, color: "#1A1917" }}>{formatarPreco(car.preco)}</div>
-                      </div>
-                    </div>
-                  </Link>
+                  <CartaoVeiculo key={car.id} car={car} mostrarLoja={false} />
                 ))}
               </div>
             )}

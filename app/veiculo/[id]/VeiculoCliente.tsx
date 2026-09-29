@@ -4,7 +4,9 @@ import Link from "next/link";
 import BotoesConta from "@/components/BotoesConta";
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
-import { buscarVeiculo as buscarVeiculoPorId } from "@/lib/dados/veiculos";
+import { buscarSemelhantes, buscarVeiculo as buscarVeiculoPorId } from "@/lib/dados/veiculos";
+import BotaoFavorito from "@/components/BotaoFavorito";
+import CartaoVeiculo from "@/components/CartaoVeiculo";
 import { formatarPreco, formatarKm } from "@/lib/formatar";
 import { registrarEvento } from "@/lib/dados/eventos";
 import type { VeiculoComLoja } from "@/lib/tipos";
@@ -18,10 +20,25 @@ export default function Veiculo() {
   const [menuAberto, setMenuAberto] = useState(false);
   const [veiculo, setVeiculo] = useState<VeiculoComLoja | null>(null);
   const [carregando, setCarregando] = useState(true);
+  const [semelhantes, setSemelhantes] = useState<VeiculoComLoja[]>([]);
 
   useEffect(() => {
-    if (id) buscarVeiculo();
+    if (!id) return;
+    let cancelado = false;
+    buscarVeiculoPorId(id).then(({ veiculo, error }) => {
+      if (cancelado) return;
+      if (!error && veiculo) {
+        setVeiculo(veiculo);
+        setEntrada(Math.round((veiculo.preco ?? 0) * 0.2).toString());
+        registrarEvento(veiculo.id, "visualizacao");
+        buscarSemelhantes(veiculo).then(lista => { if (!cancelado) setSemelhantes(lista); });
+      }
+      setCarregando(false);
+    });
+    return () => { cancelado = true; };
   }, [id]);
+
+  const fotos = veiculo?.fotos?.length ? veiculo.fotos : ["/sem-foto.png"];
 
   // Fechar lightbox com ESC e navegar com setas
   useEffect(() => {
@@ -33,26 +50,16 @@ export default function Veiculo() {
     }
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-  }, [lightbox]);
-
-  async function buscarVeiculo() {
-    const { veiculo, error } = await buscarVeiculoPorId(id);
-    if (!error && veiculo) {
-      setVeiculo(veiculo);
-      setEntrada(Math.round((veiculo.preco ?? 0) * 0.2).toString());
-      registrarEvento(veiculo.id, "visualizacao");
-    }
-    setCarregando(false);
-  }
+  }, [lightbox, fotos.length]);
 
   function formatarTelefone(tel: string | null) {
     return tel?.replace(/\D/g, "") || "";
   }
 
-  function abrirWhatsApp() {
+  function abrirWhatsApp(mensagem?: string) {
     if (!veiculo) return;
     const tel = formatarTelefone(veiculo.telefone);
-    const msg = encodeURIComponent(`Olá! Vi o anúncio do ${veiculo.nome} por ${formatarPreco(veiculo.preco)} no AutoRegião e tenho interesse.`);
+    const msg = encodeURIComponent(mensagem ?? `Olá! Vi o anúncio do ${veiculo.nome} por ${formatarPreco(veiculo.preco)} no AutoRegião e tenho interesse.`);
     registrarEvento(veiculo.id, "whatsapp");
     window.open(`https://wa.me/55${tel}?text=${msg}`, "_blank");
   }
@@ -92,7 +99,6 @@ export default function Veiculo() {
     window.open(`tel:${formatarTelefone(veiculo.telefone)}`);
   }
 
-  const fotos = veiculo?.fotos?.length ? veiculo.fotos : ["/sem-foto.png"];
   const parcela = entrada && prazo
     ? Math.round(((veiculo?.preco || 0) - Number(entrada)) * (0.0149 / (1 - Math.pow(1.0149, -Number(prazo)))))
     : 0;
@@ -123,6 +129,9 @@ export default function Veiculo() {
         .nav-desktop { display: flex !important; }
         .nav-mobile-btn { display: none !important; }
         .veiculo-grid { display: grid; grid-template-columns: 1fr 340px; gap: 24px; align-items: start; }
+        .semelhantes-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+        @media (max-width: 900px) { .semelhantes-grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (max-width: 768px) { .semelhantes-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; } }
         .contato-sticky { position: sticky; top: 76px; }
         .contato-fixo-mobile { display: none !important; }
         .thumbnails-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
@@ -215,7 +224,8 @@ export default function Veiculo() {
             <span>›</span>
             <span style={{ color: "#1A1917", fontWeight: 500 }}>{veiculo.nome}</span>
           </div>
-          <div style={{ display: "flex", gap: 8 }} className="nav-desktop">
+          <div style={{ display: "flex", gap: 8, alignItems: "center" }} className="nav-desktop">
+            <Link href="/favoritos" style={{ textDecoration: "none", color: "#7A7670", fontSize: 13.5, fontWeight: 500, marginRight: 8 }}>★ Favoritos</Link>
             <BotoesConta />
           </div>
           <button className="nav-mobile-btn" onClick={() => setMenuAberto(!menuAberto)}
@@ -227,7 +237,7 @@ export default function Veiculo() {
         </div>
         {menuAberto && (
           <div style={{ borderTop: "1px solid #E8E6E1", background: "#fff", padding: "16px", display: "flex", flexDirection: "column", gap: 14 }}>
-            {[["Buscar veículos", "/veiculos"], ["Anunciar", "/anunciar"]].map(([item, href]) => (
+            {[["Buscar veículos", "/veiculos"], ["★ Favoritos", "/favoritos"], ["Anunciar", "/anunciar"]].map(([item, href]) => (
               <Link key={item} href={href} style={{ textDecoration: "none", color: "#1A1917", fontSize: 15, fontWeight: 500 }}>{item}</Link>
             ))}
             <div style={{ display: "flex", gap: 8, paddingTop: 8, borderTop: "1px solid #E8E6E1" }}>
@@ -258,7 +268,7 @@ export default function Veiculo() {
                 {veiculo.destaque && <span style={{ position: "absolute", top: 12, left: 12, background: "#E85D26", color: "#fff", fontSize: 11, fontWeight: 500, padding: "4px 12px", borderRadius: 20 }}>⭐ Em Destaque</span>}
                 <span style={{ position: "absolute", bottom: 12, right: 12, background: "rgba(0,0,0,0.55)", color: "#fff", fontSize: 11, padding: "4px 10px", borderRadius: 6 }}>📷 {fotoAtiva + 1} / {fotos.length}</span>
                 {/* Ícone de zoom */}
-                <span style={{ position: "absolute", top: 12, right: 12, background: "rgba(0,0,0,0.45)", color: "#fff", fontSize: 14, padding: "5px 8px", borderRadius: 6 }}>🔍</span>
+                <BotaoFavorito id={veiculo.id} />
                 {fotos.length > 1 && <>
                   <button onClick={e => { e.stopPropagation(); setFotoAtiva(Math.max(0, fotoAtiva - 1)); }} style={{ position: "absolute", top: "50%", left: 10, transform: "translateY(-50%)", width: 36, height: 36, background: "rgba(255,255,255,0.85)", border: "none", borderRadius: 8, fontSize: 16, cursor: "pointer" }}>‹</button>
                   <button onClick={e => { e.stopPropagation(); setFotoAtiva(Math.min(fotos.length - 1, fotoAtiva + 1)); }} style={{ position: "absolute", top: "50%", right: 10, transform: "translateY(-50%)", width: 36, height: 36, background: "rgba(255,255,255,0.85)", border: "none", borderRadius: 8, fontSize: 16, cursor: "pointer" }}>›</button>
@@ -364,7 +374,7 @@ export default function Veiculo() {
                     {parcela > 0 ? `R$ ${parcela.toLocaleString("pt-BR")}` : "---"}
                   </div>
                 </div>
-                <button style={{ width: "100%", marginTop: 12, padding: 10, background: "#1A1917", color: "#fff", border: "none", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>Solicitar financiamento →</button>
+                <button onClick={() => abrirWhatsApp(`Olá! Vi o anúncio do ${veiculo.nome} por ${formatarPreco(veiculo.preco)} no AutoRegião e gostaria de uma simulação de financiamento.`)} style={{ width: "100%", marginTop: 12, padding: 10, background: "#1A1917", color: "#fff", border: "none", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>Solicitar financiamento →</button>
               </div>
             </div>
           </div>
@@ -383,7 +393,7 @@ export default function Veiculo() {
                 </div>
               </div>
               <div style={{ padding: "16px 18px", display: "flex", flexDirection: "column", gap: 8 }}>
-                <button onClick={abrirWhatsApp} style={{ width: "100%", padding: 13, background: "#25D366", color: "#fff", border: "none", borderRadius: 9, fontSize: 14, fontWeight: 700, cursor: "pointer" }}>
+                <button onClick={() => abrirWhatsApp()} style={{ width: "100%", padding: 13, background: "#25D366", color: "#fff", border: "none", borderRadius: 9, fontSize: 14, fontWeight: 700, cursor: "pointer" }}>
                   📱 Chamar no WhatsApp
                 </button>
                 <button onClick={ligar} style={{ width: "100%", padding: 11, background: "#F7F6F3", color: "#1A1917", border: "1.5px solid #E8E6E1", borderRadius: 9, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
@@ -391,7 +401,8 @@ export default function Veiculo() {
                 </button>
               </div>
             </div>
-            <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, padding: 14 }}>
+            <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, padding: 14, display: "flex", flexDirection: "column", gap: 8 }}>
+              <BotaoFavorito id={veiculo.id} tipo="grande" />
               {avisoCompartilhar === "" && (
                 <button onClick={compartilhar} style={{ width: "100%", padding: "10px", border: "1.5px solid #E8E6E1", borderRadius: 8, background: "#F7F6F3", cursor: "pointer", fontSize: 13, fontWeight: 600, color: "#1A1917" }}>
                   📤 Compartilhar anúncio
@@ -418,11 +429,26 @@ export default function Veiculo() {
             </div>
           </div>
         </div>
+
+        {/* VEÍCULOS PARECIDOS */}
+        {semelhantes.length > 0 && (
+          <section style={{ marginTop: 32 }}>
+            <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 12, marginBottom: 14, flexWrap: "wrap" }}>
+              <h2 style={{ fontSize: 18, fontWeight: 800, color: "#1A1917" }}>Veículos parecidos</h2>
+              {veiculo.marca && (
+                <Link href={`/veiculos?marca=${encodeURIComponent(veiculo.marca)}`} style={{ fontSize: 13, color: "#E85D26", fontWeight: 600, textDecoration: "none" }}>Ver todos {veiculo.marca} →</Link>
+              )}
+            </div>
+            <div className="semelhantes-grid">
+              {semelhantes.map(car => <CartaoVeiculo key={car.id} car={car} />)}
+            </div>
+          </section>
+        )}
       </div>
 
       {/* BOTÕES FIXOS MOBILE */}
       <div className="contato-fixo-mobile" style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: "#fff", borderTop: "1px solid #E8E6E1", padding: "12px 16px", gap: 10, zIndex: 50 }}>
-        <button onClick={abrirWhatsApp} style={{ flex: 1, padding: "13px", background: "#25D366", color: "#fff", border: "none", borderRadius: 9, fontSize: 14, fontWeight: 700, cursor: "pointer" }}>📱 WhatsApp</button>
+        <button onClick={() => abrirWhatsApp()} style={{ flex: 1, padding: "13px", background: "#25D366", color: "#fff", border: "none", borderRadius: 9, fontSize: 14, fontWeight: 700, cursor: "pointer" }}>📱 WhatsApp</button>
         <button onClick={ligar} style={{ flex: 1, padding: "13px", background: "#E85D26", color: "#fff", border: "none", borderRadius: 9, fontSize: 14, fontWeight: 700, cursor: "pointer" }}>📞 Ligar</button>
         <button onClick={() => (typeof navigator.share === "function" ? compartilhar() : compartilharWhatsApp())} aria-label="Compartilhar anúncio"
           style={{ width: 50, padding: "13px 0", background: "#F7F6F3", color: "#1A1917", border: "1.5px solid #E8E6E1", borderRadius: 9, fontSize: 16, cursor: "pointer" }}>📤</button>

@@ -6,6 +6,7 @@ import { usuarioAtual } from "@/lib/dados/usuario";
 import { mensagemErroAnuncio } from "@/lib/planos";
 import { criarVeiculo, atualizarVeiculo, buscarVeiculoDoDono, enviarFotoVeiculo, apagarFotos } from "@/lib/dados/veiculos";
 import SeletorFipe, { type EscolhaFipe } from "@/components/SeletorFipe";
+import { formatarPreco, lerPreco } from "@/lib/formatar";
 
 const dadosVeiculos: Record<string, Record<string, Record<string, string[]>>> = {
   carro: {
@@ -252,7 +253,9 @@ export default function NovoAnuncio() {
       if (!form.marca) { setErro("Selecione a marca."); return false; }
       if (!form.modelo) { setErro("Selecione o modelo."); return false; }
       if (!form.ano || !form.km) { setErro("Preencha o ano e a KM."); return false; }
-      if (!form.preco) { setErro("Preencha o preço."); return false; }
+      const preco = lerPreco(form.preco);
+      if (!preco) { setErro("Preencha o preço."); return false; }
+      if (preco > 20_000_000) { setErro("Confira o preço: ficou acima de R$ 20 milhões."); return false; }
     }
     if (etapa === 3) {
       if (!form.nome || !form.telefone || !form.cidade) { setErro("Preencha todos os campos de contato."); return false; }
@@ -302,7 +305,7 @@ export default function NovoAnuncio() {
       combustivel: form.combustivel,
       cor: form.cor,
       portas: form.portas,
-      preco: soNumero(form.preco),
+      preco: lerPreco(form.preco),
       aceita_troca: form.aceitaTroca,
       opcionais: form.opcionais,
       descricao: form.descricao,
@@ -475,7 +478,8 @@ export default function NovoAnuncio() {
                   </div>
                   <div>
                     <label style={labelStyle}>Preço <span style={{ color: "#E85D26" }}>*</span></label>
-                    <input placeholder="Ex: 72900" value={form.preco} onChange={e => set("preco", e.target.value)} style={inputStyle} />
+                    <input placeholder="Ex: 72.900" inputMode="decimal" value={form.preco} onChange={e => set("preco", e.target.value)} style={inputStyle} />
+                    {lerPreco(form.preco) && <div style={{ fontSize: 11.5, color: "#7A7670", marginTop: 4 }}>Vai aparecer como <strong style={{ color: "#1A1917" }}>{formatarPreco(lerPreco(form.preco))}</strong></div>}
                   </div>
                 </div>
 
@@ -488,7 +492,7 @@ export default function NovoAnuncio() {
                   key={`${form.tipo}|${editandoId ?? "novo"}|${carregandoEdicao}`}
                   tipoAnuncio={form.tipo}
                   marcaSugerida={form.marca}
-                  preco={parseInt(form.preco.replace(/\D/g, ""), 10) || null}
+                  preco={lerPreco(form.preco)}
                   inicial={fipe}
                   onChange={setFipe}
                 />
@@ -589,7 +593,7 @@ export default function NovoAnuncio() {
                   {fotos.length > 0 && (
                     <div style={{ fontSize: 11, color: "#16A34A", marginBottom: 6 }}>📷 {fotos.length} foto{fotos.length > 1 ? "s" : ""} adicionada{fotos.length > 1 ? "s" : ""}</div>
                   )}
-                  {form.preco && <div style={{ fontSize: 18, fontWeight: 800, color: "#E85D26" }}>R$ {form.preco}</div>}
+                  {lerPreco(form.preco) && <div style={{ fontSize: 18, fontWeight: 800, color: "#E85D26" }}>{formatarPreco(lerPreco(form.preco))}</div>}
                 </div>
               </div>
             )}

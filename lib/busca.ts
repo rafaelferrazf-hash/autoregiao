@@ -23,10 +23,10 @@ const TIPOS: TipoVeiculo[] = ["carro", "moto", "utilitario"];
 const TEXTOS = ["q", "marca", "cidade", "cambio", "combustivel"] as const;
 const NUMEROS = ["ano_min", "preco_min", "preco_max", "km_max"] as const;
 
-// "R$ 90.000" / "90000" / "90 mil" → 90000. Vazio ou inválido → undefined.
+// "R$ 90.000" / "90000" / "90.000,00" → 90000 (centavos descartados). Vazio ou inválido → undefined.
 export function paraNumero(v: string | null | undefined): number | undefined {
   if (!v) return undefined;
-  const n = parseInt(v.replace(/\D/g, ""), 10);
+  const n = parseInt(v.trim().replace(/[.,]\d{1,2}$/, "").replace(/\D/g, ""), 10);
   return Number.isNaN(n) || n <= 0 ? undefined : n;
 }
 

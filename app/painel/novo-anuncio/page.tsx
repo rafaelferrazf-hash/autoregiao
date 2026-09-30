@@ -5,6 +5,7 @@ import { useState, useRef, useEffect } from "react";
 import { usuarioAtual } from "@/lib/dados/usuario";
 import { mensagemErroAnuncio } from "@/lib/planos";
 import { criarVeiculo, atualizarVeiculo, buscarVeiculoDoDono, enviarFotoVeiculo, apagarFotos } from "@/lib/dados/veiculos";
+import SeletorFipe, { type EscolhaFipe } from "@/components/SeletorFipe";
 
 const dadosVeiculos: Record<string, Record<string, Record<string, string[]>>> = {
   carro: {
@@ -141,6 +142,10 @@ const dadosVeiculos: Record<string, Record<string, Record<string, string[]>>> = 
 // Foto nova (file, ainda não enviada) ou já publicada (url, no modo edição).
 type FotoPreview = { file?: File; url?: string; preview: string };
 
+function camposFipe(f: EscolhaFipe | null) {
+  return { fipe_tipo: f?.tipo ?? null, fipe_marca: f?.marca ?? null, fipe_modelo: f?.modelo ?? null, fipe_ano: f?.ano ?? null, fipe_nome: f?.nome || null };
+}
+
 export default function NovoAnuncio() {
   const [etapa, setEtapa] = useState(1);
   const [erro, setErro] = useState("");
@@ -160,6 +165,8 @@ export default function NovoAnuncio() {
   });
 
   const set = (field: string, value: unknown) => setForm(f => ({ ...f, [field]: value }));
+  // Modelo da Tabela FIPE escolhido (opcional). O valor é gravado pelo servidor depois de salvar.
+  const [fipe, setFipe] = useState<EscolhaFipe | null>(null);
 
   // Modo edição: /painel/novo-anuncio?editar=<id>
   const [editandoId, setEditandoId] = useState<string | null>(null);
@@ -189,6 +196,9 @@ export default function NovoAnuncio() {
         descricao: v.descricao || "",
         nome: v.nome_contato || "", telefone: v.telefone || "", cidade: v.cidade || "",
       });
+      if (v.fipe_tipo && v.fipe_marca && v.fipe_modelo && v.fipe_ano) {
+        setFipe({ tipo: v.fipe_tipo, marca: v.fipe_marca, modelo: v.fipe_modelo, ano: v.fipe_ano, nome: v.fipe_nome || "" });
+      }
       setFotos((v.fotos || []).map(url => ({ url, preview: url })));
       setFotosOriginais(v.fotos || []);
     })();
@@ -303,10 +313,16 @@ export default function NovoAnuncio() {
       status: "ativo",
       ativo: true,
       fotos: urlsFotos,
+      // Escolha da FIPE só vale para o mesmo tipo (carro/moto) do anúncio.
+      ...camposFipe(fipe && fipe.tipo === (form.tipo === "moto" ? "motorcycles" : "cars") ? fipe : null),
     };
     // Na edição não mexe em dono nem em pausado/ativo (isso é pelo painel).
     const { usuario_id: _dono, status: _status, ativo: _ativo, ...dadosEdicao } = dados;
-    const { error } = editandoId ? await atualizarVeiculo(editandoId, dadosEdicao) : await criarVeiculo(dados);
+    const { data: salvo, error } = editandoId ? await atualizarVeiculo(editandoId, dadosEdicao) : await criarVeiculo(dados);
+    // Grava o valor da FIPE (feito no servidor, que consulta a tabela). Falha aqui não impede o anúncio.
+    if (!error && salvo?.id && dados.fipe_ano) {
+      await fetch("/api/fipe/vincular", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: salvo.id }) }).catch(() => {});
+    }
     // Fotos que o lojista removeu na edição saem do Storage (depois de salvar, para não perder nada se falhar).
     if (!error && editandoId) await apagarFotos(fotosOriginais.filter(url => !urlsFotos.includes(url)));
 
@@ -467,6 +483,15 @@ export default function NovoAnuncio() {
                   <input type="checkbox" id="troca" checked={form.aceitaTroca} onChange={e => set("aceitaTroca", e.target.checked)} style={{ width: 16, height: 16, accentColor: "#E85D26" }} />
                   <label htmlFor="troca" style={{ fontSize: 13, color: "#1A1917", cursor: "pointer" }}>Aceita troca</label>
                 </div>
+
+                <SeletorFipe
+                  key={`${form.tipo}|${editandoId ?? "novo"}|${carregandoEdicao}`}
+                  tipoAnuncio={form.tipo}
+                  marcaSugerida={form.marca}
+                  preco={parseInt(form.preco.replace(/\D/g, ""), 10) || null}
+                  inicial={fipe}
+                  onChange={setFipe}
+                />
               </div>
             )}
 

@@ -103,15 +103,15 @@ export async function listarVeiculosDoUsuario(usuarioId: string, lojaId?: string
   const filtro = `usuario_id.eq.${usuarioId}${lojaId ? `,loja_id.eq.${lojaId}` : ""}`;
   const { data, error } = await supabase
     .from("veiculos")
-    .select("id, nome, ano, km, preco, status, ativo, fotos, destaque")
+    .select("id, nome, ano, km, preco, status, ativo, fotos, destaque, fipe_valor, fipe_ano")
     .or(filtro)
     .order("criado_em", { ascending: false });
-  type Resumo = Pick<Veiculo, "id" | "nome" | "ano" | "km" | "preco" | "status" | "ativo" | "fotos" | "destaque">;
+  type Resumo = Pick<Veiculo, "id" | "nome" | "ano" | "km" | "preco" | "status" | "ativo" | "fotos" | "destaque" | "fipe_valor" | "fipe_ano">;
   return { veiculos: (data ?? []) as Resumo[], error };
 }
 
 export async function criarVeiculo(veiculo: NovoVeiculo) {
-  return supabase.from("veiculos").insert(veiculo);
+  return supabase.from("veiculos").insert(veiculo).select("id").single();
 }
 
 // Anúncio completo para o dono editar (inclui pausados, pela policy veiculos_select_owner).

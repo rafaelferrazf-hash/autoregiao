@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { buscarSemelhantes, buscarVeiculo as buscarVeiculoPorId } from "@/lib/dados/veiculos";
 import BotaoFavorito from "@/components/BotaoFavorito";
-import CartaoVeiculo from "@/components/CartaoVeiculo";
+import CartaoVeiculo, { abaixoDaFipe } from "@/components/CartaoVeiculo";
 import Rodape from "@/components/Rodape";
 import { formatarPreco, formatarKm } from "@/lib/formatar";
 import { registrarEvento } from "@/lib/dados/eventos";
@@ -330,6 +330,12 @@ Motivo da denúncia:
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12, padding: 16, background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, marginBottom: 16 }}>
                 <div>
                   <div style={{ fontSize: 28, fontWeight: 800, color: "#1A1917", lineHeight: 1 }}>{formatarPreco(veiculo.preco)}</div>
+                  {abaixoDaFipe(veiculo) && (
+                    <div style={{ display: "inline-block", fontSize: 12.5, fontWeight: 700, color: "#15803D", background: "#DCFCE7", padding: "4px 10px", borderRadius: 20, marginTop: 8 }}>
+                      💰 {formatarPreco(veiculo.fipe_valor! - veiculo.preco!)} abaixo da FIPE
+                      {veiculo.fipe_mes && <span style={{ fontWeight: 500, color: "#166534" }}> · ref. {veiculo.fipe_mes}</span>}
+                    </div>
+                  )}
                   {veiculo.aceita_troca && <div style={{ fontSize: 12, color: "#16A34A", marginTop: 6, fontWeight: 500 }}>✅ Aceita troca</div>}
                 </div>
               </div>

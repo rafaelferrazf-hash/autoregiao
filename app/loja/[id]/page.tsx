@@ -54,11 +54,11 @@ export default async function PerfilLoja({ params }: { params: Promise<{ id: str
 
   const { data } = await supabase
     .from("veiculos")
-    .select("id, nome, ano, km, preco, fotos, destaque")
+    .select("id, nome, ano, km, combustivel, preco, fotos, destaque, fipe_valor")
     .eq("loja_id", id)
     .eq("ativo", true)
     .order("criado_em", { ascending: false });
-  const veiculos = (data ?? []) as Pick<Veiculo, "id" | "nome" | "ano" | "km" | "preco" | "fotos" | "destaque">[];
+  const veiculos = (data ?? []) as Pick<Veiculo, "id" | "nome" | "ano" | "km" | "combustivel" | "preco" | "fotos" | "destaque" | "fipe_valor">[];
 
   const telefone = (loja.telefone || "").replace(/\D/g, "");
   const whatsapp = (loja.whatsapp || loja.telefone || "").replace(/\D/g, "");

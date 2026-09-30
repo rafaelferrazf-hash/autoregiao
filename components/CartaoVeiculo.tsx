@@ -5,8 +5,14 @@ import { formatarKm, formatarPreco } from "@/lib/formatar";
 import type { Veiculo } from "@/lib/tipos";
 
 export type DadosCartao = Pick<Veiculo, "id" | "nome" | "ano" | "km" | "preco" | "fotos" | "destaque">
-  & Partial<Pick<Veiculo, "combustivel" | "cidade">>
+  & Partial<Pick<Veiculo, "combustivel" | "cidade" | "fipe_valor">>
   & { lojas?: { nome: string | null; cidade: string | null } | null };
+
+// Selo "Abaixo da FIPE": só aparece quando é vantagem para o comprador (preço acima da FIPE não é
+// mostrado em lugar nenhum do site).
+export function abaixoDaFipe(v: { preco: number | null; fipe_valor?: number | null }) {
+  return !!v.preco && !!v.fipe_valor && v.preco < v.fipe_valor;
+}
 
 // Card de anúncio usado em todas as listas (início, busca, loja, favoritos, parecidos).
 // `mostrarLoja`: some na página da própria loja, onde seria repetido.
@@ -29,7 +35,10 @@ export default function CartaoVeiculo({ car, mostrarLoja = true }: { car: DadosC
               <span key={tag} style={{ fontSize: 10, color: "#7A7670", background: "#F7F6F3", padding: "2px 5px", borderRadius: 4 }}>{tag}</span>
             ))}
           </div>
-          <div style={{ paddingTop: 8, borderTop: "1px solid #E8E6E1", fontSize: 15, fontWeight: 800, color: "#1A1917" }}>{formatarPreco(car.preco)}</div>
+          <div style={{ paddingTop: 8, borderTop: "1px solid #E8E6E1", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 6, flexWrap: "wrap" }}>
+            <span style={{ fontSize: 15, fontWeight: 800, color: "#1A1917" }}>{formatarPreco(car.preco)}</span>
+            {abaixoDaFipe(car) && <span style={{ fontSize: 10, fontWeight: 700, color: "#15803D", background: "#DCFCE7", padding: "2px 7px", borderRadius: 20 }}>💰 Abaixo da FIPE</span>}
+          </div>
           {mostrarLoja && local && (
             <div style={{ fontSize: 10.5, color: "#7A7670", marginTop: 5, display: "flex", alignItems: "center", gap: 3 }}>
               <span style={{ width: 5, height: 5, background: "#E85D26", borderRadius: "50%", display: "inline-block", flexShrink: 0 }}></span>

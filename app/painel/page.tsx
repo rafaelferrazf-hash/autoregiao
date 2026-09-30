@@ -337,7 +337,7 @@ export default function Painel() {
                             </div>
                           </td>
                           <td style={{ padding: "11px 14px" }}>{statusBadge(car.ativo === false ? "pausado" : foraDoAr ? "fora" : car.status || "ativo")}</td>
-                          <td style={{ padding: "11px 14px", fontSize: 13, fontWeight: 700, color: "#1A1917" }}>{formatarPreco(car.preco)}</td>
+                          <td style={{ padding: "11px 14px", fontSize: 13, fontWeight: 700, color: "#1A1917" }}>{formatarPreco(car.preco)}<SituacaoFipe car={car} /></td>
                           <td style={{ padding: "11px 14px" }}>
                             <div style={{ display: "flex", gap: 5 }}>
                               <Link href={`/veiculo/${car.id}`} style={{ width: 28, height: 28, borderRadius: 6, border: "1.5px solid #E8E6E1", background: "#F7F6F3", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, textDecoration: "none" }}>👁️</Link>
@@ -367,7 +367,7 @@ export default function Painel() {
                           </div>
                         </div>
                         <div style={{ textAlign: "right" }}>
-                          <div style={{ fontSize: 13, fontWeight: 700, color: "#1A1917" }}>{formatarPreco(car.preco)}</div>
+                          <div style={{ fontSize: 13, fontWeight: 700, color: "#1A1917" }}>{formatarPreco(car.preco)}<SituacaoFipe car={car} /></div>
                           <div style={{ display: "flex", gap: 4, marginTop: 4 }}>
                             <Link href={`/veiculo/${car.id}`} style={{ width: 26, height: 26, borderRadius: 5, border: "1.5px solid #E8E6E1", background: "#F7F6F3", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, textDecoration: "none" }}>👁️</Link>
                             <Link href={`/painel/novo-anuncio?editar=${car.id}`} title="Editar" style={{ width: 26, height: 26, borderRadius: 5, border: "1.5px solid #E8E6E1", background: "#F7F6F3", cursor: "pointer", fontSize: 11, display: "flex", alignItems: "center", justifyContent: "center", textDecoration: "none" }}>✏️</Link>
@@ -513,4 +513,15 @@ export default function Painel() {
 
     </div>
   );
+}
+
+// Só o lojista vê: como o preço está em relação à FIPE (o site mostra apenas o selo quando está abaixo).
+function SituacaoFipe({ car }: { car: { preco: number | null; fipe_valor: number | null; fipe_ano: string | null } }) {
+  if (!car.fipe_ano) return <div style={{ fontSize: 10.5, fontWeight: 500, color: "#A8A49D", marginTop: 2 }}>Sem FIPE — edite para ligar</div>;
+  if (!car.fipe_valor || !car.preco) return null;
+  const pct = Math.round(((car.preco - car.fipe_valor) / car.fipe_valor) * 100);
+  if (car.preco < car.fipe_valor) {
+    return <div style={{ fontSize: 10.5, fontWeight: 600, color: "#15803D", marginTop: 2 }}>💰 {Math.abs(pct)}% abaixo da FIPE (selo ativo)</div>;
+  }
+  return <div style={{ fontSize: 10.5, fontWeight: 500, color: "#7A7670", marginTop: 2 }}>{pct === 0 ? "Igual à FIPE" : `${pct}% acima da FIPE`}</div>;
 }

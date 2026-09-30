@@ -29,6 +29,17 @@ export type Veiculo = {
   cidade: string | null;
   criado_em: string | null;
   created_at: string | null;
+  // Tabela FIPE (supabase/fase6-fipe.sql). O lojista escolhe tipo/marca/modelo/ano; o valor
+  // (fipe_valor/codigo/mes/em) só o servidor grava.
+  fipe_tipo: string | null;
+  fipe_marca: string | null;
+  fipe_modelo: string | null;
+  fipe_ano: string | null;
+  fipe_nome: string | null;
+  fipe_valor: number | null;
+  fipe_codigo: string | null;
+  fipe_mes: string | null;
+  fipe_em: string | null;
 };
 
 // Veículo com o join `lojas(nome, cidade)`.
@@ -37,7 +48,7 @@ export type VeiculoComLoja = Veiculo & {
   lojas: { nome: string; cidade: string; estado?: string | null; endereco?: string | null; criado_em?: string | null } | null;
 };
 
-export type NovoVeiculo = Omit<Veiculo, "id" | "loja_id" | "destaque" | "criado_em" | "created_at">;
+export type NovoVeiculo = Omit<Veiculo, "id" | "loja_id" | "destaque" | "criado_em" | "created_at" | "fipe_valor" | "fipe_codigo" | "fipe_mes" | "fipe_em">;
 
 export type Loja = {
   id: string;

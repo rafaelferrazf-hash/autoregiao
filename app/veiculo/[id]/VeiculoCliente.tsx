@@ -3,8 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import BotoesConta from "@/components/BotoesConta";
 import { useState, useEffect } from "react";
-import { useParams } from "next/navigation";
-import { buscarSemelhantes, buscarVeiculo as buscarVeiculoPorId } from "@/lib/dados/veiculos";
+import { buscarSemelhantes } from "@/lib/dados/veiculos";
 import BotaoFavorito from "@/components/BotaoFavorito";
 import CartaoVeiculo, { abaixoDaFipe } from "@/components/CartaoVeiculo";
 import Rodape from "@/components/Rodape";
@@ -13,32 +12,22 @@ import { registrarEvento } from "@/lib/dados/eventos";
 import type { VeiculoComLoja } from "@/lib/tipos";
 import { EMAIL_CONTATO, URL_SITE } from "@/lib/site";
 
-export default function Veiculo() {
-  const { id } = useParams<{ id: string }>();
+// O anúncio vem pronto do servidor (page.tsx); aqui ficam as partes interativas.
+export default function Veiculo({ inicial }: { inicial: VeiculoComLoja }) {
+  const veiculo = inicial;
   const [fotoAtiva, setFotoAtiva] = useState(0);
   const [lightbox, setLightbox] = useState(false);
-  const [entrada, setEntrada] = useState("");
+  const [entrada, setEntrada] = useState(() => Math.round((inicial.preco ?? 0) * 0.2).toString());
   const [prazo, setPrazo] = useState("60");
   const [menuAberto, setMenuAberto] = useState(false);
-  const [veiculo, setVeiculo] = useState<VeiculoComLoja | null>(null);
-  const [carregando, setCarregando] = useState(true);
   const [semelhantes, setSemelhantes] = useState<VeiculoComLoja[]>([]);
 
   useEffect(() => {
-    if (!id) return;
     let cancelado = false;
-    buscarVeiculoPorId(id).then(({ veiculo, error }) => {
-      if (cancelado) return;
-      if (!error && veiculo) {
-        setVeiculo(veiculo);
-        setEntrada(Math.round((veiculo.preco ?? 0) * 0.2).toString());
-        registrarEvento(veiculo.id, "visualizacao");
-        buscarSemelhantes(veiculo).then(lista => { if (!cancelado) setSemelhantes(lista); });
-      }
-      setCarregando(false);
-    });
+    registrarEvento(inicial.id, "visualizacao");
+    buscarSemelhantes(inicial).then(lista => { if (!cancelado) setSemelhantes(lista); });
     return () => { cancelado = true; };
-  }, [id]);
+  }, [inicial]);
 
   const fotos = veiculo?.fotos?.length ? veiculo.fotos : ["/sem-foto.png"];
 
@@ -133,25 +122,6 @@ Motivo da denúncia:
   const parcela = entrada && prazo
     ? Math.round(((veiculo?.preco || 0) - Number(entrada)) * (0.0149 / (1 - Math.pow(1.0149, -Number(prazo)))))
     : 0;
-
-  if (carregando) return (
-    <main style={{ background: "#F7F6F3", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
-      <div style={{ textAlign: "center" }}>
-        <div style={{ fontSize: 40, marginBottom: 12 }}>🚗</div>
-        <div style={{ fontSize: 14, color: "#7A7670" }}>Carregando anúncio...</div>
-      </div>
-    </main>
-  );
-
-  if (!veiculo) return (
-    <main style={{ background: "#F7F6F3", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
-      <div style={{ textAlign: "center" }}>
-        <div style={{ fontSize: 40, marginBottom: 12 }}>😕</div>
-        <div style={{ fontSize: 18, fontWeight: 700, color: "#1A1917", marginBottom: 8 }}>Anúncio não encontrado</div>
-        <Link href="/veiculos" style={{ color: "#E85D26", fontSize: 14 }}>← Ver outros veículos</Link>
-      </div>
-    </main>
-  );
 
   return (
     <main style={{ background: "#F7F6F3", minHeight: "100vh" }}>

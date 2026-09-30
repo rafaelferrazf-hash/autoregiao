@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { criarClienteAnonimo } from "@/lib/supabase-servidor";
 import { URL_SITE } from "@/lib/site";
+import { rotasDeVitrine } from "@/lib/vitrines";
 
 // Lista de páginas para o Google (www.autoregiao.com.br/sitemap.xml): páginas fixas + todos os
 // anúncios e lojas ativos. Refeita no máximo 1x por hora.
@@ -11,9 +12,10 @@ const comFuso = (data: string) => new Date(/[zZ]|[+-]\d\d:?\d\d$/.test(data) ? d
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const supabase = criarClienteAnonimo();
-  const [{ data: veiculos }, { data: lojas }] = await Promise.all([
+  const [{ data: veiculos }, { data: lojas }, vitrines] = await Promise.all([
     supabase.from("veiculos").select("id, criado_em").eq("ativo", true).order("criado_em", { ascending: false }).limit(5000),
     supabase.from("lojas").select("id").eq("ativo", true).limit(5000),
+    rotasDeVitrine(),
   ]);
 
   const fixas: MetadataRoute.Sitemap = [
@@ -26,6 +28,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return [
     ...fixas,
+    // Páginas prontas de busca (/carros, /carros/chevrolet, /carros/ate-50-mil...).
+    ...vitrines.map(rota => ({ url: `${URL_SITE}${rota}`, changeFrequency: "daily" as const, priority: rota.split("/").length === 2 ? 0.9 : 0.7 })),
     ...(veiculos ?? []).map(v => ({ url: `${URL_SITE}/veiculo/${v.id}`, lastModified: comFuso(v.criado_em), changeFrequency: "weekly" as const, priority: 0.8 })),
     ...(lojas ?? []).map(l => ({ url: `${URL_SITE}/loja/${l.id}`, changeFrequency: "weekly" as const, priority: 0.7 })),
   ];

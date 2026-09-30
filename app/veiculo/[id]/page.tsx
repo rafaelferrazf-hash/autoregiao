@@ -1,29 +1,39 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import VeiculoCliente from "./VeiculoCliente";
-import { criarClienteAnonimo } from "@/lib/supabase-servidor";
+import { criarClienteAnonimo, criarClienteServidor } from "@/lib/supabase-servidor";
 import { formatarPreco, formatarKm } from "@/lib/formatar";
+import { NOME_SITE, URL_SITE } from "@/lib/site";
+import type { VeiculoComLoja } from "@/lib/tipos";
 
-// A página em si roda no navegador (VeiculoCliente). Esta parte roda no servidor só para
-// gerar título, descrição e foto — é o que o WhatsApp e o Google leem ao abrir o link.
+const ID = /^[0-9a-f-]{36}$/i;
+const COLUNAS = "*, lojas(nome, cidade, estado, endereco, criado_em, whatsapp, telefone)";
+
+// "Lençóis Paulista-SP"
+function localDoAnuncio(v: Pick<VeiculoComLoja, "cidade" | "lojas">) {
+  const cidade = v.lojas?.cidade || v.cidade;
+  const uf = v.lojas?.estado;
+  return cidade ? (uf && !cidade.toUpperCase().endsWith(uf.toUpperCase()) ? `${cidade}-${uf}` : cidade) : "";
+}
+
+// Título, descrição e foto: o que o Google e o WhatsApp mostram do link.
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
-  if (!/^[0-9a-f-]{36}$/i.test(id)) return { title: "Anúncio não encontrado — AutoRegião" };
+  if (!ID.test(id)) return { title: "Anúncio não encontrado — AutoRegião" };
 
-  const { data: v } = await criarClienteAnonimo()
-    .from("veiculos")
-    .select("nome, preco, ano, km, combustivel, cambio, cidade, fotos, lojas(nome, cidade)")
-    .eq("id", id)
-    .maybeSingle();
-  if (!v) return { title: "Anúncio não encontrado — AutoRegião" };
+  const { data } = await criarClienteAnonimo().from("veiculos").select(COLUNAS).eq("id", id).maybeSingle();
+  const v = data as VeiculoComLoja | null;
+  if (!v) return { title: "Anúncio não encontrado — AutoRegião", robots: { index: false } };
 
-  const loja = v.lojas as unknown as { nome: string; cidade: string } | null;
-  const titulo = `${v.nome} — ${formatarPreco(v.preco)}`;
-  const detalhes = [v.ano, v.km ? formatarKm(v.km) : null, v.combustivel, v.cambio, loja?.cidade || v.cidade].filter(Boolean).join(" · ");
-  const descricao = `${detalhes}. ${loja?.nome ? `Anunciado por ${loja.nome}. ` : ""}Veja as fotos e fale direto com o vendedor pelo WhatsApp.`;
-  const foto = (v.fotos as string[] | null)?.[0];
+  const local = localDoAnuncio(v);
+  // "Chevrolet Onix Plus Premier 2024 à venda em Lençóis Paulista-SP — R$ 89.300"
+  const titulo = `${v.nome}${local ? ` à venda em ${local}` : ""} — ${formatarPreco(v.preco)}`;
+  const detalhes = [v.ano, v.km ? formatarKm(v.km) : null, v.combustivel, v.cambio].filter(Boolean).join(" · ");
+  const descricao = `${v.nome} por ${formatarPreco(v.preco)}${local ? ` em ${local}` : ""}. ${detalhes}. ${v.lojas?.nome ? `Anunciado por ${v.lojas.nome}. ` : ""}Veja as fotos e fale direto com o vendedor pelo WhatsApp.`;
+  const foto = v.fotos?.[0];
 
   return {
-    title: `${titulo} | AutoRegião`,
+    title: `${titulo} | ${NOME_SITE}`,
     description: descricao,
     alternates: { canonical: `/veiculo/${id}` },
     openGraph: {
@@ -36,6 +46,47 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   };
 }
 
-export default function PaginaVeiculo() {
-  return <VeiculoCliente />;
+// A página chega pronta do servidor (bom para o Google, que lê o conteúdo sem esperar o navegador).
+// Usa a sessão do visitante: o dono ainda consegue ver o próprio anúncio pausado.
+export default async function PaginaVeiculo({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  if (!ID.test(id)) notFound();
+  const supabase = await criarClienteServidor();
+  const { data } = await supabase.from("veiculos").select(COLUNAS).eq("id", id).maybeSingle();
+  const v = data as VeiculoComLoja | null;
+  if (!v) notFound();
+
+  // Dados estruturados (schema.org): ajudam o Google a mostrar preço, ano e km no resultado.
+  const dadosEstruturados = {
+    "@context": "https://schema.org",
+    "@type": "Car",
+    name: v.nome,
+    url: `${URL_SITE}/veiculo/${v.id}`,
+    ...(v.fotos?.length ? { image: v.fotos.slice(0, 5) } : {}),
+    ...(v.marca ? { brand: { "@type": "Brand", name: v.marca } } : {}),
+    ...(v.modelo ? { model: v.modelo } : {}),
+    ...(v.ano ? { vehicleModelDate: v.ano } : {}),
+    ...(v.km ? { mileageFromOdometer: { "@type": "QuantitativeValue", value: Number(v.km), unitCode: "KMT" } } : {}),
+    ...(v.combustivel ? { fuelType: v.combustivel } : {}),
+    ...(v.cambio ? { vehicleTransmission: v.cambio } : {}),
+    ...(v.cor ? { color: v.cor } : {}),
+    ...(v.descricao ? { description: v.descricao.slice(0, 500) } : {}),
+    ...(v.preco ? {
+      offers: {
+        "@type": "Offer",
+        price: v.preco,
+        priceCurrency: "BRL",
+        availability: v.ativo ? "https://schema.org/InStock" : "https://schema.org/SoldOut",
+        url: `${URL_SITE}/veiculo/${v.id}`,
+        ...(v.lojas?.nome || v.nome_contato ? { seller: { "@type": v.lojas ? "AutoDealer" : "Person", name: v.lojas?.nome || v.nome_contato } } : {}),
+      },
+    } : {}),
+  };
+
+  return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(dadosEstruturados).replace(/</g, "\\u003c") }} />
+      <VeiculoCliente inicial={v} />
+    </>
+  );
 }

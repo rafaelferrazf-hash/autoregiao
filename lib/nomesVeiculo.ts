@@ -52,3 +52,8 @@ export function lerAnoFipe(nomeAno: string): { ano: string; combustivel: string 
     : "";
   return { ano, combustivel };
 }
+
+// "Mercedes-Benz" → "mercedes-benz", "Citroën" → "citroen" (endereços das vitrines: /carros/<marca>).
+export function slug(texto: string): string {
+  return texto.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+}

@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
 import { usuarioAtual } from "@/lib/dados/usuario";
+import { buscarLojaDoUsuario } from "@/lib/dados/lojas";
 import { mensagemErroAnuncio } from "@/lib/planos";
 import { criarVeiculo, atualizarVeiculo, buscarVeiculoDoDono, enviarFotoVeiculo, apagarFotos } from "@/lib/dados/veiculos";
 import SeletorFipe, { type EscolhaFipe } from "@/components/SeletorFipe";
@@ -11,6 +12,24 @@ import { lerAnoFipe, modeloBase } from "@/lib/nomesVeiculo";
 
 // Foto nova (file, ainda não enviada) ou já publicada (url, no modo edição).
 type FotoPreview = { file?: File; url?: string; preview: string };
+
+// "Chevrolet Onix Plus Prem. 1.0..." — a versão já costuma trazer o modelo; nesse caso não repete.
+function nomeSemAno(f: { marca: string; modelo: string; versao: string }) {
+  const versaoComModelo = f.versao && f.modelo && f.versao.toLowerCase().startsWith(f.modelo.toLowerCase());
+  return [f.marca, versaoComModelo ? null : f.modelo, f.versao].filter(Boolean).join(" ");
+}
+
+// Contato sugerido para o anúncio: da loja (Perfil da Loja) ou, para particular, do cadastro.
+async function contatoPadrao(): Promise<{ nome: string; telefone: string; cidade: string } | null> {
+  const user = await usuarioAtual();
+  if (!user) return null;
+  const { loja } = await buscarLojaDoUsuario(user.id);
+  const meta = (user.user_metadata ?? {}) as { nome?: string; telefone?: string; cidade?: string };
+  if (loja) {
+    return { nome: loja.nome || "", telefone: loja.whatsapp || loja.telefone || meta.telefone || "", cidade: loja.cidade || meta.cidade || "" };
+  }
+  return { nome: meta.nome || "", telefone: meta.telefone || "", cidade: meta.cidade || "" };
+}
 
 function camposFipe(f: EscolhaFipe | null) {
   return { fipe_tipo: f?.tipo ?? null, fipe_marca: f?.marca ?? null, fipe_modelo: f?.modelo ?? null, fipe_ano: f?.ano ?? null, fipe_nome: f?.nome || null };
@@ -61,11 +80,16 @@ export default function NovoAnuncio() {
 
   useEffect(() => {
     const id = new URLSearchParams(window.location.search).get("editar");
-    if (!id) return;
+    if (!id) {
+      // Anúncio novo: contato já vem da loja (ou do cadastro, se for particular).
+      contatoPadrao().then(c => c && setForm(f => ({ ...f, nome: f.nome || c.nome, telefone: f.telefone || c.telefone, cidade: f.cidade || c.cidade })));
+      return;
+    }
     (async () => {
       setCarregandoEdicao(true);
       const user = await usuarioAtual();
       const v = user ? await buscarVeiculoDoDono(id, user.id) : null;
+      const padrao = user ? await contatoPadrao() : null;
       setCarregandoEdicao(false);
       if (!user || !v) {
         setErro("Anúncio não encontrado ou você não tem permissão para editá-lo.");
@@ -80,7 +104,8 @@ export default function NovoAnuncio() {
         preco: v.preco != null ? String(v.preco) : "", aceitaTroca: !!v.aceita_troca,
         opcionais: v.opcionais || [],
         descricao: v.descricao || "",
-        nome: v.nome_contato || "", telefone: v.telefone || "", cidade: v.cidade || "",
+        // Anúncio sem contato próprio: completa com o da loja/cadastro.
+        nome: v.nome_contato || padrao?.nome || "", telefone: v.telefone || padrao?.telefone || "", cidade: v.cidade || padrao?.cidade || "",
       });
       if (v.fipe_tipo && v.fipe_marca && v.fipe_modelo && v.fipe_ano) {
         setFipe({ tipo: v.fipe_tipo, marca: v.fipe_marca, modelo: v.fipe_modelo, ano: v.fipe_ano, nome: v.fipe_nome || "" });
@@ -177,8 +202,7 @@ export default function NovoAnuncio() {
     setUploadando(false);
 
     // A versão já costuma trazer o modelo ("Civic EX 1.5 Turbo"); nesse caso não repete.
-    const versaoComModelo = form.versao && form.modelo && form.versao.toLowerCase().startsWith(form.modelo.toLowerCase());
-    const nomeVeiculo = [form.marca, versaoComModelo ? null : form.modelo, form.versao, form.ano].filter(Boolean).join(" ");
+    const nomeVeiculo = [nomeSemAno(form), form.ano].filter(Boolean).join(" ");
     // ano e km são texto no banco; guarda só os dígitos (ou null se vazio).
     const soNumero = (v: string) => { const n = parseInt(v.replace(/\D/g, ""), 10); return Number.isNaN(n) ? null : n; };
 
@@ -477,7 +501,7 @@ export default function NovoAnuncio() {
                 ))}
                 <div style={{ background: "#F7F6F3", borderRadius: 10, padding: "16px" }}>
                   <div style={{ fontSize: 12, fontWeight: 600, color: "#7A7670", textTransform: "uppercase", marginBottom: 10 }}>Resumo</div>
-                  <div style={{ fontSize: 14, fontWeight: 700, color: "#1A1917", marginBottom: 4 }}>{form.marca} {form.modelo} {form.versao}</div>
+                  <div style={{ fontSize: 14, fontWeight: 700, color: "#1A1917", marginBottom: 4 }}>{nomeSemAno(form)}</div>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 8 }}>
                     {[form.ano, form.km && `${form.km} km`, form.cambio, form.combustivel].filter(Boolean).map(tag => (
                       <span key={tag} style={{ fontSize: 11, color: "#7A7670", background: "#fff", padding: "2px 8px", borderRadius: 4, border: "1px solid #E8E6E1" }}>{tag}</span>

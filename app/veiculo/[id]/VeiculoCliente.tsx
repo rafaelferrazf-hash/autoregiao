@@ -60,7 +60,7 @@ export default function Veiculo() {
 
   function abrirWhatsApp(mensagem?: string) {
     if (!veiculo) return;
-    const tel = formatarTelefone(veiculo.telefone);
+    const tel = formatarTelefone(telefoneContato);
     const msg = encodeURIComponent(mensagem ?? `Olá! Vi o anúncio do ${veiculo.nome} por ${formatarPreco(veiculo.preco)} no AutoRegião e tenho interesse.`);
     registrarEvento(veiculo.id, "whatsapp");
     window.open(`https://wa.me/55${tel}?text=${msg}`, "_blank");
@@ -98,8 +98,11 @@ export default function Veiculo() {
   function ligar() {
     if (!veiculo) return;
     registrarEvento(veiculo.id, "ligacao");
-    window.open(`tel:${formatarTelefone(veiculo.telefone)}`);
+    window.open(`tel:${formatarTelefone(telefoneContato)}`);
   }
+
+  // Anúncio sem telefone próprio usa o WhatsApp/telefone do Perfil da Loja.
+  const telefoneContato = veiculo?.telefone || veiculo?.lojas?.whatsapp || veiculo?.lojas?.telefone || null;
 
   // Endereço da loja no Google Maps (só quando a loja cadastrou o endereço).
   const linkMapa = veiculo?.lojas?.endereco
@@ -450,7 +453,7 @@ Motivo da denúncia:
                   </a>
                 )}
                 <button onClick={ligar} style={{ width: "100%", padding: 11, background: "#F7F6F3", color: "#1A1917", border: "1.5px solid #E8E6E1", borderRadius: 9, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
-                  📞 Ligar: {veiculo.telefone}
+                  📞 Ligar: {telefoneContato}
                 </button>
               </div>
             </div>

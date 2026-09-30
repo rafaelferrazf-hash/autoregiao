@@ -44,8 +44,11 @@ export type Veiculo = {
 
 // Veículo com o join `lojas(nome, cidade)`.
 export type VeiculoComLoja = Veiculo & {
-  // estado/endereco/criado_em só vêm na página do anúncio (buscarVeiculo).
-  lojas: { nome: string; cidade: string; estado?: string | null; endereco?: string | null; criado_em?: string | null } | null;
+  // estado/endereco/criado_em/whatsapp/telefone só vêm na página do anúncio (buscarVeiculo).
+  lojas: {
+    nome: string; cidade: string;
+    estado?: string | null; endereco?: string | null; criado_em?: string | null; whatsapp?: string | null; telefone?: string | null;
+  } | null;
 };
 
 export type NovoVeiculo = Omit<Veiculo, "id" | "loja_id" | "destaque" | "criado_em" | "created_at" | "fipe_valor" | "fipe_codigo" | "fipe_mes" | "fipe_em">;

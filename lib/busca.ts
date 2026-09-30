@@ -3,6 +3,7 @@
 
 export type Ordem = "recentes" | "menor_preco" | "maior_preco" | "menor_km";
 export type TipoVeiculo = "carro" | "moto" | "utilitario";
+export type Anunciante = "loja" | "particular";
 
 export type Filtros = {
   q?: string;
@@ -16,6 +17,8 @@ export type Filtros = {
   preco_max?: number;
   km_max?: number;
   ordem?: Ordem;
+  abaixo_fipe?: boolean;       // só anúncios abaixo da Tabela FIPE (?abaixo_fipe=1)
+  anunciante?: Anunciante;     // loja ou particular (?anunciante=loja)
 };
 
 const ORDENS: Ordem[] = ["recentes", "menor_preco", "maior_preco", "menor_km"];
@@ -42,6 +45,9 @@ export function lerFiltros(params: URLSearchParams): Filtros {
   }
   const tipo = params.get("tipo");
   if (tipo && (TIPOS as string[]).includes(tipo)) f.tipo = tipo as TipoVeiculo;
+  if (params.get("abaixo_fipe") === "1") f.abaixo_fipe = true;
+  const anunciante = params.get("anunciante");
+  if (anunciante === "loja" || anunciante === "particular") f.anunciante = anunciante;
   const ordem = params.get("ordem");
   if (ordem && (ORDENS as string[]).includes(ordem) && ordem !== "recentes") f.ordem = ordem as Ordem;
   return f;
@@ -50,8 +56,8 @@ export function lerFiltros(params: URLSearchParams): Filtros {
 export function filtrosParaQuery(f: Filtros): string {
   const p = new URLSearchParams();
   for (const [k, v] of Object.entries(f)) {
-    if (v === undefined || v === "" || (k === "ordem" && v === "recentes")) continue;
-    p.set(k, String(v));
+    if (v === undefined || v === "" || v === false || (k === "ordem" && v === "recentes")) continue;
+    p.set(k, v === true ? "1" : String(v));
   }
   const s = p.toString();
   return s ? `?${s}` : "";
@@ -80,6 +86,8 @@ type ConsultaFiltravel<Q> = {
   ilike(coluna: string, padrao: string): Q;
   gte(coluna: string, valor: number): Q;
   lte(coluna: string, valor: number): Q;
+  is(coluna: string, valor: null): Q;
+  not(coluna: string, operador: string, valor: null): Q;
 };
 
 export function aplicarFiltros<Q extends ConsultaFiltravel<Q>>(consulta: Q, f: Filtros): Q {
@@ -98,6 +106,10 @@ export function aplicarFiltros<Q extends ConsultaFiltravel<Q>>(consulta: Q, f: F
   if (f.preco_min) consulta = consulta.gte("preco", f.preco_min);
   if (f.preco_max) consulta = consulta.lte("preco", f.preco_max);
   if (f.km_max) consulta = consulta.lte("km_num", f.km_max);
+  // abaixo_fipe: coluna calculada pelo banco (supabase/fase7-filtros.sql).
+  if (f.abaixo_fipe) consulta = consulta.eq("abaixo_fipe", "true");
+  if (f.anunciante === "loja") consulta = consulta.not("loja_id", "is", null);
+  if (f.anunciante === "particular") consulta = consulta.is("loja_id", null);
   return consulta;
 }
 
@@ -118,5 +130,7 @@ export function descreverFiltros(f: Filtros): string {
   if (f.km_max) partes.push(`até ${milhar(f.km_max)} km`);
   if (f.cambio) partes.push(`câmbio ${f.cambio.toLowerCase()}`);
   if (f.combustivel) partes.push(f.combustivel);
+  if (f.abaixo_fipe) partes.push("abaixo da FIPE");
+  if (f.anunciante) partes.push(f.anunciante === "loja" ? "de lojas" : "de particulares");
   return partes.length ? partes.join(" · ") : "Todos os veículos";
 }

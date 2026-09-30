@@ -40,6 +40,7 @@ export type Veiculo = {
   fipe_codigo: string | null;
   fipe_mes: string | null;
   fipe_em: string | null;
+  abaixo_fipe?: boolean | null;   // calculada pelo banco (fase7-filtros.sql); nunca gravada pelo site
 };
 
 // Veículo com o join `lojas(nome, cidade)`.
@@ -51,7 +52,7 @@ export type VeiculoComLoja = Veiculo & {
   } | null;
 };
 
-export type NovoVeiculo = Omit<Veiculo, "id" | "loja_id" | "destaque" | "criado_em" | "created_at" | "fipe_valor" | "fipe_codigo" | "fipe_mes" | "fipe_em">;
+export type NovoVeiculo = Omit<Veiculo, "id" | "loja_id" | "destaque" | "criado_em" | "created_at" | "fipe_valor" | "fipe_codigo" | "fipe_mes" | "fipe_em" | "abaixo_fipe">;
 
 export type Loja = {
   id: string;

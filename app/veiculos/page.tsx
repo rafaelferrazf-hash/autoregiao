@@ -98,6 +98,18 @@ function Veiculos() {
           <input inputMode="numeric" placeholder="Máx" value={rascunho.preco_max ?? ""} onChange={e => mudaNumero("preco_max", e.target.value)} style={{ ...estiloSelect, padding: "8px 10px", boxSizing: "border-box" }} />
         </div>
       </div>
+      <div style={{ marginBottom: 16 }}>
+        <div style={estiloTitulo}>Anunciante</div>
+        <select value={rascunho.anunciante ?? ""} onChange={e => muda("anunciante", e.target.value)} style={estiloSelect}>
+          <option value="">Lojas e particulares</option>
+          <option value="loja">Só lojas</option>
+          <option value="particular">Só particulares</option>
+        </select>
+      </div>
+      <label style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 18, padding: "9px 10px", borderRadius: 8, cursor: "pointer", border: `1.5px solid ${rascunho.abaixo_fipe ? "#16A34A" : "#E8E6E1"}`, background: rascunho.abaixo_fipe ? "#F0FDF4" : "#fff" }}>
+        <input type="checkbox" checked={!!rascunho.abaixo_fipe} onChange={e => setRascunho(r => ({ ...r, abaixo_fipe: e.target.checked || undefined }))} style={{ width: 16, height: 16, accentColor: "#16A34A" }} />
+        <span style={{ fontSize: 13, fontWeight: 600, color: "#15803D" }}>💰 Só abaixo da FIPE</span>
+      </label>
       <button onClick={() => aplicar(rascunho)} style={{ width: "100%", padding: "10px", background: "#E85D26", color: "#fff", border: "none", borderRadius: 8, fontSize: 13.5, fontWeight: 700, cursor: "pointer" }}>Aplicar filtros</button>
       {temFiltroAtivo(filtros) && (
         <button onClick={() => aplicar({ tipo: filtros.tipo, ordem: filtros.ordem })} style={{ width: "100%", padding: "8px", background: "transparent", color: "#7A7670", border: "none", fontSize: 12, cursor: "pointer", marginTop: 8 }}>Limpar filtros</button>

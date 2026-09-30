@@ -24,11 +24,11 @@ const faixaDoSlug = (s: string) => {
   return FAIXAS_MIL.includes(n) ? n : null;
 };
 
-type Resumo = { tipo: string | null; marca: string | null; modelo: string | null; preco: number | null };
+type Resumo = { tipo: string | null; marca: string | null; modelo: string | null; preco: number | null; abaixo_fipe: boolean | null };
 
 // Anúncios ativos (só as colunas para montar menus/sitemap). O RLS já esconde lojas inativas.
 export async function resumoDosAnuncios(): Promise<Resumo[]> {
-  const { data } = await criarClienteAnonimo().from("veiculos").select("tipo, marca, modelo, preco").eq("ativo", true).limit(5000);
+  const { data } = await criarClienteAnonimo().from("veiculos").select("tipo, marca, modelo, preco, abaixo_fipe").eq("ativo", true).limit(5000);
   return (data ?? []) as Resumo[];
 }
 
@@ -76,6 +76,11 @@ export async function montarVitrine(tipoRota: TipoRota, segmentos: string[]): Pr
     links: FAIXAS_MIL.map(n => ({ nome: `Até R$ ${n} mil`, href: `${base}/ate-${n}-mil`, qtd: todos.filter(r => r.preco && r.preco <= n * 1000).length }))
       .filter(l => l.qtd > 0),
   };
+  const qtdAbaixo = todos.filter(r => r.abaixo_fipe).length;
+  const atalhoOportunidades = {
+    titulo: "Oportunidades",
+    links: qtdAbaixo ? [{ nome: "💰 Abaixo da FIPE", href: `${base}/abaixo-da-fipe`, qtd: qtdAbaixo }] : [],
+  };
   const atalhoMarcas = {
     titulo: "Por marca",
     links: contarPor(todos.map(r => r.marca)).map(m => ({ nome: m.nome, href: `${base}/${slug(m.nome)}`, qtd: m.qtd })),
@@ -85,7 +90,16 @@ export async function montarVitrine(tipoRota: TipoRota, segmentos: string[]): Pr
     return {
       rota: base, titulo: `${t.nome} à venda`, h1: `${t.nome} à venda`,
       descricao: `${t.nome} novos e seminovos à venda em lojas e com particulares da região. Veja fotos, preços e fale direto com o vendedor pelo WhatsApp.`,
-      filtros, caminho, atalhos: [atalhoMarcas, atalhoFaixas],
+      filtros, caminho, atalhos: [atalhoOportunidades, atalhoMarcas, atalhoFaixas],
+    };
+  }
+
+  if (segmentos.length === 1 && segmentos[0] === "abaixo-da-fipe") {
+    filtros.abaixo_fipe = true;
+    return {
+      rota: `${base}/abaixo-da-fipe`, titulo: `${t.nome} abaixo da FIPE`, h1: `${t.nome} abaixo da Tabela FIPE`,
+      descricao: `${t.nome} anunciados por menos que o valor da Tabela FIPE do mês, na região. Oportunidades para comprar bem: veja as fotos e fale direto com o vendedor pelo WhatsApp.`,
+      filtros, caminho: [...caminho, { nome: "Abaixo da FIPE", href: `${base}/abaixo-da-fipe` }], atalhos: [atalhoMarcas, atalhoFaixas],
     };
   }
 
@@ -147,6 +161,7 @@ export async function rotasDeVitrine(): Promise<string[]> {
     const doT = todos.filter(r => doTipo(r, t.tipo));
     if (!doT.length) continue;
     rotas.add(`/${rota}`);
+    if (doT.some(r => r.abaixo_fipe)) rotas.add(`/${rota}/abaixo-da-fipe`);
     for (const n of FAIXAS_MIL) if (doT.some(r => r.preco && r.preco <= n * 1000)) rotas.add(`/${rota}/ate-${n}-mil`);
     for (const r of doT) {
       if (!r.marca?.trim()) continue;

@@ -7,138 +7,7 @@ import { mensagemErroAnuncio } from "@/lib/planos";
 import { criarVeiculo, atualizarVeiculo, buscarVeiculoDoDono, enviarFotoVeiculo, apagarFotos } from "@/lib/dados/veiculos";
 import SeletorFipe, { type EscolhaFipe } from "@/components/SeletorFipe";
 import { formatarPreco, lerPreco } from "@/lib/formatar";
-
-const dadosVeiculos: Record<string, Record<string, Record<string, string[]>>> = {
-  carro: {
-    "Chevrolet": {
-      "Onix": ["Onix 1.0 MT", "Onix 1.0 Turbo AT", "Onix Plus 1.0 MT", "Onix Plus 1.0 Turbo AT"],
-      "Tracker": ["Tracker 1.0 Turbo MT", "Tracker 1.2 Turbo AT", "Tracker Premier"],
-      "Cruze": ["Cruze LT 1.4 Turbo", "Cruze LTZ 1.4 Turbo", "Cruze Premier"],
-      "S10": ["S10 LS 2.5", "S10 LT 2.8 TD", "S10 High Country 2.8 TD"],
-      "Spin": ["Spin LT 1.8", "Spin LTZ 1.8", "Spin Activ 1.8"],
-      "Montana": ["Montana 1.2 Turbo MT", "Montana 1.2 Turbo AT"],
-    },
-    "Volkswagen": {
-      "Polo": ["Polo 1.0 MT", "Polo 1.0 TSI AT", "Polo Track 1.0"],
-      "Virtus": ["Virtus 1.0 MT", "Virtus 1.0 TSI AT", "Virtus GTS 1.0 TSI"],
-      "T-Cross": ["T-Cross 1.0 TSI MT", "T-Cross 1.4 TSI AT", "T-Cross Highline"],
-      "Tiguan": ["Tiguan 1.4 TSI", "Tiguan 2.0 TSI Allspace"],
-      "Nivus": ["Nivus 1.0 TSI MT", "Nivus 1.0 TSI AT"],
-      "Amarok": ["Amarok 2.0 TDI", "Amarok V6 3.0 TDI"],
-    },
-    "Fiat": {
-      "Pulse": ["Pulse Drive 1.3", "Pulse Audace 1.0 Turbo", "Pulse Impetus 1.0 Turbo"],
-      "Cronos": ["Cronos 1.3 MT", "Cronos 1.3 AT", "Cronos Precision 1.3"],
-      "Strada": ["Strada Endurance 1.4", "Strada Freedom 1.3 Turbo", "Strada Ultra 1.3 Turbo"],
-      "Toro": ["Toro Freedom 1.8", "Toro Endurance 2.0 TD", "Toro Ultra 2.0 TD"],
-      "Mobi": ["Mobi Like 1.0", "Mobi Drive 1.0"],
-      "Argo": ["Argo Drive 1.0", "Argo 1.3 AT", "Argo Trekking 1.3"],
-    },
-    "Toyota": {
-      "Corolla": ["Corolla GLi 2.0", "Corolla XEi 2.0", "Corolla Altis Hybrid"],
-      "Yaris": ["Yaris XL 1.3 MT", "Yaris XLS 1.5 AT", "Yaris XLS Connect"],
-      "Hilux": ["Hilux SR 2.8 TD", "Hilux SRV 2.8 TD", "Hilux SRX 2.8 TD"],
-      "SW4": ["SW4 SR 2.8 TD", "SW4 SRX 2.8 TD", "SW4 Diamond 2.8 TD"],
-      "RAV4": ["RAV4 2.5 Hybrid", "RAV4 2.5 Hybrid AWD"],
-    },
-    "Honda": {
-      "Civic": ["Civic EX 1.5 Turbo", "Civic EXL 1.5 Turbo", "Civic Touring 1.5 Turbo"],
-      "HR-V": ["HR-V LX 1.8", "HR-V EX 1.8", "HR-V EXL 1.8"],
-      "City": ["City DX 1.5", "City EX 1.5", "City EXL 1.5"],
-      "WR-V": ["WR-V EX 1.5", "WR-V EXL 1.5"],
-      "Fit": ["Fit LX 1.5", "Fit EX 1.5", "Fit EXL 1.5"],
-    },
-    "Hyundai": {
-      "HB20": ["HB20 1.0 MT", "HB20 1.0 Turbo AT", "HB20 Diamond Plus"],
-      "HB20S": ["HB20S 1.0 MT", "HB20S 1.0 Turbo AT"],
-      "Creta": ["Creta Action 1.0 Turbo", "Creta Comfort 1.0 Turbo", "Creta Platinum 1.0 Turbo"],
-      "Tucson": ["Tucson GLS 1.6 Turbo", "Tucson Limited 1.6 Turbo"],
-      "i30": ["i30 1.0 Turbo MT", "i30 1.0 Turbo AT"],
-    },
-    "Renault": {
-      "Kwid": ["Kwid Zen 1.0", "Kwid Intense 1.0", "Kwid Outsider 1.0"],
-      "Sandero": ["Sandero Zen 1.0", "Sandero Stepway 1.0 Turbo"],
-      "Logan": ["Logan Life 1.0", "Logan Zen 1.0"],
-      "Duster": ["Duster Zen 1.3 Turbo", "Duster Iconic 1.3 Turbo"],
-      "Oroch": ["Oroch Zen 1.3 Turbo", "Oroch Iconic 1.3 Turbo"],
-    },
-    "Jeep": {
-      "Renegade": ["Renegade Sport 1.3 Turbo", "Renegade Longitude 1.3 Turbo", "Renegade Trailhawk"],
-      "Compass": ["Compass Sport 1.3 Turbo", "Compass Longitude 1.3 Turbo", "Compass Trailhawk"],
-      "Commander": ["Commander Limited 1.3 Turbo", "Commander Overland 2.0 TD"],
-    },
-    "Nissan": {
-      "Kicks": ["Kicks S 1.6", "Kicks SV 1.6", "Kicks Exclusive 1.6"],
-      "Frontier": ["Frontier S 2.3 TD", "Frontier SV 2.3 TD", "Frontier PRO-4X 2.3 TD"],
-      "Versa": ["Versa Sense 1.6", "Versa Advance 1.6", "Versa Exclusive 1.6"],
-    },
-    "Ford": {
-      "Ranger": ["Ranger XL 2.0 TD", "Ranger XLS 2.0 TD", "Ranger Storm 3.0 TD"],
-      "Bronco": ["Bronco Sport Big Bend", "Bronco Sport Badlands"],
-      "Territory": ["Territory SE 1.5 Turbo", "Territory Titanium 1.5 Turbo"],
-    },
-  },
-  moto: {
-    "Honda": {
-      "CB": ["CB 300F Twister", "CB 500F", "CB 500X", "CB 650R"],
-      "CG": ["CG 160 Start", "CG 160 Fan", "CG 160 Titan", "CG 160 Job"],
-      "Biz": ["Biz 110i"],
-      "PCX": ["PCX 160"],
-      "XRE": ["XRE 190", "XRE 300"],
-      "NXR": ["NXR 160 Bros"],
-    },
-    "Yamaha": {
-      "Factor": ["Factor 125i", "Factor 150i"],
-      "Fazer": ["Fazer 250", "Fazer 150"],
-      "MT": ["MT-03", "MT-07", "MT-09"],
-      "Crosser": ["Crosser 150", "Crosser Z 150"],
-      "NMAX": ["NMAX 160"],
-      "Lander": ["Lander 250"],
-    },
-    "Kawasaki": {
-      "Ninja": ["Ninja 300", "Ninja 400", "Ninja 650"],
-      "Z": ["Z 300", "Z 400", "Z 650"],
-      "Versys": ["Versys 650", "Versys-X 300"],
-    },
-    "Suzuki": {
-      "GSX": ["GSX-S750", "GSX-S1000"],
-      "V-Strom": ["V-Strom 650", "V-Strom 1050"],
-      "Burgman": ["Burgman 125i", "Burgman 400"],
-    },
-    "BMW": {
-      "G": ["G 310 R", "G 310 GS", "G 450 GS"],
-      "R": ["R 1250 GS", "R 1250 RT"],
-      "S": ["S 1000 RR", "S 1000 XR"],
-    },
-  },
-  utilitario: {
-    "Mercedes-Benz": {
-      "Sprinter": ["Sprinter 311 CDI", "Sprinter 313 CDI", "Sprinter 415 CDI"],
-      "Vito": ["Vito 119 CDI", "Vito 124 CDI"],
-    },
-    "Volkswagen": {
-      "Kombi": ["Kombi 1.4 Flex"],
-      "Transporter": ["Transporter 2.0 TDI"],
-      "Crafter": ["Crafter 2.0 TDI"],
-    },
-    "Fiat": {
-      "Ducato": ["Ducato Minibus", "Ducato Cargo", "Ducato Ambulância"],
-      "Doblò": ["Doblò Cargo 1.8", "Doblò Adventure 1.8"],
-    },
-    "Ford": {
-      "Transit": ["Transit 2.0 TDCi Van", "Transit 2.0 TDCi Minibus"],
-      "Transit Custom": ["Transit Custom 2.0 TDCi"],
-    },
-    "Renault": {
-      "Master": ["Master 2.3 dCi Furgão", "Master 2.3 dCi Minibus"],
-      "Kangoo": ["Kangoo Express 1.6"],
-    },
-    "Chevrolet": {
-      "Express": ["Express 6.0 V8"],
-      "Cobalt": ["Cobalt 1.8 LTZ"],
-    },
-  },
-};
+import { lerAnoFipe, modeloBase } from "@/lib/nomesVeiculo";
 
 // Foto nova (file, ainda não enviada) ou já publicada (url, no modo edição).
 type FotoPreview = { file?: File; url?: string; preview: string };
@@ -168,6 +37,22 @@ export default function NovoAnuncio() {
   const set = (field: string, value: unknown) => setForm(f => ({ ...f, [field]: value }));
   // Modelo da Tabela FIPE escolhido (opcional). O valor é gravado pelo servidor depois de salvar.
   const [fipe, setFipe] = useState<EscolhaFipe | null>(null);
+  // "Não encontrei meu veículo na lista": marca/modelo/versão digitados à mão, sem FIPE.
+  const [manual, setManual] = useState(false);
+
+  function escolherFipe(e: EscolhaFipe | null) {
+    setFipe(e);
+    if (!e?.marcaNome || !e.modeloNome || !e.anoNome) return;
+    const { ano, combustivel } = lerAnoFipe(e.anoNome);
+    setForm(f => ({
+      ...f,
+      marca: e.marcaNome!,
+      modelo: modeloBase(e.modeloNome!),
+      versao: e.modeloNome!,
+      ano,
+      combustivel: combustivel || f.combustivel,
+    }));
+  }
 
   // Modo edição: /painel/novo-anuncio?editar=<id>
   const [editandoId, setEditandoId] = useState<string | null>(null);
@@ -199,6 +84,9 @@ export default function NovoAnuncio() {
       });
       if (v.fipe_tipo && v.fipe_marca && v.fipe_modelo && v.fipe_ano) {
         setFipe({ tipo: v.fipe_tipo, marca: v.fipe_marca, modelo: v.fipe_modelo, ano: v.fipe_ano, nome: v.fipe_nome || "" });
+      } else {
+        // Anúncio antigo, cadastrado antes da FIPE: mantém os campos digitados.
+        setManual(true);
       }
       setFotos((v.fotos || []).map(url => ({ url, preview: url })));
       setFotosOriginais(v.fotos || []);
@@ -214,9 +102,6 @@ export default function NovoAnuncio() {
     }));
   };
 
-  const marcas = Object.keys(dadosVeiculos[form.tipo] || {});
-  const modelos = form.marca ? Object.keys(dadosVeiculos[form.tipo]?.[form.marca] || {}) : [];
-  const versoes = form.marca && form.modelo ? dadosVeiculos[form.tipo]?.[form.marca]?.[form.modelo] || [] : [];
 
   const opcionaisList = [
     "Ar-condicionado", "Direção elétrica", "Vidros elétricos", "Travas elétricas",
@@ -250,8 +135,9 @@ export default function NovoAnuncio() {
 
   function validarEtapa() {
     if (etapa === 1) {
-      if (!form.marca) { setErro("Selecione a marca."); return false; }
-      if (!form.modelo) { setErro("Selecione o modelo."); return false; }
+      if (!manual && !fipe) { setErro("Escolha o veículo na lista (marca, modelo e ano) ou clique em “Não encontrei meu veículo na lista”."); return false; }
+      if (!form.marca) { setErro("Preencha a marca."); return false; }
+      if (!form.modelo) { setErro("Preencha o modelo."); return false; }
       if (!form.ano || !form.km) { setErro("Preencha o ano e a KM."); return false; }
       const preco = lerPreco(form.preco);
       if (!preco) { setErro("Preencha o preço."); return false; }
@@ -317,7 +203,7 @@ export default function NovoAnuncio() {
       ativo: true,
       fotos: urlsFotos,
       // Escolha da FIPE só vale para o mesmo tipo (carro/moto) do anúncio.
-      ...camposFipe(fipe && fipe.tipo === (form.tipo === "moto" ? "motorcycles" : "cars") ? fipe : null),
+      ...camposFipe(!manual && fipe && fipe.tipo === (form.tipo === "moto" ? "motorcycles" : "cars") ? fipe : null),
     };
     // Na edição não mexe em dono nem em pausado/ativo (isso é pelo painel).
     const { usuario_id: _dono, status: _status, ativo: _ativo, ...dadosEdicao } = dados;
@@ -399,7 +285,7 @@ export default function NovoAnuncio() {
                   <div style={{ fontSize: 11, fontWeight: 600, color: "#7A7670", letterSpacing: 0.5, textTransform: "uppercase", marginBottom: 8 }}>Tipo</div>
                   <div style={{ display: "flex", gap: 8 }}>
                     {[["carro", "🚗 Carro"], ["moto", "🏍️ Moto"], ["utilitario", "🚐 Utilitário"]].map(([val, label]) => (
-                      <button key={val} onClick={() => { set("tipo", val); set("marca", ""); set("modelo", ""); set("versao", ""); }}
+                      <button key={val} onClick={() => { set("tipo", val); set("marca", ""); set("modelo", ""); set("versao", ""); setFipe(null); }}
                         style={{ flex: 1, padding: "8px", borderRadius: 8, border: "1.5px solid", borderColor: form.tipo === val ? "#E85D26" : "#E8E6E1", background: form.tipo === val ? "#FFF5F1" : "#fff", color: form.tipo === val ? "#E85D26" : "#7A7670", fontWeight: 600, fontSize: 13, cursor: "pointer" }}>
                         {label}
                       </button>
@@ -407,33 +293,46 @@ export default function NovoAnuncio() {
                   </div>
                 </div>
 
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-                  <div>
-                    <label style={labelStyle}>Marca <span style={{ color: "#E85D26" }}>*</span></label>
-                    <select value={form.marca} onChange={e => { set("marca", e.target.value); set("modelo", ""); set("versao", ""); }} style={inputStyle}>
-                      <option value="">Selecione a marca</option>
-                      {form.marca && !marcas.includes(form.marca) && <option>{form.marca}</option>}
-                      {marcas.map(m => <option key={m}>{m}</option>)}
-                    </select>
+                {!manual ? (
+                  <SeletorFipe
+                    key={`${form.tipo}|${editandoId ?? "novo"}|${carregandoEdicao}`}
+                    tipoAnuncio={form.tipo}
+                    marcaSugerida={form.marca}
+                    preco={lerPreco(form.preco)}
+                    inicial={fipe}
+                    onChange={escolherFipe}
+                    onNaoEncontrei={() => setManual(true)}
+                  />
+                ) : (
+                  <div style={{ fontSize: 12, color: "#7A7670", background: "#F7F6F3", border: "1.5px solid #E8E6E1", borderRadius: 10, padding: "10px 12px", lineHeight: 1.5 }}>
+                    Preencha marca, modelo e versão à mão. Sem a Tabela FIPE, o anúncio não recebe o selo “💰 Abaixo da FIPE”.{" "}
+                    <button type="button" onClick={() => setManual(false)} style={{ background: "none", border: "none", padding: 0, color: "#E85D26", fontWeight: 600, cursor: "pointer", fontSize: 12 }}>
+                      Buscar na Tabela FIPE
+                    </button>
                   </div>
-                  <div>
-                    <label style={labelStyle}>Modelo <span style={{ color: "#E85D26" }}>*</span></label>
-                    <select value={form.modelo} onChange={e => { set("modelo", e.target.value); set("versao", ""); }} style={inputStyle} disabled={!form.marca}>
-                      <option value="">Selecione o modelo</option>
-                      {form.modelo && !modelos.includes(form.modelo) && <option>{form.modelo}</option>}
-                      {modelos.map(m => <option key={m}>{m}</option>)}
-                    </select>
-                  </div>
-                </div>
+                )}
 
-                <div>
-                  <label style={labelStyle}>Versão</label>
-                  <select value={form.versao} onChange={e => set("versao", e.target.value)} style={inputStyle} disabled={!form.modelo}>
-                    <option value="">Selecione a versão</option>
-                    {form.versao && !versoes.includes(form.versao) && <option>{form.versao}</option>}
-                    {versoes.map(v => <option key={v}>{v}</option>)}
-                  </select>
-                </div>
+                {(manual || fipe || form.modelo) && (
+                  <>
+                    {manual && (
+                      <div>
+                        <label style={labelStyle}>Marca <span style={{ color: "#E85D26" }}>*</span></label>
+                        <input placeholder="Ex: Chevrolet" value={form.marca} onChange={e => set("marca", e.target.value)} style={inputStyle} />
+                      </div>
+                    )}
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: 12 }}>
+                      <div>
+                        <label style={labelStyle}>Modelo <span style={{ color: "#E85D26" }}>*</span></label>
+                        <input placeholder="Ex: Onix" value={form.modelo} onChange={e => set("modelo", e.target.value)} style={inputStyle} />
+                      </div>
+                      <div>
+                        <label style={labelStyle}>Versão</label>
+                        <input placeholder="Ex: Premier 1.0 Turbo Aut." value={form.versao} onChange={e => set("versao", e.target.value)} style={inputStyle} />
+                      </div>
+                    </div>
+                    {!manual && <div style={{ fontSize: 11.5, color: "#A8A49D", marginTop: -6 }}>Preenchido pela FIPE. Pode ajustar o texto se quiser.</div>}
+                  </>
+                )}
 
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
                   {[["Ano", "ano", "Ex: 2022"], ["KM rodados", "km", "Ex: 38000"]].map(([label, field, ph]) => (
@@ -487,15 +386,6 @@ export default function NovoAnuncio() {
                   <input type="checkbox" id="troca" checked={form.aceitaTroca} onChange={e => set("aceitaTroca", e.target.checked)} style={{ width: 16, height: 16, accentColor: "#E85D26" }} />
                   <label htmlFor="troca" style={{ fontSize: 13, color: "#1A1917", cursor: "pointer" }}>Aceita troca</label>
                 </div>
-
-                <SeletorFipe
-                  key={`${form.tipo}|${editandoId ?? "novo"}|${carregandoEdicao}`}
-                  tipoAnuncio={form.tipo}
-                  marcaSugerida={form.marca}
-                  preco={lerPreco(form.preco)}
-                  inicial={fipe}
-                  onChange={setFipe}
-                />
               </div>
             )}
 

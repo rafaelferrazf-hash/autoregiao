@@ -104,10 +104,13 @@ export default function NovoAnuncio() {
 
 
   const opcionaisList = [
-    "Ar-condicionado", "Direção elétrica", "Vidros elétricos", "Travas elétricas",
-    "Airbag", "ABS", "Central multimídia", "Câmera de ré",
-    "Sensor de estacionamento", "Rodas de liga", "Teto solar", "Bancos de couro",
-    "Alarme", "Bluetooth", "GPS", "Controle de cruzeiro"
+    "Ar-condicionado", "Ar-condicionado digital", "Direção hidráulica", "Direção elétrica",
+    "Vidros elétricos", "Travas elétricas", "Retrovisores elétricos", "Airbag", "ABS",
+    "Central multimídia", "Android Auto / Apple CarPlay", "Bluetooth", "GPS",
+    "Câmera de ré", "Sensor de estacionamento", "Controle de cruzeiro", "Volante multifuncional",
+    "Computador de bordo", "Partida sem chave", "Carregador sem fio", "Faróis de LED",
+    "Faróis de neblina", "Sensor de chuva", "Rodas de liga", "Teto solar", "Bancos de couro",
+    "Banco com regulagem de altura", "Tração 4x4", "Alarme", "Único dono", "Revisões na concessionária",
   ];
 
   const inputStyle = {

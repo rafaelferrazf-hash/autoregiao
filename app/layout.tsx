@@ -1,7 +1,8 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { NOME_SITE, URL_SITE } from "@/lib/site";
+import AppInstalavel from "@/components/AppInstalavel";
 
 // Fonte única do site (títulos, preços e textos), servida pelo próprio site.
 const fonte = Plus_Jakarta_Sans({
@@ -23,6 +24,13 @@ export const metadata: Metadata = {
     description: descricaoPadrao,
     images: [{ url: "/logo.png", alt: NOME_SITE }],
   },
+  // App instalável (manifest em app/manifest.ts): ícone e nome no iPhone.
+  appleWebApp: { capable: true, title: NOME_SITE, statusBarStyle: "default" },
+  icons: { apple: "/icones/apple-touch-icon.png" },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#FFFFFF",
 };
 
 export default function RootLayout({
@@ -35,7 +43,10 @@ export default function RootLayout({
       lang="pt-BR"
       className={`${fonte.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        {children}
+        <AppInstalavel />
+      </body>
     </html>
   );
 }

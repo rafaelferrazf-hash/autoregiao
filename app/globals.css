@@ -28,3 +28,17 @@ body {
 button, input, select, textarea {
   font-family: inherit;
 }
+
+/* Celular: campos com letra de 16px ou mais — abaixo disso o iPhone dá zoom sozinho ao tocar no
+   campo. !important porque vários campos têm o tamanho da letra no próprio style. */
+@media (max-width: 768px) {
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+  /* Links soltos em texto (rodapé, "denunciar"...) com área de toque confortável para o dedo. */
+  .toque-facil a, a.toque-facil {
+    display: inline-block;
+    padding-top: 7px;
+    padding-bottom: 7px;
+  }
+}

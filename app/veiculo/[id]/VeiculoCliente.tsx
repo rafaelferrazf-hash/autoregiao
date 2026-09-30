@@ -2,7 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import BotoesConta from "@/components/BotoesConta";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { buscarSemelhantes } from "@/lib/dados/veiculos";
 import BotaoFavorito from "@/components/BotaoFavorito";
 import CartaoVeiculo, { abaixoDaFipe } from "@/components/CartaoVeiculo";
@@ -30,6 +30,29 @@ export default function Veiculo({ inicial }: { inicial: VeiculoComLoja }) {
   }, [inicial]);
 
   const fotos = veiculo?.fotos?.length ? veiculo.fotos : ["/sem-foto.png"];
+
+  // Celular: arrastar o dedo para o lado troca a foto (na foto principal e na ampliada).
+  const toque = useRef<{ x: number; y: number } | null>(null);
+  const arrastou = useRef(false); // o "clique" que vem logo depois de um arrasto é ignorado
+  function aoTocar(e: React.TouchEvent) {
+    toque.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    arrastou.current = false;
+  }
+  function aoSoltar(e: React.TouchEvent) {
+    if (!toque.current || fotos.length < 2) return;
+    const dx = e.changedTouches[0].clientX - toque.current.x;
+    const dy = e.changedTouches[0].clientY - toque.current.y;
+    toque.current = null;
+    // Só conta como troca de foto se foi um arrasto mais para o lado do que para cima/baixo.
+    if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy) * 1.2) return;
+    arrastou.current = true;
+    setFotoAtiva(f => (dx < 0 ? Math.min(fotos.length - 1, f + 1) : Math.max(0, f - 1)));
+  }
+  function ignorarSeArrastou() {
+    if (!arrastou.current) return false;
+    arrastou.current = false;
+    return true;
+  }
 
   // Fechar lightbox com ESC e navegar com setas
   useEffect(() => {
@@ -115,7 +138,7 @@ Motivo da denúncia:
           <span style={{ color: "#16A34A" }}>✔</span> {item}
         </div>
       ))}
-      <a href={linkDenuncia} style={{ display: "inline-block", marginTop: 6, fontSize: 12, color: "#7A7670", textDecoration: "underline" }}>🚩 Denunciar este anúncio</a>
+      <a href={linkDenuncia} className="toque-facil" style={{ display: "inline-block", marginTop: 6, fontSize: 12, color: "#7A7670", textDecoration: "underline" }}>🚩 Denunciar este anúncio</a>
     </div>
   );
 
@@ -158,8 +181,10 @@ Motivo da denúncia:
       {/* LIGHTBOX */}
       {lightbox && (
         <div
-          onClick={() => setLightbox(false)}
-          style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center" }}
+          onClick={() => { if (!ignorarSeArrastou()) setLightbox(false); }}
+          onTouchStart={aoTocar}
+          onTouchEnd={aoSoltar}
+          style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center", touchAction: "pan-y" }}
         >
           {/* Botão fechar */}
           <button
@@ -262,8 +287,10 @@ Motivo da denúncia:
             <div style={{ marginBottom: 20 }}>
               <div
                 className="foto-principal"
-                onClick={() => setLightbox(true)}
-                style={{ position: "relative", height: 300, borderRadius: 12, overflow: "hidden", marginBottom: 10, border: "1.5px solid #E8E6E1", background: "#F7F6F3" }}
+                onClick={() => { if (!ignorarSeArrastou()) setLightbox(true); }}
+                onTouchStart={aoTocar}
+                onTouchEnd={aoSoltar}
+                style={{ touchAction: "pan-y", position: "relative", height: 300, borderRadius: 12, overflow: "hidden", marginBottom: 10, border: "1.5px solid #E8E6E1", background: "#F7F6F3" }}
               >
                 {fotos[fotoAtiva] === "/sem-foto.png" ? (
                   <Image src="/sem-foto.png" alt="Foto do veículo" fill style={{ objectFit: "cover" }} sizes="100vw" />

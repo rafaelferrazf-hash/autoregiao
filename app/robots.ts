@@ -7,7 +7,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: ["/painel", "/admin", "/api/", "/alerta", "/pagamento", "/redefinir-senha", "/recuperar-senha"],
+      disallow: ["/painel", "/admin", "/api/", "/alerta", "/pagamento", "/redefinir-senha", "/recuperar-senha", "/offline"],
     },
     sitemap: `${URL_SITE}/sitemap.xml`,
   };

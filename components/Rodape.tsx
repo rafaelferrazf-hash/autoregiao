@@ -6,7 +6,7 @@ export default function Rodape() {
   const link = { color: "#7A7670", textDecoration: "none" } as const;
   return (
     <footer style={{ borderTop: "1px solid #E8E6E1", marginTop: 32, padding: "20px 16px 24px", textAlign: "center", fontSize: 12, color: "#7A7670" }}>
-      <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap", marginBottom: 12 }}>
+      <div className="toque-facil" style={{ display: "flex", columnGap: 16, rowGap: 0, justifyContent: "center", alignItems: "center", flexWrap: "wrap", marginBottom: 12 }}>
         <span>© {new Date().getFullYear()} <span style={{ color: "#E85D26" }}>AutoRegião</span></span>
         <Link href="/veiculos" style={link}>Buscar veículos</Link>
         <Link href="/favoritos" style={link}>Favoritos</Link>

@@ -1,8 +1,15 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useSyncExternalStore } from "react";
 import { supabase } from "@/lib/supabase";
+
+const semAssinatura = () => () => {};
+function linkTemErro() {
+  const query = new URLSearchParams(window.location.search);
+  const hash = new URLSearchParams(window.location.hash.slice(1));
+  return !!(query.get("error") || hash.get("error"));
+}
 
 export default function RedefinirSenha() {
   const [senha, setSenha] = useState("");
@@ -11,20 +18,18 @@ export default function RedefinirSenha() {
   const [carregando, setCarregando] = useState(false);
   const [sucesso, setSucesso] = useState(false);
   // "verificando" enquanto o supabase-js lê o token do link; "valido" libera o formulário.
-  const [estado, setEstado] = useState<"verificando" | "valido" | "invalido">("verificando");
+  const [estadoToken, setEstado] = useState<"verificando" | "valido" | "invalido">("verificando");
+  // Link expirado/já usado chega como ?error=... ou #error=... (lido direto da URL, sem esperar efeito).
+  const linkComErro = useSyncExternalStore(semAssinatura, linkTemErro, () => false);
+  const estado = linkComErro ? "invalido" : estadoToken;
 
   useEffect(() => {
     // O link do e-mail pode chegar em três formatos:
     //  - ?token_hash=...&type=recovery  → modelo de e-mail customizado; funciona em qualquer aparelho
     //  - ?code=...                      → fluxo PKCE padrão; só funciona no mesmo navegador que pediu
     //  - #access_token=...              → links antigos (fluxo implícito)
-    // Erros (link expirado/usado) chegam como ?error=... ou #error=...
+    if (linkTemErro()) return;
     const query = new URLSearchParams(window.location.search);
-    const hash = new URLSearchParams(window.location.hash.slice(1));
-    if (query.get("error") || hash.get("error")) {
-      setEstado("invalido");
-      return;
-    }
 
     const tokenHash = query.get("token_hash");
     if (tokenHash) {
@@ -60,9 +65,9 @@ export default function RedefinirSenha() {
           : "Erro ao salvar a senha. Tente novamente.");
       } else {
         setSucesso(true);
-        setTimeout(() => { window.location.href = "/painel"; }, 1500);
+        setTimeout(() => location.assign("/painel"), 1500);
       }
-    } catch (e) {
+    } catch {
       setCarregando(false);
       setErro("Erro inesperado. Tente novamente.");
     }

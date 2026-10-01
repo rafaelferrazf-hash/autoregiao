@@ -83,7 +83,7 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
      perfil de pagamentos com o nome legal completo **Rafael Ferraz Barbosa**, igual ao documento).
    - ⏳ Verificações do Play Console: identidade (RG/CNH), dispositivo Android (app Play Console), telefone.
    - ✅ Pacote gerado: projeto em `C:\Users\rafae\autoregiao-android` (Bubblewrap core, `br.com.autoregiao.app`,
-     targetSdk 36, versão 1.0.1/2 com o logo novo). Arquivos assinados em `...\autoregiao-android\publicar\` (`.aab` para a loja,
+     targetSdk 36, versão 1.0.2/3: logo novo, abertura em grafite com o logo completo — gerador em `android-ferramentasgeradorgerar.cjs`). Arquivos assinados em `...\autoregiao-android\publicar\` (`.aab` para a loja,
      `.apk` para testar). Ferramentas (JDK 17, Android SDK) em `C:\Users\rafae\android-ferramentas`
      (o `sdkmanager`/`android.exe` é bloqueado pelo Controle Inteligente de Aplicativos do Windows — o Gradle baixa
      o SDK sozinho; NÃO desligar essa proteção). Montar: `gradlew.bat bundleRelease assembleRelease` com

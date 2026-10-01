@@ -13,7 +13,7 @@ export default function manifest(): MetadataRoute.Manifest {
     scope: "/",
     display: "standalone",
     orientation: "portrait",
-    background_color: "#FFFFFF",
+    background_color: "#1A1A1A", // tela de abertura do app: mesmo grafite do ícone
     theme_color: "#FFFFFF",
     categories: ["shopping", "lifestyle"],
     icons: [

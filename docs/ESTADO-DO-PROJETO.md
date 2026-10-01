@@ -88,12 +88,16 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
      (o `sdkmanager`/`android.exe` é bloqueado pelo Controle Inteligente de Aplicativos do Windows — o Gradle baixa
      o SDK sozinho; NÃO desligar essa proteção). Montar: `gradlew.bat bundleRelease assembleRelease` com
      JAVA_HOME/ANDROID_HOME apontando para essas pastas; assinar com jarsigner (aab) e zipalign+apksigner (apk).
-   - Chave de envio: `android-ferramentas\chave\autoregiao-upload.jks` (alias `autoregiao`); senha só com o Rafael
-     (gerenciador de senhas). SHA-256 `B3:AA:21:8C:...:7E:8C:0C` já em `public/.well-known/assetlinks.json`
+   - Chave de envio: `android-ferramentas\chave\autoregiao-upload.jks` (alias `autoregiao`). Senha guardada pelo
+     Rafael no Gerenciador de Senhas do Google ("play.google.com / autoregiao - chave do app"); cópia do .jks no
+     Google Drive dele. Para assinar daqui, a senha está criptografada (DPAPI, só abre no usuário do Windows dele)
+     em `android-ferramentas\chave\senha-protegida.dpapi`: em PowerShell,
+     `[System.Net.NetworkCredential]::new("", (Get-Content <arquivo> | ConvertTo-SecureString)).Password`
+     → pôr em `$env:KS_SENHA` e usar `-storepass:env KS_SENHA` / `--ks-pass env:KS_SENHA`. Nunca exibir a senha. SHA-256 `B3:AA:21:8C:...:7E:8C:0C` já em `public/.well-known/assetlinks.json`
      (validado pela API do Google). **Depois do 1º envio, acrescentar a impressão digital da chave de assinatura
      do Google Play** (Play Console → Integridade do app) no assetlinks.json.
    - Textos da ficha e respostas dos questionários: `docs/google-play-ficha.md`. Imagem de destaque 1024×500 e ícone 512
-     já em `autoregiao-android\publicar\`. Faltam as capturas de tela do celular.
+     já em `autoregiao-android\publicar\`. Capturas de tela (5, 1080×1920, com moldura) também lá — refazer com anúncios reais antes do lançamento.
    - Depois: teste fechado com **12+ testadores por 14 dias** → solicitar acesso à produção.
 2. **Mercado Pago em produção** — trocar `MP_ACCESS_TOKEN`/`MP_WEBHOOK_SECRET` pelos de produção,
    configurar webhook de produção, pagamento real de R$89 e estorno.

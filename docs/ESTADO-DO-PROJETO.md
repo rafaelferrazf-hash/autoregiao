@@ -1,7 +1,7 @@
 # AutoRegião — estado do projeto
 
 Leia isto no começo de cada conversa. Atualize ao terminar uma etapa (seção "Histórico" e "Pendências").
-Última atualização: 30/09/2026.
+Última atualização: 01/10/2026.
 
 ## O que é
 Classificados de veículos (carros, motos, utilitários) de lojas e particulares de uma região.
@@ -74,9 +74,23 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
 - 2FA nas contas principais. App instalável (PWA), arrastar fotos, revisão de celular (375/320px).
 
 ## Pendências (em ordem sugerida)
-1. **App na Google Play (TWA)** — conta de desenvolvedor em nome do Rafael (US$25). Contas pessoais novas
-   precisam de **teste fechado com 12+ testadores por 14 dias** antes da produção. Gerar pacote (Bubblewrap/PWABuilder),
-   publicar `/.well-known/assetlinks.json` com a impressão digital da chave de assinatura.
+1. **App na Google Play (TWA)** — em andamento:
+   - ✅ Conta de desenvolvedor criada (pessoal, nome público "AutoRegião", e-mail público contato@, taxa paga;
+     perfil de pagamentos com o nome legal completo **Rafael Ferraz Barbosa**, igual ao documento).
+   - ⏳ Verificações do Play Console: identidade (RG/CNH), dispositivo Android (app Play Console), telefone.
+   - ✅ Pacote gerado: projeto em `C:\Users\rafae\autoregiao-android` (Bubblewrap core, `br.com.autoregiao.app`,
+     targetSdk 36, versão 1.0.0/1). Arquivos assinados em `...\autoregiao-android\publicar\` (`.aab` para a loja,
+     `.apk` para testar). Ferramentas (JDK 17, Android SDK) em `C:\Users\rafae\android-ferramentas`
+     (o `sdkmanager`/`android.exe` é bloqueado pelo Controle Inteligente de Aplicativos do Windows — o Gradle baixa
+     o SDK sozinho; NÃO desligar essa proteção). Montar: `gradlew.bat bundleRelease assembleRelease` com
+     JAVA_HOME/ANDROID_HOME apontando para essas pastas; assinar com jarsigner (aab) e zipalign+apksigner (apk).
+   - Chave de envio: `android-ferramentas\chave\autoregiao-upload.jks` (alias `autoregiao`); senha só com o Rafael
+     (gerenciador de senhas). SHA-256 `B3:AA:21:8C:...:7E:8C:0C` já em `public/.well-known/assetlinks.json`
+     (validado pela API do Google). **Depois do 1º envio, acrescentar a impressão digital da chave de assinatura
+     do Google Play** (Play Console → Integridade do app) no assetlinks.json.
+   - Textos da ficha e respostas dos questionários: `docs/google-play-ficha.md`. Faltam imagem de destaque
+     1024×500 e capturas de tela do celular.
+   - Depois: teste fechado com **12+ testadores por 14 dias** → solicitar acesso à produção.
 2. **Mercado Pago em produção** — trocar `MP_ACCESS_TOKEN`/`MP_WEBHOOK_SECRET` pelos de produção,
    configurar webhook de produção, pagamento real de R$89 e estorno.
 3. 2FA no Supabase e no Mercado Pago.

@@ -10,10 +10,12 @@ export const metadata: Metadata = {
 
 export default function Privacidade() {
   return (
-    <PaginaLegal titulo="Política de Privacidade" atualizadoEm="28 de setembro de 2026">
+    <PaginaLegal titulo="Política de Privacidade" atualizadoEm="1º de outubro de 2026">
       <p>
         Esta Política explica quais dados pessoais o <strong>AutoRegião</strong> coleta, para que usa e quais são os seus
-        direitos, conforme a Lei Geral de Proteção de Dados (Lei nº 13.709/2018 — LGPD).
+        direitos, conforme a Lei Geral de Proteção de Dados (Lei nº 13.709/2018 — LGPD). Ela vale para o site
+        www.autoregiao.com.br e para o <strong>app AutoRegião</strong> (Android e app instalável pelo navegador), que exibe
+        o mesmo conteúdo do site.
       </p>
 
       <h2>1. Quem é o responsável pelos seus dados</h2>
@@ -32,7 +34,15 @@ export default function Privacidade() {
         <li><strong>Uso do site:</strong> contamos visualizações de anúncios e cliques nos botões de WhatsApp e Ligar para mostrar
           esses números ao anunciante. Para não contar a mesma pessoa várias vezes, geramos um código anônimo a partir do
           endereço de internet e do navegador. <strong>Não guardamos o seu endereço IP</strong> e não identificamos quem clicou.</li>
+        <li><strong>Alertas de veículos:</strong> se você criar um alerta, guardamos o seu e-mail e a busca escolhida (marca,
+          preço etc.) para avisar sobre anúncios novos. Não é preciso ter conta.</li>
+        <li><strong>Favoritos:</strong> os anúncios que você salva com a estrela ficam guardados <strong>só no seu
+          aparelho</strong> (armazenamento do navegador/app); não recebemos essa lista.</li>
       </ul>
+      <p>
+        O app não acessa sua localização, contatos, câmera, microfone ou arquivos do aparelho (fotos de anúncios só são
+        enviadas quando o anunciante as escolhe no cadastro do anúncio).
+      </p>
 
       <h2>3. Para que usamos</h2>
       <ul>
@@ -40,6 +50,8 @@ export default function Privacidade() {
         <li>Publicar anúncios e a página da loja, e permitir que compradores entrem em contato (execução do contrato);</li>
         <li>Mostrar estatísticas de visualizações e contatos ao anunciante (legítimo interesse);</li>
         <li>Enviar e-mails do serviço, como confirmação de cadastro e recuperação de senha (execução do contrato);</li>
+        <li>Enviar os alertas de veículos que você pediu e confirmou — no máximo um e-mail por dia, com link para cancelar em
+          todos (consentimento);</li>
         <li>Prevenir fraudes e moderar anúncios irregulares (legítimo interesse);</li>
         <li>Cumprir obrigações legais, inclusive fiscais quando houver pagamentos (obrigação legal).</li>
       </ul>
@@ -57,6 +69,9 @@ export default function Privacidade() {
       <ul>
         <li><strong>Supabase</strong> — banco de dados, armazenamento de fotos e autenticação;</li>
         <li><strong>Vercel</strong> — hospedagem do site;</li>
+        <li><strong>Resend</strong> — envio dos e-mails do serviço e dos alertas;</li>
+        <li><strong>Google Play</strong> — distribuição do app Android (o Google pode coletar dados de instalação conforme a
+          política dele);</li>
         <li><strong>Provedor de pagamentos</strong> (ex.: Mercado Pago), quando houver planos pagos — ele recebe os dados
           necessários à cobrança; nós não guardamos dados de cartão.</li>
       </ul>
@@ -76,7 +91,8 @@ export default function Privacidade() {
         <li>Dados da conta e da loja: enquanto a conta existir. Após o pedido de exclusão, apagamos em até 30 dias, exceto o que
           a lei obrigar a manter;</li>
         <li>Anúncios excluídos: removidos do site na hora, com as fotos;</li>
-        <li>Contagem de visualizações e cliques: até 12 meses.</li>
+        <li>Contagem de visualizações e cliques: até 12 meses;</li>
+        <li>Alertas: até você cancelar (pelo link em qualquer e-mail de alerta) — pedidos não confirmados podem ser apagados.</li>
       </ul>
 
       <h2>8. Seus direitos</h2>

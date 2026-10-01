@@ -81,7 +81,16 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
 1. **App na Google Play (TWA)** — em andamento:
    - ✅ Conta de desenvolvedor criada (pessoal, nome público "AutoRegião", e-mail público contato@, taxa paga;
      perfil de pagamentos com o nome legal completo **Rafael Ferraz Barbosa**, igual ao documento).
-   - ⏳ Verificações do Play Console: identidade (RG/CNH), dispositivo Android (app Play Console), telefone.
+   - ✅ Verificações do Play Console concluídas (identidade, dispositivo Android, telefone) em 01/10/2026.
+   - ✅ App criado no Play Console: "AutoRegião: Carros da Região", pacote `br.com.autoregiao.app`, grátis, pt-BR.
+   - Configuração do app ("Termine de configurar seu app"): ✅ Política de privacidade (/privacidade, atualizada
+     para cobrir app/alertas/favoritos/Resend); ✅ Detalhes do login (conta demo `revisao@autoregiao.com.br`,
+     loja "Demonstração AutoRegião" em plano premium até 01/10/2027 — senha só com o Rafael; instruções PT/EN;
+     desativar a loja depois da aprovação). ⏳ Próximas: Anúncios (Não), Classificação de conteúdo, Público-alvo
+     (18+), Segurança dos dados, Apps governamentais (Não), Recursos financeiros (nenhum), Saúde (Não), Categoria
+     e contato, Ficha da loja — respostas em `docs/google-play-ficha.md`.
+   - Testadores: usar Grupo do Google (groups.google.com) em vez de lista de e-mails; mandar 15–16 convites.
+   - Teste no celular do Rafael com o .apk funcionou (abertura nova aprovada: opção B, grafite + logo completo).
    - ✅ Pacote gerado: projeto em `C:\Users\rafae\autoregiao-android` (Bubblewrap core, `br.com.autoregiao.app`,
      targetSdk 36, versão 1.0.2/3: logo novo, abertura em grafite com o logo completo — gerador em `android-ferramentasgeradorgerar.cjs`). Arquivos assinados em `...\autoregiao-android\publicar\` (`.aab` para a loja,
      `.apk` para testar). Ferramentas (JDK 17, Android SDK) em `C:\Users\rafae\android-ferramentas`

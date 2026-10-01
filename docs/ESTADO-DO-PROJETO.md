@@ -72,6 +72,10 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
 - Auditoria do concorrente CarroSP → favoritos, veículos parecidos, itens de confiança, FIPE, SEO
   (anúncio renderizado no servidor, JSON-LD, vitrines, sitemap/robots), filtros FIPE e loja/particular.
 - 2FA nas contas principais. App instalável (PWA), arrastar fotos, revisão de celular (375/320px).
+- Marca nova (01/10/2026), do manual em `C:\Users\rafae\AutoRegiao-Logo-Novo` (só PNG, sem vetor): logo AR, laranja
+  #FF6600, grafite #1A1A1A, Exo 2 nos títulos (h1–h3). Slogan trocado para "COMPRE | VENDA | ANUNCIE" (o manual
+  dizia "financia", que o site não faz). Peças em `public/marca/` e `public/icones/`; `components/Logo`.
+  Para impressão grande (fachada, adesivo), pedir ao designer o arquivo vetorial.
 
 ## Pendências (em ordem sugerida)
 1. **App na Google Play (TWA)** — em andamento:
@@ -88,8 +92,8 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
      (gerenciador de senhas). SHA-256 `B3:AA:21:8C:...:7E:8C:0C` já em `public/.well-known/assetlinks.json`
      (validado pela API do Google). **Depois do 1º envio, acrescentar a impressão digital da chave de assinatura
      do Google Play** (Play Console → Integridade do app) no assetlinks.json.
-   - Textos da ficha e respostas dos questionários: `docs/google-play-ficha.md`. Faltam imagem de destaque
-     1024×500 e capturas de tela do celular.
+   - Textos da ficha e respostas dos questionários: `docs/google-play-ficha.md`. Imagem de destaque 1024×500 e ícone 512
+     já em `autoregiao-android\publicar\`. Faltam as capturas de tela do celular.
    - Depois: teste fechado com **12+ testadores por 14 dias** → solicitar acesso à produção.
 2. **Mercado Pago em produção** — trocar `MP_ACCESS_TOKEN`/`MP_WEBHOOK_SECRET` pelos de produção,
    configurar webhook de produção, pagamento real de R$89 e estorno.

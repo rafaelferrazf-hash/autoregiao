@@ -1,6 +1,6 @@
 "use client";
-import Image from "next/image";
 import Link from "next/link";
+import Logo from "@/components/Logo";
 import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
@@ -55,10 +55,7 @@ function Alerta() {
     <main style={{ background: "#F7F6F3", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <nav style={{ background: "#fff", borderBottom: "1px solid #E8E6E1", height: 60, display: "flex", alignItems: "center", padding: "0 16px", flexShrink: 0 }}>
         <Link href="/" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none" }}>
-          <Image src="/logo.png" alt="AutoRegião" width={32} height={32} style={{ objectFit: "contain" }} />
-          <span style={{ fontSize: 18, fontWeight: 800, color: "#1A1917" }}>
-            <span style={{ color: "#E85D26" }}>Auto</span>Região
-          </span>
+          <Logo />
         </Link>
       </nav>
 
@@ -69,7 +66,7 @@ function Alerta() {
           {estado.tipo === "feito" ? (
             <>
               <div style={{ background: "#D1FAE5", border: "1.5px solid #6EE7B7", borderRadius: 8, padding: "12px 14px", marginBottom: 16, fontSize: 14, color: "#065F46", lineHeight: 1.5 }}>✅ {estado.texto}</div>
-              <Link href="/veiculos" style={{ display: "block", textAlign: "center", fontSize: 14, color: "#E85D26", fontWeight: 600, textDecoration: "none" }}>Ver veículos →</Link>
+              <Link href="/veiculos" style={{ display: "block", textAlign: "center", fontSize: 14, color: "#FF6600", fontWeight: 600, textDecoration: "none" }}>Ver veículos →</Link>
             </>
           ) : (
             <>
@@ -78,7 +75,7 @@ function Alerta() {
                 <div style={{ background: "#FEE2E2", border: "1.5px solid #FCA5A5", borderRadius: 8, padding: "12px 14px", marginBottom: 16, fontSize: 13, color: "#991B1B", lineHeight: 1.5 }}>{estado.texto}</div>
               )}
               <button onClick={executar} disabled={estado.tipo === "carregando" || !token}
-                style={{ width: "100%", padding: "13px", background: acao === "confirmar" ? "#E85D26" : "#1A1917", color: "#fff", border: "none", borderRadius: 8, fontSize: 15, fontWeight: 700, cursor: "pointer", opacity: estado.tipo === "carregando" ? 0.7 : 1 }}>
+                style={{ width: "100%", padding: "13px", background: acao === "confirmar" ? "#FF6600" : "#1A1917", color: "#fff", border: "none", borderRadius: 8, fontSize: 15, fontWeight: 700, cursor: "pointer", opacity: estado.tipo === "carregando" ? 0.7 : 1 }}>
                 {estado.tipo === "carregando" ? "Aguarde..." : textos.botao}
               </button>
             </>

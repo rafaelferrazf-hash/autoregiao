@@ -1,6 +1,6 @@
 "use client";
-import Image from "next/image";
 import Link from "next/link";
+import Logo from "@/components/Logo";
 import CartaoVeiculo from "@/components/CartaoVeiculo";
 import Rodape from "@/components/Rodape";
 import BotoesConta from "@/components/BotoesConta";
@@ -110,7 +110,7 @@ function Veiculos() {
         <input type="checkbox" checked={!!rascunho.abaixo_fipe} onChange={e => setRascunho(r => ({ ...r, abaixo_fipe: e.target.checked || undefined }))} style={{ width: 16, height: 16, accentColor: "#16A34A" }} />
         <span style={{ fontSize: 13, fontWeight: 600, color: "#15803D" }}>💰 Só abaixo da FIPE</span>
       </label>
-      <button onClick={() => aplicar(rascunho)} style={{ width: "100%", padding: "10px", background: "#E85D26", color: "#fff", border: "none", borderRadius: 8, fontSize: 13.5, fontWeight: 700, cursor: "pointer" }}>Aplicar filtros</button>
+      <button onClick={() => aplicar(rascunho)} style={{ width: "100%", padding: "10px", background: "#FF6600", color: "#fff", border: "none", borderRadius: 8, fontSize: 13.5, fontWeight: 700, cursor: "pointer" }}>Aplicar filtros</button>
       {temFiltroAtivo(filtros) && (
         <button onClick={() => aplicar({ tipo: filtros.tipo, ordem: filtros.ordem })} style={{ width: "100%", padding: "8px", background: "transparent", color: "#7A7670", border: "none", fontSize: 12, cursor: "pointer", marginTop: 8 }}>Limpar filtros</button>
       )}
@@ -146,10 +146,7 @@ function Veiculos() {
       <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, background: "#fff", borderBottom: "1px solid #E8E6E1" }}>
         <div style={{ height: 60, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 16px" }}>
           <Link href="/" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none" }}>
-            <Image src="/logo.png" alt="AutoRegião" width={32} height={32} style={{ objectFit: "contain" }} />
-            <span style={{ fontSize: 18, fontWeight: 800, color: "#1A1917" }}>
-              <span style={{ color: "#E85D26" }}>Auto</span>Região
-            </span>
+            <Logo />
           </Link>
           <div style={{ display: "flex", gap: 24 }} className="nav-desktop">
             {[["Buscar veículos", "/veiculos"], ["★ Favoritos", "/favoritos"], ["Anunciar", "/anunciar"]].map(([item, href]) => (

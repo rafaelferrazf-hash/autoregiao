@@ -1,6 +1,6 @@
 "use client";
-import Image from "next/image";
 import Link from "next/link";
+import Logo from "@/components/Logo";
 import { useState, useRef, useEffect } from "react";
 import { usuarioAtual } from "@/lib/dados/usuario";
 import { buscarLojaDoUsuario } from "@/lib/dados/lojas";
@@ -266,7 +266,7 @@ export default function NovoAnuncio() {
         <p style={{ fontSize: 15, color: "#7A7670", marginBottom: 24 }}>{editandoId ? "As alterações já estão no site." : "Seu veículo já está visível para compradores da região."}</p>
         <div style={{ display: "flex", gap: 10, justifyContent: "center" }}>
           <Link href="/painel" style={{ padding: "10px 24px", border: "1.5px solid #E8E6E1", borderRadius: 8, textDecoration: "none", color: "#1A1917", fontWeight: 500, fontSize: 14 }}>Ver painel</Link>
-          <Link href="/veiculos" style={{ padding: "10px 24px", background: "#E85D26", color: "#fff", borderRadius: 8, textDecoration: "none", fontWeight: 600, fontSize: 14 }}>Ver anúncios</Link>
+          <Link href="/veiculos" style={{ padding: "10px 24px", background: "#FF6600", color: "#fff", borderRadius: 8, textDecoration: "none", fontWeight: 600, fontSize: 14 }}>Ver anúncios</Link>
         </div>
       </div>
     </main>
@@ -276,8 +276,7 @@ export default function NovoAnuncio() {
     <main style={{ background: "#F7F6F3", minHeight: "100vh" }}>
       <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, background: "#fff", borderBottom: "1px solid #E8E6E1", height: 60, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 24px" }}>
         <Link href="/" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
-          <Image src="/logo.png" alt="AutoRegião" width={36} height={36} style={{ objectFit: "contain" }} />
-          <span style={{ fontSize: 20, fontWeight: 800, color: "#1A1917" }}><span style={{ color: "#E85D26" }}>Auto</span>Região</span>
+          <Logo />
         </Link>
         <Link href="/painel" style={{ fontSize: 13, color: "#7A7670", textDecoration: "none" }}>← Voltar ao painel</Link>
       </nav>
@@ -292,8 +291,8 @@ export default function NovoAnuncio() {
           <div style={{ display: "flex", gap: 6, marginBottom: 28 }}>
             {["Veículo", "Fotos", "Contato"].map((label, i) => (
               <div key={i} style={{ flex: 1 }}>
-                <div style={{ height: 4, borderRadius: 2, background: etapa >= i + 1 ? "#E85D26" : "#E8E6E1", opacity: etapa === i + 1 ? 1 : etapa > i + 1 ? 0.5 : 1 }}></div>
-                <div style={{ fontSize: 11, color: etapa >= i + 1 ? "#E85D26" : "#7A7670", marginTop: 4, fontWeight: etapa === i + 1 ? 600 : 400 }}>{label}</div>
+                <div style={{ height: 4, borderRadius: 2, background: etapa >= i + 1 ? "#FF6600" : "#E8E6E1", opacity: etapa === i + 1 ? 1 : etapa > i + 1 ? 0.5 : 1 }}></div>
+                <div style={{ fontSize: 11, color: etapa >= i + 1 ? "#FF6600" : "#7A7670", marginTop: 4, fontWeight: etapa === i + 1 ? 600 : 400 }}>{label}</div>
               </div>
             ))}
           </div>
@@ -313,7 +312,7 @@ export default function NovoAnuncio() {
                   <div style={{ display: "flex", gap: 8 }}>
                     {[["carro", "🚗 Carro"], ["moto", "🏍️ Moto"], ["utilitario", "🚐 Utilitário"]].map(([val, label]) => (
                       <button key={val} onClick={() => { set("tipo", val); set("marca", ""); set("modelo", ""); set("versao", ""); setFipe(null); }}
-                        style={{ flex: 1, padding: "8px", borderRadius: 8, border: "1.5px solid", borderColor: form.tipo === val ? "#E85D26" : "#E8E6E1", background: form.tipo === val ? "#FFF5F1" : "#fff", color: form.tipo === val ? "#E85D26" : "#7A7670", fontWeight: 600, fontSize: 13, cursor: "pointer" }}>
+                        style={{ flex: 1, padding: "8px", borderRadius: 8, border: "1.5px solid", borderColor: form.tipo === val ? "#FF6600" : "#E8E6E1", background: form.tipo === val ? "#FFF5F1" : "#fff", color: form.tipo === val ? "#FF6600" : "#7A7670", fontWeight: 600, fontSize: 13, cursor: "pointer" }}>
                         {label}
                       </button>
                     ))}
@@ -333,7 +332,7 @@ export default function NovoAnuncio() {
                 ) : (
                   <div style={{ fontSize: 12, color: "#7A7670", background: "#F7F6F3", border: "1.5px solid #E8E6E1", borderRadius: 10, padding: "10px 12px", lineHeight: 1.5 }}>
                     Preencha marca, modelo e versão à mão. Sem a Tabela FIPE, o anúncio não recebe o selo “💰 Abaixo da FIPE”.{" "}
-                    <button type="button" onClick={() => setManual(false)} style={{ background: "none", border: "none", padding: 0, color: "#E85D26", fontWeight: 600, cursor: "pointer", fontSize: 12 }}>
+                    <button type="button" onClick={() => setManual(false)} style={{ background: "none", border: "none", padding: 0, color: "#FF6600", fontWeight: 600, cursor: "pointer", fontSize: 12 }}>
                       Buscar na Tabela FIPE
                     </button>
                   </div>
@@ -343,13 +342,13 @@ export default function NovoAnuncio() {
                   <>
                     {manual && (
                       <div>
-                        <label style={labelStyle}>Marca <span style={{ color: "#E85D26" }}>*</span></label>
+                        <label style={labelStyle}>Marca <span style={{ color: "#FF6600" }}>*</span></label>
                         <input placeholder="Ex: Chevrolet" value={form.marca} onChange={e => set("marca", e.target.value)} style={inputStyle} />
                       </div>
                     )}
                     <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: 12 }}>
                       <div>
-                        <label style={labelStyle}>Modelo <span style={{ color: "#E85D26" }}>*</span></label>
+                        <label style={labelStyle}>Modelo <span style={{ color: "#FF6600" }}>*</span></label>
                         <input placeholder="Ex: Onix" value={form.modelo} onChange={e => set("modelo", e.target.value)} style={inputStyle} />
                       </div>
                       <div>
@@ -364,7 +363,7 @@ export default function NovoAnuncio() {
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
                   {[["Ano", "ano", "Ex: 2022"], ["KM rodados", "km", "Ex: 38000"]].map(([label, field, ph]) => (
                     <div key={field}>
-                      <label style={labelStyle}>{label} <span style={{ color: "#E85D26" }}>*</span></label>
+                      <label style={labelStyle}>{label} <span style={{ color: "#FF6600" }}>*</span></label>
                       <input placeholder={ph} value={form[field as keyof typeof form] as string} onChange={e => set(field, e.target.value)} style={inputStyle} />
                     </div>
                   ))}
@@ -403,14 +402,14 @@ export default function NovoAnuncio() {
                     </select>
                   </div>
                   <div>
-                    <label style={labelStyle}>Preço <span style={{ color: "#E85D26" }}>*</span></label>
+                    <label style={labelStyle}>Preço <span style={{ color: "#FF6600" }}>*</span></label>
                     <input placeholder="Ex: 72.900" inputMode="decimal" value={form.preco} onChange={e => set("preco", e.target.value)} style={inputStyle} />
                     {lerPreco(form.preco) && <div style={{ fontSize: 11.5, color: "#7A7670", marginTop: 4 }}>Vai aparecer como <strong style={{ color: "#1A1917" }}>{formatarPreco(lerPreco(form.preco))}</strong></div>}
                   </div>
                 </div>
 
                 <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                  <input type="checkbox" id="troca" checked={form.aceitaTroca} onChange={e => set("aceitaTroca", e.target.checked)} style={{ width: 16, height: 16, accentColor: "#E85D26" }} />
+                  <input type="checkbox" id="troca" checked={form.aceitaTroca} onChange={e => set("aceitaTroca", e.target.checked)} style={{ width: 16, height: 16, accentColor: "#FF6600" }} />
                   <label htmlFor="troca" style={{ fontSize: 13, color: "#1A1917", cursor: "pointer" }}>Aceita troca</label>
                 </div>
               </div>
@@ -446,10 +445,10 @@ export default function NovoAnuncio() {
                   {fotos.length > 0 && (
                     <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8 }}>
                       {fotos.map((foto, i) => (
-                        <div key={i} style={{ position: "relative", aspectRatio: "4/3", borderRadius: 8, overflow: "hidden", border: i === 0 ? "2px solid #E85D26" : "1.5px solid #E8E6E1" }}>
+                        <div key={i} style={{ position: "relative", aspectRatio: "4/3", borderRadius: 8, overflow: "hidden", border: i === 0 ? "2px solid #FF6600" : "1.5px solid #E8E6E1" }}>
                           <img src={foto.preview} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                           {i === 0 && (
-                            <span style={{ position: "absolute", bottom: 4, left: 4, background: "#E85D26", color: "#fff", fontSize: 9, fontWeight: 600, padding: "2px 6px", borderRadius: 4 }}>CAPA</span>
+                            <span style={{ position: "absolute", bottom: 4, left: 4, background: "#FF6600", color: "#fff", fontSize: 9, fontWeight: 600, padding: "2px 6px", borderRadius: 4 }}>CAPA</span>
                           )}
                           <button
                             onClick={() => removerFoto(i)}
@@ -467,11 +466,11 @@ export default function NovoAnuncio() {
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
                     {opcionaisList.map(op => (
                       <div key={op} onClick={() => toggleOpcional(op)}
-                        style={{ display: "flex", alignItems: "center", gap: 8, padding: "7px 10px", borderRadius: 7, border: "1.5px solid", borderColor: form.opcionais.includes(op) ? "#E85D26" : "#E8E6E1", background: form.opcionais.includes(op) ? "#FFF5F1" : "#fff", cursor: "pointer" }}>
-                        <div style={{ width: 14, height: 14, borderRadius: 3, border: "1.5px solid", borderColor: form.opcionais.includes(op) ? "#E85D26" : "#E8E6E1", background: form.opcionais.includes(op) ? "#E85D26" : "#fff", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        style={{ display: "flex", alignItems: "center", gap: 8, padding: "7px 10px", borderRadius: 7, border: "1.5px solid", borderColor: form.opcionais.includes(op) ? "#FF6600" : "#E8E6E1", background: form.opcionais.includes(op) ? "#FFF5F1" : "#fff", cursor: "pointer" }}>
+                        <div style={{ width: 14, height: 14, borderRadius: 3, border: "1.5px solid", borderColor: form.opcionais.includes(op) ? "#FF6600" : "#E8E6E1", background: form.opcionais.includes(op) ? "#FF6600" : "#fff", display: "flex", alignItems: "center", justifyContent: "center" }}>
                           {form.opcionais.includes(op) && <span style={{ color: "#fff", fontSize: 9 }}>✓</span>}
                         </div>
-                        <span style={{ fontSize: 12, color: form.opcionais.includes(op) ? "#E85D26" : "#1A1917" }}>{op}</span>
+                        <span style={{ fontSize: 12, color: form.opcionais.includes(op) ? "#FF6600" : "#1A1917" }}>{op}</span>
                       </div>
                     ))}
                   </div>
@@ -495,7 +494,7 @@ export default function NovoAnuncio() {
                   ["Telefone / WhatsApp", "telefone", "tel", "(14) 99999-9999"],
                   ["Cidade", "cidade", "text", "Ex: Teixeira de Freitas"]].map(([label, field, type, ph]) => (
                   <div key={field}>
-                    <label style={labelStyle}>{label} <span style={{ color: "#E85D26" }}>*</span></label>
+                    <label style={labelStyle}>{label} <span style={{ color: "#FF6600" }}>*</span></label>
                     <input type={type} placeholder={ph} value={form[field as keyof typeof form] as string} onChange={e => set(field, e.target.value)} style={inputStyle} />
                   </div>
                 ))}
@@ -510,7 +509,7 @@ export default function NovoAnuncio() {
                   {fotos.length > 0 && (
                     <div style={{ fontSize: 11, color: "#16A34A", marginBottom: 6 }}>📷 {fotos.length} foto{fotos.length > 1 ? "s" : ""} adicionada{fotos.length > 1 ? "s" : ""}</div>
                   )}
-                  {lerPreco(form.preco) && <div style={{ fontSize: 18, fontWeight: 800, color: "#E85D26" }}>{formatarPreco(lerPreco(form.preco))}</div>}
+                  {lerPreco(form.preco) && <div style={{ fontSize: 18, fontWeight: 800, color: "#FF6600" }}>{formatarPreco(lerPreco(form.preco))}</div>}
                 </div>
               </div>
             )}
@@ -523,7 +522,7 @@ export default function NovoAnuncio() {
                 </button>
               )}
               <button onClick={etapa === 3 ? publicar : avancar} disabled={carregando || uploadando}
-                style={{ flex: 2, padding: "10px", background: carregando || uploadando ? "#C44818" : "#E85D26", border: "none", borderRadius: 8, color: "#fff", fontSize: 15, fontWeight: 700, cursor: carregando || uploadando ? "not-allowed" : "pointer", opacity: carregando || uploadando ? 0.8 : 1 }}>
+                style={{ flex: 2, padding: "10px", background: carregando || uploadando ? "#C44818" : "#FF6600", border: "none", borderRadius: 8, color: "#fff", fontSize: 15, fontWeight: 700, cursor: carregando || uploadando ? "not-allowed" : "pointer", opacity: carregando || uploadando ? 0.8 : 1 }}>
                 {uploadando ? "Enviando fotos..." : carregando ? (editandoId ? "Salvando..." : "Publicando...") : etapa === 3 ? (editandoId ? "Salvar alterações ✓" : "Publicar anúncio 🚀") : "Continuar →"}
               </button>
             </div>

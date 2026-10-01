@@ -1,6 +1,6 @@
 "use client";
-import Image from "next/image";
 import Link from "next/link";
+import Logo from "@/components/Logo";
 import CartaoVeiculo from "@/components/CartaoVeiculo";
 import Rodape from "@/components/Rodape";
 import { slug } from "@/lib/nomesVeiculo";
@@ -58,10 +58,7 @@ export default function Home() {
       <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, background: "#fff", borderBottom: "1px solid #E8E6E1" }}>
         <div style={{ height: 60, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 16px" }}>
           <Link href="/" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none" }}>
-            <Image src="/logo.png" alt="AutoRegião" width={32} height={32} style={{ objectFit: "contain" }} />
-            <span style={{ fontSize: 18, fontWeight: 800, color: "#1A1917" }}>
-              <span style={{ color: "#E85D26" }}>Auto</span>Região
-            </span>
+            <Logo />
           </Link>
 
           <div style={{ display: "flex", gap: 24 }} className="nav-desktop">
@@ -106,12 +103,12 @@ export default function Home() {
                 <span style={{ fontSize: 16, fontWeight: 800, color: "#1A1917" }}>{carregando ? "..." : `${total} ${total === 1 ? "veículo" : "veículos"}`}</span>
                 <span style={{ fontSize: 12, color: "#7A7670", marginLeft: 6 }}>anunciados · mais recentes</span>
               </div>
-              <Link href="/veiculos" className="toque-facil" style={{ fontSize: 13, color: "#E85D26", fontWeight: 600, textDecoration: "none" }}>Buscar com filtros →</Link>
+              <Link href="/veiculos" className="toque-facil" style={{ fontSize: 13, color: "#FF6600", fontWeight: 600, textDecoration: "none" }}>Buscar com filtros →</Link>
             </div>
 
             {!carregando && carros.length === 0 && (
               <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, padding: 32, textAlign: "center", fontSize: 13, color: "#7A7670" }}>
-                Ainda não há veículos anunciados. <Link href="/anunciar" style={{ color: "#E85D26", fontWeight: 600, textDecoration: "none" }}>Anuncie o seu →</Link>
+                Ainda não há veículos anunciados. <Link href="/anunciar" style={{ color: "#FF6600", fontWeight: 600, textDecoration: "none" }}>Anuncie o seu →</Link>
               </div>
             )}
 

@@ -1,6 +1,6 @@
 "use client";
-import Image from "next/image";
 import Link from "next/link";
+import Logo from "@/components/Logo";
 import { useEffect, useState } from "react";
 import { usuarioAtual } from "@/lib/dados/usuario";
 import { buscarLojaDoUsuario } from "@/lib/dados/lojas";
@@ -56,8 +56,7 @@ export default function Planos() {
 
       <nav style={{ background: "#fff", borderBottom: "1px solid #E8E6E1", height: 60, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 16px" }}>
         <Link href="/" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none" }}>
-          <Image src="/logo.png" alt="AutoRegião" width={32} height={32} style={{ objectFit: "contain" }} />
-          <span style={{ fontSize: 18, fontWeight: 800, color: "#1A1917" }}><span style={{ color: "#E85D26" }}>Auto</span>Região</span>
+          <Logo />
         </Link>
         <Link href="/painel" style={{ fontSize: 13, color: "#7A7670", textDecoration: "none" }}>← Voltar ao painel</Link>
       </nav>
@@ -90,7 +89,7 @@ export default function Planos() {
             <div style={{ display: "inline-flex", background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 10, padding: 4, marginBottom: 20, gap: 4, flexWrap: "wrap" }}>
               {PERIODOS.map(p => (
                 <button key={p.meses} onClick={() => setMeses(p.meses)}
-                  style={{ padding: "8px 16px", borderRadius: 7, border: "none", cursor: "pointer", fontSize: 13, fontWeight: 600, background: meses === p.meses ? "#E85D26" : "transparent", color: meses === p.meses ? "#fff" : "#1A1917" }}>
+                  style={{ padding: "8px 16px", borderRadius: 7, border: "none", cursor: "pointer", fontSize: 13, fontWeight: 600, background: meses === p.meses ? "#FF6600" : "transparent", color: meses === p.meses ? "#fff" : "#1A1917" }}>
                   {p.rotulo}{p.desconto > 0 && <span style={{ marginLeft: 6, fontSize: 11, fontWeight: 700, color: meses === p.meses ? "#fff" : "#16A34A" }}>−{Math.round(p.desconto * 100)}%</span>}
                 </button>
               ))}
@@ -105,7 +104,7 @@ export default function Planos() {
                 const cheio = p.precoMensal * meses;
                 const atual = loja.plano === p.id;
                 return (
-                  <div key={p.id} style={{ background: "#fff", borderRadius: 14, border: p.id === "profissional" ? "2px solid #E85D26" : "1.5px solid #E8E6E1", padding: 20, display: "flex", flexDirection: "column" }}>
+                  <div key={p.id} style={{ background: "#fff", borderRadius: 14, border: p.id === "profissional" ? "2px solid #FF6600" : "1.5px solid #E8E6E1", padding: 20, display: "flex", flexDirection: "column" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
                       <div style={{ fontSize: 19, fontWeight: 800, color: "#1A1917" }}>{p.nome}</div>
                       {atual && <span style={{ fontSize: 10, fontWeight: 700, background: "#1A1917", color: "#fff", padding: "2px 8px", borderRadius: 20 }}>SEU PLANO</span>}
@@ -119,7 +118,7 @@ export default function Planos() {
                       <div key={r} style={{ fontSize: 12.5, color: "#1A1917", marginBottom: 7, display: "flex", gap: 6 }}><span style={{ color: "#16A34A" }}>✔</span>{r}</div>
                     ))}
                     <button onClick={() => pagar(p.id)} disabled={pagando !== null}
-                      style={{ marginTop: "auto", paddingTop: 12, paddingBottom: 12, background: p.id === "profissional" ? "#E85D26" : "#1A1917", color: "#fff", border: "none", borderRadius: 9, fontSize: 14, fontWeight: 700, cursor: pagando ? "default" : "pointer", opacity: pagando && pagando !== p.id ? 0.5 : 1 }}>
+                      style={{ marginTop: "auto", paddingTop: 12, paddingBottom: 12, background: p.id === "profissional" ? "#FF6600" : "#1A1917", color: "#fff", border: "none", borderRadius: 9, fontSize: 14, fontWeight: 700, cursor: pagando ? "default" : "pointer", opacity: pagando && pagando !== p.id ? 0.5 : 1 }}>
                       {pagando === p.id ? "Abrindo o Mercado Pago..." : atual ? "Renovar" : "Assinar"} {pagando !== p.id && `— ${formatarReais(total)}`}
                     </button>
                   </div>
@@ -128,7 +127,7 @@ export default function Planos() {
             </div>
             <p style={{ fontSize: 12, color: "#7A7670", marginTop: 14, lineHeight: 1.6 }}>
               Pagamento pelo Mercado Pago: Pix (aprovação na hora), cartão de crédito ou boleto (até 3 dias úteis). A renovação não é automática — avisamos no painel antes de vencer.
-              Você pode desistir em até 7 dias após o pagamento com reembolso total (<Link href="/termos" style={{ color: "#E85D26" }}>Termos de Uso</Link>).
+              Você pode desistir em até 7 dias após o pagamento com reembolso total (<Link href="/termos" style={{ color: "#FF6600" }}>Termos de Uso</Link>).
             </p>
           </>
         )}

@@ -47,7 +47,7 @@ export default function RetornoPagamento() {
         <h1 style={{ fontSize: 22, fontWeight: 800, color: "#1A1917", marginBottom: 10 }}>{c.titulo}</h1>
         <p style={{ fontSize: 14, color: "#7A7670", lineHeight: 1.6, marginBottom: 24 }}>{c.texto}</p>
         <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
-          <Link href="/painel" style={{ padding: "10px 20px", background: "#E85D26", color: "#fff", borderRadius: 8, textDecoration: "none", fontWeight: 600, fontSize: 14 }}>Ir para o painel</Link>
+          <Link href="/painel" style={{ padding: "10px 20px", background: "#FF6600", color: "#fff", borderRadius: 8, textDecoration: "none", fontWeight: 600, fontSize: 14 }}>Ir para o painel</Link>
           {(estado === "recusado" || estado === "sem_pagamento" || estado === "erro") && (
             <Link href="/painel/planos" style={{ padding: "10px 20px", border: "1.5px solid #E8E6E1", color: "#1A1917", borderRadius: 8, textDecoration: "none", fontWeight: 500, fontSize: 14 }}>Ver planos</Link>
           )}

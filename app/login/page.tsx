@@ -1,6 +1,6 @@
 "use client";
-import Image from "next/image";
 import Link from "next/link";
+import Logo from "@/components/Logo";
 import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { ehAdmin } from "@/lib/admin";
@@ -51,13 +51,10 @@ export default function Login() {
 
       <nav style={{ background: "#fff", borderBottom: "1px solid #E8E6E1", height: 60, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 16px", flexShrink: 0 }}>
         <Link href="/" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none" }}>
-          <Image src="/logo.png" alt="AutoRegião" width={32} height={32} style={{ objectFit: "contain" }} />
-          <span style={{ fontSize: 18, fontWeight: 800, color: "#1A1917" }}>
-            <span style={{ color: "#E85D26" }}>Auto</span>Região
-          </span>
+          <Logo />
         </Link>
         <div style={{ fontSize: 13, color: "#7A7670" }}>
-          Não tem conta? <Link href="/cadastro" style={{ color: "#E85D26", fontWeight: 600, textDecoration: "none" }}>Cadastre-se grátis</Link>
+          Não tem conta? <Link href="/cadastro" style={{ color: "#FF6600", fontWeight: 600, textDecoration: "none" }}>Cadastre-se grátis</Link>
         </div>
       </nav>
 
@@ -86,29 +83,29 @@ export default function Login() {
               <div>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
                   <label style={{ fontSize: 11, fontWeight: 600, color: "#7A7670", textTransform: "uppercase", letterSpacing: 0.5 }}>Senha</label>
-                  <Link href="/recuperar-senha" style={{ fontSize: 12, color: "#E85D26", textDecoration: "none", fontWeight: 500 }}>Esqueci minha senha</Link>
+                  <Link href="/recuperar-senha" style={{ fontSize: 12, color: "#FF6600", textDecoration: "none", fontWeight: 500 }}>Esqueci minha senha</Link>
                 </div>
                 <input type="password" placeholder="••••••••" value={senha} onChange={e => setSenha(e.target.value)} onKeyDown={e => e.key === "Enter" && handleLogin()}
                   style={{ width: "100%", padding: "12px 14px", border: "1.5px solid #E8E6E1", borderRadius: 8, fontSize: 15, color: "#1A1917", background: "#F7F6F3", outline: "none", boxSizing: "border-box" }} />
               </div>
               <button onClick={handleLogin} disabled={carregando}
-                style={{ width: "100%", padding: "14px", background: carregando ? "#C44818" : "#E85D26", color: "#fff", border: "none", borderRadius: 9, fontSize: 16, fontWeight: 700, cursor: carregando ? "not-allowed" : "pointer", opacity: carregando ? 0.8 : 1 }}>
+                style={{ width: "100%", padding: "14px", background: carregando ? "#C44818" : "#FF6600", color: "#fff", border: "none", borderRadius: 9, fontSize: 16, fontWeight: 700, cursor: carregando ? "not-allowed" : "pointer", opacity: carregando ? 0.8 : 1 }}>
                 {carregando ? "Entrando..." : "Entrar na minha conta"}
               </button>
             </div>
 
             <div style={{ textAlign: "center", fontSize: 13, color: "#7A7670", marginTop: 20 }}>
-              Ainda não tem conta? <Link href="/cadastro" style={{ color: "#E85D26", fontWeight: 600, textDecoration: "none" }}>Cadastrar agora</Link>
+              Ainda não tem conta? <Link href="/cadastro" style={{ color: "#FF6600", fontWeight: 600, textDecoration: "none" }}>Cadastrar agora</Link>
             </div>
           </div>
 
           {/* BANNER — escondido no mobile */}
           <div className="login-banner" style={{ background: "#1A1917", padding: "48px 40px", flexDirection: "column", justifyContent: "center", position: "relative", overflow: "hidden" }}>
-            <div style={{ position: "absolute", top: -60, right: -60, width: 280, height: 280, background: "radial-gradient(circle, rgba(232,93,38,0.2) 0%, transparent 70%)", pointerEvents: "none" }}></div>
+            <div style={{ position: "absolute", top: -60, right: -60, width: 280, height: 280, background: "radial-gradient(circle, rgba(255,102,0,0.2) 0%, transparent 70%)", pointerEvents: "none" }}></div>
             <div style={{ position: "relative", zIndex: 1 }}>
               <div style={{ fontSize: 48, marginBottom: 20 }}>🚗</div>
               <h2 style={{ fontSize: 24, fontWeight: 800, color: "#fff", lineHeight: 1.2, marginBottom: 16 }}>
-                O carro certo,<br /><span style={{ color: "#E85D26" }}>perto de você.</span>
+                O carro certo,<br /><span style={{ color: "#FF6600" }}>perto de você.</span>
               </h2>
               <p style={{ fontSize: 14, color: "#7A7670", lineHeight: 1.65, marginBottom: 32 }}>Veículos de lojistas da sua região, com contato direto pelo WhatsApp.</p>
               {[["🏪", "Lojas e revendas da sua região"], ["📍", "Veículos perto de você"], ["💬", "Contato direto com o lojista"]].map(([icon, text]) => (
@@ -127,7 +124,7 @@ export default function Login() {
       </div>
 
       <div style={{ padding: "16px 24px", textAlign: "center", borderTop: "1px solid #E8E6E1" }}>
-        <p style={{ fontSize: 12, color: "#7A7670" }}>© 2026 <span style={{ color: "#E85D26" }}>AutoRegião</span></p>
+        <p style={{ fontSize: 12, color: "#7A7670" }}>© 2026 <span style={{ color: "#FF6600" }}>AutoRegião</span></p>
       </div>
 
     </main>

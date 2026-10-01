@@ -117,7 +117,7 @@ function cartaoVeiculo(v: VeiculoComLoja): string {
     ${foto ? `<img src="${escaparHtml(foto)}" alt="" width="456" style="display:block;width:100%;max-height:220px;object-fit:cover">` : ""}
     <div style="padding:12px 14px">
       <div style="font-size:15px;font-weight:bold;margin:0 0 4px">${escaparHtml(v.nome ?? "Veículo")}</div>
-      <div style="font-size:17px;font-weight:bold;color:#E85D26;margin:0 0 4px">${escaparHtml(formatarPreco(v.preco))}</div>
+      <div style="font-size:17px;font-weight:bold;color:#FF6600;margin:0 0 4px">${escaparHtml(formatarPreco(v.preco))}</div>
       <div style="font-size:12px;color:#8A877F">${escaparHtml(detalhes)}</div>
     </div>
   </a>`;
@@ -150,7 +150,7 @@ export async function enviarAlertasDoDia(): Promise<{ alertas: number; emails: n
       const verTodos = `${URL_SITE}/veiculos${filtrosParaQuery(a.filtros)}`;
       secoes.push(`<h2 style="margin:24px 0 12px;font-size:16px">${escaparHtml(a.descricao)} <span style="font-weight:normal;color:#8A877F">(${total} ${total === 1 ? "novo" : "novos"})</span></h2>
         ${veiculos.map(cartaoVeiculo).join("")}
-        ${total > veiculos.length ? `<p style="margin:0 0 8px;font-size:14px"><a href="${verTodos}" style="color:#E85D26;font-weight:bold">Ver todos os ${total} anúncios →</a></p>` : ""}
+        ${total > veiculos.length ? `<p style="margin:0 0 8px;font-size:14px"><a href="${verTodos}" style="color:#FF6600;font-weight:bold">Ver todos os ${total} anúncios →</a></p>` : ""}
         <p style="margin:0 0 8px;font-size:12px"><a href="${linkPagina("cancelar", a.token)}" style="color:#8A877F">Cancelar este alerta</a></p>`);
     }
 

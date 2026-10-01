@@ -19,7 +19,7 @@ export default function BotoesConta({ celular = false }: { celular?: boolean }) 
     ? { flex: 1, padding: "10px", borderRadius: 7, fontSize: 14, fontWeight: 500, textDecoration: "none", textAlign: "center" as const }
     : { padding: "7px 16px", borderRadius: 7, fontSize: 13, fontWeight: 500, textDecoration: "none", display: "flex", alignItems: "center" };
   const contorno = { ...base, border: "1.5px solid #E8E6E1", background: "transparent", color: "#1A1917" };
-  const cheio = { ...base, background: "#E85D26", border: "1.5px solid #E85D26", color: "#fff" };
+  const cheio = { ...base, background: "#FF6600", border: "1.5px solid #FF6600", color: "#fff" };
 
   // Enquanto confere a sessão, guarda o espaço para o topo não "pular".
   if (conta === "carregando") return <span style={{ ...contorno, visibility: "hidden" }}>Entrar</span>;

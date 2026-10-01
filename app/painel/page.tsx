@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
+import Logo from "@/components/Logo";
 import { useState, useEffect } from "react";
 import { usuarioAtual, sair } from "@/lib/dados/usuario";
 import { ehAdmin } from "@/lib/admin";
@@ -99,7 +100,7 @@ export default function Painel() {
 
   const statusBadge = (status: string | null) => {
     const map: Record<string, { bg: string; color: string; label: string }> = {
-      destaque: { bg: "rgba(232,93,38,0.08)", color: "#E85D26", label: "⭐ Destaque" },
+      destaque: { bg: "rgba(255,102,0,0.08)", color: "#FF6600", label: "⭐ Destaque" },
       ativo: { bg: "rgba(22,163,74,0.08)", color: "#16A34A", label: "✅ Ativo" },
       pausado: { bg: "#F7F6F3", color: "#7A7670", label: "⏸ Pausado" },
       analise: { bg: "rgba(37,99,235,0.08)", color: "#2563EB", label: "🕐 Análise" },
@@ -175,14 +176,13 @@ export default function Painel() {
       {/* SIDEBAR DESKTOP */}
       <aside className="sidebar-desktop" style={{ width: 240, background: "#111009", minHeight: "100vh", position: "fixed", top: 0, left: 0, flexDirection: "column", zIndex: 50 }}>
         <Link href="/" style={{ padding: "18px 20px", borderBottom: "1px solid rgba(255,255,255,0.06)", display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
-          <Image src="/logo.png" alt="AutoRegião" width={32} height={32} style={{ objectFit: "contain" }} />
-          <span style={{ fontSize: 17, fontWeight: 800, color: "#fff" }}><span style={{ color: "#E85D26" }}>Auto</span>Região</span>
+          <Logo altura={24} />
         </Link>
         <div style={{ padding: "14px 20px", borderBottom: "1px solid rgba(255,255,255,0.06)", display: "flex", alignItems: "center", gap: 10 }}>
-          <div style={{ width: 40, height: 40, background: "#E85D26", borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, flexShrink: 0 }}>🏪</div>
+          <div style={{ width: 40, height: 40, background: "#FF6600", borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, flexShrink: 0 }}>🏪</div>
           <div>
             <div style={{ fontSize: 13, fontWeight: 700, color: "#fff" }}>{nomeLoja}</div>
-            <div style={{ fontSize: 10, color: "#E85D26", fontWeight: 500, marginTop: 1 }}>{nomePlano}</div>
+            <div style={{ fontSize: 10, color: "#FF6600", fontWeight: 500, marginTop: 1 }}>{nomePlano}</div>
           </div>
         </div>
         <nav style={{ flex: 1, padding: "12px 10px", display: "flex", flexDirection: "column", gap: 1 }}>
@@ -199,25 +199,25 @@ export default function Painel() {
                   <span style={{ fontSize: 15, width: 20, textAlign: "center", flexShrink: 0 }}>➕</span>
                   <span>Novo Anúncio</span>
                 </Link>
-              : <button key={item.id} onClick={() => setAbaAtiva(item.id)} style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 10px", borderRadius: 8, border: "none", background: abaAtiva === item.id ? "#E85D26" : "transparent", color: abaAtiva === item.id ? "#fff" : "rgba(255,255,255,0.5)", fontSize: 13.5, fontWeight: 500, cursor: "pointer", width: "100%", textAlign: "left" }}>
+              : <button key={item.id} onClick={() => setAbaAtiva(item.id)} style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 10px", borderRadius: 8, border: "none", background: abaAtiva === item.id ? "#FF6600" : "transparent", color: abaAtiva === item.id ? "#fff" : "rgba(255,255,255,0.5)", fontSize: 13.5, fontWeight: 500, cursor: "pointer", width: "100%", textAlign: "left" }}>
                 <span style={{ fontSize: 15, width: 20, textAlign: "center", flexShrink: 0 }}>{item.icon}</span>
                 <span style={{ flex: 1 }}>{item.label}</span>
-                {item.badge && <span style={{ background: abaAtiva === item.id ? "rgba(255,255,255,0.25)" : "#E85D26", color: "#fff", fontSize: 10, fontWeight: 700, padding: "1px 6px", borderRadius: 10 }}>{item.badge}</span>}
+                {item.badge && <span style={{ background: abaAtiva === item.id ? "rgba(255,255,255,0.25)" : "#FF6600", color: "#fff", fontSize: 10, fontWeight: 700, padding: "1px 6px", borderRadius: 10 }}>{item.badge}</span>}
               </button>
           ))}
           {souAdmin && (
-            <Link href="/admin" style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 10px", borderRadius: 8, marginTop: 10, border: "1px solid rgba(232,93,38,0.35)", background: "rgba(232,93,38,0.1)", color: "#fff", fontSize: 13.5, fontWeight: 600, textDecoration: "none" }}>
+            <Link href="/admin" style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 10px", borderRadius: 8, marginTop: 10, border: "1px solid rgba(255,102,0,0.35)", background: "rgba(255,102,0,0.1)", color: "#fff", fontSize: 13.5, fontWeight: 600, textDecoration: "none" }}>
               <span style={{ fontSize: 15, width: 20, textAlign: "center", flexShrink: 0 }}>🛡️</span>
               <span style={{ flex: 1 }}>Painel Admin</span>
             </Link>
           )}
         </nav>
         <div style={{ padding: "12px 10px", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
-          <div style={{ background: "rgba(232,93,38,0.12)", border: "1px solid rgba(232,93,38,0.25)", borderRadius: 10, padding: 12, marginBottom: 8 }}>
-            <div style={{ fontSize: 10, color: "#E85D26", fontWeight: 500, marginBottom: 4 }}>ANÚNCIOS ATIVOS</div>
+          <div style={{ background: "rgba(255,102,0,0.12)", border: "1px solid rgba(255,102,0,0.25)", borderRadius: 10, padding: 12, marginBottom: 8 }}>
+            <div style={{ fontSize: 10, color: "#FF6600", fontWeight: 500, marginBottom: 4 }}>ANÚNCIOS ATIVOS</div>
             <div style={{ fontSize: 13, fontWeight: 700, color: "#fff", marginBottom: 8 }}>{ativos} ativo{ativos !== 1 ? "s" : ""}{limite !== null ? ` de ${limite}` : ""}</div>
             <div style={{ background: "rgba(255,255,255,0.1)", borderRadius: 4, height: 4, marginBottom: 6 }}>
-              <div style={{ background: "#E85D26", height: 4, borderRadius: 4, width: limite === null ? "100%" : `${Math.min((ativos / limite) * 100, 100)}%` }}></div>
+              <div style={{ background: "#FF6600", height: 4, borderRadius: 4, width: limite === null ? "100%" : `${Math.min((ativos / limite) * 100, 100)}%` }}></div>
             </div>
             <div style={{ fontSize: 10, color: "rgba(255,255,255,0.45)" }}>{limite === null ? "Sem limite de anúncios" : `${Math.max(limite - ativos, 0)} vaga${limite - ativos === 1 ? "" : "s"} disponíve${limite - ativos === 1 ? "l" : "is"}`}</div>
           </div>
@@ -239,9 +239,9 @@ export default function Painel() {
             <div style={{ fontSize: 10, color: "#7A7670", textTransform: "capitalize" }}>{hoje}</div>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <Link href="/painel/novo-anuncio" className="header-novo" style={{ padding: "7px 14px", background: "#E85D26", borderRadius: 7, fontSize: 12, fontWeight: 700, color: "#fff", textDecoration: "none", alignItems: "center" }}>+ Novo Anúncio</Link>
+            <Link href="/painel/novo-anuncio" className="header-novo" style={{ padding: "7px 14px", background: "#FF6600", borderRadius: 7, fontSize: 12, fontWeight: 700, color: "#fff", textDecoration: "none", alignItems: "center" }}>+ Novo Anúncio</Link>
             <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "5px 10px", border: "1.5px solid #E8E6E1", borderRadius: 8, background: "#F7F6F3", cursor: "pointer" }}>
-              <div style={{ width: 26, height: 26, background: "#E85D26", borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13 }}>👤</div>
+              <div style={{ width: 26, height: 26, background: "#FF6600", borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13 }}>👤</div>
               <span style={{ fontSize: 12, fontWeight: 500, color: "#1A1917" }}>{nomeUsuario}</span>
             </div>
           </div>
@@ -256,17 +256,17 @@ export default function Painel() {
           {lojaCarregada && (situacao.tipo === "sem_loja" || (situacao.tipo === "em_dia" && (situacao.avisar || emTrial)) || situacao.tipo === "carencia" || situacao.tipo === "vencido") && (() => {
             const grave = situacao.tipo === "carencia" || situacao.tipo === "vencido";
             return (
-              <div style={{ background: grave ? "#FEF2F2" : "rgba(232,93,38,0.08)", border: `1px solid ${grave ? "#FCA5A5" : "rgba(232,93,38,0.2)"}`, borderRadius: 10, padding: "12px 14px", display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16, flexWrap: "wrap", gap: 8 }}>
+              <div style={{ background: grave ? "#FEF2F2" : "rgba(255,102,0,0.08)", border: `1px solid ${grave ? "#FCA5A5" : "rgba(255,102,0,0.2)"}`, borderRadius: 10, padding: "12px 14px", display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16, flexWrap: "wrap", gap: 8 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                   <span style={{ fontSize: 16 }}>{grave ? "⚠️" : "⏳"}</span>
                   <div style={{ fontSize: 13, color: "#1A1917", lineHeight: 1.5 }}>
                     {situacao.tipo === "sem_loja" && "Sua conta ainda não tem uma loja vinculada. Você pode anunciar 1 veículo como particular."}
-                    {situacao.tipo === "em_dia" && <>{emTrial ? "Período grátis" : `Plano ${nomePlano}`} termina em <strong style={{ color: "#E85D26" }}>{situacao.diasRestantes} {situacao.diasRestantes === 1 ? "dia" : "dias"}</strong> ({dataFim}).</>}
+                    {situacao.tipo === "em_dia" && <>{emTrial ? "Período grátis" : `Plano ${nomePlano}`} termina em <strong style={{ color: "#FF6600" }}>{situacao.diasRestantes} {situacao.diasRestantes === 1 ? "dia" : "dias"}</strong> ({dataFim}).</>}
                     {situacao.tipo === "carencia" && <>Seu plano <strong>venceu em {dataFim}</strong>. Seus anúncios <strong style={{ color: "#DC2626" }}>saem do site em {situacao.diasAteSairDoAr} {situacao.diasAteSairDoAr === 1 ? "dia" : "dias"}</strong> se o plano não for renovado.</>}
                     {situacao.tipo === "vencido" && <>Seu plano venceu em {dataFim}. <strong style={{ color: "#DC2626" }}>Seus anúncios estão fora do site</strong> e voltam assim que o plano for renovado.</>}
                   </div>
                 </div>
-                {situacao.tipo !== "sem_loja" && <Link href="/painel/planos" style={{ fontSize: 12, fontWeight: 600, color: "#E85D26", textDecoration: "none" }}>Ver planos →</Link>}
+                {situacao.tipo !== "sem_loja" && <Link href="/painel/planos" style={{ fontSize: 12, fontWeight: 600, color: "#FF6600", textDecoration: "none" }}>Ver planos →</Link>}
               </div>
             );
           })()}
@@ -274,12 +274,12 @@ export default function Painel() {
           {/* STATS */}
           <div className="stats-grid" style={{ marginBottom: 16 }}>
             {[
-              { label: "Visualizações (30 dias)", value: stats ? stats.visualizacoes_30d.toLocaleString("pt-BR") : "—", change: varVisitas.texto, up: varVisitas.up, icon: "👁️", bg: "rgba(232,93,38,0.08)" },
+              { label: "Visualizações (30 dias)", value: stats ? stats.visualizacoes_30d.toLocaleString("pt-BR") : "—", change: varVisitas.texto, up: varVisitas.up, icon: "👁️", bg: "rgba(255,102,0,0.08)" },
               { label: "Contatos (30 dias)", value: stats ? stats.contatos_30d.toLocaleString("pt-BR") : "—", change: varContatos.texto, up: varContatos.up, icon: "💬", bg: "rgba(22,163,74,0.08)" },
               { label: "Anúncios ativos", value: String(ativos), change: foraDoAr ? "fora do site (plano vencido)" : limite === null ? "sem limite" : `limite do plano: ${limite}`, up: false, icon: "🚗", bg: "rgba(37,99,235,0.08)" },
               vitalicio
-                ? { label: "Plano", value: "Vitalício", change: "sem vencimento", up: true, icon: "👑", bg: "rgba(232,93,38,0.08)" }
-                : { label: emTrial ? "Período grátis" : `Plano ${nomePlano}`, value: situacao.tipo === "em_dia" ? String(situacao.diasRestantes) : situacao.tipo === "sem_loja" ? "—" : "Vencido", change: situacao.tipo === "em_dia" ? (situacao.diasRestantes === 1 ? "dia restante" : "dias restantes") : situacao.tipo === "carencia" ? `sai do site em ${situacao.diasAteSairDoAr}d` : situacao.tipo === "vencido" ? "anúncios fora do site" : "sem loja", up: situacao.tipo === "em_dia", icon: "⏳", bg: "rgba(232,93,38,0.08)" },
+                ? { label: "Plano", value: "Vitalício", change: "sem vencimento", up: true, icon: "👑", bg: "rgba(255,102,0,0.08)" }
+                : { label: emTrial ? "Período grátis" : `Plano ${nomePlano}`, value: situacao.tipo === "em_dia" ? String(situacao.diasRestantes) : situacao.tipo === "sem_loja" ? "—" : "Vencido", change: situacao.tipo === "em_dia" ? (situacao.diasRestantes === 1 ? "dia restante" : "dias restantes") : situacao.tipo === "carencia" ? `sai do site em ${situacao.diasAteSairDoAr}d` : situacao.tipo === "vencido" ? "anúncios fora do site" : "sem loja", up: situacao.tipo === "em_dia", icon: "⏳", bg: "rgba(255,102,0,0.08)" },
             ].map(stat => (
               <div key={stat.label} style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, padding: 14 }}>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
@@ -299,15 +299,15 @@ export default function Painel() {
               <div style={{ padding: "14px 18px", borderBottom: "1px solid #E8E6E1", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                 <div style={{ fontSize: 14, fontWeight: 700, color: "#1A1917" }}>{verTodos ? `Meus anúncios (${anunciosReais.length})` : "Anúncios recentes"}</div>
                 {verTodos
-                  ? <button onClick={() => setAbaAtiva("dashboard")} style={{ fontSize: 12, color: "#E85D26", fontWeight: 500, background: "none", border: "none", cursor: "pointer" }}>← Voltar ao resumo</button>
-                  : anunciosReais.length > 5 && <button onClick={() => setAbaAtiva("anuncios")} style={{ fontSize: 12, color: "#E85D26", fontWeight: 500, background: "none", border: "none", cursor: "pointer" }}>Ver todos ({anunciosReais.length}) →</button>}
+                  ? <button onClick={() => setAbaAtiva("dashboard")} style={{ fontSize: 12, color: "#FF6600", fontWeight: 500, background: "none", border: "none", cursor: "pointer" }}>← Voltar ao resumo</button>
+                  : anunciosReais.length > 5 && <button onClick={() => setAbaAtiva("anuncios")} style={{ fontSize: 12, color: "#FF6600", fontWeight: 500, background: "none", border: "none", cursor: "pointer" }}>Ver todos ({anunciosReais.length}) →</button>}
               </div>
 
               {anunciosReais.length === 0 ? (
                 <div style={{ padding: "32px", textAlign: "center" }}>
                   <div style={{ fontSize: 32, marginBottom: 8 }}>🚗</div>
                   <div style={{ fontSize: 13, color: "#7A7670", marginBottom: 12 }}>Nenhum anúncio cadastrado ainda.</div>
-                  <Link href="/painel/novo-anuncio" style={{ padding: "8px 16px", background: "#E85D26", color: "#fff", borderRadius: 7, textDecoration: "none", fontSize: 13, fontWeight: 600 }}>+ Criar primeiro anúncio</Link>
+                  <Link href="/painel/novo-anuncio" style={{ padding: "8px 16px", background: "#FF6600", color: "#fff", borderRadius: 7, textDecoration: "none", fontSize: 13, fontWeight: 600 }}>+ Criar primeiro anúncio</Link>
                 </div>
               ) : (
                 <>
@@ -411,7 +411,7 @@ export default function Painel() {
                       const dia = new Date(v.dia + "T12:00:00").toLocaleDateString("pt-BR", { weekday: "short" }).replace(".", "");
                       return (
                         <div key={v.dia} title={`${v.total} visita${v.total === 1 ? "" : "s"}`} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
-                          <div style={{ width: "100%", height: Math.max(3, Math.round((v.total / maxVisitas) * 60)), background: barraHoje ? "#E85D26" : "rgba(232,93,38,0.25)", borderRadius: "4px 4px 0 0" }}></div>
+                          <div style={{ width: "100%", height: Math.max(3, Math.round((v.total / maxVisitas) * 60)), background: barraHoje ? "#FF6600" : "rgba(255,102,0,0.25)", borderRadius: "4px 4px 0 0" }}></div>
                           <span style={{ fontSize: 9, color: "#7A7670", textTransform: "capitalize" }}>{dia}</span>
                         </div>
                       );
@@ -445,12 +445,12 @@ export default function Painel() {
             <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, overflow: "hidden" }}>
               <div style={{ padding: "14px 18px", borderBottom: "1px solid #E8E6E1", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                 <div style={{ fontSize: 14, fontWeight: 700, color: "#1A1917" }}>Meu plano</div>
-                {!vitalicio && <Link href="/painel/planos" style={{ fontSize: 12, color: "#E85D26", fontWeight: 500, textDecoration: "none" }}>Ver planos →</Link>}
+                {!vitalicio && <Link href="/painel/planos" style={{ fontSize: 12, color: "#FF6600", fontWeight: 500, textDecoration: "none" }}>Ver planos →</Link>}
               </div>
               <div style={{ padding: "0 18px" }}>
                 {(vitalicio
-                  ? [["Plano atual", "👑 Acesso vitalício", "#E85D26"], ["Anúncios usados", `${anunciosReais.length} (sem limite)`, "#1A1917"], ["Vencimento", "Nunca", "#16A34A"]]
-                  : [["Plano atual", nomePlano, "#E85D26"], ["Anúncios ativos", limite === null ? `${ativos} (sem limite)` : `${ativos} / ${limite}`, "#1A1917"], [emTrial ? "Período grátis" : "Validade", textoPeriodo, situacao.tipo === "em_dia" ? "#E85D26" : "#DC2626"], ["Destaque nos resultados", loja?.plano === "profissional" || loja?.plano === "premium" ? "✅ Incluído" : "Planos Profissional e Premium", "#7A7670"]]
+                  ? [["Plano atual", "👑 Acesso vitalício", "#FF6600"], ["Anúncios usados", `${anunciosReais.length} (sem limite)`, "#1A1917"], ["Vencimento", "Nunca", "#16A34A"]]
+                  : [["Plano atual", nomePlano, "#FF6600"], ["Anúncios ativos", limite === null ? `${ativos} (sem limite)` : `${ativos} / ${limite}`, "#1A1917"], [emTrial ? "Período grátis" : "Validade", textoPeriodo, situacao.tipo === "em_dia" ? "#FF6600" : "#DC2626"], ["Destaque nos resultados", loja?.plano === "profissional" || loja?.plano === "premium" ? "✅ Incluído" : "Planos Profissional e Premium", "#7A7670"]]
                 ).map(([label, value, color]) => (
                   <div key={label} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 0", borderBottom: "1px solid #E8E6E1" }}>
                     <span style={{ fontSize: 12.5, color: "#7A7670" }}>{label}</span>
@@ -468,13 +468,13 @@ export default function Painel() {
                       style={{ flex: 1, padding: "8px 12px", border: `1.5px solid ${cupomStatus === "invalido" || cupomStatus === "erro" || cupomStatus === "usado" ? "#DC2626" : "#E8E6E1"}`, borderRadius: 7, fontSize: 13, background: "#fff", color: "#1A1917", outline: "none", letterSpacing: 1 }}
                     />
                     <button onClick={resgatarCupom} disabled={cupomStatus === "loading" || cupomStatus === "ok"}
-                      style={{ padding: "8px 14px", background: cupomStatus === "ok" ? "#16A34A" : "#E85D26", color: "#fff", border: "none", borderRadius: 7, fontSize: 12, fontWeight: 600, cursor: cupomStatus === "loading" || cupomStatus === "ok" ? "default" : "pointer", whiteSpace: "nowrap" as const, opacity: cupomStatus === "loading" ? 0.7 : 1 }}>
+                      style={{ padding: "8px 14px", background: cupomStatus === "ok" ? "#16A34A" : "#FF6600", color: "#fff", border: "none", borderRadius: 7, fontSize: 12, fontWeight: 600, cursor: cupomStatus === "loading" || cupomStatus === "ok" ? "default" : "pointer", whiteSpace: "nowrap" as const, opacity: cupomStatus === "loading" ? 0.7 : 1 }}>
                       {cupomStatus === "loading" ? "..." : cupomStatus === "ok" ? "✅ Ok" : "Resgatar"}
                     </button>
                   </div>
                   {msg && <div style={{ fontSize: 11, color: msg.cor, marginTop: 6, fontWeight: 500 }}>{msg.texto}</div>}
                 </div>
-                <Link href="/painel/planos" style={{ display: "block", textAlign: "center", width: "100%", padding: 10, background: "#E85D26", color: "#fff", borderRadius: 8, fontSize: 13, fontWeight: 700, textDecoration: "none", boxSizing: "border-box" }}>
+                <Link href="/painel/planos" style={{ display: "block", textAlign: "center", width: "100%", padding: 10, background: "#FF6600", color: "#fff", borderRadius: 8, fontSize: 13, fontWeight: 700, textDecoration: "none", boxSizing: "border-box" }}>
                   Ver planos e renovar
                 </Link>
               </div>}
@@ -494,13 +494,13 @@ export default function Painel() {
         ].map(item => (
           item.link
             ? <Link key={item.id} href={item.link} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2, textDecoration: "none", padding: "4px 12px" }}>
-                <div style={{ width: 36, height: 36, background: "#E85D26", borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>{item.icon}</div>
-                <span style={{ fontSize: 10, color: "#E85D26", fontWeight: 600 }}>{item.label}</span>
+                <div style={{ width: 36, height: 36, background: "#FF6600", borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>{item.icon}</div>
+                <span style={{ fontSize: 10, color: "#FF6600", fontWeight: 600 }}>{item.label}</span>
               </Link>
             : <button key={item.id} onClick={() => setAbaAtiva(item.id)}
                 style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2, background: "none", border: "none", cursor: "pointer", padding: "4px 12px", position: "relative" }}>
                 <span style={{ fontSize: 20 }}>{item.icon}</span>
-                <span style={{ fontSize: 10, color: abaAtiva === item.id ? "#E85D26" : "rgba(255,255,255,0.4)", fontWeight: abaAtiva === item.id ? 600 : 400 }}>{item.label}</span>
+                <span style={{ fontSize: 10, color: abaAtiva === item.id ? "#FF6600" : "rgba(255,255,255,0.4)", fontWeight: abaAtiva === item.id ? 600 : 400 }}>{item.label}</span>
               </button>
         ))}
         {souAdmin && (

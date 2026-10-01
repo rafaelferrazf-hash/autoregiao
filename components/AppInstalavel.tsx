@@ -78,7 +78,7 @@ export default function AppInstalavel() {
         </div>
       </div>
       {evento && (
-        <button onClick={instalar} style={{ background: "#E85D26", color: "#fff", border: "none", borderRadius: 8, padding: "9px 14px", fontSize: 13, fontWeight: 700, cursor: "pointer", flexShrink: 0 }}>Instalar</button>
+        <button onClick={instalar} style={{ background: "#FF6600", color: "#fff", border: "none", borderRadius: 8, padding: "9px 14px", fontSize: 13, fontWeight: 700, cursor: "pointer", flexShrink: 0 }}>Instalar</button>
       )}
       <button onClick={fechar} aria-label="Fechar" style={{ background: "none", border: "none", color: "#A8A49D", fontSize: 20, cursor: "pointer", padding: 4, flexShrink: 0 }}>×</button>
     </div>

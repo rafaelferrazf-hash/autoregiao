@@ -1,5 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
+import Logo from "@/components/Logo";
 import BotoesConta from "@/components/BotoesConta";
 import CartaoVeiculo from "@/components/CartaoVeiculo";
 import CriarAlerta from "@/components/CriarAlerta";
@@ -25,8 +25,7 @@ export default function PaginaVitrine({ vitrine, veiculos, total }: { vitrine: V
 
       <nav style={{ background: "#fff", borderBottom: "1px solid #E8E6E1", height: 60, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 16px" }}>
         <Link href="/" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none" }}>
-          <Image src="/logo.png" alt="AutoRegião" width={32} height={32} style={{ objectFit: "contain" }} />
-          <span style={{ fontSize: 18, fontWeight: 800, color: "#1A1917" }}><span style={{ color: "#E85D26" }}>Auto</span>Região</span>
+          <Logo />
         </Link>
         <div className="vit-links" style={{ display: "flex", gap: 24 }}>
           {[["Buscar veículos", "/veiculos"], ["★ Favoritos", "/favoritos"], ["Anunciar", "/anunciar"]].map(([nome, href]) => (
@@ -72,7 +71,7 @@ export default function PaginaVitrine({ vitrine, veiculos, total }: { vitrine: V
           </div>
 
           <aside style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-            <Link href={`/veiculos?${busca}`} style={{ display: "block", textAlign: "center", padding: 11, background: "#E85D26", color: "#fff", borderRadius: 8, fontSize: 14, fontWeight: 700, textDecoration: "none" }}>
+            <Link href={`/veiculos?${busca}`} style={{ display: "block", textAlign: "center", padding: 11, background: "#FF6600", color: "#fff", borderRadius: 8, fontSize: 14, fontWeight: 700, textDecoration: "none" }}>
               🔧 Refinar com filtros
             </Link>
             {vitrine.atalhos.filter(a => a.links.length > 0).map(a => (
@@ -80,7 +79,7 @@ export default function PaginaVitrine({ vitrine, veiculos, total }: { vitrine: V
                 <div style={{ fontSize: 13, fontWeight: 700, color: "#1A1917", marginBottom: 10 }}>{a.titulo}</div>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
                   {a.links.slice(0, 20).map(l => (
-                    <Link key={l.href} href={l.href} style={{ ...chip, ...(l.href === vitrine.rota ? { borderColor: "#E85D26", color: "#E85D26" } : {}) }}>
+                    <Link key={l.href} href={l.href} style={{ ...chip, ...(l.href === vitrine.rota ? { borderColor: "#FF6600", color: "#FF6600" } : {}) }}>
                       {l.nome}{l.qtd ? <span style={{ color: "#A8A49D" }}> ({l.qtd})</span> : null}
                     </Link>
                   ))}

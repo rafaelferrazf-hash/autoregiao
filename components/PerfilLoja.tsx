@@ -65,7 +65,7 @@ export default function PerfilLoja({ loja, onSalvo }: { loja: Loja | null; onSal
           <div style={{ fontSize: 15, fontWeight: 700, color: "#1A1917" }}>Perfil da loja</div>
           <div style={{ fontSize: 12, color: "#7A7670" }}>Estes dados aparecem na página pública da sua loja.</div>
         </div>
-        <Link href={`/loja/${loja.id}`} target="_blank" style={{ fontSize: 12, color: "#E85D26", fontWeight: 600, textDecoration: "none" }}>Ver minha página →</Link>
+        <Link href={`/loja/${loja.id}`} target="_blank" style={{ fontSize: 12, color: "#FF6600", fontWeight: 600, textDecoration: "none" }}>Ver minha página →</Link>
       </div>
 
       <div style={{ padding: 18, display: "flex", flexDirection: "column", gap: 16 }}>
@@ -127,7 +127,7 @@ export default function PerfilLoja({ loja, onSalvo }: { loja: Loja | null; onSal
 
         <div>
           <button onClick={salvar} disabled={salvando}
-            style={{ padding: "11px 22px", background: "#E85D26", color: "#fff", border: "none", borderRadius: 8, fontSize: 14, fontWeight: 700, cursor: salvando ? "default" : "pointer", opacity: salvando ? 0.7 : 1 }}>
+            style={{ padding: "11px 22px", background: "#FF6600", color: "#fff", border: "none", borderRadius: 8, fontSize: 14, fontWeight: 700, cursor: salvando ? "default" : "pointer", opacity: salvando ? 0.7 : 1 }}>
             {salvando ? "Salvando..." : "Salvar perfil"}
           </button>
         </div>

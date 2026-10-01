@@ -1,6 +1,6 @@
 "use client";
-import Image from "next/image";
 import Link from "next/link";
+import Logo from "@/components/Logo";
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
@@ -17,7 +17,7 @@ type Aba = (typeof ABAS)[number];
 
 const COR_STATUS: Record<string, { bg: string; color: string }> = {
   ativo: { bg: "#D1FAE5", color: "#065F46" },
-  vitalicio: { bg: "rgba(232,93,38,0.12)", color: "#C44818" },
+  vitalicio: { bg: "rgba(255,102,0,0.12)", color: "#C44818" },
   assinante: { bg: "#D1FAE5", color: "#065F46" },
   trial: { bg: "#FEF3C7", color: "#92400E" },
   vencida: { bg: "#FEE2E2", color: "#991B1B" },
@@ -125,11 +125,8 @@ export default function Admin() {
       {/* NAVBAR */}
       <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, background: "#1A1917", height: 60, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 16px" }}>
         <Link href="/" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none" }}>
-          <Image src="/logo.png" alt="AutoRegião" width={28} height={28} style={{ objectFit: "contain" }} />
-          <span style={{ fontSize: 16, fontWeight: 800, color: "#fff" }}>
-            <span style={{ color: "#E85D26" }}>Auto</span>Região
-          </span>
-          <span style={{ background: "#E85D26", color: "#fff", fontSize: 10, fontWeight: 600, padding: "2px 7px", borderRadius: 4, marginLeft: 4 }}>ADMIN</span>
+          <Logo altura={26} />
+          <span style={{ background: "#FF6600", color: "#fff", fontSize: 10, fontWeight: 600, padding: "2px 7px", borderRadius: 4, marginLeft: 4 }}>ADMIN</span>
         </Link>
         <div className="admin-nav-links" style={{ gap: 20, alignItems: "center" }}>
           {ABAS.map(item => (
@@ -150,7 +147,7 @@ export default function Admin() {
           {ABAS.map(item => (
             <button key={item} onClick={() => { setAba(item); setMenuAberto(false); }} style={{ fontSize: 15, color: "#fff", background: "none", border: "none", textAlign: "left", fontWeight: aba === item ? 700 : 500, cursor: "pointer", padding: 0 }}>{item}</button>
           ))}
-          <button onClick={async () => { await supabase.auth.signOut(); window.location.href = "/login"; }} style={{ fontSize: 15, color: "#E85D26", background: "none", border: "none", textAlign: "left", fontWeight: 500, cursor: "pointer", padding: 0 }}>Sair</button>
+          <button onClick={async () => { await supabase.auth.signOut(); window.location.href = "/login"; }} style={{ fontSize: 15, color: "#FF6600", background: "none", border: "none", textAlign: "left", fontWeight: 500, cursor: "pointer", padding: 0 }}>Sair</button>
         </div>
       )}
 
@@ -178,7 +175,7 @@ export default function Admin() {
                     <span style={{ fontSize: 18 }}>{s.icon}</span>
                   </div>
                   <div style={{ fontSize: 24, fontWeight: 800, color: "#1A1917", marginBottom: 4 }}>{s.value}</div>
-                  <div style={{ fontSize: 11, color: "#E85D26" }}>{s.change}</div>
+                  <div style={{ fontSize: 11, color: "#FF6600" }}>{s.change}</div>
                 </div>
               ))}
             </div>
@@ -228,7 +225,7 @@ export default function Admin() {
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
                 <div style={{ ...tituloCartao, marginBottom: 0 }}>🎟️ Cupons de extensão</div>
                 <button onClick={gerarCupom} disabled={gerando}
-                  style={{ padding: "6px 14px", background: gerando ? "#C44818" : "#E85D26", border: "none", borderRadius: 7, color: "#fff", fontSize: 12, fontWeight: 600, cursor: gerando ? "default" : "pointer", opacity: gerando ? 0.7 : 1 }}>
+                  style={{ padding: "6px 14px", background: gerando ? "#C44818" : "#FF6600", border: "none", borderRadius: 7, color: "#fff", fontSize: 12, fontWeight: 600, cursor: gerando ? "default" : "pointer", opacity: gerando ? 0.7 : 1 }}>
                   {gerando ? "Gerando..." : "+ Gerar cupom"}
                 </button>
               </div>
@@ -361,7 +358,7 @@ export default function Admin() {
                   {(resumo?.usuarios ?? []).map(u => (
                     <tr key={u.id} style={{ borderBottom: "1px solid #F7F6F3" }}>
                       <td style={td}>
-                        <div style={{ fontWeight: 600 }}>{u.nome || "—"} {u.admin && <span style={{ fontSize: 10, fontWeight: 700, background: "#E85D26", color: "#fff", padding: "1px 6px", borderRadius: 4, marginLeft: 4 }}>ADMIN</span>}</div>
+                        <div style={{ fontWeight: 600 }}>{u.nome || "—"} {u.admin && <span style={{ fontSize: 10, fontWeight: 700, background: "#FF6600", color: "#fff", padding: "1px 6px", borderRadius: 4, marginLeft: 4 }}>ADMIN</span>}</div>
                         <div style={{ fontSize: 12, color: "#7A7670" }}>{u.email}</div>
                       </td>
                       <td style={{ ...td, color: u.loja ? "#1A1917" : "#7A7670" }}>{u.loja ?? "—"}</td>

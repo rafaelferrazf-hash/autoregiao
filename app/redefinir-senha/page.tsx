@@ -1,6 +1,6 @@
 "use client";
-import Image from "next/image";
 import Link from "next/link";
+import Logo from "@/components/Logo";
 import { useState, useEffect, useSyncExternalStore } from "react";
 import { supabase } from "@/lib/supabase";
 
@@ -81,10 +81,7 @@ export default function RedefinirSenha() {
 
       <nav style={{ background: "#fff", borderBottom: "1px solid #E8E6E1", height: 60, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 16px", flexShrink: 0 }}>
         <Link href="/" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none" }}>
-          <Image src="/logo.png" alt="AutoRegião" width={32} height={32} style={{ objectFit: "contain" }} />
-          <span style={{ fontSize: 18, fontWeight: 800, color: "#1A1917" }}>
-            <span style={{ color: "#E85D26" }}>Auto</span>Região
-          </span>
+          <Logo />
         </Link>
       </nav>
 
@@ -101,7 +98,7 @@ export default function RedefinirSenha() {
               <div style={{ background: "#FEE2E2", border: "1.5px solid #FCA5A5", borderRadius: 8, padding: "12px 14px", margin: "16px 0", fontSize: 13, color: "#991B1B", lineHeight: 1.5 }}>
                 ⚠️ Este link é inválido ou já expirou. Peça um link novo — ele vale por tempo limitado e só pode ser usado uma vez.
               </div>
-              <Link href="/recuperar-senha" style={{ display: "block", textAlign: "center", fontSize: 14, color: "#E85D26", fontWeight: 600, textDecoration: "none" }}>Pedir novo link</Link>
+              <Link href="/recuperar-senha" style={{ display: "block", textAlign: "center", fontSize: 14, color: "#FF6600", fontWeight: 600, textDecoration: "none" }}>Pedir novo link</Link>
             </>
           )}
 
@@ -122,7 +119,7 @@ export default function RedefinirSenha() {
                   <input type="password" placeholder="Repita a senha" value={confirmacao} onChange={e => setConfirmacao(e.target.value)} onKeyDown={e => e.key === "Enter" && handleSalvar()} style={inputStyle} />
                 </div>
                 <button onClick={handleSalvar} disabled={carregando || sucesso}
-                  style={{ width: "100%", padding: "14px", background: carregando ? "#C44818" : "#E85D26", color: "#fff", border: "none", borderRadius: 9, fontSize: 16, fontWeight: 700, cursor: carregando ? "not-allowed" : "pointer", opacity: carregando ? 0.8 : 1 }}>
+                  style={{ width: "100%", padding: "14px", background: carregando ? "#C44818" : "#FF6600", color: "#fff", border: "none", borderRadius: 9, fontSize: 16, fontWeight: 700, cursor: carregando ? "not-allowed" : "pointer", opacity: carregando ? 0.8 : 1 }}>
                   {carregando ? "Salvando..." : "Salvar senha nova"}
                 </button>
               </div>
@@ -132,7 +129,7 @@ export default function RedefinirSenha() {
       </div>
 
       <div style={{ padding: "16px 24px", textAlign: "center", borderTop: "1px solid #E8E6E1" }}>
-        <p style={{ fontSize: 12, color: "#7A7670" }}>© 2026 <span style={{ color: "#E85D26" }}>AutoRegião</span></p>
+        <p style={{ fontSize: 12, color: "#7A7670" }}>© 2026 <span style={{ color: "#FF6600" }}>AutoRegião</span></p>
       </div>
 
     </main>

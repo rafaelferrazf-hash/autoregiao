@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Plus_Jakarta_Sans } from "next/font/google";
+import { Exo_2, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { NOME_SITE, URL_SITE } from "@/lib/site";
 import AppInstalavel from "@/components/AppInstalavel";
@@ -7,6 +7,12 @@ import AppInstalavel from "@/components/AppInstalavel";
 // Fonte única do site (títulos, preços e textos), servida pelo próprio site.
 const fonte = Plus_Jakarta_Sans({
   variable: "--font-jakarta",
+  subsets: ["latin"],
+});
+
+// Fonte dos títulos, do manual da marca (Exo 2: forte, com cara automotiva).
+const fonteTitulos = Exo_2({
+  variable: "--font-titulos",
   subsets: ["latin"],
 });
 
@@ -22,7 +28,7 @@ export const metadata: Metadata = {
     type: "website",
     title: "AutoRegião — O carro da sua região",
     description: descricaoPadrao,
-    images: [{ url: "/logo.png", alt: NOME_SITE }],
+    images: [{ url: "/marca/og.png", width: 1200, height: 630, alt: NOME_SITE }],
   },
   // App instalável (manifest em app/manifest.ts): ícone e nome no iPhone.
   appleWebApp: { capable: true, title: NOME_SITE, statusBarStyle: "default" },
@@ -41,7 +47,7 @@ export default function RootLayout({
   return (
     <html
       lang="pt-BR"
-      className={`${fonte.variable} h-full antialiased`}
+      className={`${fonte.variable} ${fonteTitulos.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         {children}

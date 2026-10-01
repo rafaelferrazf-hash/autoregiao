@@ -24,6 +24,11 @@ body {
   font-family: var(--font-jakarta), system-ui, sans-serif;
 }
 
+/* Títulos na fonte da marca (manual: Exo 2). */
+h1, h2, h3 {
+  font-family: var(--font-titulos), var(--font-jakarta), system-ui, sans-serif;
+}
+
 /* Campos e botões usam a mesma fonte do site. */
 button, input, select, textarea {
   font-family: inherit;

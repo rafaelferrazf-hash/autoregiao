@@ -1,5 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
+import Logo from "@/components/Logo";
 import CartaoVeiculo from "@/components/CartaoVeiculo";
 import Rodape from "@/components/Rodape";
 import { notFound } from "next/navigation";
@@ -90,10 +90,7 @@ export default async function PerfilLoja({ params }: { params: Promise<{ id: str
       {/* NAVBAR */}
       <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, background: "#fff", borderBottom: "1px solid #E8E6E1", height: 60, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 16px" }}>
         <Link href="/" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
-          <Image src="/logo.png" alt="AutoRegião" width={36} height={36} style={{ objectFit: "contain" }} />
-          <span style={{ fontSize: 20, fontWeight: 800, color: "#1A1917" }}>
-            <span style={{ color: "#E85D26" }}>Auto</span>Região
-          </span>
+          <Logo />
         </Link>
         <Link href="/veiculos" style={{ fontSize: 13, color: "#7A7670", textDecoration: "none" }}>← Ver todos os veículos</Link>
       </nav>
@@ -103,7 +100,7 @@ export default async function PerfilLoja({ params }: { params: Promise<{ id: str
         {/* HEADER DA LOJA */}
         <div style={{ background: "#1A1917", padding: "32px 16px" }}>
           <div style={{ maxWidth: 1000, margin: "0 auto", display: "flex", alignItems: "flex-start", gap: 24, flexWrap: "wrap" }}>
-            <div style={{ width: 80, height: 80, borderRadius: 16, background: "#E85D26", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 32, flexShrink: 0 }}>
+            <div style={{ width: 80, height: 80, borderRadius: 16, background: "#FF6600", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 32, flexShrink: 0 }}>
               🏪
             </div>
             <div style={{ flex: 1, minWidth: 200 }}>

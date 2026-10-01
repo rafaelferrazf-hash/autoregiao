@@ -1,5 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
+import Logo from "@/components/Logo";
 
 // Moldura das páginas /termos e /privacidade (texto longo, leitura confortável no celular).
 export default function PaginaLegal({ titulo, atualizadoEm, children }: { titulo: string; atualizadoEm: string; children: React.ReactNode }) {
@@ -11,15 +11,12 @@ export default function PaginaLegal({ titulo, atualizadoEm, children }: { titulo
         .legal p { margin: 0 0 12px; }
         .legal ul { margin: 0 0 12px; padding-left: 20px; }
         .legal li { margin-bottom: 6px; }
-        .legal a { color: #E85D26; }
+        .legal a { color: #FF6600; }
         .legal strong { color: #1A1917; }
       `}</style>
       <nav style={{ background: "#fff", borderBottom: "1px solid #E8E6E1", height: 60, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 16px" }}>
         <Link href="/" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none" }}>
-          <Image src="/logo.png" alt="AutoRegião" width={32} height={32} style={{ objectFit: "contain" }} />
-          <span style={{ fontSize: 18, fontWeight: 800, color: "#1A1917" }}>
-            <span style={{ color: "#E85D26" }}>Auto</span>Região
-          </span>
+          <Logo />
         </Link>
         <Link href="/" style={{ fontSize: 13, color: "#7A7670", textDecoration: "none" }}>← Voltar ao site</Link>
       </nav>

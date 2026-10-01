@@ -20,8 +20,8 @@ export default function CartaoVeiculo({ car, mostrarLoja = true }: { car: DadosC
   const local = [car.lojas?.nome, car.lojas?.cidade || car.cidade].filter(Boolean).join(" · ");
   return (
     <Link href={`/veiculo/${car.id}`} style={{ textDecoration: "none" }}>
-      <div style={{ background: "#fff", borderRadius: 12, overflow: "hidden", border: car.destaque ? "1.5px solid #E85D26" : "1.5px solid #E8E6E1", position: "relative", height: "100%" }}>
-        {car.destaque && <span style={{ position: "absolute", top: 8, left: 8, background: "#E85D26", color: "#fff", fontSize: 10, fontWeight: 500, padding: "3px 8px", borderRadius: 20, zIndex: 2 }}>⭐ Destaque</span>}
+      <div style={{ background: "#fff", borderRadius: 12, overflow: "hidden", border: car.destaque ? "1.5px solid #FF6600" : "1.5px solid #E8E6E1", position: "relative", height: "100%" }}>
+        {car.destaque && <span style={{ position: "absolute", top: 8, left: 8, background: "#FF6600", color: "#fff", fontSize: 10, fontWeight: 500, padding: "3px 8px", borderRadius: 20, zIndex: 2 }}>⭐ Destaque</span>}
         <BotaoFavorito id={car.id} />
         <div style={{ position: "relative", height: 150, width: "100%", background: "#F7F6F3" }}>
           {car.fotos && car.fotos.length > 0
@@ -41,7 +41,7 @@ export default function CartaoVeiculo({ car, mostrarLoja = true }: { car: DadosC
           </div>
           {mostrarLoja && local && (
             <div style={{ fontSize: 10.5, color: "#7A7670", marginTop: 5, display: "flex", alignItems: "center", gap: 3 }}>
-              <span style={{ width: 5, height: 5, background: "#E85D26", borderRadius: "50%", display: "inline-block", flexShrink: 0 }}></span>
+              <span style={{ width: 5, height: 5, background: "#FF6600", borderRadius: "50%", display: "inline-block", flexShrink: 0 }}></span>
               {local}
             </div>
           )}

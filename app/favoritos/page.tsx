@@ -1,6 +1,6 @@
 "use client";
-import Image from "next/image";
 import Link from "next/link";
+import Logo from "@/components/Logo";
 import { useEffect, useState } from "react";
 import BotoesConta from "@/components/BotoesConta";
 import CartaoVeiculo from "@/components/CartaoVeiculo";
@@ -43,10 +43,7 @@ export default function Favoritos() {
 
       <nav style={{ background: "#fff", borderBottom: "1px solid #E8E6E1", height: 60, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 16px" }}>
         <Link href="/" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none" }}>
-          <Image src="/logo.png" alt="AutoRegião" width={32} height={32} style={{ objectFit: "contain" }} />
-          <span style={{ fontSize: 18, fontWeight: 800, color: "#1A1917" }}>
-            <span style={{ color: "#E85D26" }}>Auto</span>Região
-          </span>
+          <Logo />
         </Link>
         <div className="fav-nav-links" style={{ display: "flex", gap: 24 }}>
           <Link href="/veiculos" style={{ textDecoration: "none", color: "#7A7670", fontSize: 13.5, fontWeight: 500 }}>Buscar veículos</Link>
@@ -69,10 +66,10 @@ export default function Favoritos() {
           <div style={{ fontSize: 14, color: "#7A7670", padding: "40px 0", textAlign: "center" }}>Carregando seus favoritos...</div>
         ) : veiculos.length === 0 ? (
           <div style={{ textAlign: "center", padding: "60px 20px", background: "#fff", borderRadius: 12, border: "1.5px solid #E8E6E1" }}>
-            <div style={{ fontSize: 40, marginBottom: 12, color: "#E85D26" }}>☆</div>
+            <div style={{ fontSize: 40, marginBottom: 12, color: "#FF6600" }}>☆</div>
             <div style={{ fontSize: 16, fontWeight: 700, color: "#1A1917", marginBottom: 6 }}>Nenhum favorito ainda</div>
             <div style={{ fontSize: 13, color: "#7A7670", marginBottom: 18 }}>Toque na estrela ☆ de um anúncio para salvar e ver depois.</div>
-            <Link href="/veiculos" style={{ display: "inline-block", padding: "11px 20px", background: "#E85D26", color: "#fff", borderRadius: 8, fontSize: 14, fontWeight: 700, textDecoration: "none" }}>Buscar veículos</Link>
+            <Link href="/veiculos" style={{ display: "inline-block", padding: "11px 20px", background: "#FF6600", color: "#fff", borderRadius: 8, fontSize: 14, fontWeight: 700, textDecoration: "none" }}>Buscar veículos</Link>
           </div>
         ) : (
           <div className="fav-grid">

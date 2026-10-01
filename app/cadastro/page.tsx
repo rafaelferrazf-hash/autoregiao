@@ -1,6 +1,6 @@
 "use client";
-import Image from "next/image";
 import Link from "next/link";
+import Logo from "@/components/Logo";
 import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 
@@ -50,7 +50,7 @@ export default function Cadastro() {
         <div style={{ fontSize: 26, fontWeight: 800, color: "#1A1917", marginBottom: 8 }}>Cadastro realizado!</div>
         <p style={{ fontSize: 15, color: "#7A7670", marginBottom: 8 }}>Bem-vindo ao AutoRegião, {form.nome.split(" ")[0]}!</p>
         <p style={{ fontSize: 13, color: "#7A7670", marginBottom: 24 }}>Verifique seu e-mail para confirmar a conta.</p>
-        <Link href="/login" style={{ padding: "12px 28px", background: "#E85D26", color: "#fff", borderRadius: 8, textDecoration: "none", fontWeight: 600, fontSize: 15 }}>Ir para o login</Link>
+        <Link href="/login" style={{ padding: "12px 28px", background: "#FF6600", color: "#fff", borderRadius: 8, textDecoration: "none", fontWeight: 600, fontSize: 15 }}>Ir para o login</Link>
       </div>
     </main>
   );
@@ -71,14 +71,11 @@ export default function Cadastro() {
       <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, background: "#fff", borderBottom: "1px solid #E8E6E1" }}>
         <div style={{ height: 60, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 16px" }}>
           <Link href="/" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none" }}>
-            <Image src="/logo.png" alt="AutoRegião" width={32} height={32} style={{ objectFit: "contain" }} />
-            <span style={{ fontSize: 18, fontWeight: 800, color: "#1A1917" }}>
-              <span style={{ color: "#E85D26" }}>Auto</span>Região
-            </span>
+            <Logo />
           </Link>
           <span className="nav-desktop-cad" style={{ fontSize: 13, color: "#7A7670" }}>
             Já tem conta?{" "}
-            <Link href="/login" style={{ color: "#E85D26", fontWeight: 600, textDecoration: "none" }}>Entrar</Link>
+            <Link href="/login" style={{ color: "#FF6600", fontWeight: 600, textDecoration: "none" }}>Entrar</Link>
           </span>
           <button className="nav-mobile-cad" onClick={() => setMenuAberto(!menuAberto)}
             style={{ background: "none", border: "none", cursor: "pointer", padding: 8, flexDirection: "column", gap: 5 }}>
@@ -91,7 +88,7 @@ export default function Cadastro() {
           <div style={{ borderTop: "1px solid #E8E6E1", background: "#fff", padding: "16px", display: "flex", flexDirection: "column", gap: 14 }}>
             <div style={{ fontSize: 14, color: "#7A7670", textAlign: "center" }}>
               Já tem conta?{" "}
-              <Link href="/login" style={{ color: "#E85D26", fontWeight: 600, textDecoration: "none" }}>Entrar agora</Link>
+              <Link href="/login" style={{ color: "#FF6600", fontWeight: 600, textDecoration: "none" }}>Entrar agora</Link>
             </div>
           </div>
         )}
@@ -114,7 +111,7 @@ export default function Cadastro() {
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
                 {[["comprador", "🔍 Comprar"], ["particular", "🚗 Vender"], ["lojista", "🏪 Lojista"]].map(([val, label]) => (
                   <button key={val} onClick={() => setTipo(val as "comprador" | "lojista" | "particular")}
-                    style={{ padding: "12px", borderRadius: 8, border: "1.5px solid", borderColor: tipo === val ? "#E85D26" : "#E8E6E1", background: tipo === val ? "#FFF5F1" : "#fff", color: tipo === val ? "#E85D26" : "#7A7670", fontWeight: 600, fontSize: 14, cursor: "pointer" }}>
+                    style={{ padding: "12px", borderRadius: 8, border: "1.5px solid", borderColor: tipo === val ? "#FF6600" : "#E8E6E1", background: tipo === val ? "#FFF5F1" : "#fff", color: tipo === val ? "#FF6600" : "#7A7670", fontWeight: 600, fontSize: 14, cursor: "pointer" }}>
                     {label}
                   </button>
                 ))}
@@ -134,7 +131,7 @@ export default function Cadastro() {
             ].map(([label, field, type, placeholder, required]) => (
               <div key={field as string} style={{ marginBottom: 14 }}>
                 <div style={{ fontSize: 12, fontWeight: 500, color: "#1A1917", marginBottom: 5 }}>
-                  {label as string} {required && <span style={{ color: "#E85D26" }}>*</span>}
+                  {label as string} {required && <span style={{ color: "#FF6600" }}>*</span>}
                 </div>
                 <input type={type as string} placeholder={placeholder as string} value={form[field as keyof typeof form]}
                   onChange={e => setForm({ ...form, [field as string]: e.target.value })}
@@ -145,12 +142,12 @@ export default function Cadastro() {
             {tipo === "particular" && (
               <>
                 <div style={{ marginBottom: 14 }}>
-                  <div style={{ fontSize: 12, fontWeight: 500, color: "#1A1917", marginBottom: 5 }}>Veículo que deseja vender <span style={{ color: "#E85D26" }}>*</span></div>
+                  <div style={{ fontSize: 12, fontWeight: 500, color: "#1A1917", marginBottom: 5 }}>Veículo que deseja vender <span style={{ color: "#FF6600" }}>*</span></div>
                   <input placeholder="Ex: Chevrolet Onix 2022" value={form.loja} onChange={e => setForm({ ...form, loja: e.target.value })}
                     style={{ width: "100%", padding: "12px 14px", border: "1.5px solid #E8E6E1", borderRadius: 8, fontSize: 15, color: "#1A1917", background: "#F7F6F3", outline: "none", boxSizing: "border-box" }} />
                 </div>
                 <div style={{ marginBottom: 14 }}>
-                  <div style={{ fontSize: 12, fontWeight: 500, color: "#1A1917", marginBottom: 5 }}>Cidade <span style={{ color: "#E85D26" }}>*</span></div>
+                  <div style={{ fontSize: 12, fontWeight: 500, color: "#1A1917", marginBottom: 5 }}>Cidade <span style={{ color: "#FF6600" }}>*</span></div>
                   <input placeholder="Ex: Teixeira de Freitas" value={form.cidade} onChange={e => setForm({ ...form, cidade: e.target.value })}
                     style={{ width: "100%", padding: "12px 14px", border: "1.5px solid #E8E6E1", borderRadius: 8, fontSize: 15, color: "#1A1917", background: "#F7F6F3", outline: "none", boxSizing: "border-box" }} />
                 </div>
@@ -160,12 +157,12 @@ export default function Cadastro() {
             {tipo === "lojista" && (
               <>
                 <div style={{ marginBottom: 14 }}>
-                  <div style={{ fontSize: 12, fontWeight: 500, color: "#1A1917", marginBottom: 5 }}>Nome da loja <span style={{ color: "#E85D26" }}>*</span></div>
+                  <div style={{ fontSize: 12, fontWeight: 500, color: "#1A1917", marginBottom: 5 }}>Nome da loja <span style={{ color: "#FF6600" }}>*</span></div>
                   <input placeholder="Ex: Auto Paulista" value={form.loja} onChange={e => setForm({ ...form, loja: e.target.value })}
                     style={{ width: "100%", padding: "12px 14px", border: "1.5px solid #E8E6E1", borderRadius: 8, fontSize: 15, color: "#1A1917", background: "#F7F6F3", outline: "none", boxSizing: "border-box" }} />
                 </div>
                 <div style={{ marginBottom: 14 }}>
-                  <div style={{ fontSize: 12, fontWeight: 500, color: "#1A1917", marginBottom: 5 }}>Cidade <span style={{ color: "#E85D26" }}>*</span></div>
+                  <div style={{ fontSize: 12, fontWeight: 500, color: "#1A1917", marginBottom: 5 }}>Cidade <span style={{ color: "#FF6600" }}>*</span></div>
                   <input placeholder="Ex: Teixeira de Freitas" value={form.cidade} onChange={e => setForm({ ...form, cidade: e.target.value })}
                     style={{ width: "100%", padding: "12px 14px", border: "1.5px solid #E8E6E1", borderRadius: 8, fontSize: 15, color: "#1A1917", background: "#F7F6F3", outline: "none", boxSizing: "border-box" }} />
                 </div>
@@ -174,7 +171,7 @@ export default function Cadastro() {
 
             {[["Senha", "senha", "Mínimo 8 caracteres"], ["Confirmar senha", "confirmarSenha", "Repita a senha"]].map(([label, field, placeholder]) => (
               <div key={field} style={{ marginBottom: 14 }}>
-                <div style={{ fontSize: 12, fontWeight: 500, color: "#1A1917", marginBottom: 5 }}>{label} <span style={{ color: "#E85D26" }}>*</span></div>
+                <div style={{ fontSize: 12, fontWeight: 500, color: "#1A1917", marginBottom: 5 }}>{label} <span style={{ color: "#FF6600" }}>*</span></div>
                 <input type="password" placeholder={placeholder} value={form[field as keyof typeof form]}
                   onChange={e => setForm({ ...form, [field]: e.target.value })}
                   style={{ width: "100%", padding: "12px 14px", border: "1.5px solid #E8E6E1", borderRadius: 8, fontSize: 15, color: "#1A1917", background: "#F7F6F3", outline: "none", boxSizing: "border-box" }} />
@@ -183,12 +180,12 @@ export default function Cadastro() {
 
             <div style={{ fontSize: 12, color: "#7A7670", marginBottom: 20, lineHeight: 1.6 }}>
               Ao criar sua conta você concorda com os{" "}
-              <Link href="/termos" target="_blank" style={{ color: "#E85D26", textDecoration: "none" }}>Termos de uso</Link>{" "}e a{" "}
-              <Link href="/privacidade" target="_blank" style={{ color: "#E85D26", textDecoration: "none" }}>Política de privacidade</Link>.
+              <Link href="/termos" target="_blank" style={{ color: "#FF6600", textDecoration: "none" }}>Termos de uso</Link>{" "}e a{" "}
+              <Link href="/privacidade" target="_blank" style={{ color: "#FF6600", textDecoration: "none" }}>Política de privacidade</Link>.
             </div>
 
             <button onClick={handleSubmit} disabled={carregando}
-              style={{ width: "100%", padding: "14px", background: carregando ? "#C44818" : "#E85D26", color: "#fff", border: "none", borderRadius: 8, fontSize: 16, fontWeight: 700, cursor: carregando ? "not-allowed" : "pointer", opacity: carregando ? 0.8 : 1 }}>
+              style={{ width: "100%", padding: "14px", background: carregando ? "#C44818" : "#FF6600", color: "#fff", border: "none", borderRadius: 8, fontSize: 16, fontWeight: 700, cursor: carregando ? "not-allowed" : "pointer", opacity: carregando ? 0.8 : 1 }}>
               {carregando ? "Criando conta..." : "Criar minha conta"}
             </button>
 
@@ -200,7 +197,7 @@ export default function Cadastro() {
 
             <div style={{ textAlign: "center", fontSize: 14, color: "#7A7670" }}>
               Já tem conta?{" "}
-              <Link href="/login" style={{ color: "#E85D26", fontWeight: 600, textDecoration: "none" }}>Entrar agora</Link>
+              <Link href="/login" style={{ color: "#FF6600", fontWeight: 600, textDecoration: "none" }}>Entrar agora</Link>
             </div>
           </div>
 

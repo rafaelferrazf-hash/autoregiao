@@ -51,7 +51,7 @@ export default function CriarAlerta({ filtros, busca }: { filtros: Filtros; busc
             style={{ width: "100%", boxSizing: "border-box", padding: "9px 11px", border: "1.5px solid #E8E6E1", borderRadius: 7, fontSize: 13, color: "#1A1917", outline: "none", marginBottom: 8 }} />
           {erro && <div style={{ fontSize: 12, color: "#B91C1C", marginBottom: 8, lineHeight: 1.4 }}>{erro}</div>}
           <button type="submit" disabled={enviando}
-            style={{ width: "100%", padding: "10px", background: "#E85D26", color: "#fff", border: "none", borderRadius: 7, fontSize: 13, fontWeight: 700, cursor: "pointer", opacity: enviando ? 0.7 : 1 }}>
+            style={{ width: "100%", padding: "10px", background: "#FF6600", color: "#fff", border: "none", borderRadius: 7, fontSize: 13, fontWeight: 700, cursor: "pointer", opacity: enviando ? 0.7 : 1 }}>
             {enviando ? "Enviando..." : "Criar alerta"}
           </button>
           <div style={{ fontSize: 11, color: "#A8A49D", marginTop: 8, lineHeight: 1.4 }}>No máximo 1 e-mail por dia. Cancele quando quiser.</div>

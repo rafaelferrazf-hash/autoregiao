@@ -1,6 +1,6 @@
 "use client";
-import Image from "next/image";
 import Link from "next/link";
+import Logo from "@/components/Logo";
 import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 
@@ -38,12 +38,9 @@ export default function RecuperarSenha() {
 
       <nav style={{ background: "#fff", borderBottom: "1px solid #E8E6E1", height: 60, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 16px", flexShrink: 0 }}>
         <Link href="/" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none" }}>
-          <Image src="/logo.png" alt="AutoRegião" width={32} height={32} style={{ objectFit: "contain" }} />
-          <span style={{ fontSize: 18, fontWeight: 800, color: "#1A1917" }}>
-            <span style={{ color: "#E85D26" }}>Auto</span>Região
-          </span>
+          <Logo />
         </Link>
-        <Link href="/login" style={{ fontSize: 13, color: "#E85D26", fontWeight: 600, textDecoration: "none" }}>Voltar ao login</Link>
+        <Link href="/login" style={{ fontSize: 13, color: "#FF6600", fontWeight: 600, textDecoration: "none" }}>Voltar ao login</Link>
       </nav>
 
       <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "24px 16px" }}>
@@ -56,7 +53,7 @@ export default function RecuperarSenha() {
               <div style={{ background: "#D1FAE5", border: "1.5px solid #6EE7B7", borderRadius: 8, padding: "12px 14px", marginBottom: 16, fontSize: 13, color: "#065F46", lineHeight: 1.5 }}>
                 ✅ Se existir uma conta com <strong>{email.trim()}</strong>, você vai receber o link em alguns minutos. Confira também a caixa de spam.
               </div>
-              <Link href="/login" style={{ display: "block", textAlign: "center", fontSize: 14, color: "#E85D26", fontWeight: 600, textDecoration: "none" }}>Voltar ao login</Link>
+              <Link href="/login" style={{ display: "block", textAlign: "center", fontSize: 14, color: "#FF6600", fontWeight: 600, textDecoration: "none" }}>Voltar ao login</Link>
             </>
           ) : (
             <>
@@ -69,7 +66,7 @@ export default function RecuperarSenha() {
                     style={{ width: "100%", padding: "12px 14px", border: "1.5px solid #E8E6E1", borderRadius: 8, fontSize: 15, color: "#1A1917", background: "#F7F6F3", outline: "none", boxSizing: "border-box" }} />
                 </div>
                 <button onClick={handleEnviar} disabled={carregando}
-                  style={{ width: "100%", padding: "14px", background: carregando ? "#C44818" : "#E85D26", color: "#fff", border: "none", borderRadius: 9, fontSize: 16, fontWeight: 700, cursor: carregando ? "not-allowed" : "pointer", opacity: carregando ? 0.8 : 1 }}>
+                  style={{ width: "100%", padding: "14px", background: carregando ? "#C44818" : "#FF6600", color: "#fff", border: "none", borderRadius: 9, fontSize: 16, fontWeight: 700, cursor: carregando ? "not-allowed" : "pointer", opacity: carregando ? 0.8 : 1 }}>
                   {carregando ? "Enviando..." : "Enviar link de recuperação"}
                 </button>
               </div>
@@ -79,7 +76,7 @@ export default function RecuperarSenha() {
       </div>
 
       <div style={{ padding: "16px 24px", textAlign: "center", borderTop: "1px solid #E8E6E1" }}>
-        <p style={{ fontSize: 12, color: "#7A7670" }}>© 2026 <span style={{ color: "#E85D26" }}>AutoRegião</span></p>
+        <p style={{ fontSize: 12, color: "#7A7670" }}>© 2026 <span style={{ color: "#FF6600" }}>AutoRegião</span></p>
       </div>
 
     </main>

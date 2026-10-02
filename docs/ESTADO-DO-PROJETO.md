@@ -94,6 +94,13 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
    - ⚠️ **Antes de pedir produção:** verificar a política de pagamentos do Google Play para a assinatura dos planos
      das lojas (Mercado Pago dentro do app/TWA). Se necessário, esconder a compra de planos no app Android
      (lojista assina pelo site). Questionário IARC respondido como "sem compra de itens digitais".
+   - ✅ 02/10/2026: todas as 11 tarefas de configuração concluídas; faixa "Teste fechado - Alpha" com país Brasil,
+     testadores = Grupo do Google `testadores-autoregiao@googlegroups.com` (qualquer pessoa pode entrar; só
+     proprietário posta/vê membros), feedback contato@; versão 1.0.2 (código 3) **enviada para revisão do Google**.
+     Link de participação aparece na aba Testadores depois da aprovação. Os 14 dias contam a partir daí.
+   - ✅ assetlinks.json com 3 impressões SHA-256 (chave do Google em uso 26:2D:E7…, chave anterior clássica
+     1F:FE:49…, chave de envio B3:AA:21…) — verificado "linked: true" na API do Google.
+   - Próxima versão do app: subir `appVersionCode` para 4 no `gerar.cjs` (o campo do nome é `appVersion`).
    - Testadores: usar Grupo do Google (groups.google.com) em vez de lista de e-mails; mandar 15–16 convites.
    - Teste no celular do Rafael com o .apk funcionou (abertura nova aprovada: opção B, grafite + logo completo).
    - ✅ Pacote gerado: projeto em `C:\Users\rafae\autoregiao-android` (Bubblewrap core, `br.com.autoregiao.app`,

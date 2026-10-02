@@ -76,6 +76,8 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
   #FF6600, grafite #1A1A1A, Exo 2 nos títulos (h1–h3). Slogan trocado para "COMPRE | VENDA | ANUNCIE" (o manual
   dizia "financia", que o site não faz). Peças em `public/marca/` e `public/icones/`; `components/Logo`.
   Para impressão grande (fachada, adesivo), pedir ao designer o arquivo vetorial.
+  O logo foi **gerado com IA** (confirmado pelo Rafael): na Google Play, ícone e banner rotulados como "criados com IA"
+  (capturas de tela não). Sugestão pendente: redesenho em vetor por designer e registro da marca no INPI.
 
 ## Pendências (em ordem sugerida)
 1. **App na Google Play (TWA)** — em andamento:
@@ -88,7 +90,7 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
      loja "Demonstração AutoRegião" em plano premium até 01/10/2027 — senha só com o Rafael; instruções PT/EN;
      desativar a loja depois da aprovação). ⏳ Próximas: Anúncios (Não) ✅, Classificação de conteúdo, Público-alvo
      (18+), Segurança dos dados, Apps governamentais (Não), Recursos financeiros (nenhum), Saúde (Não), Categoria
-     e contato, Ficha da loja — respostas em `docs/google-play-ficha.md`.
+     e contato, Ficha da loja (✅ textos, ícone, banner e 5 capturas enviados em 02/10) — respostas em `docs/google-play-ficha.md`.
    - ⚠️ **Antes de pedir produção:** verificar a política de pagamentos do Google Play para a assinatura dos planos
      das lojas (Mercado Pago dentro do app/TWA). Se necessário, esconder a compra de planos no app Android
      (lojista assina pelo site). Questionário IARC respondido como "sem compra de itens digitais".

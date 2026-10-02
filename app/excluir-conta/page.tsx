@@ -34,6 +34,17 @@ export default function ExcluirConta() {
         ou excluir cada anúncio na hora.
       </p>
 
+      <h2 id="excluir-dados">Excluir só alguns dados (sem excluir a conta)</h2>
+      <ul>
+        <li><strong>Anúncios e fotos:</strong> no <Link href="/painel">painel</Link>, toque em excluir no anúncio — ele e as fotos
+          são apagados na hora;</li>
+        <li><strong>Dados da loja</strong> (telefone, endereço, descrição etc.): edite ou apague no Perfil da Loja, no painel;</li>
+        <li><strong>Alertas de veículos:</strong> use o link &quot;Cancelar&quot; em qualquer e-mail de alerta;</li>
+        <li><strong>Outros dados</strong> (por exemplo, as estatísticas de visualizações): envie e-mail para{" "}
+          <a href={`mailto:${EMAIL_CONTATO}?subject=${encodeURIComponent("Excluir meus dados")}`}>{EMAIL_CONTATO}</a> com o
+          assunto <strong>&quot;Excluir meus dados&quot;</strong>, dizendo quais dados quer apagar. Concluímos em até 30 dias.</li>
+      </ul>
+
       <h2>O que é apagado</h2>
       <ul>
         <li>Dados da conta: nome, e-mail, telefone e senha;</li>

@@ -77,3 +77,24 @@ O app não contém anúncios de terceiros (os anúncios de veículos são o cont
 ## Teste fechado (obrigatório para conta pessoal nova)
 12 ou mais testadores com o app instalado por 14 dias seguidos. Lista de e-mails Gmail dos testadores
 em Testes → Teste fechado → Testadores. Depois: “Solicitar acesso à produção”.
+
+## Mensagem para os testadores (WhatsApp)
+```
+Oi! Tudo bem? 😊
+Estou lançando o app *AutoRegião* (classificados de carros da região) e preciso da sua ajuda para testar antes de ele sair na Play Store. É rápido e de graça (precisa ser celular Android):
+
+1️⃣ Entre no grupo de testadores (toque em "Participar do grupo"):
+https://groups.google.com/g/testadores-autoregiao
+
+2️⃣ COPIE o link abaixo e COLE no navegador Chrome (não toque direto nele, senão abre a Play Store e dá erro):
+https://play.google.com/apps/testing/br.com.autoregiao.app
+Toque em "Tornar-se testador" e depois em "Fazer download no Google Play".
+
+⚠️ Use a mesma conta Google nos passos 1 e 2 e na Play Store.
+⚠️ Deixe o app instalado por pelo menos 14 dias e abra de vez em quando.
+
+Se der "item não encontrado", espere uns minutinhos e tente de novo.
+Muito obrigado pela força! 🙏
+```
+Problemas já vistos: grupo precisa estar com "Quem pode pesquisar" = qualquer pessoa da Web (senão
+"Conteúdo indisponível"); tocar no link do teste pelo WhatsApp abre a Play Store e dá "item não encontrado".

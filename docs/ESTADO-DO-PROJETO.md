@@ -86,13 +86,13 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
    - Configuração do app ("Termine de configurar seu app"): ✅ Política de privacidade (/privacidade, atualizada
      para cobrir app/alertas/favoritos/Resend); ✅ Detalhes do login (conta demo `revisao@autoregiao.com.br`,
      loja "Demonstração AutoRegião" em plano premium até 01/10/2027 — senha só com o Rafael; instruções PT/EN;
-     desativar a loja depois da aprovação). ⏳ Próximas: Anúncios (Não), Classificação de conteúdo, Público-alvo
+     desativar a loja depois da aprovação). ⏳ Próximas: Anúncios (Não) ✅, Classificação de conteúdo, Público-alvo
      (18+), Segurança dos dados, Apps governamentais (Não), Recursos financeiros (nenhum), Saúde (Não), Categoria
      e contato, Ficha da loja — respostas em `docs/google-play-ficha.md`.
    - Testadores: usar Grupo do Google (groups.google.com) em vez de lista de e-mails; mandar 15–16 convites.
    - Teste no celular do Rafael com o .apk funcionou (abertura nova aprovada: opção B, grafite + logo completo).
    - ✅ Pacote gerado: projeto em `C:\Users\rafae\autoregiao-android` (Bubblewrap core, `br.com.autoregiao.app`,
-     targetSdk 36, versão 1.0.2/3: logo novo, abertura em grafite com o logo completo — gerador em `android-ferramentasgeradorgerar.cjs`). Arquivos assinados em `...\autoregiao-android\publicar\` (`.aab` para a loja,
+     targetSdk 36, versão 1.0.2/3: logo novo, abertura em grafite com o logo completo — gerador em `android-ferramentas\gerador\gerar.cjs`; ele também troca a imagem da abertura). Arquivos assinados em `...\autoregiao-android\publicar\` (`.aab` para a loja,
      `.apk` para testar). Ferramentas (JDK 17, Android SDK) em `C:\Users\rafae\android-ferramentas`
      (o `sdkmanager`/`android.exe` é bloqueado pelo Controle Inteligente de Aplicativos do Windows — o Gradle baixa
      o SDK sozinho; NÃO desligar essa proteção). Montar: `gradlew.bat bundleRelease assembleRelease` com

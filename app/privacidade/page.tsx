@@ -104,6 +104,7 @@ export default function Privacidade() {
         <li>revogar consentimentos e se opor a tratamentos baseados em legítimo interesse.</li>
       </ul>
       <p>
+        Para excluir a conta, veja o passo a passo em <a href="/excluir-conta">Excluir minha conta</a>.
         Para exercer qualquer direito, escreva para <a href={`mailto:${EMAIL_CONTATO}`}>{EMAIL_CONTATO}</a> a partir do e-mail
         da sua conta. Respondemos em até 15 dias. Você também pode reclamar à Autoridade Nacional de Proteção de Dados (ANPD).
       </p>

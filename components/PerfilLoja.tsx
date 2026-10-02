@@ -1,7 +1,8 @@
 "use client";
 import Link from "next/link";
 import { useState } from "react";
-import { atualizarPerfilLoja, type PerfilLojaEditavel } from "@/lib/dados/lojas";
+import { atualizarPerfilLoja, enviarLogoLoja, removerLogoLoja, type PerfilLojaEditavel } from "@/lib/dados/lojas";
+import LogoLoja from "@/components/LogoLoja";
 import type { Loja } from "@/lib/tipos";
 
 const UFS = ["AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"];
@@ -21,6 +22,8 @@ export default function PerfilLoja({ loja, onSalvo }: { loja: Loja | null; onSal
   }));
   const [salvando, setSalvando] = useState(false);
   const [mensagem, setMensagem] = useState<{ ok: boolean; texto: string } | null>(null);
+  const [enviandoLogo, setEnviandoLogo] = useState(false);
+  const [avisoLogo, setAvisoLogo] = useState<{ ok: boolean; texto: string } | null>(null);
 
   if (!loja) {
     return (
@@ -49,6 +52,35 @@ export default function PerfilLoja({ loja, onSalvo }: { loja: Loja | null; onSal
     setMensagem({ ok: true, texto: "Perfil salvo! As mudanças já aparecem na página da sua loja." });
   }
 
+  // Logo/foto: salva na hora (não depende do botão "Salvar perfil").
+  async function escolherLogo(e: React.ChangeEvent<HTMLInputElement>) {
+    const arquivo = e.target.files?.[0];
+    e.target.value = "";
+    if (!arquivo || !loja) return;
+    if (!arquivo.type.startsWith("image/")) return setAvisoLogo({ ok: false, texto: "Escolha um arquivo de imagem (foto ou logo)." });
+    if (arquivo.size > 15 * 1024 * 1024) return setAvisoLogo({ ok: false, texto: "Imagem muito grande (máximo 15 MB)." });
+    setEnviandoLogo(true); setAvisoLogo(null);
+    try {
+      const { url, error } = await enviarLogoLoja(loja.usuario_id ?? "", loja.id, arquivo, loja.logo_url);
+      if (error || !url) throw error;
+      onSalvo({ ...loja, logo_url: url });
+      setAvisoLogo({ ok: true, texto: "Logo atualizado! Já aparece na sua página e nos seus anúncios." });
+    } catch {
+      setAvisoLogo({ ok: false, texto: "Não foi possível enviar a imagem. Tente de novo." });
+    }
+    setEnviandoLogo(false);
+  }
+
+  async function tirarLogo() {
+    if (!loja) return;
+    setEnviandoLogo(true);
+    const { error } = await removerLogoLoja(loja.id, loja.logo_url ?? null);
+    setEnviandoLogo(false);
+    if (error) return setAvisoLogo({ ok: false, texto: "Não foi possível remover. Tente de novo." });
+    onSalvo({ ...loja, logo_url: null });
+    setAvisoLogo({ ok: true, texto: "Logo removido." });
+  }
+
   const rotulo = { display: "block", fontSize: 12, fontWeight: 600, color: "#1A1917", marginBottom: 5 } as const;
   const ajuda = { fontSize: 11, color: "#7A7670", marginTop: 4 } as const;
   const campo = { width: "100%", padding: "10px 12px", border: "1.5px solid #E8E6E1", borderRadius: 8, fontSize: 14, color: "#1A1917", background: "#F7F6F3", outline: "none", boxSizing: "border-box" } as const;
@@ -69,6 +101,24 @@ export default function PerfilLoja({ loja, onSalvo }: { loja: Loja | null; onSal
       </div>
 
       <div style={{ padding: 18, display: "flex", flexDirection: "column", gap: 16 }}>
+        <div>
+          <label style={rotulo}>Logo ou foto da loja</label>
+          <div style={{ display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap" }}>
+            <LogoLoja url={loja.logo_url} tamanho={72} raio={14} />
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+              <label style={{ padding: "9px 14px", background: "#FF6600", color: "#fff", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: enviandoLogo ? "wait" : "pointer", opacity: enviandoLogo ? 0.7 : 1 }}>
+                {enviandoLogo ? "Enviando..." : loja.logo_url ? "Trocar imagem" : "Escolher imagem"}
+                <input type="file" accept="image/*" onChange={escolherLogo} disabled={enviandoLogo} style={{ display: "none" }} />
+              </label>
+              {loja.logo_url && !enviandoLogo && (
+                <button type="button" onClick={tirarLogo} style={{ padding: "9px 14px", background: "#fff", color: "#7A7670", border: "1.5px solid #E8E6E1", borderRadius: 8, fontSize: 13, cursor: "pointer" }}>Remover</button>
+              )}
+            </div>
+          </div>
+          <div style={ajuda}>Aparece na página da sua loja e nos seus anúncios. Pode ser o logo ou uma foto da fachada; de preferência quadrada.</div>
+          {avisoLogo && <div style={{ fontSize: 12, marginTop: 6, color: avisoLogo.ok ? "#15803D" : "#B91C1C" }}>{avisoLogo.ok ? "✅ " : ""}{avisoLogo.texto}</div>}
+        </div>
+
         <div>
           <label style={rotulo}>Nome da loja *</label>
           <input value={form.nome} onChange={e => muda("nome", e.target.value)} maxLength={80} style={campo} />

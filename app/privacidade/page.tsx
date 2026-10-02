@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function Privacidade() {
   return (
-    <PaginaLegal titulo="Política de Privacidade" atualizadoEm="1º de outubro de 2026">
+    <PaginaLegal titulo="Política de Privacidade" atualizadoEm="2 de outubro de 2026">
       <p>
         Esta Política explica quais dados pessoais o <strong>AutoRegião</strong> coleta, para que usa e quais são os seus
         direitos, conforme a Lei Geral de Proteção de Dados (Lei nº 13.709/2018 — LGPD). Ela vale para o site
@@ -28,8 +28,8 @@ export default function Privacidade() {
       <ul>
         <li><strong>Cadastro:</strong> nome, e-mail, telefone e tipo de conta. A senha é guardada de forma criptografada pelo
           nosso provedor de autenticação — nós não temos acesso a ela.</li>
-        <li><strong>Dados da loja:</strong> nome, cidade, estado, telefone, WhatsApp, endereço, horário e descrição, quando você
-          os informa.</li>
+        <li><strong>Dados da loja:</strong> nome, cidade, estado, telefone, WhatsApp, endereço, horário, descrição e logo ou
+          foto da loja, quando você os informa.</li>
         <li><strong>Anúncios:</strong> dados do veículo, fotos, preço, nome de contato, telefone e cidade.</li>
         <li><strong>Uso do site:</strong> contamos visualizações de anúncios e cliques nos botões de WhatsApp e Ligar para mostrar
           esses números ao anunciante. Para não contar a mesma pessoa várias vezes, geramos um código anônimo a partir do
@@ -70,6 +70,8 @@ export default function Privacidade() {
         <li><strong>Supabase</strong> — banco de dados, armazenamento de fotos e autenticação;</li>
         <li><strong>Vercel</strong> — hospedagem do site;</li>
         <li><strong>Resend</strong> — envio dos e-mails do serviço e dos alertas;</li>
+        <li><strong>Google Maps</strong> — mapa com o endereço das lojas que cadastraram endereço e o botão &quot;Como chegar&quot;
+          (ao exibir o mapa ou abrir a rota, o Google recebe dados de navegação conforme a política dele);</li>
         <li><strong>Google Play</strong> — distribuição do app Android (o Google pode coletar dados de instalação conforme a
           política dele);</li>
         <li><strong>Provedor de pagamentos</strong> (ex.: Mercado Pago), quando houver planos pagos — ele recebe os dados

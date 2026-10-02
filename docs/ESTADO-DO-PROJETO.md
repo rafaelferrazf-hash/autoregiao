@@ -53,7 +53,7 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
   `/loja/[id]`, `/favoritos`, `/alerta`, `/anunciar`, `/painel` (+ `/novo-anuncio`, `/planos`), `/admin`,
   `/login`, `/cadastro`, `/recuperar-senha`, `/redefinir-senha`, `/pagamento/retorno`, `/termos`, `/privacidade`, `/offline`.
 - SQL já rodado: `rls-fase0`, `fase1-seguranca`, `fase2`, `fase3`, `fase3-fotos`, `fase4a`, `fase4b`,
-  `fase5-alertas`, `fase6-fipe`, `fase7-filtros`. Modelos de e-mail do Auth: `supabase/emails/`.
+  `fase5-alertas`, `fase6-fipe`, `fase7-filtros`, `fase8-logo-loja`. Modelos de e-mail do Auth: `supabase/emails/`.
 
 ## Regras de negócio importantes
 - Planos (`lib/planos.ts`): básico R$89/10 anúncios, profissional R$159/30 + destaque, premium R$299/ilimitado + destaque;
@@ -71,6 +71,9 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
 - Fonte Plus Jakarta Sans; página 404; alertas por e-mail.
 - Auditoria do concorrente CarroSP → favoritos, veículos parecidos, itens de confiança, FIPE, SEO
   (anúncio renderizado no servidor, JSON-LD, vitrines, sitemap/robots), filtros FIPE e loja/particular.
+- Logo/foto da loja no Perfil da Loja (`lojas.logo_url`, só aceita imagem do nosso Storage; reduzida no aparelho
+  por `lib/imagem.ts`) e mapinha do Google + "Como chegar" (Google Maps/Waze) em `components/MapaLoja` — 02/10/2026.
+  Vídeo nos anúncios: adiado pelo Rafael.
 - 2FA nas contas principais. App instalável (PWA), arrastar fotos, revisão de celular (375/320px).
 - Marca nova (01/10/2026), do manual em `C:\Users\rafae\AutoRegiao-Logo-Novo` (só PNG, sem vetor): logo AR, laranja
   #FF6600, grafite #1A1A1A, Exo 2 nos títulos (h1–h3). Slogan trocado para "COMPRE | VENDA | ANUNCIE" (o manual

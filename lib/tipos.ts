@@ -48,7 +48,7 @@ export type VeiculoComLoja = Veiculo & {
   // estado/endereco/criado_em/whatsapp/telefone só vêm na página do anúncio (buscarVeiculo).
   lojas: {
     nome: string; cidade: string;
-    estado?: string | null; endereco?: string | null; criado_em?: string | null; whatsapp?: string | null; telefone?: string | null;
+    estado?: string | null; endereco?: string | null; criado_em?: string | null; whatsapp?: string | null; telefone?: string | null; logo_url?: string | null;
   } | null;
 };
 
@@ -65,6 +65,7 @@ export type Loja = {
   descricao: string | null;
   endereco: string | null;
   horario: string | null;
+  logo_url?: string | null;   // logo/foto da loja (fase8-logo-loja.sql)
   plano: string | null;
   ativo: boolean | null;
   expira_em: string | null;

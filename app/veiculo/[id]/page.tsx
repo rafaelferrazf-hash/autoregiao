@@ -7,7 +7,7 @@ import { NOME_SITE, URL_SITE } from "@/lib/site";
 import type { VeiculoComLoja } from "@/lib/tipos";
 
 const ID = /^[0-9a-f-]{36}$/i;
-const COLUNAS = "*, lojas(nome, cidade, estado, endereco, criado_em, whatsapp, telefone)";
+const COLUNAS = "*, lojas(nome, cidade, estado, endereco, criado_em, whatsapp, telefone, logo_url)";
 
 // "Lençóis Paulista-SP"
 function localDoAnuncio(v: Pick<VeiculoComLoja, "cidade" | "lojas">) {

@@ -2,6 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import Logo from "@/components/Logo";
+import LogoLoja from "@/components/LogoLoja";
 import { useState, useEffect } from "react";
 import { usuarioAtual, sair } from "@/lib/dados/usuario";
 import { ehAdmin } from "@/lib/admin";
@@ -179,7 +180,7 @@ export default function Painel() {
           <Logo altura={24} />
         </Link>
         <div style={{ padding: "14px 20px", borderBottom: "1px solid rgba(255,255,255,0.06)", display: "flex", alignItems: "center", gap: 10 }}>
-          <div style={{ width: 40, height: 40, background: "#FF6600", borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, flexShrink: 0 }}>🏪</div>
+          <LogoLoja url={loja?.logo_url} tamanho={40} />
           <div>
             <div style={{ fontSize: 13, fontWeight: 700, color: "#fff" }}>{nomeLoja}</div>
             <div style={{ fontSize: 10, color: "#FF6600", fontWeight: 500, marginTop: 1 }}>{nomePlano}</div>

@@ -53,7 +53,7 @@ export async function opcoesDeFiltro() {
 export async function buscarVeiculo(id: string) {
   const { data, error } = await supabase
     .from("veiculos")
-    .select("*, lojas(nome, cidade, estado, endereco, criado_em, whatsapp, telefone)")
+    .select("*, lojas(nome, cidade, estado, endereco, criado_em, whatsapp, telefone, logo_url)")
     .eq("id", id)
     .single();
   return { veiculo: data as VeiculoComLoja | null, error };

@@ -1,6 +1,8 @@
 import Link from "next/link";
 import Logo from "@/components/Logo";
 import CartaoVeiculo from "@/components/CartaoVeiculo";
+import MapaLoja from "@/components/MapaLoja";
+import LogoLoja from "@/components/LogoLoja";
 import Rodape from "@/components/Rodape";
 import { notFound } from "next/navigation";
 import { criarClienteAnonimo } from "@/lib/supabase-servidor";
@@ -64,9 +66,6 @@ export default async function PerfilLoja({ params }: { params: Promise<{ id: str
   const whatsapp = (loja.whatsapp || loja.telefone || "").replace(/\D/g, "");
   const desde = loja.criado_em ? new Date(loja.criado_em).getFullYear() : null;
   const local = [loja.cidade, loja.estado].filter(Boolean).join(", ");
-  const linkMapa = loja.endereco
-    ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent([loja.endereco, loja.cidade, loja.estado].filter(Boolean).join(", "))}`
-    : null;
   const informacoes = [
     ["📍", "Endereço", loja.endereco],
     ["🕐", "Horário", loja.horario],
@@ -100,9 +99,7 @@ export default async function PerfilLoja({ params }: { params: Promise<{ id: str
         {/* HEADER DA LOJA */}
         <div style={{ background: "#1A1917", padding: "32px 16px" }}>
           <div style={{ maxWidth: 1000, margin: "0 auto", display: "flex", alignItems: "flex-start", gap: 24, flexWrap: "wrap" }}>
-            <div style={{ width: 80, height: 80, borderRadius: 16, background: "#FF6600", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 32, flexShrink: 0 }}>
-              🏪
-            </div>
+            <LogoLoja url={loja.logo_url} tamanho={80} raio={16} />
             <div style={{ flex: 1, minWidth: 200 }}>
               <div style={{ fontSize: 22, fontWeight: 800, color: "#fff", marginBottom: 4 }}>{loja.nome}</div>
               <div style={{ fontSize: 13, color: "rgba(255,255,255,0.6)", marginBottom: 10 }}>
@@ -173,11 +170,10 @@ export default async function PerfilLoja({ params }: { params: Promise<{ id: str
                     </div>
                   </div>
                 ))}
-                {linkMapa && (
-                  <a href={linkMapa} target="_blank" rel="noopener noreferrer" style={{ display: "block", textAlign: "center", padding: "9px", border: "1.5px solid #E8E6E1", borderRadius: 8, fontSize: 13, fontWeight: 700, color: "#1A1917", textDecoration: "none" }}>🗺️ Ver no mapa</a>
-                )}
               </div>
             )}
+
+            {loja.endereco && <MapaLoja endereco={loja.endereco} cidade={loja.cidade} estado={loja.estado} nome={loja.nome} />}
 
             {whatsapp && (
               <a href={`https://wa.me/55${whatsapp}`} target="_blank" rel="noopener noreferrer"

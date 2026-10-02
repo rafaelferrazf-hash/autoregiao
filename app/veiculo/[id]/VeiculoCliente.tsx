@@ -8,6 +8,8 @@ import { buscarSemelhantes } from "@/lib/dados/veiculos";
 import BotaoFavorito from "@/components/BotaoFavorito";
 import CartaoVeiculo, { abaixoDaFipe } from "@/components/CartaoVeiculo";
 import Rodape from "@/components/Rodape";
+import MapaLoja from "@/components/MapaLoja";
+import LogoLoja from "@/components/LogoLoja";
 import { formatarPreco, formatarKm } from "@/lib/formatar";
 import { registrarEvento } from "@/lib/dados/eventos";
 import type { VeiculoComLoja } from "@/lib/tipos";
@@ -118,8 +120,8 @@ export default function Veiculo({ inicial }: { inicial: VeiculoComLoja }) {
   const telefoneContato = veiculo?.telefone || veiculo?.lojas?.whatsapp || veiculo?.lojas?.telefone || null;
 
   // Endereço da loja no Google Maps (só quando a loja cadastrou o endereço).
-  const linkMapa = veiculo?.lojas?.endereco
-    ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent([veiculo.lojas.endereco, veiculo.lojas.cidade, veiculo.lojas.estado].filter(Boolean).join(", "))}`
+  const mapaLoja = veiculo?.lojas?.endereco
+    ? <MapaLoja endereco={veiculo.lojas.endereco} cidade={veiculo.lojas.cidade} estado={veiculo.lojas.estado} nome={veiculo.lojas.nome} />
     : null;
   const anuncianteDesde = veiculo?.lojas?.criado_em
     ? new Date(veiculo.lojas.criado_em).toLocaleDateString("pt-BR", { month: "long", year: "numeric" })
@@ -415,11 +417,7 @@ Motivo da denúncia:
             </div>
             {/* No celular a coluna da direita some: mapa e segurança aparecem aqui. */}
             <div className="so-celular" style={{ flexDirection: "column", gap: 12, marginTop: 16 }}>
-              {linkMapa && (
-                <a href={linkMapa} target="_blank" rel="noopener noreferrer" style={{ display: "block", textAlign: "center", padding: 11, background: "#fff", color: "#1A1917", border: "1.5px solid #E8E6E1", borderRadius: 9, fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
-                  🗺️ Ver endereço da loja no mapa
-                </a>
-              )}
+              {mapaLoja}
               {caixaSeguranca}
             </div>
           </div>
@@ -428,7 +426,7 @@ Motivo da denúncia:
           <div className="contato-sticky" style={{ display: "flex", flexDirection: "column", gap: 14 }}>
             <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 14, overflow: "hidden" }}>
               <div style={{ background: "#1A1917", padding: "16px 18px", display: "flex", alignItems: "center", gap: 12 }}>
-                <div style={{ width: 44, height: 44, background: "#FF6600", borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, flexShrink: 0 }}>🏪</div>
+                <LogoLoja url={veiculo.lojas?.logo_url} tamanho={44} />
                 <div style={{ flex: 1 }}>
                   <div style={{ fontSize: 14, fontWeight: 700, color: "#fff" }}>{veiculo.lojas?.nome || veiculo.nome_contato}</div>
                   <div style={{ fontSize: 11.5, color: "#7A7670", marginTop: 2 }}>📍 {veiculo.lojas?.cidade || veiculo.cidade}</div>
@@ -442,16 +440,12 @@ Motivo da denúncia:
                 <button onClick={() => abrirWhatsApp()} style={{ width: "100%", padding: 13, background: "#25D366", color: "#fff", border: "none", borderRadius: 9, fontSize: 14, fontWeight: 700, cursor: "pointer" }}>
                   📱 Chamar no WhatsApp
                 </button>
-                {linkMapa && (
-                  <a href={linkMapa} target="_blank" rel="noopener noreferrer" style={{ display: "block", textAlign: "center", width: "100%", boxSizing: "border-box", padding: 11, background: "#fff", color: "#1A1917", border: "1.5px solid #E8E6E1", borderRadius: 9, fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
-                    🗺️ Ver endereço no mapa
-                  </a>
-                )}
                 <button onClick={ligar} style={{ width: "100%", padding: 11, background: "#F7F6F3", color: "#1A1917", border: "1.5px solid #E8E6E1", borderRadius: 9, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
                   📞 Ligar: {telefoneContato}
                 </button>
               </div>
             </div>
+            {mapaLoja}
             <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, padding: 14, display: "flex", flexDirection: "column", gap: 8 }}>
               <BotaoFavorito id={veiculo.id} tipo="grande" />
               {avisoCompartilhar === "" && (

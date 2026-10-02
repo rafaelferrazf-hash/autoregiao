@@ -34,3 +34,29 @@ export async function atualizarPerfilLoja(id: string, perfil: PerfilLojaEditavel
     .single();
   return { loja: data as Loja | null, error };
 }
+
+// Logo/foto da loja: reduz no aparelho, envia para a pasta do lojista no Storage e grava em lojas.logo_url.
+export async function enviarLogoLoja(usuarioId: string, lojaId: string, arquivo: File, logoAnterior?: string | null) {
+  const { reduzirImagem } = await import("@/lib/imagem");
+  const { blob, extensao, tipo } = await reduzirImagem(arquivo, 600);
+  const caminho = `${usuarioId}/loja-logo-${Date.now()}.${extensao}`;
+  const envio = await supabase.storage.from("veiculos").upload(caminho, blob, { contentType: tipo });
+  if (envio.error) return { url: null, error: envio.error };
+  const url = supabase.storage.from("veiculos").getPublicUrl(caminho).data.publicUrl;
+  const { error } = await supabase.from("lojas").update({ logo_url: url }).eq("id", lojaId);
+  if (error) return { url: null, error };
+  if (logoAnterior) await apagarArquivoDoStorage(logoAnterior);
+  return { url, error: null };
+}
+
+export async function removerLogoLoja(lojaId: string, logoAtual: string | null) {
+  const { error } = await supabase.from("lojas").update({ logo_url: null }).eq("id", lojaId);
+  if (!error && logoAtual) await apagarArquivoDoStorage(logoAtual);
+  return { error };
+}
+
+async function apagarArquivoDoStorage(url: string) {
+  const marca = "/storage/v1/object/public/veiculos/";
+  const i = url.indexOf(marca);
+  if (i >= 0) await supabase.storage.from("veiculos").remove([url.slice(i + marca.length)]);
+}

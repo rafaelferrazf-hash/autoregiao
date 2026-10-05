@@ -53,7 +53,7 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
   `/loja/[id]`, `/favoritos`, `/alerta`, `/anunciar`, `/painel` (+ `/novo-anuncio`, `/planos`), `/admin`,
   `/login`, `/cadastro`, `/recuperar-senha`, `/redefinir-senha`, `/pagamento/retorno`, `/termos`, `/privacidade`, `/offline`.
 - SQL já rodado: `rls-fase0`, `fase1-seguranca`, `fase2`, `fase3`, `fase3-fotos`, `fase4a`, `fase4b`,
-  `fase5-alertas`, `fase6-fipe`, `fase7-filtros`, `fase8-logo-loja` (⏳ `fase9-excluir-conta` escrito, falta rodar). Modelos de e-mail do Auth: `supabase/emails/`.
+  `fase5-alertas`, `fase6-fipe`, `fase7-filtros`, `fase8-logo-loja`, `fase9-excluir-conta`. Modelos de e-mail do Auth: `supabase/emails/`.
 
 ## Regras de negócio importantes
 - Planos (`lib/planos.ts`): básico R$89/10 anúncios, profissional R$159/30 + destaque, premium R$299/ilimitado + destaque;
@@ -132,7 +132,7 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
      (`?origem=app` na abertura do Android, referrer `android-app://`, user agent `AutoRegiaoApp` no iPhone) e
      esconde preços/planos/cupons em /anunciar, /painel e /painel/planos. Assinatura só pelo site.
    - ✅ (05/10) Botão "Excluir minha conta" no Perfil da Loja (`components/ExcluirConta`, `/api/conta/excluir`,
-     `supabase/fase9-excluir-conta.sql` — **o Rafael precisa rodar o SQL antes de publicar**). Loja com pagamentos
+     `supabase/fase9-excluir-conta.sql`, rodado em 05/10). Loja com pagamentos
      fica anonimizada (registro fiscal); sem pagamentos é apagada. Admin não se exclui por aí.
    - Android 1.0.3 (código 4, abre em `/?origem=app`) gerado e assinado em `autoregiao-android\publicar\` —
      enviar ao teste fechado depois de publicar o site.

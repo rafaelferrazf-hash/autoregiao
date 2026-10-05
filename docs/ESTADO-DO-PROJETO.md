@@ -53,7 +53,7 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
   `/loja/[id]`, `/favoritos`, `/alerta`, `/anunciar`, `/painel` (+ `/novo-anuncio`, `/planos`), `/admin`,
   `/login`, `/cadastro`, `/recuperar-senha`, `/redefinir-senha`, `/pagamento/retorno`, `/termos`, `/privacidade`, `/offline`.
 - SQL já rodado: `rls-fase0`, `fase1-seguranca`, `fase2`, `fase3`, `fase3-fotos`, `fase4a`, `fase4b`,
-  `fase5-alertas`, `fase6-fipe`, `fase7-filtros`, `fase8-logo-loja`, `fase9-excluir-conta`. Modelos de e-mail do Auth: `supabase/emails/`.
+  `fase5-alertas`, `fase6-fipe`, `fase7-filtros`, `fase8-logo-loja`, `fase9-excluir-conta` (⏳ `fase10-push` escrito, falta rodar). Modelos de e-mail do Auth: `supabase/emails/`.
 
 ## Regras de negócio importantes
 - Planos (`lib/planos.ts`): básico R$89/10 anúncios, profissional R$159/30 + destaque, premium R$299/ilimitado + destaque;
@@ -134,8 +134,15 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
    - ✅ (05/10) Botão "Excluir minha conta" no Perfil da Loja (`components/ExcluirConta`, `/api/conta/excluir`,
      `supabase/fase9-excluir-conta.sql`, rodado em 05/10). Loja com pagamentos
      fica anonimizada (registro fiscal); sem pagamentos é apagada. Admin não se exclui por aí.
+   - ✅ (05/10) Projeto do app iPhone em `app-ios/` (Capacitor 8, ver `app-ios/LEIA-ME.md`) + `codemagic.yaml`
+     (Mac na nuvem → TestFlight). Site: `lib/nativo.ts` (compartilhar nativo, notificações), `components/OuvinteNativo`,
+     alertas por notificação no app (`alertas.push_token`, `supabase/fase10-push.sql`, `lib/push.ts` APNs direto).
+     Variáveis a criar na Vercel depois da conta Apple: `APNS_CHAVE_P8`, `APNS_CHAVE_ID`, `APNS_TIME_ID`.
+     Próximos: Rafael paga/inscreve Apple Developer (US$99/ano, pessoa física) → criar App ID com Push +
+     app no App Store Connect → Codemagic (login GitHub, integração "AutoRegiao" com chave de API) → TestFlight
+     no iPhone dele → capturas 6,9" → ficha, privacidade (rótulos) → revisão. Não testado num iPhone ainda.
    - Android 1.0.3 (código 4, abre em `/?origem=app`) gerado e assinado em `autoregiao-android\publicar\` —
-     enviar ao teste fechado depois de publicar o site.
+     ✅ enviado ao teste fechado em 05/10 (em revisão).
 2. **Mercado Pago em produção** — trocar `MP_ACCESS_TOKEN`/`MP_WEBHOOK_SECRET` pelos de produção,
    configurar webhook de produção, pagamento real de R$89 e estorno.
 3. 2FA no Supabase e no Mercado Pago.

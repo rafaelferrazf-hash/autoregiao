@@ -3,8 +3,10 @@ import Image from "next/image";
 import Link from "next/link";
 import Logo from "@/components/Logo";
 import LogoLoja from "@/components/LogoLoja";
+import { useEmAppDaLoja } from "@/lib/appLoja";
 import { useState, useEffect } from "react";
 import { usuarioAtual, sair } from "@/lib/dados/usuario";
+import ExcluirConta from "@/components/ExcluirConta";
 import { ehAdmin } from "@/lib/admin";
 import { resgatarCupom as resgatarCupomNoBanco } from "@/lib/dados/cupons";
 import { buscarLojaDoUsuario } from "@/lib/dados/lojas";
@@ -16,6 +18,8 @@ import { ehVitalicio, limiteDoPlano, mensagemErroAnuncio, nomeDoPlano, situacaoD
 import PerfilLoja from "@/components/PerfilLoja";
 
 export default function Painel() {
+  // Dentro dos apps das lojas: sem cupom nem compra de plano (ver lib/appLoja.ts).
+  const emApp = useEmAppDaLoja();
   const [abaAtiva, setAbaAtiva] = useState("dashboard");
   const [nomeUsuario, setNomeUsuario] = useState("...");
   const [nomeLoja, setNomeLoja] = useState("Minha Loja");
@@ -250,7 +254,10 @@ export default function Painel() {
 
         <div style={{ padding: "16px", flex: 1 }}>
           {abaAtiva === "perfil" ? (
-            lojaCarregada && <PerfilLoja key={loja?.id ?? "sem-loja"} loja={loja} onSalvo={l => { setLoja(l); setNomeLoja(l.nome); }} />
+            lojaCarregada && <>
+              <PerfilLoja key={loja?.id ?? "sem-loja"} loja={loja} onSalvo={l => { setLoja(l); setNomeLoja(l.nome); }} />
+              {!souAdmin && <ExcluirConta />}
+            </>
           ) : (<>
 
           {/* AVISO */}
@@ -267,7 +274,7 @@ export default function Painel() {
                     {situacao.tipo === "vencido" && <>Seu plano venceu em {dataFim}. <strong style={{ color: "#DC2626" }}>Seus anúncios estão fora do site</strong> e voltam assim que o plano for renovado.</>}
                   </div>
                 </div>
-                {situacao.tipo !== "sem_loja" && <Link href="/painel/planos" style={{ fontSize: 12, fontWeight: 600, color: "#FF6600", textDecoration: "none" }}>Ver planos →</Link>}
+                {situacao.tipo !== "sem_loja" && <Link href="/painel/planos" style={{ fontSize: 12, fontWeight: 600, color: "#FF6600", textDecoration: "none" }}>{emApp ? "Meu plano →" : "Ver planos →"}</Link>}
               </div>
             );
           })()}
@@ -446,7 +453,7 @@ export default function Painel() {
             <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, overflow: "hidden" }}>
               <div style={{ padding: "14px 18px", borderBottom: "1px solid #E8E6E1", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                 <div style={{ fontSize: 14, fontWeight: 700, color: "#1A1917" }}>Meu plano</div>
-                {!vitalicio && <Link href="/painel/planos" style={{ fontSize: 12, color: "#FF6600", fontWeight: 500, textDecoration: "none" }}>Ver planos →</Link>}
+                {!vitalicio && <Link href="/painel/planos" style={{ fontSize: 12, color: "#FF6600", fontWeight: 500, textDecoration: "none" }}>{emApp ? "Detalhes →" : "Ver planos →"}</Link>}
               </div>
               <div style={{ padding: "0 18px" }}>
                 {(vitalicio
@@ -460,7 +467,7 @@ export default function Painel() {
                 ))}
               </div>
               {!vitalicio && <div style={{ padding: "14px 18px", display: "flex", flexDirection: "column", gap: 10 }}>
-                <div style={{ background: "#F7F6F3", border: "1.5px solid #E8E6E1", borderRadius: 10, padding: 12 }}>
+                {!emApp && <div style={{ background: "#F7F6F3", border: "1.5px solid #E8E6E1", borderRadius: 10, padding: 12 }}>
                   <div style={{ fontSize: 11, fontWeight: 600, color: "#7A7670", marginBottom: 8, textTransform: "uppercase" as const, letterSpacing: 0.5 }}>🎟️ Resgatar cupom</div>
                   <div style={{ display: "flex", gap: 8 }}>
                     <input type="text" placeholder="AR-XXXXXX" value={cupom}
@@ -474,9 +481,9 @@ export default function Painel() {
                     </button>
                   </div>
                   {msg && <div style={{ fontSize: 11, color: msg.cor, marginTop: 6, fontWeight: 500 }}>{msg.texto}</div>}
-                </div>
+                </div>}
                 <Link href="/painel/planos" style={{ display: "block", textAlign: "center", width: "100%", padding: 10, background: "#FF6600", color: "#fff", borderRadius: 8, fontSize: 13, fontWeight: 700, textDecoration: "none", boxSizing: "border-box" }}>
-                  Ver planos e renovar
+                  {emApp ? "Ver meu plano" : "Ver planos e renovar"}
                 </Link>
               </div>}
             </div>

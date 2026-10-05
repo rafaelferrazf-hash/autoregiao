@@ -7,6 +7,7 @@ import { buscarLojaDoUsuario } from "@/lib/dados/lojas";
 import { iniciarPagamento, listarMeusPagamentos, rotuloMetodo, rotuloStatusPagamento, type PagamentoHistorico } from "@/lib/dados/pagamentos";
 import { ehVitalicio, formatarReais, nomeDoPlano, PERIODOS, PLANOS, situacaoDoPlano, valorDoPeriodo, type IdPlanoPago, type MesesPeriodo } from "@/lib/planos";
 import type { Loja } from "@/lib/tipos";
+import { useEmAppDaLoja } from "@/lib/appLoja";
 
 // Escolher plano + período e pagar pelo Mercado Pago (Pix, cartão ou boleto).
 export default function Planos() {
@@ -17,6 +18,8 @@ export default function Planos() {
   const [pagando, setPagando] = useState<IdPlanoPago | null>(null);
   const [erro, setErro] = useState("");
   const [agora] = useState(() => Date.now());
+  // Dentro dos apps das lojas (Google Play/App Store) não há compra: só a situação do plano.
+  const emApp = useEmAppDaLoja();
 
   useEffect(() => {
     (async () => {
@@ -62,7 +65,7 @@ export default function Planos() {
       </nav>
 
       <div style={{ maxWidth: 1000, margin: "0 auto", padding: "28px 16px 56px" }}>
-        <h1 style={{ fontSize: 26, fontWeight: 800, color: "#1A1917", marginBottom: 6 }}>Planos</h1>
+        <h1 style={{ fontSize: 26, fontWeight: 800, color: "#1A1917", marginBottom: 6 }}>{emApp ? "Meu plano" : "Planos"}</h1>
 
         {!carregado ? (
           <p style={{ fontSize: 14, color: "#7A7670" }}>Carregando...</p>
@@ -82,9 +85,10 @@ export default function Planos() {
               {situacao.tipo === "em_dia" && <> · válido até <strong style={{ color: "#1A1917" }}>{dataFim}</strong> ({situacao.diasRestantes} {situacao.diasRestantes === 1 ? "dia" : "dias"})</>}
               {situacao.tipo === "carencia" && <> · <strong style={{ color: "#DC2626" }}>venceu em {dataFim}</strong> — seus anúncios saem do site em {situacao.diasAteSairDoAr} {situacao.diasAteSairDoAr === 1 ? "dia" : "dias"}</>}
               {situacao.tipo === "vencido" && <> · <strong style={{ color: "#DC2626" }}>vencido desde {dataFim}</strong> — seus anúncios estão fora do site</>}
-              <br />Ao pagar, os dias são <strong style={{ color: "#1A1917" }}>somados</strong> ao que você ainda tem. Se já venceu, contam a partir de hoje.
+              {!emApp && <><br />Ao pagar, os dias são <strong style={{ color: "#1A1917" }}>somados</strong> ao que você ainda tem. Se já venceu, contam a partir de hoje.</>}
             </div>
 
+            {!emApp && <>
             {/* PERÍODO */}
             <div style={{ display: "inline-flex", background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 10, padding: 4, marginBottom: 20, gap: 4, flexWrap: "wrap" }}>
               {PERIODOS.map(p => (
@@ -129,11 +133,12 @@ export default function Planos() {
               Pagamento pelo Mercado Pago: Pix (aprovação na hora), cartão de crédito ou boleto (até 3 dias úteis). A renovação não é automática — avisamos no painel antes de vencer.
               Você pode desistir em até 7 dias após o pagamento com reembolso total (<Link href="/termos" style={{ color: "#FF6600" }}>Termos de Uso</Link>).
             </p>
+            </>}
           </>
         )}
 
         {/* HISTÓRICO */}
-        {historico.length > 0 && (
+        {!emApp && historico.length > 0 && (
           <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, marginTop: 28, overflowX: "auto" }}>
             <div style={{ padding: "14px 18px", borderBottom: "1px solid #E8E6E1", fontSize: 15, fontWeight: 700, color: "#1A1917" }}>Meus pagamentos</div>
             <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 560 }}>

@@ -14,13 +14,21 @@ const corpo = encodeURIComponent("Olá! Quero excluir minha conta do AutoRegião
 
 export default function ExcluirConta() {
   return (
-    <PaginaLegal titulo="Excluir minha conta" atualizadoEm="2 de outubro de 2026">
+    <PaginaLegal titulo="Excluir minha conta" atualizadoEm="5 de outubro de 2026">
       <p>
         Você pode pedir a exclusão da sua conta do <strong>AutoRegião</strong> (site www.autoregiao.com.br e app AutoRegião)
         e dos dados ligados a ela a qualquer momento.
       </p>
 
-      <h2>Como pedir</h2>
+      <h2>Pelo site ou pelo app (na hora)</h2>
+      <ol>
+        <li>Entre na sua conta e abra o <Link href="/painel">painel</Link>;</li>
+        <li>Toque em <strong>Perfil da Loja</strong> (no celular, <strong>Loja</strong>, no menu de baixo);</li>
+        <li>No fim da página, toque em <strong>Excluir minha conta</strong>, digite <strong>EXCLUIR</strong> e confirme.</li>
+      </ol>
+      <p>A exclusão é feita na hora e não pode ser desfeita.</p>
+
+      <h2>Ou por e-mail</h2>
       <ol>
         <li>
           Envie um e-mail para <a href={`mailto:${EMAIL_CONTATO}?subject=${assunto}&body=${corpo}`}>{EMAIL_CONTATO}</a> com o

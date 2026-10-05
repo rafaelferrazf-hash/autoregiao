@@ -3,6 +3,7 @@ import Link from "next/link";
 import Logo from "@/components/Logo";
 import BotoesConta from "@/components/BotoesConta";
 import { PLANOS, DIAS_GRATIS } from "@/lib/planos";
+import { useEmAppDaLoja } from "@/lib/appLoja";
 import { useState } from "react";
 
 // Itens do menu de navegação.
@@ -17,6 +18,7 @@ const menuItens = [
 ];
 
 export default function Anunciar() {
+  const emApp = useEmAppDaLoja();
   const [menuAberto, setMenuAberto] = useState(false);
 
   return (
@@ -134,7 +136,8 @@ export default function Anunciar() {
         </div>
       </section>
 
-      {/* PLANOS LOJISTAS */}
+      {/* PLANOS LOJISTAS — fora dos apps das lojas (ver lib/appLoja.ts) */}
+      {!emApp && <>
       <section id="planos" style={{ padding: "64px 16px", background: "#F7F6F3", scrollMarginTop: 60 }}>
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 40 }}>
@@ -177,6 +180,8 @@ export default function Anunciar() {
           </div>
         </div>
       </section>
+
+      </>}
 
       {/* PLANOS PARTICULAR */}
       <section style={{ padding: "64px 16px", background: "#fff" }}>

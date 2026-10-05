@@ -1,0 +1,28 @@
+{
+  "appId": "br.com.autoregiao.app",
+  "appName": "AutoRegião",
+  "webDir": "www",
+  "appendUserAgent": "AutoRegiaoApp",
+  "backgroundColor": "#1A1A1A",
+  "server": {
+    "url": "https://www.autoregiao.com.br/?origem=app",
+    "errorPath": "offline.html",
+    "allowNavigation": ["www.autoregiao.com.br", "autoregiao.com.br"]
+  },
+  "ios": {
+    "contentInset": "automatic",
+    "scheme": "AutoRegiao",
+    "limitsNavigationsToAppBoundDomains": false
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 1200,
+      "launchAutoHide": true,
+      "backgroundColor": "#1A1A1A",
+      "showSpinner": false
+    },
+    "PushNotifications": {
+      "presentationOptions": ["badge", "sound", "alert"]
+    }
+  }
+}

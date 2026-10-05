@@ -3,16 +3,17 @@ import { aplicarFiltros, descreverFiltros, filtrosParaQuery, lerFiltros, type Fi
 import { botaoEmail, enviarEmail, escaparHtml, modeloEmail } from "@/lib/email";
 import { formatarKm, formatarPreco } from "@/lib/formatar";
 import { URL_SITE } from "@/lib/site";
+import { enviarPushes, pushConfigurado } from "@/lib/push";
 import type { VeiculoComLoja } from "@/lib/tipos";
 
-// Alertas de veículos por e-mail. Tabela public.alertas (supabase/fase5-alertas.sql), acessada só
+// Alertas de veículos por e-mail ou, no app de iPhone, por notificação no aparelho (push_token). Tabela public.alertas (supabase/fase5-alertas.sql), acessada só
 // daqui, com a service key.
 
 const MAX_ALERTAS_POR_EMAIL = 10;
 const MAX_PEDIDOS_POR_DIA = 3;       // pedidos ainda não confirmados, por e-mail, em 24h
 const MAX_VEICULOS_POR_ALERTA = 6;   // no e-mail diário; o resto fica no link "ver todos"
 
-type Alerta = { id: string; email: string; filtros: Filtros; descricao: string; token: string; confirmado_em: string; ultimo_envio: string | null };
+type Alerta = { id: string; email: string | null; push_token: string | null; filtros: Filtros; descricao: string; token: string; confirmado_em: string; ultimo_envio: string | null };
 
 export const EMAIL_VALIDO = /^[^\s@]{1,64}@[^\s@]+\.[^\s@]{2,}$/;
 
@@ -77,6 +78,38 @@ export async function criarAlerta(email: string, filtros: Filtros): Promise<{ ok
   return { ok: true };
 }
 
+export const TOKEN_PUSH = /^[0-9a-f]{32,200}$/i;
+
+// Alerta criado no app de iPhone: vale na hora (a permissão de notificação já confirma o aparelho).
+export async function criarAlertaPush(pushToken: string, filtros: Filtros): Promise<{ ok: true } | { ok: false; erro: string }> {
+  const admin = criarClienteAdmin();
+  const token = pushToken.toLowerCase();
+  const { data: existentes } = await admin.from("alertas").select("filtros").eq("push_token", token).is("cancelado_em", null);
+  const lista = existentes ?? [];
+  const chave = JSON.stringify(filtrosParaQuery(filtros));
+  if (lista.some(a => JSON.stringify(filtrosParaQuery(a.filtros as Filtros)) === chave)) {
+    return { ok: false, erro: "Este celular já tem um alerta para essa busca." };
+  }
+  if (lista.length >= MAX_ALERTAS_POR_EMAIL) {
+    return { ok: false, erro: `Limite de ${MAX_ALERTAS_POR_EMAIL} alertas por celular. Cancele algum antes.` };
+  }
+  const { error } = await admin.from("alertas").insert({
+    push_token: token, filtros, descricao: descreverFiltros(filtros), confirmado_em: new Date().toISOString(),
+  });
+  return error ? { ok: false, erro: "Não foi possível criar o alerta. Tente de novo." } : { ok: true };
+}
+
+export async function listarAlertasPush(pushToken: string) {
+  const { data } = await criarClienteAdmin().from("alertas").select("id, descricao")
+    .eq("push_token", pushToken.toLowerCase()).is("cancelado_em", null).order("criado_em");
+  return data ?? [];
+}
+
+export async function cancelarAlertaPush(pushToken: string, id: string) {
+  await criarClienteAdmin().from("alertas").update({ cancelado_em: new Date().toISOString() })
+    .eq("push_token", pushToken.toLowerCase()).eq("id", id).is("cancelado_em", null);
+}
+
 const TOKEN = /^[0-9a-f-]{36}$/i;
 
 export async function confirmarAlerta(token: string): Promise<{ ok: boolean; descricao?: string }> {
@@ -125,19 +158,19 @@ function cartaoVeiculo(v: VeiculoComLoja): string {
 
 // Chamado 1x por dia pelo cron (/api/keepalive). Um e-mail por pessoa, juntando todos os alertas
 // dela; só envia quando há anúncio novo desde o último envio (ou desde a confirmação).
-export async function enviarAlertasDoDia(): Promise<{ alertas: number; emails: number; falhas: number }> {
+export async function enviarAlertasDoDia(): Promise<{ alertas: number; emails: number; pushes: number; falhas: number }> {
   const admin = criarClienteAdmin();
   const inicio = new Date().toISOString();
   const { data, error } = await admin
     .from("alertas")
-    .select("id, email, filtros, descricao, token, confirmado_em, ultimo_envio")
+    .select("id, email, push_token, filtros, descricao, token, confirmado_em, ultimo_envio")
     .not("confirmado_em", "is", null)
     .is("cancelado_em", null);
   if (error) throw error;
   const alertas = (data ?? []) as Alerta[];
 
   const porEmail = new Map<string, Alerta[]>();
-  for (const a of alertas) porEmail.set(a.email, [...(porEmail.get(a.email) ?? []), a]);
+  for (const a of alertas) if (a.email) porEmail.set(a.email, [...(porEmail.get(a.email) ?? []), a]);
 
   let emails = 0, falhas = 0;
   for (const [email, lista] of porEmail) {
@@ -183,5 +216,44 @@ export async function enviarAlertasDoDia(): Promise<{ alertas: number; emails: n
       console.error("alerta: falha no envio diário:", envio.erro);
     }
   }
-  return { alertas: alertas.length, emails, falhas };
+  const pushes = pushConfigurado() ? await enviarAlertasPush(alertas.filter(a => a.push_token && !a.email), inicio) : 0;
+  return { alertas: alertas.length, emails, pushes, falhas };
+}
+
+// Uma notificação por aparelho, juntando os alertas dele. Tocar abre a busca do alerta.
+async function enviarAlertasPush(alertas: Alerta[], inicio: string): Promise<number> {
+  const admin = criarClienteAdmin();
+  const porAparelho = new Map<string, Alerta[]>();
+  for (const a of alertas) porAparelho.set(a.push_token!, [...(porAparelho.get(a.push_token!) ?? []), a]);
+
+  const envios: { token: string; ids: string[]; titulo: string; texto: string; url: string }[] = [];
+  for (const [token, lista] of porAparelho) {
+    const comNovos: { a: Alerta; total: number }[] = [];
+    for (const a of lista) {
+      const { total } = await veiculosNovos(a.filtros, a.ultimo_envio ?? a.confirmado_em);
+      if (total) comNovos.push({ a, total });
+    }
+    const ids = lista.map(a => a.id);
+    if (!comNovos.length) {
+      await admin.from("alertas").update({ ultimo_envio: inicio }).in("id", ids);
+      continue;
+    }
+    const total = comNovos.reduce((s, x) => s + x.total, 0);
+    const primeiro = comNovos[0];
+    envios.push({
+      token, ids,
+      titulo: total === 1 ? "1 anúncio novo para o seu alerta" : `${total} anúncios novos para os seus alertas`,
+      texto: comNovos.length === 1 ? primeiro.a.descricao : comNovos.map(x => x.a.descricao).join(" · ").slice(0, 170),
+      url: `/veiculos${filtrosParaQuery(primeiro.a.filtros)}`,
+    });
+  }
+
+  const resultados = await enviarPushes(envios);
+  let enviados = 0;
+  for (const [i, r] of resultados.entries()) {
+    const { ids, token } = envios[i];
+    if (r === "ok") { enviados++; await admin.from("alertas").update({ ultimo_envio: inicio }).in("id", ids); }
+    else if (r === "invalido") await admin.from("alertas").update({ cancelado_em: inicio }).eq("push_token", token).is("cancelado_em", null);
+  }
+  return enviados;
 }

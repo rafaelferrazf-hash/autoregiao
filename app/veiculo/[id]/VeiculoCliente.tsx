@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import { compartilharNativo } from "@/lib/nativo";
 import Link from "next/link";
 import Logo from "@/components/Logo";
 import BotoesConta from "@/components/BotoesConta";
@@ -88,6 +89,7 @@ export default function Veiculo({ inicial }: { inicial: VeiculoComLoja }) {
     if (!veiculo) return;
     const url = `${window.location.origin}/veiculo/${veiculo.id}`;
     const texto = `${veiculo.nome} por ${formatarPreco(veiculo.preco)} no AutoRegião`;
+    if (await compartilharNativo({ title: texto, text: texto, url })) return; // app de iPhone
     if (navigator.share) {
       try { await navigator.share({ title: texto, text: texto, url }); } catch { /* cancelado */ }
       return;

@@ -1,0 +1,23 @@
+{
+  "name": "autoregiao-ios",
+  "private": true,
+  "version": "1.0.0",
+  "description": "App de iPhone do AutoRegião (Capacitor): abre o site www.autoregiao.com.br com recursos nativos.",
+  "scripts": {
+    "sync": "cap sync ios",
+    "icones": "capacitor-assets generate --ios --iconBackgroundColor #1A1A1A --splashBackgroundColor #1A1A1A"
+  },
+  "dependencies": {
+    "@capacitor/app": "^8.1.2",
+    "@capacitor/core": "^8.5.2",
+    "@capacitor/ios": "^8.5.2",
+    "@capacitor/push-notifications": "^8.1.3",
+    "@capacitor/share": "^8.0.3",
+    "@capacitor/splash-screen": "^8.0.2",
+    "@capacitor/status-bar": "^8.0.4"
+  },
+  "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
+    "@capacitor/cli": "^8.5.2"
+  }
+}

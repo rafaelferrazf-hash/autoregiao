@@ -1,0 +1,36 @@
+# Montagem do app de iPhone (pasta app-ios/) num Mac na nuvem do Codemagic e envio ao TestFlight.
+# Começa manualmente pelo site do Codemagic (botão "Start new build").
+# Pré-requisitos no Codemagic: integração "App Store Connect" com o nome abaixo (chave de API da Apple,
+# colada pelo Rafael direto no Codemagic — nunca no chat nem no código).
+workflows:
+  ios-testflight:
+    name: App iPhone -> TestFlight
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+    integrations:
+      app_store_connect: AutoRegiao
+    environment:
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: br.com.autoregiao.app
+      node: 22
+      xcode: latest
+    scripts:
+      - name: Instalar dependências
+        script: cd app-ios && npm ci
+      - name: Copiar configuração para o projeto iOS
+        script: cd app-ios && npx cap sync ios
+      - name: Número da montagem
+        # Cada montagem precisa de um número maior que a anterior (BUILD_NUMBER do Codemagic).
+        script: |
+          sed -i '' "s/CURRENT_PROJECT_VERSION = [0-9]*;/CURRENT_PROJECT_VERSION = $BUILD_NUMBER;/" app-ios/ios/App/App.xcodeproj/project.pbxproj
+      - name: Perfis de assinatura
+        script: xcode-project use-profiles --project app-ios/ios/App/App.xcodeproj
+      - name: Montar o app (.ipa)
+        script: xcode-project build-ipa --project app-ios/ios/App/App.xcodeproj --scheme App
+    artifacts:
+      - build/ios/ipa/*.ipa
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true

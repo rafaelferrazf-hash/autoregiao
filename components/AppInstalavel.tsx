@@ -16,6 +16,7 @@ const TRINTA_DIAS = 30 * 86_400_000;
 const semAssinatura = () => () => {};
 function convitePermitido() {
   if (window.matchMedia("(display-mode: standalone)").matches) return false; // já é o app
+  if (/AutoRegiaoApp/i.test(navigator.userAgent)) return false;                // app do iPhone (App Store)
   if (!/android|iphone|ipad|ipod/i.test(navigator.userAgent)) return false;  // só no celular
   try {
     const fechado = Number(localStorage.getItem(CHAVE) || 0);

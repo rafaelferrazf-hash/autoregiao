@@ -33,7 +33,8 @@ export const metadata: Metadata = {
   },
   // App instalável (manifest em app/manifest.ts): ícone e nome no iPhone.
   appleWebApp: { capable: true, title: NOME_SITE, statusBarStyle: "default" },
-  icons: { apple: "/icones/apple-touch-icon.png" },
+  // Ícones: app/favicon.ico, app/icon.png e app/apple-icon.png (o Next gera as tags sozinho;
+  // não declarar `icons` aqui, senão ele substitui as tags dos arquivos).
 };
 
 export const viewport: Viewport = {

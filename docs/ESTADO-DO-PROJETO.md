@@ -53,7 +53,7 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
   `/loja/[id]`, `/favoritos`, `/alerta`, `/anunciar`, `/painel` (+ `/novo-anuncio`, `/planos`), `/admin`,
   `/login`, `/cadastro`, `/recuperar-senha`, `/redefinir-senha`, `/pagamento/retorno`, `/termos`, `/privacidade`, `/offline`.
 - SQL já rodado: `rls-fase0`, `fase1-seguranca`, `fase2`, `fase3`, `fase3-fotos`, `fase4a`, `fase4b`,
-  `fase5-alertas`, `fase6-fipe`, `fase7-filtros`, `fase8-logo-loja`. Modelos de e-mail do Auth: `supabase/emails/`.
+  `fase5-alertas`, `fase6-fipe`, `fase7-filtros`, `fase8-logo-loja` (⏳ `fase9-excluir-conta` escrito, falta rodar). Modelos de e-mail do Auth: `supabase/emails/`.
 
 ## Regras de negócio importantes
 - Planos (`lib/planos.ts`): básico R$89/10 anúncios, profissional R$159/30 + destaque, premium R$299/ilimitado + destaque;
@@ -128,6 +128,14 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
    tela offline; botão "Excluir minha conta" dentro do app (regra 5.1.1); sem compra de planos dentro do app
    (regra 3.1.1). Montagem num Mac na nuvem (Codemagic). Custo: US$99/ano. Previsão: 2–3 semanas.
    Concorrente CarroSP tem apps separados do site, nota 2,7 nas duas lojas (usuários dizem que o site é melhor).
+   - ✅ (05/10) Sem compra de planos dentro dos apps: `lib/appLoja.ts` (`useEmAppDaLoja`) detecta o app
+     (`?origem=app` na abertura do Android, referrer `android-app://`, user agent `AutoRegiaoApp` no iPhone) e
+     esconde preços/planos/cupons em /anunciar, /painel e /painel/planos. Assinatura só pelo site.
+   - ✅ (05/10) Botão "Excluir minha conta" no Perfil da Loja (`components/ExcluirConta`, `/api/conta/excluir`,
+     `supabase/fase9-excluir-conta.sql` — **o Rafael precisa rodar o SQL antes de publicar**). Loja com pagamentos
+     fica anonimizada (registro fiscal); sem pagamentos é apagada. Admin não se exclui por aí.
+   - Android 1.0.3 (código 4, abre em `/?origem=app`) gerado e assinado em `autoregiao-android\publicar\` —
+     enviar ao teste fechado depois de publicar o site.
 2. **Mercado Pago em produção** — trocar `MP_ACCESS_TOKEN`/`MP_WEBHOOK_SECRET` pelos de produção,
    configurar webhook de produção, pagamento real de R$89 e estorno.
 3. 2FA no Supabase e no Mercado Pago.

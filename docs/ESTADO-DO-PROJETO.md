@@ -53,7 +53,7 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
   `/loja/[id]`, `/favoritos`, `/alerta`, `/anunciar`, `/painel` (+ `/novo-anuncio`, `/planos`), `/admin`,
   `/login`, `/cadastro`, `/recuperar-senha`, `/redefinir-senha`, `/pagamento/retorno`, `/termos`, `/privacidade`, `/offline`.
 - SQL já rodado: `rls-fase0`, `fase1-seguranca`, `fase2`, `fase3`, `fase3-fotos`, `fase4a`, `fase4b`,
-  `fase5-alertas`, `fase6-fipe`, `fase7-filtros`, `fase8-logo-loja`, `fase9-excluir-conta` (⏳ `fase10-push` escrito, falta rodar). Modelos de e-mail do Auth: `supabase/emails/`.
+  `fase5-alertas`, `fase6-fipe`, `fase7-filtros`, `fase8-logo-loja`, `fase9-excluir-conta`, `fase10-push`. Modelos de e-mail do Auth: `supabase/emails/`.
 
 ## Regras de negócio importantes
 - Planos (`lib/planos.ts`): básico R$89/10 anúncios, profissional R$159/30 + destaque, premium R$299/ilimitado + destaque;

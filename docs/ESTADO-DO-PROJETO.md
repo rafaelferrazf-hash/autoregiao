@@ -77,6 +77,10 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
 - 06/10/2026: ícones da marca no lugar dos emojis (`components/Icone`, Tabler; aprovado pelo Rafael pela prévia).
   Foto de capa da loja (`lojas.capa_url`) grande no topo de /loja/[id] + botão "Ver revenda" no anúncio
   (também no celular). Favicon (`app/favicon.ico`; não declarar `icons` no metadata).
+- 06/10/2026 (CarroSP, página do anúncio): galeria em faixa larga, preço no topo do cartão da direita,
+  caminho clicável (`lib/caminhoVeiculo.ts`, + BreadcrumbList), "ver todas as opções do mesmo modelo".
+  Ideias aprovadas para depois: endereço do anúncio com o nome do carro (SEO); tipo de carroceria
+  (Sedan/Hatch/SUV/Picape) com filtro; "Enviar mensagem/proposta" por e-mail.
 - 2FA nas contas principais. App instalável (PWA), arrastar fotos, revisão de celular (375/320px).
 - Marca nova (01/10/2026), do manual em `C:\Users\rafae\AutoRegiao-Logo-Novo` (só PNG, sem vetor): logo AR, laranja
   #FF6600, grafite #1A1A1A, Exo 2 nos títulos (h1–h3). Slogan trocado para "COMPRE | VENDA | ANUNCIE" (o manual

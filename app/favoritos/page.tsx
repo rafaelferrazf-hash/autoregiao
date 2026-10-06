@@ -8,6 +8,7 @@ import Rodape from "@/components/Rodape";
 import { buscarVeiculosPorIds } from "@/lib/dados/veiculos";
 import { manterFavoritos, useFavoritos } from "@/lib/favoritos";
 import type { VeiculoComLoja } from "@/lib/tipos";
+import Icone from "@/components/Icone";
 
 // Anúncios que o visitante salvou com a estrela (guardados no navegador, sem conta).
 export default function Favoritos() {
@@ -53,7 +54,7 @@ export default function Favoritos() {
       </nav>
 
       <div style={{ maxWidth: 1180, margin: "0 auto", padding: "24px 16px 60px" }}>
-        <h1 style={{ fontSize: 24, fontWeight: 800, color: "#1A1917", marginBottom: 4 }}>★ Meus favoritos</h1>
+        <h1 style={{ fontSize: 24, fontWeight: 800, color: "#1A1917", marginBottom: 4 }}><Icone nome="estrelaCheia" cor="#FF6600" /> Meus favoritos</h1>
         <p style={{ fontSize: 13, color: "#7A7670", marginBottom: 20 }}>Os anúncios que você salvou ficam guardados neste aparelho.</p>
 
         {resultado && resultado.removidos > 0 && (
@@ -66,9 +67,9 @@ export default function Favoritos() {
           <div style={{ fontSize: 14, color: "#7A7670", padding: "40px 0", textAlign: "center" }}>Carregando seus favoritos...</div>
         ) : veiculos.length === 0 ? (
           <div style={{ textAlign: "center", padding: "60px 20px", background: "#fff", borderRadius: 12, border: "1.5px solid #E8E6E1" }}>
-            <div style={{ fontSize: 40, marginBottom: 12, color: "#FF6600" }}>☆</div>
+            <div style={{ marginBottom: 12, color: "#FF6600" }}><Icone nome="estrela" tamanho={42} traco={1.5} /></div>
             <div style={{ fontSize: 16, fontWeight: 700, color: "#1A1917", marginBottom: 6 }}>Nenhum favorito ainda</div>
-            <div style={{ fontSize: 13, color: "#7A7670", marginBottom: 18 }}>Toque na estrela ☆ de um anúncio para salvar e ver depois.</div>
+            <div style={{ fontSize: 13, color: "#7A7670", marginBottom: 18 }}>Toque na estrela <Icone nome="estrela" /> de um anúncio para salvar e ver depois.</div>
             <Link href="/veiculos" style={{ display: "inline-block", padding: "11px 20px", background: "#FF6600", color: "#fff", borderRadius: 8, fontSize: 14, fontWeight: 700, textDecoration: "none" }}>Buscar veículos</Link>
           </div>
         ) : (

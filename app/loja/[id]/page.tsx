@@ -8,6 +8,7 @@ import { notFound } from "next/navigation";
 import { criarClienteAnonimo } from "@/lib/supabase-servidor";
 import type { Loja, Veiculo } from "@/lib/tipos";
 import type { Metadata } from "next";
+import Icone, { type NomeIcone } from "@/components/Icone";
 
 // Título, descrição e foto de capa para o link da loja no WhatsApp/Google.
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
@@ -67,10 +68,10 @@ export default async function PerfilLoja({ params }: { params: Promise<{ id: str
   const desde = loja.criado_em ? new Date(loja.criado_em).getFullYear() : null;
   const local = [loja.cidade, loja.estado].filter(Boolean).join(", ");
   const informacoes = [
-    ["📍", "Endereço", loja.endereco],
-    ["🕐", "Horário", loja.horario],
-    ["📞", "Telefone", loja.telefone],
-  ].filter(([, , valor]) => valor) as [string, string, string][];
+    ["local", "Endereço", loja.endereco],
+    ["relogio", "Horário", loja.horario],
+    ["telefone", "Telefone", loja.telefone],
+  ].filter(([, , valor]) => valor) as [NomeIcone, string, string][];
 
   return (
     <main style={{ background: "#F7F6F3", minHeight: "100vh" }}>
@@ -103,10 +104,10 @@ export default async function PerfilLoja({ params }: { params: Promise<{ id: str
             <div style={{ flex: 1, minWidth: 200 }}>
               <div style={{ fontSize: 22, fontWeight: 800, color: "#fff", marginBottom: 4 }}>{loja.nome}</div>
               <div style={{ fontSize: 13, color: "rgba(255,255,255,0.6)", marginBottom: 10 }}>
-                {local && <>📍 {local}</>}{local && desde && " · "}{desde && <>Na plataforma desde {desde}</>}
+                {local && <><Icone nome="local" /> {local}</>}{local && desde && " · "}{desde && <>Na plataforma desde {desde}</>}
               </div>
               <div>
-                <span style={{ fontSize: 15, fontWeight: 700, color: "#fff" }}>🚗 {veiculos.length}</span>
+                <span style={{ fontSize: 15, fontWeight: 700, color: "#fff" }}><Icone nome="carro" /> {veiculos.length}</span>
                 <span style={{ fontSize: 12, color: "rgba(255,255,255,0.5)", marginLeft: 4 }}>{veiculos.length === 1 ? "veículo à venda" : "veículos à venda"}</span>
               </div>
             </div>
@@ -114,13 +115,13 @@ export default async function PerfilLoja({ params }: { params: Promise<{ id: str
               <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
                 {telefone && (
                   <a href={`tel:${telefone}`} style={{ padding: "8px 16px", border: "1.5px solid rgba(255,255,255,0.2)", borderRadius: 8, color: "#fff", textDecoration: "none", fontSize: 13, fontWeight: 500 }}>
-                    📞 Ligar
+                    <Icone nome="telefone" /> Ligar
                   </a>
                 )}
                 {whatsapp && (
                   <a href={`https://wa.me/55${whatsapp}`} target="_blank" rel="noopener noreferrer"
                     style={{ padding: "8px 16px", background: "#25D366", border: "none", borderRadius: 8, color: "#fff", textDecoration: "none", fontSize: 13, fontWeight: 600 }}>
-                    💬 WhatsApp
+                    <Icone nome="whatsapp" /> WhatsApp
                   </a>
                 )}
               </div>
@@ -163,7 +164,7 @@ export default async function PerfilLoja({ params }: { params: Promise<{ id: str
                 <div style={{ fontSize: 14, fontWeight: 700, color: "#1A1917", marginBottom: 12 }}>Informações</div>
                 {informacoes.map(([icon, label, value]) => (
                   <div key={label} style={{ display: "flex", gap: 10, marginBottom: 12 }}>
-                    <span style={{ fontSize: 16 }}>{icon}</span>
+                    <span style={{ color: "#FF6600", display: "flex", paddingTop: 2 }}><Icone nome={icon} tamanho={18} /></span>
                     <div>
                       <div style={{ fontSize: 10, fontWeight: 600, color: "#7A7670", textTransform: "uppercase", letterSpacing: 0.4 }}>{label}</div>
                       <div style={{ fontSize: 13, color: "#1A1917", marginTop: 1 }}>{value}</div>
@@ -178,7 +179,7 @@ export default async function PerfilLoja({ params }: { params: Promise<{ id: str
             {whatsapp && (
               <a href={`https://wa.me/55${whatsapp}`} target="_blank" rel="noopener noreferrer"
                 style={{ display: "block", background: "#25D366", borderRadius: 12, padding: "16px", textAlign: "center", textDecoration: "none" }}>
-                <div style={{ fontSize: 24, marginBottom: 6 }}>💬</div>
+                <div style={{ marginBottom: 6, color: "#fff" }}><Icone nome="whatsapp" tamanho={28} /></div>
                 <div style={{ fontSize: 14, fontWeight: 700, color: "#fff", marginBottom: 3 }}>Falar com a loja</div>
                 <div style={{ fontSize: 12, color: "rgba(255,255,255,0.8)" }}>Responde pelo WhatsApp</div>
               </a>

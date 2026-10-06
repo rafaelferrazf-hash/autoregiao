@@ -9,6 +9,7 @@ import { criarVeiculo, atualizarVeiculo, buscarVeiculoDoDono, enviarFotoVeiculo,
 import SeletorFipe, { type EscolhaFipe } from "@/components/SeletorFipe";
 import { formatarPreco, lerPreco } from "@/lib/formatar";
 import { lerAnoFipe, modeloBase } from "@/lib/nomesVeiculo";
+import Icone from "@/components/Icone";
 
 // Foto nova (file, ainda não enviada) ou já publicada (url, no modo edição).
 type FotoPreview = { file?: File; url?: string; preview: string };
@@ -261,7 +262,7 @@ export default function NovoAnuncio() {
   if (etapa === 4) return (
     <main style={{ background: "#F7F6F3", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
       <div style={{ textAlign: "center", padding: 40 }}>
-        <div style={{ fontSize: 64, marginBottom: 16 }}>🚗</div>
+        <div style={{ marginBottom: 16, color: "#FF6600" }}><Icone nome="carro" tamanho={60} traco={1.5} /></div>
         <div style={{ fontSize: 26, fontWeight: 800, color: "#1A1917", marginBottom: 8 }}>{editandoId ? "Anúncio atualizado!" : "Anúncio publicado!"}</div>
         <p style={{ fontSize: 15, color: "#7A7670", marginBottom: 24 }}>{editandoId ? "As alterações já estão no site." : "Seu veículo já está visível para compradores da região."}</p>
         <div style={{ display: "flex", gap: 10, justifyContent: "center" }}>
@@ -301,7 +302,7 @@ export default function NovoAnuncio() {
 
             {erro && (
               <div style={{ background: "#FEE2E2", border: "1.5px solid #FCA5A5", borderRadius: 8, padding: "12px 14px", marginBottom: 16, fontSize: 13, color: "#991B1B", fontWeight: 500 }}>
-                ⚠️ {erro}
+                <Icone nome="atencao" /> {erro}
               </div>
             )}
 
@@ -310,10 +311,10 @@ export default function NovoAnuncio() {
                 <div>
                   <div style={{ fontSize: 11, fontWeight: 600, color: "#7A7670", letterSpacing: 0.5, textTransform: "uppercase", marginBottom: 8 }}>Tipo</div>
                   <div style={{ display: "flex", gap: 8 }}>
-                    {[["carro", "🚗 Carro"], ["moto", "🏍️ Moto"], ["utilitario", "🚐 Utilitário"]].map(([val, label]) => (
+                    {([["carro", "Carro"], ["moto", "Moto"], ["utilitario", "Utilitário"]] as const).map(([val, label]) => (
                       <button key={val} onClick={() => { set("tipo", val); set("marca", ""); set("modelo", ""); set("versao", ""); setFipe(null); }}
                         style={{ flex: 1, padding: "8px", borderRadius: 8, border: "1.5px solid", borderColor: form.tipo === val ? "#FF6600" : "#E8E6E1", background: form.tipo === val ? "#FFF5F1" : "#fff", color: form.tipo === val ? "#FF6600" : "#7A7670", fontWeight: 600, fontSize: 13, cursor: "pointer" }}>
-                        {label}
+                        <Icone nome={val} /> {label}
                       </button>
                     ))}
                   </div>
@@ -331,7 +332,7 @@ export default function NovoAnuncio() {
                   />
                 ) : (
                   <div style={{ fontSize: 12, color: "#7A7670", background: "#F7F6F3", border: "1.5px solid #E8E6E1", borderRadius: 10, padding: "10px 12px", lineHeight: 1.5 }}>
-                    Preencha marca, modelo e versão à mão. Sem a Tabela FIPE, o anúncio não recebe o selo “💰 Abaixo da FIPE”.{" "}
+                    Preencha marca, modelo e versão à mão. Sem a Tabela FIPE, o anúncio não recebe o selo “Abaixo da FIPE”.{" "}
                     <button type="button" onClick={() => setManual(false)} style={{ background: "none", border: "none", padding: 0, color: "#FF6600", fontWeight: 600, cursor: "pointer", fontSize: 12 }}>
                       Buscar na Tabela FIPE
                     </button>
@@ -428,7 +429,7 @@ export default function NovoAnuncio() {
                     onClick={() => inputFotoRef.current?.click()}
                     style={{ border: "2px dashed #E8E6E1", borderRadius: 10, padding: "28px", textAlign: "center", background: "#F7F6F3", cursor: "pointer", marginBottom: 12 }}
                   >
-                    <div style={{ fontSize: 28, marginBottom: 6 }}>📷</div>
+                    <div style={{ marginBottom: 6, color: "#FF6600" }}><Icone nome="camera" tamanho={30} traco={1.5} /></div>
                     <div style={{ fontSize: 13, color: "#1A1917", fontWeight: 500, marginBottom: 2 }}>Clique para adicionar fotos</div>
                     <div style={{ fontSize: 11, color: "#7A7670" }}>JPG ou PNG · Até 20 fotos · 5MB cada</div>
                   </div>
@@ -453,7 +454,7 @@ export default function NovoAnuncio() {
                           <button
                             onClick={() => removerFoto(i)}
                             style={{ position: "absolute", top: 4, right: 4, width: 20, height: 20, borderRadius: "50%", background: "rgba(0,0,0,0.6)", border: "none", color: "#fff", fontSize: 11, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}
-                          >✕</button>
+                          ><Icone nome="fechar" tamanho={12} traco={2.4} /></button>
                         </div>
                       ))}
                     </div>
@@ -468,7 +469,7 @@ export default function NovoAnuncio() {
                       <div key={op} onClick={() => toggleOpcional(op)}
                         style={{ display: "flex", alignItems: "center", gap: 8, padding: "7px 10px", borderRadius: 7, border: "1.5px solid", borderColor: form.opcionais.includes(op) ? "#FF6600" : "#E8E6E1", background: form.opcionais.includes(op) ? "#FFF5F1" : "#fff", cursor: "pointer" }}>
                         <div style={{ width: 14, height: 14, borderRadius: 3, border: "1.5px solid", borderColor: form.opcionais.includes(op) ? "#FF6600" : "#E8E6E1", background: form.opcionais.includes(op) ? "#FF6600" : "#fff", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                          {form.opcionais.includes(op) && <span style={{ color: "#fff", fontSize: 9 }}>✓</span>}
+                          {form.opcionais.includes(op) && <Icone nome="check" tamanho={11} traco={3} cor="#fff" />}
                         </div>
                         <span style={{ fontSize: 12, color: form.opcionais.includes(op) ? "#FF6600" : "#1A1917" }}>{op}</span>
                       </div>
@@ -488,7 +489,7 @@ export default function NovoAnuncio() {
             {etapa === 3 && (
               <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
                 <div style={{ background: "#F7F6F3", borderRadius: 10, padding: "14px 16px", fontSize: 13, color: "#7A7670" }}>
-                  📋 Essas informações serão exibidas no anúncio para os compradores entrarem em contato.
+                  <Icone nome="info" /> Essas informações serão exibidas no anúncio para os compradores entrarem em contato.
                 </div>
                 {[["Nome / Loja", "nome", "text", "Ex: Auto Paulista"],
                   ["Telefone / WhatsApp", "telefone", "tel", "(14) 99999-9999"],
@@ -507,7 +508,7 @@ export default function NovoAnuncio() {
                     ))}
                   </div>
                   {fotos.length > 0 && (
-                    <div style={{ fontSize: 11, color: "#16A34A", marginBottom: 6 }}>📷 {fotos.length} foto{fotos.length > 1 ? "s" : ""} adicionada{fotos.length > 1 ? "s" : ""}</div>
+                    <div style={{ fontSize: 11, color: "#16A34A", marginBottom: 6 }}><Icone nome="camera" /> {fotos.length} foto{fotos.length > 1 ? "s" : ""} adicionada{fotos.length > 1 ? "s" : ""}</div>
                   )}
                   {lerPreco(form.preco) && <div style={{ fontSize: 18, fontWeight: 800, color: "#FF6600" }}>{formatarPreco(lerPreco(form.preco))}</div>}
                 </div>
@@ -523,7 +524,7 @@ export default function NovoAnuncio() {
               )}
               <button onClick={etapa === 3 ? publicar : avancar} disabled={carregando || uploadando}
                 style={{ flex: 2, padding: "10px", background: carregando || uploadando ? "#C44818" : "#FF6600", border: "none", borderRadius: 8, color: "#fff", fontSize: 15, fontWeight: 700, cursor: carregando || uploadando ? "not-allowed" : "pointer", opacity: carregando || uploadando ? 0.8 : 1 }}>
-                {uploadando ? "Enviando fotos..." : carregando ? (editandoId ? "Salvando..." : "Publicando...") : etapa === 3 ? (editandoId ? "Salvar alterações ✓" : "Publicar anúncio 🚀") : "Continuar →"}
+                {uploadando ? "Enviando fotos..." : carregando ? (editandoId ? "Salvando..." : "Publicando...") : etapa === 3 ? (editandoId ? "Salvar alterações" : "Publicar anúncio") : "Continuar →"}
               </button>
             </div>
           </div>

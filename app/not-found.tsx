@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Logo from "@/components/Logo";
+import Icone from "@/components/Icone";
 
 // Página de "não encontrado" do site todo (endereço errado, anúncio removido, loja inativa).
 export default function NaoEncontrado() {
@@ -13,7 +14,7 @@ export default function NaoEncontrado() {
 
       <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "24px 16px" }}>
         <div style={{ maxWidth: 440, width: "100%", textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>🚗💨</div>
+          <div style={{ marginBottom: 8, color: "#FF6600" }}><Icone nome="carro" tamanho={56} traco={1.5} /></div>
           <h1 style={{ fontSize: 24, fontWeight: 800, color: "#1A1917", marginBottom: 8 }}>Página não encontrada</h1>
           <p style={{ fontSize: 14, color: "#7A7670", lineHeight: 1.5, marginBottom: 24 }}>
             O endereço pode estar errado, ou o anúncio já foi vendido ou removido pelo vendedor.

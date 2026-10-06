@@ -8,6 +8,7 @@ import { iniciarPagamento, listarMeusPagamentos, rotuloMetodo, rotuloStatusPagam
 import { ehVitalicio, formatarReais, nomeDoPlano, PERIODOS, PLANOS, situacaoDoPlano, valorDoPeriodo, type IdPlanoPago, type MesesPeriodo } from "@/lib/planos";
 import type { Loja } from "@/lib/tipos";
 import { useEmAppDaLoja } from "@/lib/appLoja";
+import Icone from "@/components/Icone";
 
 // Escolher plano + período e pagar pelo Mercado Pago (Pix, cartão ou boleto).
 export default function Planos() {
@@ -75,7 +76,7 @@ export default function Planos() {
           </div>
         ) : ehVitalicio(loja.plano) ? (
           <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, padding: 20, fontSize: 14, color: "#1A1917" }}>
-            👑 Sua loja tem <strong>acesso vitalício</strong>: sem vencimento e sem limite de anúncios. Não é preciso pagar.
+            <Icone nome="coroa" cor="#FF6600" /> Sua loja tem <strong>acesso vitalício</strong>: sem vencimento e sem limite de anúncios. Não é preciso pagar.
           </div>
         ) : (
           <>
@@ -99,7 +100,7 @@ export default function Planos() {
               ))}
             </div>
 
-            {erro && <div style={{ background: "#FEE2E2", border: "1.5px solid #FCA5A5", borderRadius: 8, padding: "10px 12px", fontSize: 13, color: "#991B1B", marginBottom: 16 }}>⚠️ {erro}</div>}
+            {erro && <div style={{ background: "#FEE2E2", border: "1.5px solid #FCA5A5", borderRadius: 8, padding: "10px 12px", fontSize: 13, color: "#991B1B", marginBottom: 16 }}><Icone nome="atencao" /> {erro}</div>}
 
             {/* PLANOS */}
             <div className="planos-painel">
@@ -119,7 +120,7 @@ export default function Planos() {
                       {meses === 1 ? "por mês" : <>por {meses} meses · <s>{formatarReais(cheio)}</s> <span style={{ color: "#16A34A", fontWeight: 600 }}>economize {formatarReais(cheio - total)}</span></>}
                     </div>
                     {p.recursos.map(r => (
-                      <div key={r} style={{ fontSize: 12.5, color: "#1A1917", marginBottom: 7, display: "flex", gap: 6 }}><span style={{ color: "#16A34A" }}>✔</span>{r}</div>
+                      <div key={r} style={{ fontSize: 12.5, color: "#1A1917", marginBottom: 7, display: "flex", gap: 6 }}><span style={{ color: "#16A34A", display: "flex", paddingTop: 1 }}><Icone nome="check" tamanho={15} traco={2.2} /></span>{r}</div>
                     ))}
                     <button onClick={() => pagar(p.id)} disabled={pagando !== null}
                       style={{ marginTop: "auto", paddingTop: 12, paddingBottom: 12, background: p.id === "profissional" ? "#FF6600" : "#1A1917", color: "#fff", border: "none", borderRadius: 9, fontSize: 14, fontWeight: 700, cursor: pagando ? "default" : "pointer", opacity: pagando && pagando !== p.id ? 0.5 : 1 }}>

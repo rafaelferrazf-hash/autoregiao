@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { ehAdmin } from "@/lib/admin";
+import Icone from "@/components/Icone";
 
 // Botões do topo das páginas públicas: "Entrar / Cadastrar loja" para visitante,
 // "Meu painel" para lojista logado e só "Admin" para a conta de admin.
@@ -34,6 +35,6 @@ export default function BotoesConta({ celular = false }: { celular?: boolean }) 
   }
 
   // Conta de admin é só admin (a loja do dono fica numa conta de lojista separada).
-  if (conta === "admin") return <Link href="/admin" style={cheio}>🛡️ Admin</Link>;
+  if (conta === "admin") return <Link href="/admin" style={cheio}><Icone nome="escudo" /> Admin</Link>;
   return <Link href="/painel" style={cheio}>Meu painel</Link>;
 }

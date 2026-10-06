@@ -4,6 +4,7 @@ import Logo from "@/components/Logo";
 import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { ehAdmin } from "@/lib/admin";
+import Icone from "@/components/Icone";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -71,8 +72,8 @@ export default function Login() {
               <Link href="/cadastro" style={{ flex: 1, padding: "9px 0", borderRadius: 6, background: "transparent", fontSize: 14, fontWeight: 500, color: "#7A7670", textDecoration: "none", textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center" }}>Cadastrar</Link>
             </div>
 
-            {sucesso && <div style={{ background: "#D1FAE5", border: "1.5px solid #6EE7B7", borderRadius: 8, padding: "12px 14px", marginBottom: 16, fontSize: 13, color: "#065F46" }}>✅ Login realizado! Redirecionando...</div>}
-            {erro && <div style={{ background: "#FEE2E2", border: "1.5px solid #FCA5A5", borderRadius: 8, padding: "12px 14px", marginBottom: 16, fontSize: 13, color: "#991B1B" }}>⚠️ {erro}</div>}
+            {sucesso && <div style={{ background: "#D1FAE5", border: "1.5px solid #6EE7B7", borderRadius: 8, padding: "12px 14px", marginBottom: 16, fontSize: 13, color: "#065F46" }}><Icone nome="ok" /> Login realizado! Redirecionando...</div>}
+            {erro && <div style={{ background: "#FEE2E2", border: "1.5px solid #FCA5A5", borderRadius: 8, padding: "12px 14px", marginBottom: 16, fontSize: 13, color: "#991B1B" }}><Icone nome="atencao" /> {erro}</div>}
 
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               <div>
@@ -103,14 +104,14 @@ export default function Login() {
           <div className="login-banner" style={{ background: "#1A1917", padding: "48px 40px", flexDirection: "column", justifyContent: "center", position: "relative", overflow: "hidden" }}>
             <div style={{ position: "absolute", top: -60, right: -60, width: 280, height: 280, background: "radial-gradient(circle, rgba(255,102,0,0.2) 0%, transparent 70%)", pointerEvents: "none" }}></div>
             <div style={{ position: "relative", zIndex: 1 }}>
-              <div style={{ fontSize: 48, marginBottom: 20 }}>🚗</div>
+              <div style={{ marginBottom: 20, color: "#FF6600" }}><Icone nome="carro" tamanho={48} traco={1.5} /></div>
               <h2 style={{ fontSize: 24, fontWeight: 800, color: "#fff", lineHeight: 1.2, marginBottom: 16 }}>
                 O carro certo,<br /><span style={{ color: "#FF6600" }}>perto de você.</span>
               </h2>
               <p style={{ fontSize: 14, color: "#7A7670", lineHeight: 1.65, marginBottom: 32 }}>Veículos de lojistas da sua região, com contato direto pelo WhatsApp.</p>
-              {[["🏪", "Lojas e revendas da sua região"], ["📍", "Veículos perto de você"], ["💬", "Contato direto com o lojista"]].map(([icon, text]) => (
+              {([["loja", "Lojas e revendas da sua região"], ["local", "Veículos perto de você"], ["whatsapp", "Contato direto com o lojista"]] as const).map(([icon, text]) => (
                 <div key={text} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
-                  <span style={{ fontSize: 16 }}>{icon}</span>
+                  <span style={{ color: "#FF6600", display: "flex" }}><Icone nome={icon} tamanho={18} /></span>
                   <span style={{ fontSize: 13, color: "rgba(255,255,255,0.7)" }}>{text}</span>
                 </div>
               ))}

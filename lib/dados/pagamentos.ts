@@ -51,15 +51,15 @@ export async function verificarPagamento(paymentId: string): Promise<{ status?: 
 
 export function rotuloStatusPagamento(status: string): { texto: string; cor: string } {
   switch (status) {
-    case "approved": return { texto: "✅ Aprovado", cor: "#16A34A" };
+    case "approved": return { texto: "Aprovado", cor: "#16A34A" };
     case "pending":
     case "in_process":
-    case "authorized": return { texto: "⏳ Aguardando pagamento", cor: "#92400E" };
+    case "authorized": return { texto: "Aguardando pagamento", cor: "#92400E" };
     case "pendente": return { texto: "Não concluído", cor: "#7A7670" };
-    case "rejected": return { texto: "❌ Recusado", cor: "#DC2626" };
+    case "rejected": return { texto: "Recusado", cor: "#DC2626" };
     case "cancelled": return { texto: "Cancelado", cor: "#7A7670" };
     case "refunded":
-    case "charged_back": return { texto: "↩️ Estornado", cor: "#7A7670" };
+    case "charged_back": return { texto: "Estornado", cor: "#7A7670" };
     default: return { texto: status, cor: "#7A7670" };
   }
 }

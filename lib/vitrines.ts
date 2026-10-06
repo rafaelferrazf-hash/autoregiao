@@ -79,7 +79,7 @@ export async function montarVitrine(tipoRota: TipoRota, segmentos: string[]): Pr
   const qtdAbaixo = todos.filter(r => r.abaixo_fipe).length;
   const atalhoOportunidades = {
     titulo: "Oportunidades",
-    links: qtdAbaixo ? [{ nome: "💰 Abaixo da FIPE", href: `${base}/abaixo-da-fipe`, qtd: qtdAbaixo }] : [],
+    links: qtdAbaixo ? [{ nome: "Abaixo da FIPE", href: `${base}/abaixo-da-fipe`, qtd: qtdAbaixo }] : [],
   };
   const atalhoMarcas = {
     titulo: "Por marca",

@@ -3,6 +3,7 @@ import Link from "next/link";
 import Logo from "@/components/Logo";
 import { useState } from "react";
 import { supabase } from "@/lib/supabase";
+import Icone from "@/components/Icone";
 
 export default function RecuperarSenha() {
   const [email, setEmail] = useState("");
@@ -51,13 +52,13 @@ export default function RecuperarSenha() {
           {enviado ? (
             <>
               <div style={{ background: "#D1FAE5", border: "1.5px solid #6EE7B7", borderRadius: 8, padding: "12px 14px", marginBottom: 16, fontSize: 13, color: "#065F46", lineHeight: 1.5 }}>
-                ✅ Se existir uma conta com <strong>{email.trim()}</strong>, você vai receber o link em alguns minutos. Confira também a caixa de spam.
+                <Icone nome="ok" /> Se existir uma conta com <strong>{email.trim()}</strong>, você vai receber o link em alguns minutos. Confira também a caixa de spam.
               </div>
               <Link href="/login" style={{ display: "block", textAlign: "center", fontSize: 14, color: "#FF6600", fontWeight: 600, textDecoration: "none" }}>Voltar ao login</Link>
             </>
           ) : (
             <>
-              {erro && <div style={{ background: "#FEE2E2", border: "1.5px solid #FCA5A5", borderRadius: 8, padding: "12px 14px", marginBottom: 16, fontSize: 13, color: "#991B1B" }}>⚠️ {erro}</div>}
+              {erro && <div style={{ background: "#FEE2E2", border: "1.5px solid #FCA5A5", borderRadius: 8, padding: "12px 14px", marginBottom: 16, fontSize: 13, color: "#991B1B" }}><Icone nome="atencao" /> {erro}</div>}
 
               <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
                 <div>

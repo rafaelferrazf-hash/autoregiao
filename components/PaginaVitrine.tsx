@@ -7,6 +7,7 @@ import Rodape from "@/components/Rodape";
 import { filtrosParaQuery } from "@/lib/busca";
 import type { Vitrine } from "@/lib/vitrines";
 import type { VeiculoComLoja } from "@/lib/tipos";
+import Icone from "@/components/Icone";
 
 // Página de vitrine (/carros, /carros/chevrolet...): tudo renderizado no servidor, para o Google.
 export default function PaginaVitrine({ vitrine, veiculos, total }: { vitrine: Vitrine; veiculos: VeiculoComLoja[]; total: number }) {
@@ -28,8 +29,8 @@ export default function PaginaVitrine({ vitrine, veiculos, total }: { vitrine: V
           <Logo />
         </Link>
         <div className="vit-links" style={{ display: "flex", gap: 24 }}>
-          {[["Buscar veículos", "/veiculos"], ["★ Favoritos", "/favoritos"], ["Anunciar", "/anunciar"]].map(([nome, href]) => (
-            <Link key={href} href={href} style={{ textDecoration: "none", color: "#7A7670", fontSize: 13.5, fontWeight: 500 }}>{nome}</Link>
+          {[["Buscar veículos", "/veiculos"], ["Favoritos", "/favoritos"], ["Anunciar", "/anunciar"]].map(([nome, href]) => (
+            <Link key={href} href={href} style={{ textDecoration: "none", color: "#7A7670", fontSize: 13.5, fontWeight: 500 }}>{nome === "Favoritos" && <Icone nome="estrela" style={{ marginRight: 4 }} />}{nome}</Link>
           ))}
         </div>
         <div style={{ display: "flex", gap: 8 }}><BotoesConta /></div>
@@ -58,7 +59,7 @@ export default function PaginaVitrine({ vitrine, veiculos, total }: { vitrine: V
               </div>
             ) : (
               <div style={{ textAlign: "center", padding: "50px 20px", background: "#fff", borderRadius: 12, border: "1.5px solid #E8E6E1" }}>
-                <div style={{ fontSize: 36, marginBottom: 10 }}>🚗</div>
+                <div style={{ marginBottom: 10, color: "#C9C5BE" }}><Icone nome="carro" tamanho={40} traco={1.5} /></div>
                 <div style={{ fontSize: 16, fontWeight: 700, color: "#1A1917", marginBottom: 6 }}>Nenhum anúncio agora</div>
                 <div style={{ fontSize: 13, color: "#7A7670" }}>Crie um alerta ao lado e receba um e-mail quando aparecer.</div>
               </div>
@@ -72,7 +73,7 @@ export default function PaginaVitrine({ vitrine, veiculos, total }: { vitrine: V
 
           <aside style={{ display: "flex", flexDirection: "column", gap: 14 }}>
             <Link href={`/veiculos?${busca}`} style={{ display: "block", textAlign: "center", padding: 11, background: "#FF6600", color: "#fff", borderRadius: 8, fontSize: 14, fontWeight: 700, textDecoration: "none" }}>
-              🔧 Refinar com filtros
+              <Icone nome="ajustes" /> Refinar com filtros
             </Link>
             {vitrine.atalhos.filter(a => a.links.length > 0).map(a => (
               <div key={a.titulo} style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, padding: 14 }}>
@@ -80,7 +81,7 @@ export default function PaginaVitrine({ vitrine, veiculos, total }: { vitrine: V
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
                   {a.links.slice(0, 20).map(l => (
                     <Link key={l.href} href={l.href} style={{ ...chip, ...(l.href === vitrine.rota ? { borderColor: "#FF6600", color: "#FF6600" } : {}) }}>
-                      {l.nome}{l.qtd ? <span style={{ color: "#A8A49D" }}> ({l.qtd})</span> : null}
+                      {l.nome === "Abaixo da FIPE" && <Icone nome="abaixo" cor="#15803D" style={{ marginRight: 4 }} />}{l.nome}{l.qtd ? <span style={{ color: "#A8A49D" }}> ({l.qtd})</span> : null}
                     </Link>
                   ))}
                 </div>

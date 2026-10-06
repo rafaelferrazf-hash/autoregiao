@@ -4,6 +4,7 @@ import { useState } from "react";
 import { atualizarPerfilLoja, enviarLogoLoja, removerLogoLoja, type PerfilLojaEditavel } from "@/lib/dados/lojas";
 import LogoLoja from "@/components/LogoLoja";
 import type { Loja } from "@/lib/tipos";
+import Icone from "@/components/Icone";
 
 const UFS = ["AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"];
 
@@ -116,7 +117,7 @@ export default function PerfilLoja({ loja, onSalvo }: { loja: Loja | null; onSal
             </div>
           </div>
           <div style={ajuda}>Aparece na página da sua loja e nos seus anúncios. Pode ser o logo ou uma foto da fachada; de preferência quadrada.</div>
-          {avisoLogo && <div style={{ fontSize: 12, marginTop: 6, color: avisoLogo.ok ? "#15803D" : "#B91C1C" }}>{avisoLogo.ok ? "✅ " : ""}{avisoLogo.texto}</div>}
+          {avisoLogo && <div style={{ fontSize: 12, marginTop: 6, color: avisoLogo.ok ? "#15803D" : "#B91C1C" }}>{avisoLogo.ok && <><Icone nome="ok" />{" "}</>}{avisoLogo.texto}</div>}
         </div>
 
         <div>
@@ -171,7 +172,7 @@ export default function PerfilLoja({ loja, onSalvo }: { loja: Loja | null; onSal
 
         {mensagem && (
           <div style={{ background: mensagem.ok ? "#D1FAE5" : "#FEE2E2", border: `1.5px solid ${mensagem.ok ? "#6EE7B7" : "#FCA5A5"}`, borderRadius: 8, padding: "10px 12px", fontSize: 13, color: mensagem.ok ? "#065F46" : "#991B1B" }}>
-            {mensagem.ok ? "✅ " : "⚠️ "}{mensagem.texto}
+            <Icone nome={mensagem.ok ? "ok" : "atencao"} />{" "}{mensagem.texto}
           </div>
         )}
 

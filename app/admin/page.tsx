@@ -11,6 +11,7 @@ import {
   type ResumoAdmin,
 } from "@/lib/dados/admin";
 import { formatarPreco } from "@/lib/formatar";
+import Icone, { type NomeIcone } from "@/components/Icone";
 
 const ABAS = ["Dashboard", "Lojas", "Anúncios", "Usuários"] as const;
 type Aba = (typeof ABAS)[number];
@@ -156,7 +157,7 @@ export default function Admin() {
         <div style={{ marginBottom: 20 }}>
           <div style={{ fontSize: 20, fontWeight: 800, color: "#1A1917" }}>{aba}</div>
           <div style={{ fontSize: 13, color: "#7A7670" }}>{subtitulo[aba]}</div>
-          {erroResumo && <div style={{ fontSize: 13, color: "#991B1B", marginTop: 6 }}>⚠️ {erroResumo}</div>}
+          {erroResumo && <div style={{ fontSize: 13, color: "#991B1B", marginTop: 6 }}><Icone nome="atencao" /> {erroResumo}</div>}
         </div>
 
         {/* ===================== DASHBOARD ===================== */}
@@ -164,15 +165,15 @@ export default function Admin() {
           <>
             <div className="stats-grid-admin" style={{ marginBottom: 24 }}>
               {[
-                { label: "Lojas cadastradas", value: n(t?.lojas), icon: "🏪", change: t ? `+${t.lojas_7d} nos últimos 7 dias` : "", ir: "Lojas" as Aba },
-                { label: "Veículos ativos", value: n(t?.veiculos_ativos), icon: "🚗", change: t ? `+${t.veiculos_7d} nos últimos 7 dias` : "", ir: "Anúncios" as Aba },
-                { label: "Usuários cadastrados", value: n(t?.usuarios), icon: "👥", change: t ? `+${t.usuarios_30d} nos últimos 30 dias` : "", ir: "Usuários" as Aba },
-                { label: "Contatos (30 dias)", value: n(t?.contatos_30d), icon: "💬", change: t ? `${n(t.visualizacoes_30d)} visualizações` : "", ir: null },
+                { label: "Lojas cadastradas", value: n(t?.lojas), icon: "loja", change: t ? `+${t.lojas_7d} nos últimos 7 dias` : "", ir: "Lojas" as Aba },
+                { label: "Veículos ativos", value: n(t?.veiculos_ativos), icon: "carro", change: t ? `+${t.veiculos_7d} nos últimos 7 dias` : "", ir: "Anúncios" as Aba },
+                { label: "Usuários cadastrados", value: n(t?.usuarios), icon: "usuarios", change: t ? `+${t.usuarios_30d} nos últimos 30 dias` : "", ir: "Usuários" as Aba },
+                { label: "Contatos (30 dias)", value: n(t?.contatos_30d), icon: "whatsapp", change: t ? `${n(t.visualizacoes_30d)} visualizações` : "", ir: null },
               ].map(s => (
                 <div key={s.label} onClick={() => s.ir && setAba(s.ir)} style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, padding: "16px", cursor: s.ir ? "pointer" : "default" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 8 }}>
                     <div style={{ fontSize: 11, fontWeight: 600, color: "#7A7670", textTransform: "uppercase", letterSpacing: 0.4 }}>{s.label}</div>
-                    <span style={{ fontSize: 18 }}>{s.icon}</span>
+                    <span style={{ color: "#FF6600", display: "flex" }}><Icone nome={s.icon as NomeIcone} tamanho={20} /></span>
                   </div>
                   <div style={{ fontSize: 24, fontWeight: 800, color: "#1A1917", marginBottom: 4 }}>{s.value}</div>
                   <div style={{ fontSize: 11, color: "#FF6600" }}>{s.change}</div>
@@ -223,7 +224,7 @@ export default function Admin() {
             {/* CUPONS */}
             <div style={cartao}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-                <div style={{ ...tituloCartao, marginBottom: 0 }}>🎟️ Cupons de extensão</div>
+                <div style={{ ...tituloCartao, marginBottom: 0 }}><Icone nome="cupom" /> Cupons de extensão</div>
                 <button onClick={gerarCupom} disabled={gerando}
                   style={{ padding: "6px 14px", background: gerando ? "#C44818" : "#FF6600", border: "none", borderRadius: 7, color: "#fff", fontSize: 12, fontWeight: 600, cursor: gerando ? "default" : "pointer", opacity: gerando ? 0.7 : 1 }}>
                   {gerando ? "Gerando..." : "+ Gerar cupom"}
@@ -238,7 +239,7 @@ export default function Admin() {
                   </div>
                   <button onClick={() => { navigator.clipboard.writeText(cupomGerado); alert("Copiado!"); }}
                     style={{ padding: "8px 16px", background: "#065F46", color: "#fff", border: "none", borderRadius: 7, fontSize: 12, fontWeight: 600, cursor: "pointer" }}>
-                    📋 Copiar
+                    <Icone nome="copiar" /> Copiar
                   </button>
                 </div>
               )}
@@ -268,7 +269,7 @@ export default function Admin() {
                       <tr key={loja.id} style={{ borderBottom: "1px solid #F7F6F3", opacity: trabalhando ? 0.5 : 1 }}>
                         <td style={td}>
                           <Link href={`/loja/${loja.id}`} style={{ fontWeight: 600, color: "#1A1917", textDecoration: "none" }}>{loja.nome}</Link>
-                          <div style={{ fontSize: 11, color: "#7A7670" }}>📍 {loja.cidade || "—"}</div>
+                          <div style={{ fontSize: 11, color: "#7A7670" }}><Icone nome="local" /> {loja.cidade || "—"}</div>
                         </td>
                         <td style={td}>{loja.plano}</td>
                         <td style={td}>{loja.veiculos}</td>
@@ -276,7 +277,7 @@ export default function Admin() {
                         <td style={{ ...td, fontSize: 12, color: "#7A7670" }}>{loja.vencimento}</td>
                         <td style={td}>
                           {loja.protegida ? (
-                            <span style={{ fontSize: 12, color: "#7A7670" }}>👑 Protegida (dono)</span>
+                            <span style={{ fontSize: 12, color: "#7A7670" }}><Icone nome="coroa" /> Protegida (dono)</span>
                           ) : (
                             <div style={{ display: "flex", gap: 6, flexWrap: "wrap", alignItems: "center" }}>
                               <select value={dias} disabled={trabalhando} onChange={e => setDiasPorLoja(d => ({ ...d, [loja.id]: Number(e.target.value) }))}
@@ -363,7 +364,7 @@ export default function Admin() {
                       </td>
                       <td style={{ ...td, color: u.loja ? "#1A1917" : "#7A7670" }}>{u.loja ?? "—"}</td>
                       <td style={{ ...td, fontSize: 12 }}>{data(u.cadastro)}</td>
-                      <td style={td}>{u.confirmado ? <span style={{ color: "#16A34A", fontWeight: 600, fontSize: 12 }}>✓ Sim</span> : <span style={{ color: "#92400E", fontWeight: 600, fontSize: 12 }}>Pendente</span>}</td>
+                      <td style={td}>{u.confirmado ? <span style={{ color: "#16A34A", fontWeight: 600, fontSize: 12 }}><Icone nome="check" /> Sim</span> : <span style={{ color: "#92400E", fontWeight: 600, fontSize: 12 }}>Pendente</span>}</td>
                       <td style={{ ...td, fontSize: 12, color: "#7A7670" }}>{data(u.ultimo_acesso)}</td>
                     </tr>
                   ))}

@@ -15,6 +15,7 @@ import { formatarPreco, formatarKm } from "@/lib/formatar";
 import { registrarEvento } from "@/lib/dados/eventos";
 import type { VeiculoComLoja } from "@/lib/tipos";
 import { EMAIL_CONTATO, URL_SITE } from "@/lib/site";
+import Icone, { type NomeIcone } from "@/components/Icone";
 
 // O anúncio vem pronto do servidor (page.tsx); aqui ficam as partes interativas.
 export default function Veiculo({ inicial }: { inicial: VeiculoComLoja }) {
@@ -137,13 +138,13 @@ Motivo da denúncia:
     : "";
   const caixaSeguranca = veiculo && (
     <div style={{ background: "rgba(22,163,74,0.08)", border: "1.5px solid rgba(22,163,74,0.15)", borderRadius: 12, padding: "14px 16px" }}>
-      <div style={{ fontSize: 13, fontWeight: 700, color: "#16A34A", marginBottom: 10 }}>🛡️ Compre com segurança</div>
+      <div style={{ fontSize: 13, fontWeight: 700, color: "#16A34A", marginBottom: 10 }}><Icone nome="escudo" /> Compre com segurança</div>
       {["Veja o veículo pessoalmente antes de pagar", "Confira documentos e débitos no Detran", "Desconfie de sinal ou depósito antecipado", "Solicite laudo cautelar", "A AutoRegião nunca pede código, senha ou pagamento"].map(item => (
         <div key={item} style={{ display: "flex", alignItems: "center", gap: 7, fontSize: 12, color: "#1A1917", marginBottom: 6 }}>
-          <span style={{ color: "#16A34A" }}>✔</span> {item}
+          <span style={{ color: "#16A34A", display: "flex" }}><Icone nome="check" tamanho={14} traco={2.2} /></span> {item}
         </div>
       ))}
-      <a href={linkDenuncia} className="toque-facil" style={{ display: "inline-block", marginTop: 6, fontSize: 12, color: "#7A7670", textDecoration: "underline" }}>🚩 Denunciar este anúncio</a>
+      <a href={linkDenuncia} className="toque-facil" style={{ display: "inline-block", marginTop: 6, fontSize: 12, color: "#7A7670", textDecoration: "underline" }}><Icone nome="bandeira" /> Denunciar este anúncio</a>
     </div>
   );
 
@@ -194,8 +195,8 @@ Motivo da denúncia:
           {/* Botão fechar */}
           <button
             onClick={() => setLightbox(false)}
-            style={{ position: "absolute", top: 16, right: 16, width: 40, height: 40, background: "rgba(255,255,255,0.15)", border: "none", borderRadius: 8, color: "#fff", fontSize: 20, cursor: "pointer", zIndex: 10 }}
-          >✕</button>
+            style={{ position: "absolute", top: 16, right: 16, width: 40, height: 40, background: "rgba(255,255,255,0.15)", border: "none", borderRadius: 8, color: "#fff", fontSize: 20, cursor: "pointer", zIndex: 10, display: "flex", alignItems: "center", justifyContent: "center" }}
+          ><Icone nome="fechar" tamanho={22} /></button>
 
           {/* Contador */}
           <div style={{ position: "absolute", top: 20, left: "50%", transform: "translateX(-50%)", color: "rgba(255,255,255,0.6)", fontSize: 13 }}>
@@ -257,7 +258,7 @@ Motivo da denúncia:
             <span style={{ color: "#1A1917", fontWeight: 500 }}>{veiculo.nome}</span>
           </div>
           <div style={{ display: "flex", gap: 8, alignItems: "center" }} className="nav-desktop">
-            <Link href="/favoritos" style={{ textDecoration: "none", color: "#7A7670", fontSize: 13.5, fontWeight: 500, marginRight: 8 }}>★ Favoritos</Link>
+            <Link href="/favoritos" style={{ textDecoration: "none", color: "#7A7670", fontSize: 13.5, fontWeight: 500, marginRight: 8 }}><Icone nome="estrela" /> Favoritos</Link>
             <BotoesConta />
           </div>
           <button className="nav-mobile-btn" onClick={() => setMenuAberto(!menuAberto)}
@@ -269,8 +270,8 @@ Motivo da denúncia:
         </div>
         {menuAberto && (
           <div style={{ borderTop: "1px solid #E8E6E1", background: "#fff", padding: "16px", display: "flex", flexDirection: "column", gap: 14 }}>
-            {[["Buscar veículos", "/veiculos"], ["★ Favoritos", "/favoritos"], ["Anunciar", "/anunciar"]].map(([item, href]) => (
-              <Link key={item} href={href} style={{ textDecoration: "none", color: "#1A1917", fontSize: 15, fontWeight: 500 }}>{item}</Link>
+            {[["Buscar veículos", "/veiculos"], ["Favoritos", "/favoritos"], ["Anunciar", "/anunciar"]].map(([item, href]) => (
+              <Link key={item} href={href} style={{ textDecoration: "none", color: "#1A1917", fontSize: 15, fontWeight: 500 }}>{item === "Favoritos" && <Icone nome="estrela" style={{ marginRight: 4 }} />}{item}</Link>
             ))}
             <div style={{ display: "flex", gap: 8, paddingTop: 8, borderTop: "1px solid #E8E6E1" }}>
               <BotoesConta celular />
@@ -299,8 +300,8 @@ Motivo da denúncia:
                 ) : (
                   <img src={fotos[fotoAtiva]} alt="Foto do veículo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                 )}
-                {veiculo.destaque && <span style={{ position: "absolute", top: 12, left: 12, background: "#FF6600", color: "#fff", fontSize: 11, fontWeight: 500, padding: "4px 12px", borderRadius: 20 }}>⭐ Em Destaque</span>}
-                <span style={{ position: "absolute", bottom: 12, right: 12, background: "rgba(0,0,0,0.55)", color: "#fff", fontSize: 11, padding: "4px 10px", borderRadius: 6 }}>📷 {fotoAtiva + 1} / {fotos.length}</span>
+                {veiculo.destaque && <span style={{ position: "absolute", top: 12, left: 12, background: "#FF6600", color: "#fff", fontSize: 11, fontWeight: 500, padding: "4px 12px", borderRadius: 20, display: "inline-flex", alignItems: "center", gap: 4 }}><Icone nome="estrelaCheia" tamanho={12} /> Em Destaque</span>}
+                <span style={{ position: "absolute", bottom: 12, right: 12, background: "rgba(0,0,0,0.55)", color: "#fff", fontSize: 11, padding: "4px 10px", borderRadius: 6, display: "inline-flex", alignItems: "center", gap: 4 }}><Icone nome="camera" tamanho={13} /> {fotoAtiva + 1} / {fotos.length}</span>
                 {/* Ícone de zoom */}
                 <BotaoFavorito id={veiculo.id} />
                 {fotos.length > 1 && <>
@@ -322,8 +323,8 @@ Motivo da denúncia:
             {/* TÍTULO E PREÇO */}
             <div style={{ marginBottom: 16 }}>
               <div style={{ display: "flex", gap: 6, marginBottom: 10, flexWrap: "wrap" }}>
-                {veiculo.destaque && <span style={{ fontSize: 11, fontWeight: 500, padding: "3px 9px", borderRadius: 4, background: "rgba(255,102,0,0.08)", color: "#FF6600" }}>⭐ Destaque</span>}
-                <span style={{ fontSize: 11, fontWeight: 500, padding: "3px 9px", borderRadius: 4, background: "#F7F6F3", color: "#7A7670", border: "1px solid #E8E6E1" }}>📍 {veiculo.cidade}</span>
+                {veiculo.destaque && <span style={{ fontSize: 11, fontWeight: 500, padding: "3px 9px", borderRadius: 4, background: "rgba(255,102,0,0.08)", color: "#FF6600", display: "inline-flex", alignItems: "center", gap: 3 }}><Icone nome="estrelaCheia" tamanho={12} /> Destaque</span>}
+                <span style={{ fontSize: 11, fontWeight: 500, padding: "3px 9px", borderRadius: 4, background: "#F7F6F3", color: "#7A7670", border: "1px solid #E8E6E1", display: "inline-flex", alignItems: "center", gap: 3 }}><Icone nome="local" tamanho={12} /> {veiculo.cidade}</span>
               </div>
               <h1 style={{ fontSize: 24, fontWeight: 800, color: "#1A1917", marginBottom: 6 }}>{veiculo.nome}</h1>
               <p style={{ fontSize: 14, color: "#7A7670", marginBottom: 14 }}>
@@ -334,11 +335,11 @@ Motivo da denúncia:
                   <div style={{ fontSize: 28, fontWeight: 800, color: "#1A1917", lineHeight: 1 }}>{formatarPreco(veiculo.preco)}</div>
                   {abaixoDaFipe(veiculo) && (
                     <div style={{ display: "inline-block", fontSize: 12.5, fontWeight: 700, color: "#15803D", background: "#DCFCE7", padding: "4px 10px", borderRadius: 20, marginTop: 8 }}>
-                      💰 {formatarPreco(veiculo.fipe_valor! - veiculo.preco!)} abaixo da FIPE
+                      <Icone nome="abaixo" /> {formatarPreco(veiculo.fipe_valor! - veiculo.preco!)} abaixo da FIPE
                       {veiculo.fipe_mes && <span style={{ fontWeight: 500, color: "#166534" }}> · ref. {veiculo.fipe_mes}</span>}
                     </div>
                   )}
-                  {veiculo.aceita_troca && <div style={{ fontSize: 12, color: "#16A34A", marginTop: 6, fontWeight: 500 }}>✅ Aceita troca</div>}
+                  {veiculo.aceita_troca && <div style={{ fontSize: 12, color: "#16A34A", marginTop: 6, fontWeight: 500 }}><Icone nome="ok" /> Aceita troca</div>}
                 </div>
               </div>
             </div>
@@ -348,15 +349,15 @@ Motivo da denúncia:
               <div style={{ padding: "14px 18px", borderBottom: "1px solid #E8E6E1", fontSize: 14, fontWeight: 700, color: "#1A1917" }}>Características</div>
               <div className="caracteristicas-grid">
                 {[
-                  ["📅", "Ano", veiculo.ano],
-                  ["📍", "Quilometragem", formatarKm(veiculo.km)],
-                  ["⛽", "Combustível", veiculo.combustivel],
-                  ["⚙️", "Câmbio", veiculo.cambio],
-                  ["🎨", "Cor", veiculo.cor],
-                  ["🚪", "Portas", veiculo.portas],
+                  ["calendario", "Ano", veiculo.ano],
+                  ["km", "Quilometragem", formatarKm(veiculo.km)],
+                  ["combustivel", "Combustível", veiculo.combustivel],
+                  ["cambio", "Câmbio", veiculo.cambio],
+                  ["cor", "Cor", veiculo.cor],
+                  ["porta", "Portas", veiculo.portas],
                 ].filter(([,, v]) => v).map(([icon, label, value], i) => (
                   <div key={label as string} style={{ padding: "12px 14px", borderRight: (i + 1) % 3 !== 0 ? "1px solid #E8E6E1" : "none", borderBottom: i < 3 ? "1px solid #E8E6E1" : "none" }}>
-                    <div style={{ fontSize: 16, marginBottom: 4 }}>{icon}</div>
+                    <div style={{ marginBottom: 4, color: "#FF6600" }}><Icone nome={icon as NomeIcone} tamanho={20} /></div>
                     <div style={{ fontSize: 10, color: "#7A7670", textTransform: "uppercase", letterSpacing: 0.4, marginBottom: 2 }}>{label as string}</div>
                     <div style={{ fontSize: 13, fontWeight: 700, color: "#1A1917" }}>{value as string}</div>
                   </div>
@@ -379,7 +380,7 @@ Motivo da denúncia:
                 <div style={{ padding: "14px 18px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
                   {veiculo.opcionais.map(item => (
                     <div key={item} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, color: "#1A1917" }}>
-                      <span style={{ fontSize: 13, color: "#16A34A" }}>✅</span> {item}
+                      <span style={{ color: "#16A34A", display: "flex" }}><Icone nome="check" tamanho={15} traco={2.2} /></span> {item}
                     </div>
                   ))}
                 </div>
@@ -388,7 +389,7 @@ Motivo da denúncia:
 
             {/* SIMULADOR */}
             <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, overflow: "hidden" }}>
-              <div style={{ padding: "14px 18px", borderBottom: "1px solid #E8E6E1", fontSize: 14, fontWeight: 700, color: "#1A1917" }}>💰 Simular financiamento</div>
+              <div style={{ padding: "14px 18px", borderBottom: "1px solid #E8E6E1", fontSize: 14, fontWeight: 700, color: "#1A1917" }}><Icone nome="real" cor="#FF6600" /> Simular financiamento</div>
               <div style={{ padding: "16px 18px" }}>
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
                   <div>
@@ -431,8 +432,8 @@ Motivo da denúncia:
                 <LogoLoja url={veiculo.lojas?.logo_url} tamanho={44} />
                 <div style={{ flex: 1 }}>
                   <div style={{ fontSize: 14, fontWeight: 700, color: "#fff" }}>{veiculo.lojas?.nome || veiculo.nome_contato}</div>
-                  <div style={{ fontSize: 11.5, color: "#7A7670", marginTop: 2 }}>📍 {veiculo.lojas?.cidade || veiculo.cidade}</div>
-                  {anuncianteDesde && <div style={{ fontSize: 11.5, color: "#A8A49D", marginTop: 2 }}>✔ Anunciante desde {anuncianteDesde}</div>}
+                  <div style={{ fontSize: 11.5, color: "#7A7670", marginTop: 2 }}><Icone nome="local" /> {veiculo.lojas?.cidade || veiculo.cidade}</div>
+                  {anuncianteDesde && <div style={{ fontSize: 11.5, color: "#A8A49D", marginTop: 2 }}><Icone nome="check" /> Anunciante desde {anuncianteDesde}</div>}
                   {veiculo.loja_id && (
                     <Link href={`/loja/${veiculo.loja_id}`} style={{ display: "inline-block", fontSize: 11.5, color: "#FF6600", fontWeight: 600, textDecoration: "none", marginTop: 4 }}>Ver loja e outros anúncios →</Link>
                   )}
@@ -440,10 +441,10 @@ Motivo da denúncia:
               </div>
               <div style={{ padding: "16px 18px", display: "flex", flexDirection: "column", gap: 8 }}>
                 <button onClick={() => abrirWhatsApp()} style={{ width: "100%", padding: 13, background: "#25D366", color: "#fff", border: "none", borderRadius: 9, fontSize: 14, fontWeight: 700, cursor: "pointer" }}>
-                  📱 Chamar no WhatsApp
+                  <Icone nome="whatsapp" /> Chamar no WhatsApp
                 </button>
                 <button onClick={ligar} style={{ width: "100%", padding: 11, background: "#F7F6F3", color: "#1A1917", border: "1.5px solid #E8E6E1", borderRadius: 9, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
-                  📞 Ligar: {telefoneContato}
+                  <Icone nome="telefone" /> Ligar: {telefoneContato}
                 </button>
               </div>
             </div>
@@ -452,16 +453,16 @@ Motivo da denúncia:
               <BotaoFavorito id={veiculo.id} tipo="grande" />
               {avisoCompartilhar === "" && (
                 <button onClick={compartilhar} style={{ width: "100%", padding: "10px", border: "1.5px solid #E8E6E1", borderRadius: 8, background: "#F7F6F3", cursor: "pointer", fontSize: 13, fontWeight: 600, color: "#1A1917" }}>
-                  📤 Compartilhar anúncio
+                  <Icone nome="compartilhar" /> Compartilhar anúncio
                 </button>
               )}
               {avisoCompartilhar !== "" && (
                 <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                   <div style={{ display: "flex", gap: 8 }}>
-                    <button onClick={compartilharWhatsApp} style={{ flex: 1, padding: "10px 6px", border: "none", borderRadius: 8, background: "#25D366", color: "#fff", cursor: "pointer", fontSize: 12, fontWeight: 700 }}>💬 Enviar no WhatsApp</button>
-                    <button onClick={copiarLink} style={{ flex: 1, padding: "10px 6px", border: "1.5px solid #E8E6E1", borderRadius: 8, background: "#F7F6F3", color: "#1A1917", cursor: "pointer", fontSize: 12, fontWeight: 600 }}>🔗 Copiar link</button>
+                    <button onClick={compartilharWhatsApp} style={{ flex: 1, padding: "10px 6px", border: "none", borderRadius: 8, background: "#25D366", color: "#fff", cursor: "pointer", fontSize: 12, fontWeight: 700 }}><Icone nome="whatsapp" /> Enviar no WhatsApp</button>
+                    <button onClick={copiarLink} style={{ flex: 1, padding: "10px 6px", border: "1.5px solid #E8E6E1", borderRadius: 8, background: "#F7F6F3", color: "#1A1917", cursor: "pointer", fontSize: 12, fontWeight: 600 }}><Icone nome="link" /> Copiar link</button>
                   </div>
-                  {avisoCompartilhar === "copiado" && <div style={{ fontSize: 12, color: "#16A34A", textAlign: "center" }}>✅ Link copiado! É só colar onde quiser.</div>}
+                  {avisoCompartilhar === "copiado" && <div style={{ fontSize: 12, color: "#16A34A", textAlign: "center" }}><Icone nome="ok" /> Link copiado! É só colar onde quiser.</div>}
                   {avisoCompartilhar === "erro" && <div style={{ fontSize: 12, color: "#991B1B", textAlign: "center" }}>Não deu para copiar. Copie o endereço lá em cima no navegador.</div>}
                 </div>
               )}
@@ -488,10 +489,10 @@ Motivo da denúncia:
 
       {/* BOTÕES FIXOS MOBILE */}
       <div className="contato-fixo-mobile" style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: "#fff", borderTop: "1px solid #E8E6E1", padding: "12px 16px", gap: 10, zIndex: 50 }}>
-        <button onClick={() => abrirWhatsApp()} style={{ flex: 1, padding: "13px", background: "#25D366", color: "#fff", border: "none", borderRadius: 9, fontSize: 14, fontWeight: 700, cursor: "pointer" }}>📱 WhatsApp</button>
-        <button onClick={ligar} style={{ flex: 1, padding: "13px", background: "#FF6600", color: "#fff", border: "none", borderRadius: 9, fontSize: 14, fontWeight: 700, cursor: "pointer" }}>📞 Ligar</button>
+        <button onClick={() => abrirWhatsApp()} style={{ flex: 1, padding: "13px", background: "#25D366", color: "#fff", border: "none", borderRadius: 9, fontSize: 14, fontWeight: 700, cursor: "pointer" }}><Icone nome="whatsapp" /> WhatsApp</button>
+        <button onClick={ligar} style={{ flex: 1, padding: "13px", background: "#FF6600", color: "#fff", border: "none", borderRadius: 9, fontSize: 14, fontWeight: 700, cursor: "pointer" }}><Icone nome="telefone" /> Ligar</button>
         <button onClick={() => (typeof navigator.share === "function" ? compartilhar() : compartilharWhatsApp())} aria-label="Compartilhar anúncio"
-          style={{ width: 50, padding: "13px 0", background: "#F7F6F3", color: "#1A1917", border: "1.5px solid #E8E6E1", borderRadius: 9, fontSize: 16, cursor: "pointer" }}>📤</button>
+          style={{ width: 50, padding: "13px 0", background: "#F7F6F3", color: "#1A1917", border: "1.5px solid #E8E6E1", borderRadius: 9, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}><Icone nome="compartilhar" tamanho={20} /></button>
       </div>
 
       <Rodape />

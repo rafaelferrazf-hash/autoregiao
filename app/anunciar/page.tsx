@@ -5,6 +5,7 @@ import BotoesConta from "@/components/BotoesConta";
 import { PLANOS, DIAS_GRATIS } from "@/lib/planos";
 import { useEmAppDaLoja } from "@/lib/appLoja";
 import { useState } from "react";
+import Icone, { type NomeIcone } from "@/components/Icone";
 
 // Itens do menu de navegação.
 // href: "#" nos itens ainda sem página pronta (Revendas, Tabela FIPE, Financiamento).
@@ -79,7 +80,7 @@ export default function Anunciar() {
           <div className="hero-grid">
             <div>
               <div style={{ display: "inline-block", background: "rgba(255,102,0,0.15)", border: "1px solid rgba(255,102,0,0.3)", borderRadius: 20, padding: "4px 14px", fontSize: 12, color: "#FF6600", fontWeight: 600, marginBottom: 20 }}>
-                🚗 Lançamento em Teixeira de Freitas e região
+                <Icone nome="carro" /> Lançamento em Teixeira de Freitas e região
               </div>
               <h1 style={{ fontSize: 42, fontWeight: 800, color: "#fff", lineHeight: 1.15, marginBottom: 16 }}>
                 Hora de vender?<br /><span style={{ color: "#FF6600" }}>A gente te ajuda!</span>
@@ -89,7 +90,7 @@ export default function Anunciar() {
               </p>
               <div className="hero-btns" style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
                 <Link href="/cadastro" style={{ padding: "14px 28px", background: "#FF6600", borderRadius: 9, color: "#fff", fontSize: 15, fontWeight: 700, textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 8 }}>
-                  🚀 Criar conta grátis
+                  <Icone nome="foguete" /> Criar conta grátis
                 </Link>
                 <Link href="/login" style={{ padding: "14px 28px", background: "transparent", border: "1.5px solid rgba(255,255,255,0.2)", borderRadius: 9, color: "#fff", fontSize: 15, fontWeight: 600, textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 8 }}>
                   Já tenho conta →
@@ -98,13 +99,13 @@ export default function Anunciar() {
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               {[
-                ["✅", "Cadastro simples e rápido", "Em menos de 5 minutos seu anúncio está no ar"],
-                ["📍", "Compradores da sua região", "Teixeira de Freitas e cidades vizinhas"],
-                ["💬", "Contato direto via WhatsApp", "Sem intermediários: o comprador fala com você"],
-                ["📊", "Veja o resultado", "Quantas pessoas viram e chamaram no seu anúncio"],
+                ["ok", "Cadastro simples e rápido", "Em menos de 5 minutos seu anúncio está no ar"],
+                ["local", "Compradores da sua região", "Teixeira de Freitas e cidades vizinhas"],
+                ["whatsapp", "Contato direto via WhatsApp", "Sem intermediários: o comprador fala com você"],
+                ["grafico", "Veja o resultado", "Quantas pessoas viram e chamaram no seu anúncio"],
               ].map(([icon, title, desc]) => (
                 <div key={title} style={{ display: "flex", alignItems: "flex-start", gap: 14, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 12, padding: "14px 16px" }}>
-                  <span style={{ fontSize: 22, flexShrink: 0 }}>{icon}</span>
+                  <span style={{ flexShrink: 0, color: "#FF6600", display: "flex" }}><Icone nome={icon as NomeIcone} tamanho={24} /></span>
                   <div>
                     <div style={{ fontSize: 14, fontWeight: 700, color: "#fff", marginBottom: 3 }}>{title}</div>
                     <div style={{ fontSize: 12.5, color: "rgba(255,255,255,0.5)", lineHeight: 1.5 }}>{desc}</div>
@@ -121,13 +122,13 @@ export default function Anunciar() {
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
           <div className="numeros-grid">
             {[
-              ["🏆", "Lançamento 2026", "Portal de veículos focado na nossa região"],
-              ["📍", "Teixeira de Freitas", "Cidade sede, com expansão para as cidades vizinhas"],
-              ["🚗", `${DIAS_GRATIS} dias grátis`, "Para lojas cadastradas no período de lançamento"],
-              ["🆓", "Particular anuncia grátis", "1 veículo por pessoa no período de lançamento"],
+              ["trofeu", "Lançamento 2026", "Portal de veículos focado na nossa região"],
+              ["local", "Teixeira de Freitas", "Cidade sede, com expansão para as cidades vizinhas"],
+              ["presente", `${DIAS_GRATIS} dias grátis`, "Para lojas cadastradas no período de lançamento"],
+              ["usuario", "Particular anuncia grátis", "1 veículo por pessoa no período de lançamento"],
             ].map(([icon, title, desc]) => (
               <div key={title} style={{ textAlign: "center", padding: "20px 16px" }}>
-                <div style={{ fontSize: 36, marginBottom: 12 }}>{icon}</div>
+                <div style={{ marginBottom: 12, color: "#FF6600" }}><Icone nome={icon as NomeIcone} tamanho={38} traco={1.5} /></div>
                 <div style={{ fontSize: 18, fontWeight: 800, color: "#1A1917", marginBottom: 6 }}>{title}</div>
                 <div style={{ fontSize: 13, color: "#7A7670", lineHeight: 1.5 }}>{desc}</div>
               </div>
@@ -153,7 +154,7 @@ export default function Anunciar() {
               <div key={plano.nome} style={{ background: "#fff", borderRadius: 16, overflow: "hidden", border: plano.destaque ? "2px solid #FF6600" : "1.5px solid #E8E6E1", position: "relative" }}>
                 {plano.destaque && (
                   <div style={{ background: "#FF6600", padding: "6px 0", textAlign: "center", fontSize: 11, fontWeight: 700, color: "#fff", letterSpacing: 0.5 }}>
-                    ⭐ MAIS POPULAR
+                    <Icone nome="estrelaCheia" tamanho={12} /> MAIS POPULAR
                   </div>
                 )}
                 <div style={{ padding: "28px 24px" }}>
@@ -164,11 +165,11 @@ export default function Anunciar() {
                     <span style={{ fontSize: 13, color: "#7A7670", marginBottom: 4 }}>{plano.periodo}</span>
                   </div>
                   <div style={{ background: "rgba(255,102,0,0.08)", border: "1px solid rgba(255,102,0,0.15)", borderRadius: 8, padding: "8px 12px", fontSize: 12, color: "#FF6600", fontWeight: 600, marginBottom: 20, textAlign: "center" }}>
-                    🎁 {DIAS_GRATIS} dias grátis para começar
+                    <Icone nome="presente" /> {DIAS_GRATIS} dias grátis para começar
                   </div>
                   {plano.recursos.map(r => (
                     <div key={r} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, color: "#1A1917", marginBottom: 10 }}>
-                      <span style={{ color: "#16A34A", fontSize: 14 }}>✅</span> {r}
+                      <span style={{ color: "#16A34A", display: "flex" }}><Icone nome="check" tamanho={16} traco={2.2} /></span> {r}
                     </div>
                   ))}
                   <Link href="/cadastro" style={{ display: "block", width: "100%", padding: "12px", background: plano.destaque ? "#FF6600" : "#1A1917", color: "#fff", borderRadius: 9, fontSize: 14, fontWeight: 700, textDecoration: "none", textAlign: "center", marginTop: 20, boxSizing: "border-box" }}>
@@ -204,7 +205,7 @@ export default function Anunciar() {
       {/* CTA FINAL */}
       <section style={{ background: "#1A1917", padding: "64px 16px" }}>
         <div style={{ maxWidth: 600, margin: "0 auto", textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 16 }}>🚗</div>
+          <div style={{ marginBottom: 16, color: "#FF6600" }}><Icone nome="carro" tamanho={52} traco={1.5} /></div>
           <h2 style={{ fontSize: 32, fontWeight: 800, color: "#fff", marginBottom: 14, lineHeight: 1.2 }}>
             Pronto para vender<br /><span style={{ color: "#FF6600" }}>mais rápido?</span>
           </h2>

@@ -3,6 +3,7 @@ import Link from "next/link";
 import BotaoFavorito from "@/components/BotaoFavorito";
 import { formatarKm, formatarPreco } from "@/lib/formatar";
 import type { Veiculo } from "@/lib/tipos";
+import Icone from "@/components/Icone";
 
 export type DadosCartao = Pick<Veiculo, "id" | "nome" | "ano" | "km" | "preco" | "fotos" | "destaque">
   & Partial<Pick<Veiculo, "combustivel" | "cidade" | "fipe_valor">>
@@ -21,7 +22,7 @@ export default function CartaoVeiculo({ car, mostrarLoja = true }: { car: DadosC
   return (
     <Link href={`/veiculo/${car.id}`} style={{ textDecoration: "none" }}>
       <div style={{ background: "#fff", borderRadius: 12, overflow: "hidden", border: car.destaque ? "1.5px solid #FF6600" : "1.5px solid #E8E6E1", position: "relative", height: "100%" }}>
-        {car.destaque && <span style={{ position: "absolute", top: 8, left: 8, background: "#FF6600", color: "#fff", fontSize: 10, fontWeight: 500, padding: "3px 8px", borderRadius: 20, zIndex: 2 }}>⭐ Destaque</span>}
+        {car.destaque && <span style={{ position: "absolute", top: 8, left: 8, background: "#FF6600", color: "#fff", fontSize: 10, fontWeight: 500, padding: "3px 8px", borderRadius: 20, zIndex: 2, display: "inline-flex", alignItems: "center", gap: 3 }}><Icone nome="estrelaCheia" tamanho={11} /> Destaque</span>}
         <BotaoFavorito id={car.id} />
         <div style={{ position: "relative", height: 150, width: "100%", background: "#F7F6F3" }}>
           {car.fotos && car.fotos.length > 0
@@ -37,7 +38,7 @@ export default function CartaoVeiculo({ car, mostrarLoja = true }: { car: DadosC
           </div>
           <div style={{ paddingTop: 8, borderTop: "1px solid #E8E6E1", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 6, flexWrap: "wrap" }}>
             <span style={{ fontSize: 15, fontWeight: 800, color: "#1A1917" }}>{formatarPreco(car.preco)}</span>
-            {abaixoDaFipe(car) && <span style={{ fontSize: 10, fontWeight: 700, color: "#15803D", background: "#DCFCE7", padding: "2px 7px", borderRadius: 20 }}>💰 Abaixo da FIPE</span>}
+            {abaixoDaFipe(car) && <span style={{ fontSize: 10, fontWeight: 700, color: "#15803D", background: "#DCFCE7", padding: "2px 7px", borderRadius: 20, display: "inline-flex", alignItems: "center", gap: 3 }}><Icone nome="abaixo" tamanho={12} traco={2.2} /> Abaixo da FIPE</span>}
           </div>
           {mostrarLoja && local && (
             <div style={{ fontSize: 10.5, color: "#7A7670", marginTop: 5, display: "flex", alignItems: "center", gap: 3 }}>

@@ -16,6 +16,7 @@ import { buscarEstatisticasPainel, type EstatisticasPainel } from "@/lib/dados/e
 import type { Loja } from "@/lib/tipos";
 import { ehVitalicio, limiteDoPlano, mensagemErroAnuncio, nomeDoPlano, situacaoDoPlano } from "@/lib/planos";
 import PerfilLoja from "@/components/PerfilLoja";
+import Icone, { type NomeIcone } from "@/components/Icone";
 
 export default function Painel() {
   // Dentro dos apps das lojas: sem cupom nem compra de plano (ver lib/appLoja.ts).
@@ -96,23 +97,23 @@ export default function Painel() {
   };
 
   const mensagemCupom = () => {
-    if (cupomStatus === "ok") return { cor: "#16A34A", texto: "✅ Cupom aplicado! +30 dias adicionados ao seu período." };
-    if (cupomStatus === "invalido") return { cor: "#DC2626", texto: "❌ Formato inválido. Use AR-XXXXXX." };
-    if (cupomStatus === "erro") return { cor: "#DC2626", texto: "❌ Cupom não encontrado ou inválido." };
-    if (cupomStatus === "usado") return { cor: "#DC2626", texto: "❌ Este cupom já foi utilizado." };
+    if (cupomStatus === "ok") return { cor: "#16A34A", texto: "Cupom aplicado! +30 dias adicionados ao seu período." };
+    if (cupomStatus === "invalido") return { cor: "#DC2626", texto: "Formato inválido. Use AR-XXXXXX." };
+    if (cupomStatus === "erro") return { cor: "#DC2626", texto: "Cupom não encontrado ou inválido." };
+    if (cupomStatus === "usado") return { cor: "#DC2626", texto: "Este cupom já foi utilizado." };
     return null;
   };
 
   const statusBadge = (status: string | null) => {
-    const map: Record<string, { bg: string; color: string; label: string }> = {
-      destaque: { bg: "rgba(255,102,0,0.08)", color: "#FF6600", label: "⭐ Destaque" },
-      ativo: { bg: "rgba(22,163,74,0.08)", color: "#16A34A", label: "✅ Ativo" },
-      pausado: { bg: "#F7F6F3", color: "#7A7670", label: "⏸ Pausado" },
-      analise: { bg: "rgba(37,99,235,0.08)", color: "#2563EB", label: "🕐 Análise" },
-      fora: { bg: "#FEF2F2", color: "#DC2626", label: "⚠️ Fora do site" },
+    const map: Record<string, { bg: string; color: string; label: string; icone: NomeIcone }> = {
+      destaque: { bg: "rgba(255,102,0,0.08)", color: "#FF6600", label: "Destaque", icone: "estrelaCheia" },
+      ativo: { bg: "rgba(22,163,74,0.08)", color: "#16A34A", label: "Ativo", icone: "ok" },
+      pausado: { bg: "#F7F6F3", color: "#7A7670", label: "Pausado", icone: "pausar" },
+      analise: { bg: "rgba(37,99,235,0.08)", color: "#2563EB", label: "Análise", icone: "relogio" },
+      fora: { bg: "#FEF2F2", color: "#DC2626", label: "Fora do site", icone: "atencao" },
     };
     const s = (status && map[status]) || map["ativo"];
-    return <span style={{ display: "inline-flex", alignItems: "center", fontSize: 10, fontWeight: 500, padding: "3px 8px", borderRadius: 20, background: s.bg, color: s.color, whiteSpace: "nowrap" }}>{s.label}</span>;
+    return <span style={{ display: "inline-flex", alignItems: "center", fontSize: 10, fontWeight: 500, padding: "3px 8px", borderRadius: 20, background: s.bg, color: s.color, whiteSpace: "nowrap", gap: 3 }}><Icone nome={s.icone} tamanho={12} /> {s.label}</span>;
   };
 
   const msg = mensagemCupom();
@@ -192,27 +193,27 @@ export default function Painel() {
         </div>
         <nav style={{ flex: 1, padding: "12px 10px", display: "flex", flexDirection: "column", gap: 1 }}>
           {[
-            { id: "dashboard", icon: "📊", label: "Dashboard" },
-            { id: "anuncios", icon: "🚗", label: "Meus Anúncios", badge: anunciosReais.length > 0 ? String(anunciosReais.length) : undefined },
-            { id: "novo", icon: "➕", label: "Novo Anúncio" },
+            { id: "dashboard", icon: "grafico", label: "Dashboard" },
+            { id: "anuncios", icon: "carro", label: "Meus Anúncios", badge: anunciosReais.length > 0 ? String(anunciosReais.length) : undefined },
+            { id: "novo", icon: "mais", label: "Novo Anúncio" },
             // Mensagens, Avaliações, Estatísticas, Plano & Pagamento e Configurações
             // ficam escondidas até existirem de verdade.
-            { id: "perfil", icon: "🏪", label: "Perfil da Loja" },
+            { id: "perfil", icon: "loja", label: "Perfil da Loja" },
           ].map(item => (
             item.id === "novo"
               ? <Link key={item.id} href="/painel/novo-anuncio" style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 10px", borderRadius: 8, background: "transparent", color: "rgba(255,255,255,0.5)", fontSize: 13.5, fontWeight: 500, textDecoration: "none", width: "100%" }}>
-                  <span style={{ fontSize: 15, width: 20, textAlign: "center", flexShrink: 0 }}>➕</span>
+                  <span style={{ width: 20, display: "flex", justifyContent: "center", flexShrink: 0 }}><Icone nome="mais" tamanho={18} /></span>
                   <span>Novo Anúncio</span>
                 </Link>
               : <button key={item.id} onClick={() => setAbaAtiva(item.id)} style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 10px", borderRadius: 8, border: "none", background: abaAtiva === item.id ? "#FF6600" : "transparent", color: abaAtiva === item.id ? "#fff" : "rgba(255,255,255,0.5)", fontSize: 13.5, fontWeight: 500, cursor: "pointer", width: "100%", textAlign: "left" }}>
-                <span style={{ fontSize: 15, width: 20, textAlign: "center", flexShrink: 0 }}>{item.icon}</span>
+                <span style={{ width: 20, display: "flex", justifyContent: "center", flexShrink: 0 }}><Icone nome={item.icon as NomeIcone} tamanho={18} /></span>
                 <span style={{ flex: 1 }}>{item.label}</span>
                 {item.badge && <span style={{ background: abaAtiva === item.id ? "rgba(255,255,255,0.25)" : "#FF6600", color: "#fff", fontSize: 10, fontWeight: 700, padding: "1px 6px", borderRadius: 10 }}>{item.badge}</span>}
               </button>
           ))}
           {souAdmin && (
             <Link href="/admin" style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 10px", borderRadius: 8, marginTop: 10, border: "1px solid rgba(255,102,0,0.35)", background: "rgba(255,102,0,0.1)", color: "#fff", fontSize: 13.5, fontWeight: 600, textDecoration: "none" }}>
-              <span style={{ fontSize: 15, width: 20, textAlign: "center", flexShrink: 0 }}>🛡️</span>
+              <span style={{ width: 20, display: "flex", justifyContent: "center", flexShrink: 0 }}><Icone nome="escudo" tamanho={18} /></span>
               <span style={{ flex: 1 }}>Painel Admin</span>
             </Link>
           )}
@@ -229,7 +230,7 @@ export default function Painel() {
           <button
             onClick={async () => { await sair(); window.location.href = "/login"; }}
             style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 10px", borderRadius: 8, border: "none", background: "transparent", color: "rgba(255,255,255,0.35)", fontSize: 12.5, cursor: "pointer", width: "100%" }}>
-            <span>🚪</span> Sair
+            <Icone nome="sair" tamanho={17} /> Sair
           </button>
         </div>
       </aside>
@@ -246,7 +247,7 @@ export default function Painel() {
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <Link href="/painel/novo-anuncio" className="header-novo" style={{ padding: "7px 14px", background: "#FF6600", borderRadius: 7, fontSize: 12, fontWeight: 700, color: "#fff", textDecoration: "none", alignItems: "center" }}>+ Novo Anúncio</Link>
             <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "5px 10px", border: "1.5px solid #E8E6E1", borderRadius: 8, background: "#F7F6F3", cursor: "pointer" }}>
-              <div style={{ width: 26, height: 26, background: "#FF6600", borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13 }}>👤</div>
+              <div style={{ width: 26, height: 26, background: "#FF6600", borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center", color: "#fff" }}><Icone nome="usuario" tamanho={16} /></div>
               <span style={{ fontSize: 12, fontWeight: 500, color: "#1A1917" }}>{nomeUsuario}</span>
             </div>
           </div>
@@ -266,7 +267,7 @@ export default function Painel() {
             return (
               <div style={{ background: grave ? "#FEF2F2" : "rgba(255,102,0,0.08)", border: `1px solid ${grave ? "#FCA5A5" : "rgba(255,102,0,0.2)"}`, borderRadius: 10, padding: "12px 14px", display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16, flexWrap: "wrap", gap: 8 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  <span style={{ fontSize: 16 }}>{grave ? "⚠️" : "⏳"}</span>
+                  <span style={{ display: "flex", color: grave ? "#DC2626" : "#FF6600" }}><Icone nome={grave ? "atencao" : "ampulheta"} tamanho={18} /></span>
                   <div style={{ fontSize: 13, color: "#1A1917", lineHeight: 1.5 }}>
                     {situacao.tipo === "sem_loja" && "Sua conta ainda não tem uma loja vinculada. Você pode anunciar 1 veículo como particular."}
                     {situacao.tipo === "em_dia" && <>{emTrial ? "Período grátis" : `Plano ${nomePlano}`} termina em <strong style={{ color: "#FF6600" }}>{situacao.diasRestantes} {situacao.diasRestantes === 1 ? "dia" : "dias"}</strong> ({dataFim}).</>}
@@ -282,17 +283,17 @@ export default function Painel() {
           {/* STATS */}
           <div className="stats-grid" style={{ marginBottom: 16 }}>
             {[
-              { label: "Visualizações (30 dias)", value: stats ? stats.visualizacoes_30d.toLocaleString("pt-BR") : "—", change: varVisitas.texto, up: varVisitas.up, icon: "👁️", bg: "rgba(255,102,0,0.08)" },
-              { label: "Contatos (30 dias)", value: stats ? stats.contatos_30d.toLocaleString("pt-BR") : "—", change: varContatos.texto, up: varContatos.up, icon: "💬", bg: "rgba(22,163,74,0.08)" },
-              { label: "Anúncios ativos", value: String(ativos), change: foraDoAr ? "fora do site (plano vencido)" : limite === null ? "sem limite" : `limite do plano: ${limite}`, up: false, icon: "🚗", bg: "rgba(37,99,235,0.08)" },
+              { label: "Visualizações (30 dias)", value: stats ? stats.visualizacoes_30d.toLocaleString("pt-BR") : "—", change: varVisitas.texto, up: varVisitas.up, icon: "olho", bg: "rgba(255,102,0,0.08)" },
+              { label: "Contatos (30 dias)", value: stats ? stats.contatos_30d.toLocaleString("pt-BR") : "—", change: varContatos.texto, up: varContatos.up, icon: "whatsapp", bg: "rgba(22,163,74,0.08)" },
+              { label: "Anúncios ativos", value: String(ativos), change: foraDoAr ? "fora do site (plano vencido)" : limite === null ? "sem limite" : `limite do plano: ${limite}`, up: false, icon: "carro", bg: "rgba(37,99,235,0.08)" },
               vitalicio
-                ? { label: "Plano", value: "Vitalício", change: "sem vencimento", up: true, icon: "👑", bg: "rgba(255,102,0,0.08)" }
-                : { label: emTrial ? "Período grátis" : `Plano ${nomePlano}`, value: situacao.tipo === "em_dia" ? String(situacao.diasRestantes) : situacao.tipo === "sem_loja" ? "—" : "Vencido", change: situacao.tipo === "em_dia" ? (situacao.diasRestantes === 1 ? "dia restante" : "dias restantes") : situacao.tipo === "carencia" ? `sai do site em ${situacao.diasAteSairDoAr}d` : situacao.tipo === "vencido" ? "anúncios fora do site" : "sem loja", up: situacao.tipo === "em_dia", icon: "⏳", bg: "rgba(255,102,0,0.08)" },
+                ? { label: "Plano", value: "Vitalício", change: "sem vencimento", up: true, icon: "coroa", bg: "rgba(255,102,0,0.08)" }
+                : { label: emTrial ? "Período grátis" : `Plano ${nomePlano}`, value: situacao.tipo === "em_dia" ? String(situacao.diasRestantes) : situacao.tipo === "sem_loja" ? "—" : "Vencido", change: situacao.tipo === "em_dia" ? (situacao.diasRestantes === 1 ? "dia restante" : "dias restantes") : situacao.tipo === "carencia" ? `sai do site em ${situacao.diasAteSairDoAr}d` : situacao.tipo === "vencido" ? "anúncios fora do site" : "sem loja", up: situacao.tipo === "em_dia", icon: "ampulheta", bg: "rgba(255,102,0,0.08)" },
             ].map(stat => (
               <div key={stat.label} style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, padding: 14 }}>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
                   <span style={{ fontSize: 11, color: "#7A7670", fontWeight: 500 }}>{stat.label}</span>
-                  <div style={{ width: 28, height: 28, borderRadius: 7, background: stat.bg, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13 }}>{stat.icon}</div>
+                  <div style={{ width: 28, height: 28, borderRadius: 7, background: stat.bg, display: "flex", alignItems: "center", justifyContent: "center", color: "#1A1917" }}><Icone nome={stat.icon as NomeIcone} tamanho={16} /></div>
                 </div>
                 <div style={{ fontSize: 22, fontWeight: 800, color: "#1A1917", lineHeight: 1, marginBottom: 4 }}>{stat.value}</div>
                 <div style={{ fontSize: 11, fontWeight: 500, color: stat.up ? "#16A34A" : "#7A7670" }}>{stat.change}</div>
@@ -313,7 +314,7 @@ export default function Painel() {
 
               {anunciosReais.length === 0 ? (
                 <div style={{ padding: "32px", textAlign: "center" }}>
-                  <div style={{ fontSize: 32, marginBottom: 8 }}>🚗</div>
+                  <div style={{ marginBottom: 8, color: "#C9C5BE" }}><Icone nome="carro" tamanho={36} traco={1.5} /></div>
                   <div style={{ fontSize: 13, color: "#7A7670", marginBottom: 12 }}>Nenhum anúncio cadastrado ainda.</div>
                   <Link href="/painel/novo-anuncio" style={{ padding: "8px 16px", background: "#FF6600", color: "#fff", borderRadius: 7, textDecoration: "none", fontSize: 13, fontWeight: 600 }}>+ Criar primeiro anúncio</Link>
                 </div>
@@ -348,10 +349,10 @@ export default function Painel() {
                           <td style={{ padding: "11px 14px", fontSize: 13, fontWeight: 700, color: "#1A1917" }}>{formatarPreco(car.preco)}<SituacaoFipe car={car} /></td>
                           <td style={{ padding: "11px 14px" }}>
                             <div style={{ display: "flex", gap: 5 }}>
-                              <Link href={`/veiculo/${car.id}`} style={{ width: 28, height: 28, borderRadius: 6, border: "1.5px solid #E8E6E1", background: "#F7F6F3", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, textDecoration: "none" }}>👁️</Link>
-                              <Link href={`/painel/novo-anuncio?editar=${car.id}`} title="Editar" style={{ width: 28, height: 28, borderRadius: 6, border: "1.5px solid #E8E6E1", background: "#F7F6F3", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: 12, textDecoration: "none" }}>✏️</Link>
-                              <button title={car.ativo === false ? "Reativar" : "Pausar"} disabled={acaoEmAndamento === car.id} onClick={() => alternarPausa(car)} style={{ width: 28, height: 28, borderRadius: 6, border: "1.5px solid #E8E6E1", background: "#F7F6F3", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: 12, opacity: acaoEmAndamento === car.id ? 0.5 : 1 }}>{car.ativo === false ? "▶️" : "⏸️"}</button>
-                              <button title="Excluir" disabled={acaoEmAndamento === car.id} onClick={() => excluir(car)} style={{ width: 28, height: 28, borderRadius: 6, border: "1.5px solid #E8E6E1", background: "#F7F6F3", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: 12, opacity: acaoEmAndamento === car.id ? 0.5 : 1 }}>🗑️</button>
+                              <Link href={`/veiculo/${car.id}`} style={{ width: 28, height: 28, borderRadius: 6, border: "1.5px solid #E8E6E1", background: "#F7F6F3", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, textDecoration: "none", color: "#1A1917" }}><Icone nome="olho" tamanho={15} /></Link>
+                              <Link href={`/painel/novo-anuncio?editar=${car.id}`} title="Editar" style={{ width: 28, height: 28, borderRadius: 6, border: "1.5px solid #E8E6E1", background: "#F7F6F3", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: 12, textDecoration: "none", color: "#1A1917" }}><Icone nome="editar" tamanho={15} /></Link>
+                              <button title={car.ativo === false ? "Reativar" : "Pausar"} disabled={acaoEmAndamento === car.id} onClick={() => alternarPausa(car)} style={{ width: 28, height: 28, borderRadius: 6, border: "1.5px solid #E8E6E1", background: "#F7F6F3", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: 12, opacity: acaoEmAndamento === car.id ? 0.5 : 1 }}><Icone nome={car.ativo === false ? "reativar" : "pausar"} tamanho={15} /></button>
+                              <button title="Excluir" disabled={acaoEmAndamento === car.id} onClick={() => excluir(car)} style={{ width: 28, height: 28, borderRadius: 6, border: "1.5px solid #E8E6E1", background: "#F7F6F3", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: 12, opacity: acaoEmAndamento === car.id ? 0.5 : 1 , color: "#DC2626" }}><Icone nome="lixeira" tamanho={15} /></button>
                             </div>
                           </td>
                         </tr>
@@ -377,10 +378,10 @@ export default function Painel() {
                         <div style={{ textAlign: "right" }}>
                           <div style={{ fontSize: 13, fontWeight: 700, color: "#1A1917" }}>{formatarPreco(car.preco)}<SituacaoFipe car={car} /></div>
                           <div style={{ display: "flex", gap: 4, marginTop: 4 }}>
-                            <Link href={`/veiculo/${car.id}`} style={{ width: 26, height: 26, borderRadius: 5, border: "1.5px solid #E8E6E1", background: "#F7F6F3", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, textDecoration: "none" }}>👁️</Link>
-                            <Link href={`/painel/novo-anuncio?editar=${car.id}`} title="Editar" style={{ width: 26, height: 26, borderRadius: 5, border: "1.5px solid #E8E6E1", background: "#F7F6F3", cursor: "pointer", fontSize: 11, display: "flex", alignItems: "center", justifyContent: "center", textDecoration: "none" }}>✏️</Link>
-                            <button title={car.ativo === false ? "Reativar" : "Pausar"} disabled={acaoEmAndamento === car.id} onClick={() => alternarPausa(car)} style={{ width: 26, height: 26, borderRadius: 5, border: "1.5px solid #E8E6E1", background: "#F7F6F3", cursor: "pointer", fontSize: 11 }}>{car.ativo === false ? "▶️" : "⏸️"}</button>
-                            <button title="Excluir" disabled={acaoEmAndamento === car.id} onClick={() => excluir(car)} style={{ width: 26, height: 26, borderRadius: 5, border: "1.5px solid #E8E6E1", background: "#F7F6F3", cursor: "pointer", fontSize: 11 }}>🗑️</button>
+                            <Link href={`/veiculo/${car.id}`} style={{ width: 26, height: 26, borderRadius: 5, border: "1.5px solid #E8E6E1", background: "#F7F6F3", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, textDecoration: "none", color: "#1A1917" }}><Icone nome="olho" tamanho={15} /></Link>
+                            <Link href={`/painel/novo-anuncio?editar=${car.id}`} title="Editar" style={{ width: 26, height: 26, borderRadius: 5, border: "1.5px solid #E8E6E1", background: "#F7F6F3", cursor: "pointer", fontSize: 11, display: "flex", alignItems: "center", justifyContent: "center", textDecoration: "none", color: "#1A1917" }}><Icone nome="editar" tamanho={15} /></Link>
+                            <button title={car.ativo === false ? "Reativar" : "Pausar"} disabled={acaoEmAndamento === car.id} onClick={() => alternarPausa(car)} style={{ width: 26, height: 26, borderRadius: 5, border: "1.5px solid #E8E6E1", background: "#F7F6F3", cursor: "pointer", fontSize: 11 }}><Icone nome={car.ativo === false ? "reativar" : "pausar"} tamanho={15} /></button>
+                            <button title="Excluir" disabled={acaoEmAndamento === car.id} onClick={() => excluir(car)} style={{ width: 26, height: 26, borderRadius: 5, border: "1.5px solid #E8E6E1", background: "#F7F6F3", cursor: "pointer", fontSize: 11 , color: "#DC2626" }}><Icone nome="lixeira" tamanho={15} /></button>
                           </div>
                         </div>
                       </div>
@@ -399,7 +400,7 @@ export default function Painel() {
                   <div style={{ padding: "18px 16px", fontSize: 12, color: "#7A7670", lineHeight: 1.5 }}>Nenhum contato ainda. Quando alguém clicar em WhatsApp ou Ligar nos seus anúncios, aparece aqui.</div>
                 ) : contatosRecentes.map((c, i) => (
                   <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 16px", borderBottom: i < contatosRecentes.length - 1 ? "1px solid #E8E6E1" : "none" }}>
-                    <div style={{ width: 32, height: 32, background: "#F7F6F3", border: "1px solid #E8E6E1", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, flexShrink: 0 }}>{c.tipo === "whatsapp" ? "💬" : "📞"}</div>
+                    <div style={{ width: 32, height: 32, background: "#F7F6F3", border: "1px solid #E8E6E1", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, color: c.tipo === "whatsapp" ? "#16A34A" : "#1A1917" }}><Icone nome={c.tipo === "whatsapp" ? "whatsapp" : "telefone"} tamanho={16} /></div>
                     <div style={{ flex: 1 }}>
                       <div style={{ fontSize: 12.5, fontWeight: 500, color: "#1A1917" }}>{c.tipo === "whatsapp" ? "Clique no WhatsApp" : "Clique em Ligar"}</div>
                       <div style={{ fontSize: 11, color: "#7A7670" }}>{c.veiculo}</div>
@@ -441,9 +442,9 @@ export default function Painel() {
                 <div style={{ fontSize: 14, fontWeight: 700, color: "#1A1917" }}>Ações rápidas</div>
               </div>
               <div style={{ padding: 14, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-                {[["➕", "Novo anúncio"], ["⭐", "Destaque"], ["📊", "Estatísticas"], ["🏪", "Editar perfil"], ["📱", "QR Code"], ["💬", "Mensagens"]].map(([icon, label]) => (
+                {([["mais", "Novo anúncio"], ["estrela", "Destaque"], ["grafico", "Estatísticas"], ["loja", "Editar perfil"], ["qrcode", "QR Code"], ["whatsapp", "Mensagens"]] as const).map(([icon, label]) => (
                   <button key={label} style={{ padding: 12, border: "1.5px solid #E8E6E1", borderRadius: 10, background: "#F7F6F3", cursor: "pointer", textAlign: "center" }}>
-                    <div style={{ fontSize: 20, marginBottom: 5 }}>{icon}</div>
+                    <div style={{ marginBottom: 5, color: "#FF6600" }}><Icone nome={icon} tamanho={22} /></div>
                     <div style={{ fontSize: 11, fontWeight: 500, color: "#1A1917" }}>{label}</div>
                   </button>
                 ))}
@@ -457,8 +458,8 @@ export default function Painel() {
               </div>
               <div style={{ padding: "0 18px" }}>
                 {(vitalicio
-                  ? [["Plano atual", "👑 Acesso vitalício", "#FF6600"], ["Anúncios usados", `${anunciosReais.length} (sem limite)`, "#1A1917"], ["Vencimento", "Nunca", "#16A34A"]]
-                  : [["Plano atual", nomePlano, "#FF6600"], ["Anúncios ativos", limite === null ? `${ativos} (sem limite)` : `${ativos} / ${limite}`, "#1A1917"], [emTrial ? "Período grátis" : "Validade", textoPeriodo, situacao.tipo === "em_dia" ? "#FF6600" : "#DC2626"], ["Destaque nos resultados", loja?.plano === "profissional" || loja?.plano === "premium" ? "✅ Incluído" : "Planos Profissional e Premium", "#7A7670"]]
+                  ? [["Plano atual", "Acesso vitalício", "#FF6600"], ["Anúncios usados", `${anunciosReais.length} (sem limite)`, "#1A1917"], ["Vencimento", "Nunca", "#16A34A"]]
+                  : [["Plano atual", nomePlano, "#FF6600"], ["Anúncios ativos", limite === null ? `${ativos} (sem limite)` : `${ativos} / ${limite}`, "#1A1917"], [emTrial ? "Período grátis" : "Validade", textoPeriodo, situacao.tipo === "em_dia" ? "#FF6600" : "#DC2626"], ["Destaque nos resultados", loja?.plano === "profissional" || loja?.plano === "premium" ? "Incluído" : "Planos Profissional e Premium", "#7A7670"]]
                 ).map(([label, value, color]) => (
                   <div key={label} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 0", borderBottom: "1px solid #E8E6E1" }}>
                     <span style={{ fontSize: 12.5, color: "#7A7670" }}>{label}</span>
@@ -468,7 +469,7 @@ export default function Painel() {
               </div>
               {!vitalicio && <div style={{ padding: "14px 18px", display: "flex", flexDirection: "column", gap: 10 }}>
                 {!emApp && <div style={{ background: "#F7F6F3", border: "1.5px solid #E8E6E1", borderRadius: 10, padding: 12 }}>
-                  <div style={{ fontSize: 11, fontWeight: 600, color: "#7A7670", marginBottom: 8, textTransform: "uppercase" as const, letterSpacing: 0.5 }}>🎟️ Resgatar cupom</div>
+                  <div style={{ fontSize: 11, fontWeight: 600, color: "#7A7670", marginBottom: 8, textTransform: "uppercase" as const, letterSpacing: 0.5 }}><Icone nome="cupom" /> Resgatar cupom</div>
                   <div style={{ display: "flex", gap: 8 }}>
                     <input type="text" placeholder="AR-XXXXXX" value={cupom}
                       onChange={e => { setCupom(e.target.value.toUpperCase()); setCupomStatus(null); }}
@@ -477,10 +478,10 @@ export default function Painel() {
                     />
                     <button onClick={resgatarCupom} disabled={cupomStatus === "loading" || cupomStatus === "ok"}
                       style={{ padding: "8px 14px", background: cupomStatus === "ok" ? "#16A34A" : "#FF6600", color: "#fff", border: "none", borderRadius: 7, fontSize: 12, fontWeight: 600, cursor: cupomStatus === "loading" || cupomStatus === "ok" ? "default" : "pointer", whiteSpace: "nowrap" as const, opacity: cupomStatus === "loading" ? 0.7 : 1 }}>
-                      {cupomStatus === "loading" ? "..." : cupomStatus === "ok" ? "✅ Ok" : "Resgatar"}
+                      {cupomStatus === "loading" ? "..." : cupomStatus === "ok" ? "Ok" : "Resgatar"}
                     </button>
                   </div>
-                  {msg && <div style={{ fontSize: 11, color: msg.cor, marginTop: 6, fontWeight: 500 }}>{msg.texto}</div>}
+                  {msg && <div style={{ fontSize: 11, color: msg.cor, marginTop: 6, fontWeight: 500 }}><Icone nome={cupomStatus === "ok" ? "ok" : "erro"} /> {msg.texto}</div>}
                 </div>}
                 <Link href="/painel/planos" style={{ display: "block", textAlign: "center", width: "100%", padding: 10, background: "#FF6600", color: "#fff", borderRadius: 8, fontSize: 13, fontWeight: 700, textDecoration: "none", boxSizing: "border-box" }}>
                   {emApp ? "Ver meu plano" : "Ver planos e renovar"}
@@ -495,25 +496,25 @@ export default function Painel() {
       {/* TAB BAR MOBILE */}
       <div className="tab-bar" style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: "#111009", borderTop: "1px solid rgba(255,255,255,0.08)", padding: "8px 0", zIndex: 50, justifyContent: "space-around", alignItems: "center" }}>
         {[
-          { id: "dashboard", icon: "📊", label: "Início" },
-          { id: "anuncios", icon: "🚗", label: "Anúncios" },
-          { id: "novo", icon: "➕", label: "Novo", link: "/painel/novo-anuncio" },
-          { id: "perfil", icon: "🏪", label: "Loja" },
+          { id: "dashboard", icon: "grafico", label: "Início" },
+          { id: "anuncios", icon: "carro", label: "Anúncios" },
+          { id: "novo", icon: "mais", label: "Novo", link: "/painel/novo-anuncio" },
+          { id: "perfil", icon: "loja", label: "Loja" },
         ].map(item => (
           item.link
             ? <Link key={item.id} href={item.link} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2, textDecoration: "none", padding: "4px 12px" }}>
-                <div style={{ width: 36, height: 36, background: "#FF6600", borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>{item.icon}</div>
+                <div style={{ width: 36, height: 36, background: "#FF6600", borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", color: "#fff" }}><Icone nome={item.icon as NomeIcone} tamanho={20} /></div>
                 <span style={{ fontSize: 10, color: "#FF6600", fontWeight: 600 }}>{item.label}</span>
               </Link>
             : <button key={item.id} onClick={() => setAbaAtiva(item.id)}
                 style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2, background: "none", border: "none", cursor: "pointer", padding: "4px 12px", position: "relative" }}>
-                <span style={{ fontSize: 20 }}>{item.icon}</span>
+                <span style={{ display: "flex", color: abaAtiva === item.id ? "#FF6600" : "rgba(255,255,255,0.55)" }}><Icone nome={item.icon as NomeIcone} tamanho={22} /></span>
                 <span style={{ fontSize: 10, color: abaAtiva === item.id ? "#FF6600" : "rgba(255,255,255,0.4)", fontWeight: abaAtiva === item.id ? 600 : 400 }}>{item.label}</span>
               </button>
         ))}
         {souAdmin && (
           <Link href="/admin" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2, textDecoration: "none", padding: "4px 12px" }}>
-            <span style={{ fontSize: 20 }}>🛡️</span>
+            <span style={{ display: "flex", color: "rgba(255,255,255,0.55)" }}><Icone nome="escudo" tamanho={22} /></span>
             <span style={{ fontSize: 10, color: "rgba(255,255,255,0.4)" }}>Admin</span>
           </Link>
         )}
@@ -529,7 +530,7 @@ function SituacaoFipe({ car }: { car: { preco: number | null; fipe_valor: number
   if (!car.fipe_valor || !car.preco) return null;
   const pct = Math.round(((car.preco - car.fipe_valor) / car.fipe_valor) * 100);
   if (car.preco < car.fipe_valor) {
-    return <div style={{ fontSize: 10.5, fontWeight: 600, color: "#15803D", marginTop: 2 }}>💰 {Math.abs(pct)}% abaixo da FIPE (selo ativo)</div>;
+    return <div style={{ fontSize: 10.5, fontWeight: 600, color: "#15803D", marginTop: 2 }}><Icone nome="abaixo" /> {Math.abs(pct)}% abaixo da FIPE (selo ativo)</div>;
   }
   return <div style={{ fontSize: 10.5, fontWeight: 500, color: "#7A7670", marginTop: 2 }}>{pct === 0 ? "Igual à FIPE" : `${pct}% acima da FIPE`}</div>;
 }

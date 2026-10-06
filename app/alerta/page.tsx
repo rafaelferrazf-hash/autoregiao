@@ -3,6 +3,7 @@ import Link from "next/link";
 import Logo from "@/components/Logo";
 import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import Icone from "@/components/Icone";
 
 // Página aberta pelos links dos e-mails de alerta (?acao=confirmar|cancelar&token=...).
 // A ação só acontece no clique do botão: o Outlook/Hotmail abre os links dos e-mails sozinho para
@@ -61,11 +62,11 @@ function Alerta() {
 
       <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "24px 16px" }}>
         <div style={{ maxWidth: 440, width: "100%", background: "#fff", borderRadius: 16, boxShadow: "0 4px 32px rgba(0,0,0,0.08)", border: "1px solid #E8E6E1", padding: "40px 32px", boxSizing: "border-box" }}>
-          <h1 style={{ fontSize: 24, fontWeight: 800, color: "#1A1917", marginBottom: 8 }}>🔔 {textos.titulo}</h1>
+          <h1 style={{ fontSize: 24, fontWeight: 800, color: "#1A1917", marginBottom: 8 }}><Icone nome="sino" cor="#FF6600" /> {textos.titulo}</h1>
 
           {estado.tipo === "feito" ? (
             <>
-              <div style={{ background: "#D1FAE5", border: "1.5px solid #6EE7B7", borderRadius: 8, padding: "12px 14px", marginBottom: 16, fontSize: 14, color: "#065F46", lineHeight: 1.5 }}>✅ {estado.texto}</div>
+              <div style={{ background: "#D1FAE5", border: "1.5px solid #6EE7B7", borderRadius: 8, padding: "12px 14px", marginBottom: 16, fontSize: 14, color: "#065F46", lineHeight: 1.5 }}><Icone nome="ok" /> {estado.texto}</div>
               <Link href="/veiculos" style={{ display: "block", textAlign: "center", fontSize: 14, color: "#FF6600", fontWeight: 600, textDecoration: "none" }}>Ver veículos →</Link>
             </>
           ) : (

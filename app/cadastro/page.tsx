@@ -3,6 +3,7 @@ import Link from "next/link";
 import Logo from "@/components/Logo";
 import { useState } from "react";
 import { supabase } from "@/lib/supabase";
+import Icone from "@/components/Icone";
 
 export default function Cadastro() {
   const [tipo, setTipo] = useState<"comprador" | "lojista" | "particular">("comprador");
@@ -46,7 +47,7 @@ export default function Cadastro() {
   if (sucesso) return (
     <main style={{ background: "#F7F6F3", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "24px" }}>
       <div style={{ textAlign: "center", padding: "40px 24px" }}>
-        <div style={{ fontSize: 64, marginBottom: 16 }}>🎉</div>
+        <div style={{ marginBottom: 16, color: "#FF6600" }}><Icone nome="festa" tamanho={60} traco={1.5} /></div>
         <div style={{ fontSize: 26, fontWeight: 800, color: "#1A1917", marginBottom: 8 }}>Cadastro realizado!</div>
         <p style={{ fontSize: 15, color: "#7A7670", marginBottom: 8 }}>Bem-vindo ao AutoRegião, {form.nome.split(" ")[0]}!</p>
         <p style={{ fontSize: 13, color: "#7A7670", marginBottom: 24 }}>Verifique seu e-mail para confirmar a conta.</p>
@@ -109,10 +110,10 @@ export default function Cadastro() {
             <div style={{ marginBottom: 20 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#7A7670", letterSpacing: 0.5, textTransform: "uppercase", marginBottom: 8 }}>Tipo de conta</div>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
-                {[["comprador", "🔍 Comprar"], ["particular", "🚗 Vender"], ["lojista", "🏪 Lojista"]].map(([val, label]) => (
+                {([["comprador", "buscar", "Comprar"], ["particular", "carro", "Vender"], ["lojista", "loja", "Lojista"]] as const).map(([val, icone, label]) => (
                   <button key={val} onClick={() => setTipo(val as "comprador" | "lojista" | "particular")}
                     style={{ padding: "12px", borderRadius: 8, border: "1.5px solid", borderColor: tipo === val ? "#FF6600" : "#E8E6E1", background: tipo === val ? "#FFF5F1" : "#fff", color: tipo === val ? "#FF6600" : "#7A7670", fontWeight: 600, fontSize: 14, cursor: "pointer" }}>
-                    {label}
+                    <Icone nome={icone} /> {label}
                   </button>
                 ))}
               </div>
@@ -120,7 +121,7 @@ export default function Cadastro() {
 
             {erro && (
               <div style={{ background: "#FEE2E2", border: "1.5px solid #FCA5A5", borderRadius: 8, padding: "12px 14px", marginBottom: 16, fontSize: 13, color: "#991B1B", fontWeight: 500 }}>
-                ⚠️ {erro}
+                <Icone nome="atencao" /> {erro}
               </div>
             )}
 
@@ -203,7 +204,7 @@ export default function Cadastro() {
 
           {tipo === "lojista" && (
             <div style={{ marginTop: 16, background: "#1A1917", borderRadius: 12, padding: "16px 20px", display: "flex", alignItems: "center", gap: 14 }}>
-              <div style={{ fontSize: 28 }}>🎁</div>
+              <div style={{ color: "#FF6600" }}><Icone nome="presente" tamanho={28} /></div>
               <div>
                 <div style={{ fontSize: 13, fontWeight: 700, color: "#fff", marginBottom: 3 }}>60 dias grátis para lojistas</div>
                 <div style={{ fontSize: 12, color: "rgba(255,255,255,0.6)" }}>Anuncie todos os seus veículos sem custo durante o período de lançamento.</div>

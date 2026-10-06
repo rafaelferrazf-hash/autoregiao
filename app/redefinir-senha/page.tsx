@@ -3,6 +3,7 @@ import Link from "next/link";
 import Logo from "@/components/Logo";
 import { useState, useEffect, useSyncExternalStore } from "react";
 import { supabase } from "@/lib/supabase";
+import Icone from "@/components/Icone";
 
 const semAssinatura = () => () => {};
 function linkTemErro() {
@@ -96,7 +97,7 @@ export default function RedefinirSenha() {
           {estado === "invalido" && (
             <>
               <div style={{ background: "#FEE2E2", border: "1.5px solid #FCA5A5", borderRadius: 8, padding: "12px 14px", margin: "16px 0", fontSize: 13, color: "#991B1B", lineHeight: 1.5 }}>
-                ⚠️ Este link é inválido ou já expirou. Peça um link novo — ele vale por tempo limitado e só pode ser usado uma vez.
+                <Icone nome="atencao" /> Este link é inválido ou já expirou. Peça um link novo — ele vale por tempo limitado e só pode ser usado uma vez.
               </div>
               <Link href="/recuperar-senha" style={{ display: "block", textAlign: "center", fontSize: 14, color: "#FF6600", fontWeight: 600, textDecoration: "none" }}>Pedir novo link</Link>
             </>
@@ -106,8 +107,8 @@ export default function RedefinirSenha() {
             <>
               <p style={{ fontSize: 14, color: "#7A7670", marginBottom: 24, lineHeight: 1.5 }}>Escolha uma senha nova para a sua conta.</p>
 
-              {sucesso && <div style={{ background: "#D1FAE5", border: "1.5px solid #6EE7B7", borderRadius: 8, padding: "12px 14px", marginBottom: 16, fontSize: 13, color: "#065F46" }}>✅ Senha alterada! Redirecionando para o painel...</div>}
-              {erro && <div style={{ background: "#FEE2E2", border: "1.5px solid #FCA5A5", borderRadius: 8, padding: "12px 14px", marginBottom: 16, fontSize: 13, color: "#991B1B" }}>⚠️ {erro}</div>}
+              {sucesso && <div style={{ background: "#D1FAE5", border: "1.5px solid #6EE7B7", borderRadius: 8, padding: "12px 14px", marginBottom: 16, fontSize: 13, color: "#065F46" }}><Icone nome="ok" /> Senha alterada! Redirecionando para o painel...</div>}
+              {erro && <div style={{ background: "#FEE2E2", border: "1.5px solid #FCA5A5", borderRadius: 8, padding: "12px 14px", marginBottom: 16, fontSize: 13, color: "#991B1B" }}><Icone nome="atencao" /> {erro}</div>}
 
               <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
                 <div>

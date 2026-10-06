@@ -11,6 +11,7 @@ import BarraBusca, { ANOS } from "@/components/BarraBusca";
 import CriarAlerta from "@/components/CriarAlerta";
 import { lerFiltros, filtrosParaQuery, temFiltroAtivo, paraNumero, type Filtros, type Ordem, type TipoVeiculo } from "@/lib/busca";
 import type { VeiculoComLoja } from "@/lib/tipos";
+import Icone from "@/components/Icone";
 
 type Opcoes = Awaited<ReturnType<typeof opcoesDeFiltro>>;
 
@@ -108,7 +109,7 @@ function Veiculos() {
       </div>
       <label style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 18, padding: "9px 10px", borderRadius: 8, cursor: "pointer", border: `1.5px solid ${rascunho.abaixo_fipe ? "#16A34A" : "#E8E6E1"}`, background: rascunho.abaixo_fipe ? "#F0FDF4" : "#fff" }}>
         <input type="checkbox" checked={!!rascunho.abaixo_fipe} onChange={e => setRascunho(r => ({ ...r, abaixo_fipe: e.target.checked || undefined }))} style={{ width: 16, height: 16, accentColor: "#16A34A" }} />
-        <span style={{ fontSize: 13, fontWeight: 600, color: "#15803D" }}>💰 Só abaixo da FIPE</span>
+        <span style={{ fontSize: 13, fontWeight: 600, color: "#15803D" }}><Icone nome="abaixo" /> Só abaixo da FIPE</span>
       </label>
       <button onClick={() => aplicar(rascunho)} style={{ width: "100%", padding: "10px", background: "#FF6600", color: "#fff", border: "none", borderRadius: 8, fontSize: 13.5, fontWeight: 700, cursor: "pointer" }}>Aplicar filtros</button>
       {temFiltroAtivo(filtros) && (
@@ -149,8 +150,8 @@ function Veiculos() {
             <Logo />
           </Link>
           <div style={{ display: "flex", gap: 24 }} className="nav-desktop">
-            {[["Buscar veículos", "/veiculos"], ["★ Favoritos", "/favoritos"], ["Anunciar", "/anunciar"]].map(([item, href]) => (
-              <Link key={item} href={href} style={{ textDecoration: "none", color: "#7A7670", fontSize: 13.5, fontWeight: 500 }}>{item}</Link>
+            {[["Buscar veículos", "/veiculos"], ["Favoritos", "/favoritos"], ["Anunciar", "/anunciar"]].map(([item, href]) => (
+              <Link key={item} href={href} style={{ textDecoration: "none", color: "#7A7670", fontSize: 13.5, fontWeight: 500 }}>{item === "Favoritos" && <Icone nome="estrela" style={{ marginRight: 4 }} />}{item}</Link>
             ))}
           </div>
           <div style={{ display: "flex", gap: 8 }} className="nav-desktop">
@@ -165,8 +166,8 @@ function Veiculos() {
         </div>
         {menuAberto && (
           <div className="nav-mobile" style={{ borderTop: "1px solid #E8E6E1", background: "#fff", padding: "16px", display: "flex", flexDirection: "column", gap: 14 }}>
-            {[["Buscar veículos", "/veiculos"], ["★ Favoritos", "/favoritos"], ["Anunciar", "/anunciar"]].map(([item, href]) => (
-              <Link key={item} href={href} style={{ textDecoration: "none", color: "#1A1917", fontSize: 15, fontWeight: 500 }}>{item}</Link>
+            {[["Buscar veículos", "/veiculos"], ["Favoritos", "/favoritos"], ["Anunciar", "/anunciar"]].map(([item, href]) => (
+              <Link key={item} href={href} style={{ textDecoration: "none", color: "#1A1917", fontSize: 15, fontWeight: 500 }}>{item === "Favoritos" && <Icone nome="estrela" style={{ marginRight: 4 }} />}{item}</Link>
             ))}
             <div style={{ display: "flex", gap: 8, paddingTop: 8, borderTop: "1px solid #E8E6E1" }}>
               <BotoesConta celular />
@@ -182,7 +183,7 @@ function Veiculos() {
 
         <button className="filtros-mobile-btn" onClick={() => setFiltrosAbertos(!filtrosAbertos)}
           style={{ width: "100%", padding: "10px", background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 8, fontSize: 14, fontWeight: 500, color: "#1A1917", cursor: "pointer", marginBottom: 12, alignItems: "center", justifyContent: "center", gap: 8 }}>
-          🔧 {filtrosAbertos ? "Fechar filtros" : "Filtrar veículos"}
+          <Icone nome="ajustes" /> {filtrosAbertos ? "Fechar filtros" : "Filtrar veículos"}
         </button>
 
         {filtrosAbertos && (
@@ -236,7 +237,7 @@ function Veiculos() {
               </div>
             ) : veiculos.length === 0 ? (
               <div style={{ textAlign: "center", padding: "60px 20px", background: "#fff", borderRadius: 12, border: "1.5px solid #E8E6E1" }}>
-                <div style={{ fontSize: 40, marginBottom: 12 }}>🚗</div>
+                <div style={{ marginBottom: 12, color: "#C9C5BE" }}><Icone nome="carro" tamanho={44} traco={1.5} /></div>
                 <div style={{ fontSize: 16, fontWeight: 700, color: "#1A1917", marginBottom: 6 }}>{erro ? "Não foi possível buscar agora" : "Nenhum veículo encontrado"}</div>
                 <div style={{ fontSize: 13, color: "#7A7670" }}>{erro ? "Tente de novo em instantes." : temFiltroAtivo(filtros) ? "Tente ajustar ou limpar os filtros." : "Volte mais tarde."}</div>
               </div>

@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 
 import { limparMarca, limparVersao } from "@/lib/nomesVeiculo";
+import Icone from "@/components/Icone";
 
 // Escolha do veículo no cadastro do anúncio, pela Tabela FIPE: marca → modelo/versão → ano.
 // A página usa a escolha para preencher marca/modelo/versão/ano/combustível do anúncio.
@@ -158,10 +159,10 @@ export default function SeletorFipe({ tipoAnuncio, marcaSugerida, preco, inicial
 
   return (
     <div style={{ border: "1.5px solid #E8E6E1", borderRadius: 10, padding: 14, background: "#F7F6F3" }}>
-      <div style={{ fontSize: 13, fontWeight: 700, color: "#1A1917", marginBottom: 4 }}>🔎 Qual é o veículo? <span style={{ fontWeight: 500, color: "#7A7670" }}>(Tabela FIPE)</span></div>
+      <div style={{ fontSize: 13, fontWeight: 700, color: "#1A1917", marginBottom: 4 }}><Icone nome="buscar" cor="#FF6600" /> Qual é o veículo? <span style={{ fontWeight: 500, color: "#7A7670" }}>(Tabela FIPE)</span></div>
       <div style={{ fontSize: 12, color: "#7A7670", lineHeight: 1.5, marginBottom: 12 }}>
         Escolha marca, modelo e ano: preenchemos o resto para você. Se o seu preço ficar <strong>abaixo da FIPE</strong>,
-        o anúncio ganha o selo <strong>“💰 Abaixo da FIPE”</strong>. O valor da FIPE <strong>não aparece para o comprador</strong>.
+        o anúncio ganha o selo <strong>“Abaixo da FIPE”</strong>. O valor da FIPE <strong>não aparece para o comprador</strong>.
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 10 }}>
@@ -210,7 +211,7 @@ export default function SeletorFipe({ tipoAnuncio, marcaSugerida, preco, inicial
           {diferenca === null ? (
             <div style={{ color: "#7A7670", fontSize: 12 }}>Preencha o preço para comparar.</div>
           ) : diferenca < 0 ? (
-            <div style={{ color: "#15803D", fontSize: 12.5, fontWeight: 600 }}>✅ Seu preço está {reais(-diferenca)} ({pct}%) abaixo da FIPE — o anúncio vai ganhar o selo 💰 Abaixo da FIPE.</div>
+            <div style={{ color: "#15803D", fontSize: 12.5, fontWeight: 600 }}><Icone nome="ok" /> Seu preço está {reais(-diferenca)} ({pct}%) abaixo da FIPE — o anúncio vai ganhar o selo “Abaixo da FIPE”.</div>
           ) : (
             <div style={{ color: "#7A7670", fontSize: 12.5 }}>
               Seu preço está {diferenca === 0 ? "igual à FIPE" : `${reais(diferenca)} (${pct}%) acima da FIPE`}. Isso fica só entre nós: o comprador não vê.

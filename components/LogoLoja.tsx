@@ -1,4 +1,5 @@
-// Logo/foto da loja; sem logo, mostra o quadradinho laranja com 🏪.
+import Icone from "@/components/Icone";
+// Logo/foto da loja; sem logo, mostra o quadradinho laranja com o ícone de loja.
 export default function LogoLoja({ url, tamanho = 44, raio = 10 }: { url?: string | null; tamanho?: number; raio?: number }) {
   if (url) {
     return (
@@ -8,6 +9,6 @@ export default function LogoLoja({ url, tamanho = 44, raio = 10 }: { url?: strin
     );
   }
   return (
-    <div style={{ width: tamanho, height: tamanho, background: "#FF6600", borderRadius: raio, display: "flex", alignItems: "center", justifyContent: "center", fontSize: Math.round(tamanho * 0.45), flexShrink: 0 }}>🏪</div>
+    <div style={{ width: tamanho, height: tamanho, background: "#FF6600", borderRadius: raio, display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", flexShrink: 0 }}><Icone nome="loja" tamanho={Math.round(tamanho * 0.55)} traco={1.6} /></div>
   );
 }

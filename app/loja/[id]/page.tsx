@@ -76,10 +76,10 @@ export default async function PerfilLoja({ params }: { params: Promise<{ id: str
     <main style={{ background: "#F7F6F3", minHeight: "100vh" }}>
 
       <style>{`
-        .loja-grid { display: grid; grid-template-columns: 1fr 280px; gap: 20px; }
-        .loja-topo { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); gap: 16px; align-items: stretch; }
+        .loja-grid { display: grid; grid-template-columns: 1fr 320px; gap: 20px; }
+        .loja-topo { display: grid; grid-template-columns: minmax(0, 2.2fr) minmax(300px, 1fr); gap: 18px; align-items: stretch; }
         .loja-capa { background: #1A1A1A; border-radius: 14px; overflow: hidden; aspect-ratio: 16 / 9; max-width: 100%; }
-        .loja-carros { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+        .loja-carros { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
         @media (max-width: 768px) {
           .loja-grid { grid-template-columns: 1fr !important; }
           .loja-topo { grid-template-columns: 1fr !important; }
@@ -101,7 +101,7 @@ export default async function PerfilLoja({ params }: { params: Promise<{ id: str
 
         {/* TOPO DA LOJA: foto de capa em destaque + cartão com contato */}
         <div style={{ background: "#fff", borderBottom: "1px solid #E8E6E1" }}>
-          <div style={{ maxWidth: 1000, margin: "0 auto", padding: "20px 16px 24px" }}>
+          <div style={{ maxWidth: 1200, margin: "0 auto", padding: "20px 16px 24px" }}>
             <h1 style={{ fontSize: 22, fontWeight: 800, color: "#1A1917", margin: "0 0 14px", lineHeight: 1.25 }}>
               {loja.nome}{local && <span style={{ color: "#7A7670", fontWeight: 600 }}> · {local}</span>}
             </h1>
@@ -110,10 +110,17 @@ export default async function PerfilLoja({ params }: { params: Promise<{ id: str
                 {loja.capa_url
                   // eslint-disable-next-line @next/next/no-img-element
                   ? <img src={loja.capa_url} alt={`Fachada da ${loja.nome}`} fetchPriority="high" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
-                  : <div style={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 12 }}>
-                      <LogoLoja url={loja.logo_url} tamanho={96} raio={20} />
-                      <div style={{ fontSize: 18, fontWeight: 800, color: "#fff", textAlign: "center", padding: "0 16px" }}>{loja.nome}</div>
-                    </div>}
+                  : loja.logo_url
+                    // Sem capa: o logo/foto ocupa o quadro inteiro (sem cortar), com a própria imagem desfocada no fundo.
+                    ? <div style={{ position: "relative", height: "100%", overflow: "hidden" }}>
+                        <div aria-hidden="true" style={{ position: "absolute", inset: -30, backgroundImage: `url(${loja.logo_url})`, backgroundSize: "cover", backgroundPosition: "center", filter: "blur(28px) brightness(0.55)" }} />
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={loja.logo_url} alt={loja.nome} fetchPriority="high" style={{ position: "relative", width: "100%", height: "100%", objectFit: "contain", display: "block" }} />
+                      </div>
+                    : <div style={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 12 }}>
+                        <LogoLoja url={null} tamanho={96} raio={20} />
+                        <div style={{ fontSize: 18, fontWeight: 800, color: "#fff", textAlign: "center", padding: "0 16px" }}>{loja.nome}</div>
+                      </div>}
               </div>
 
               <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 14, padding: 18, display: "flex", flexDirection: "column", gap: 12 }}>
@@ -166,7 +173,7 @@ export default async function PerfilLoja({ params }: { params: Promise<{ id: str
         </div>
 
         {/* CONTEÚDO */}
-        <div className="loja-grid" style={{ maxWidth: 1000, margin: "0 auto", padding: "24px 16px" }}>
+        <div className="loja-grid" style={{ maxWidth: 1200, margin: "0 auto", padding: "24px 16px" }}>
 
           {/* VEÍCULOS */}
           <div>

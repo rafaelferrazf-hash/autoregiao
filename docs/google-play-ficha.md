@@ -98,3 +98,6 @@ Muito obrigado pela força! 🙏
 ```
 Problemas já vistos: grupo precisa estar com "Quem pode pesquisar" = qualquer pessoa da Web (senão
 "Conteúdo indisponível"); tocar no link do teste pelo WhatsApp abre a Play Store e dá "item não encontrado".
+Mais problemas vistos (06/10): o app em teste fechado NÃO aparece na busca da Play Store (só pelo link direto);
+"sumiu o app" / janelinha da Play Store em branco = quase sempre a Play Store em OUTRA conta Google
+(conferir a foto de perfil no topo da Play Store e trocar para a conta do teste); limpar cache da Play Store ajuda.

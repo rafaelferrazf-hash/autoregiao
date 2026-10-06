@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const { id } = await params;
   if (!/^[0-9a-f-]{36}$/i.test(id)) return { title: "Loja não encontrada — AutoRegião" };
   const supabase = criarClienteAnonimo();
-  const { data: loja } = await supabase.from("lojas").select("nome, cidade, estado, descricao, ativo").eq("id", id).maybeSingle();
+  const { data: loja } = await supabase.from("lojas").select("*").eq("id", id).maybeSingle();
   if (!loja || loja.ativo === false) return { title: "Loja não encontrada — AutoRegião" };
 
   const { data: carros, count } = await supabase
@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     .eq("ativo", true)
     .order("criado_em", { ascending: false })
     .limit(5);
-  const foto = (carros ?? []).map(c => (c.fotos as string[] | null)?.[0]).find(Boolean);
+  const foto = (loja as Loja).capa_url || (carros ?? []).map(c => (c.fotos as string[] | null)?.[0]).find(Boolean);
   const local = [loja.cidade, loja.estado].filter(Boolean).join("/");
   const qtd = count ?? 0;
   const descricao = loja.descricao?.slice(0, 160)
@@ -68,7 +68,6 @@ export default async function PerfilLoja({ params }: { params: Promise<{ id: str
   const desde = loja.criado_em ? new Date(loja.criado_em).getFullYear() : null;
   const local = [loja.cidade, loja.estado].filter(Boolean).join(", ");
   const informacoes = [
-    ["local", "Endereço", loja.endereco],
     ["relogio", "Horário", loja.horario],
     ["telefone", "Telefone", loja.telefone],
   ].filter(([, , valor]) => valor) as [NomeIcone, string, string][];
@@ -78,9 +77,12 @@ export default async function PerfilLoja({ params }: { params: Promise<{ id: str
 
       <style>{`
         .loja-grid { display: grid; grid-template-columns: 1fr 280px; gap: 20px; }
+        .loja-topo { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); gap: 16px; align-items: stretch; }
+        .loja-capa { background: #1A1A1A; border-radius: 14px; overflow: hidden; aspect-ratio: 16 / 9; max-width: 100%; }
         .loja-carros { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
         @media (max-width: 768px) {
           .loja-grid { grid-template-columns: 1fr !important; }
+          .loja-topo { grid-template-columns: 1fr !important; }
         }
         @media (max-width: 480px) {
           .loja-carros { grid-template-columns: 1fr !important; }
@@ -92,40 +94,74 @@ export default async function PerfilLoja({ params }: { params: Promise<{ id: str
         <Link href="/" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
           <Logo />
         </Link>
-        <Link href="/veiculos" style={{ fontSize: 13, color: "#7A7670", textDecoration: "none" }}>← Ver todos os veículos</Link>
+        <Link href="/veiculos" style={{ fontSize: 13, color: "#7A7670", textDecoration: "none", whiteSpace: "nowrap" }}>← Buscar veículos</Link>
       </nav>
 
       <div style={{ paddingTop: 60 }}>
 
-        {/* HEADER DA LOJA */}
-        <div style={{ background: "#1A1917", padding: "32px 16px" }}>
-          <div style={{ maxWidth: 1000, margin: "0 auto", display: "flex", alignItems: "flex-start", gap: 24, flexWrap: "wrap" }}>
-            <LogoLoja url={loja.logo_url} tamanho={80} raio={16} />
-            <div style={{ flex: 1, minWidth: 200 }}>
-              <div style={{ fontSize: 22, fontWeight: 800, color: "#fff", marginBottom: 4 }}>{loja.nome}</div>
-              <div style={{ fontSize: 13, color: "rgba(255,255,255,0.6)", marginBottom: 10 }}>
-                {local && <><Icone nome="local" /> {local}</>}{local && desde && " · "}{desde && <>Na plataforma desde {desde}</>}
+        {/* TOPO DA LOJA: foto de capa em destaque + cartão com contato */}
+        <div style={{ background: "#fff", borderBottom: "1px solid #E8E6E1" }}>
+          <div style={{ maxWidth: 1000, margin: "0 auto", padding: "20px 16px 24px" }}>
+            <h1 style={{ fontSize: 22, fontWeight: 800, color: "#1A1917", margin: "0 0 14px", lineHeight: 1.25 }}>
+              {loja.nome}{local && <span style={{ color: "#7A7670", fontWeight: 600 }}> · {local}</span>}
+            </h1>
+            <div className="loja-topo">
+              <div className="loja-capa">
+                {loja.capa_url
+                  // eslint-disable-next-line @next/next/no-img-element
+                  ? <img src={loja.capa_url} alt={`Fachada da ${loja.nome}`} fetchPriority="high" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+                  : <div style={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 12 }}>
+                      <LogoLoja url={loja.logo_url} tamanho={96} raio={20} />
+                      <div style={{ fontSize: 18, fontWeight: 800, color: "#fff", textAlign: "center", padding: "0 16px" }}>{loja.nome}</div>
+                    </div>}
               </div>
-              <div>
-                <span style={{ fontSize: 15, fontWeight: 700, color: "#fff" }}><Icone nome="carro" /> {veiculos.length}</span>
-                <span style={{ fontSize: 12, color: "rgba(255,255,255,0.5)", marginLeft: 4 }}>{veiculos.length === 1 ? "veículo à venda" : "veículos à venda"}</span>
+
+              <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 14, padding: 18, display: "flex", flexDirection: "column", gap: 12 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                  <LogoLoja url={loja.logo_url} tamanho={52} raio={12} />
+                  <div style={{ minWidth: 0 }}>
+                    <div style={{ fontSize: 16, fontWeight: 800, color: "#1A1917", lineHeight: 1.25 }}>{loja.nome}</div>
+                    <div style={{ fontSize: 12.5, color: "#7A7670", marginTop: 2 }}>
+                      <Icone nome="carro" /> {veiculos.length} {veiculos.length === 1 ? "veículo à venda" : "veículos à venda"}
+                    </div>
+                  </div>
+                </div>
+                {(loja.endereco || local) && (
+                  <div style={{ display: "flex", gap: 8, fontSize: 13, color: "#1A1917", lineHeight: 1.45 }}>
+                    <span style={{ color: "#FF6600", display: "flex", paddingTop: 1 }}><Icone nome="local" tamanho={18} /></span>
+                    <span>{loja.endereco}{loja.endereco && local && <br />}{local}</span>
+                  </div>
+                )}
+                {desde && (
+                  <div style={{ display: "flex", gap: 8, fontSize: 13, color: "#1A1917" }}>
+                    <span style={{ color: "#FF6600", display: "flex" }}><Icone nome="calendario" tamanho={18} /></span>
+                    Na AutoRegião desde {desde}
+                  </div>
+                )}
+                <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 2 }}>
+                  {whatsapp && (
+                    <a href={`https://wa.me/55${whatsapp}`} target="_blank" rel="noopener noreferrer" className="toque-facil"
+                      style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 7, padding: 12, background: "#25D366", borderRadius: 9, color: "#fff", textDecoration: "none", fontSize: 14, fontWeight: 700 }}>
+                      <Icone nome="whatsapp" tamanho={19} /> Falar com a loja
+                    </a>
+                  )}
+                  <div style={{ display: "flex", gap: 8 }}>
+                    {telefone && (
+                      <a href={`tel:${telefone}`} className="toque-facil"
+                        style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 6, padding: 11, border: "1.5px solid #E8E6E1", borderRadius: 9, color: "#1A1917", textDecoration: "none", fontSize: 13, fontWeight: 700 }}>
+                        <Icone nome="telefone" /> Ligar
+                      </a>
+                    )}
+                    {loja.endereco && (
+                      <a href="#mapa" className="toque-facil"
+                        style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 6, padding: 11, border: "1.5px solid #E8E6E1", borderRadius: 9, color: "#1A1917", textDecoration: "none", fontSize: 13, fontWeight: 700 }}>
+                        <Icone nome="local" /> Ver mapa
+                      </a>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
-            {(telefone || whatsapp) && (
-              <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
-                {telefone && (
-                  <a href={`tel:${telefone}`} style={{ padding: "8px 16px", border: "1.5px solid rgba(255,255,255,0.2)", borderRadius: 8, color: "#fff", textDecoration: "none", fontSize: 13, fontWeight: 500 }}>
-                    <Icone nome="telefone" /> Ligar
-                  </a>
-                )}
-                {whatsapp && (
-                  <a href={`https://wa.me/55${whatsapp}`} target="_blank" rel="noopener noreferrer"
-                    style={{ padding: "8px 16px", background: "#25D366", border: "none", borderRadius: 8, color: "#fff", textDecoration: "none", fontSize: 13, fontWeight: 600 }}>
-                    <Icone nome="whatsapp" /> WhatsApp
-                  </a>
-                )}
-              </div>
-            )}
           </div>
         </div>
 
@@ -174,7 +210,7 @@ export default async function PerfilLoja({ params }: { params: Promise<{ id: str
               </div>
             )}
 
-            {loja.endereco && <MapaLoja endereco={loja.endereco} cidade={loja.cidade} estado={loja.estado} nome={loja.nome} />}
+            {loja.endereco && <div id="mapa" style={{ scrollMarginTop: 76 }}><MapaLoja endereco={loja.endereco} cidade={loja.cidade} estado={loja.estado} nome={loja.nome} /></div>}
 
             {whatsapp && (
               <a href={`https://wa.me/55${whatsapp}`} target="_blank" rel="noopener noreferrer"

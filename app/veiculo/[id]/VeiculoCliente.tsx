@@ -420,6 +420,20 @@ Motivo da denúncia:
             </div>
             {/* No celular a coluna da direita some: mapa e segurança aparecem aqui. */}
             <div className="so-celular" style={{ flexDirection: "column", gap: 12, marginTop: 16 }}>
+              {veiculo.loja_id && veiculo.lojas && (
+                <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, padding: 14, display: "flex", flexDirection: "column", gap: 12 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                    <LogoLoja url={veiculo.lojas.logo_url} tamanho={44} />
+                    <div style={{ minWidth: 0 }}>
+                      <div style={{ fontSize: 14, fontWeight: 700, color: "#1A1917" }}>{veiculo.lojas.nome}</div>
+                      <div style={{ fontSize: 12, color: "#7A7670", marginTop: 2 }}><Icone nome="local" /> {veiculo.lojas.cidade || veiculo.cidade}</div>
+                    </div>
+                  </div>
+                  <Link href={`/loja/${veiculo.loja_id}`} className="toque-facil" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, padding: 12, background: "#FFF5F0", color: "#FF6600", border: "1.5px solid #FF6600", borderRadius: 9, fontSize: 14, fontWeight: 700, textDecoration: "none" }}>
+                    <Icone nome="loja" /> Ver revenda <span style={{ fontWeight: 500, color: "#C2570F" }}>· todos os veículos</span>
+                  </Link>
+                </div>
+              )}
               {mapaLoja}
               {caixaSeguranca}
             </div>
@@ -434,9 +448,6 @@ Motivo da denúncia:
                   <div style={{ fontSize: 14, fontWeight: 700, color: "#fff" }}>{veiculo.lojas?.nome || veiculo.nome_contato}</div>
                   <div style={{ fontSize: 11.5, color: "#7A7670", marginTop: 2 }}><Icone nome="local" /> {veiculo.lojas?.cidade || veiculo.cidade}</div>
                   {anuncianteDesde && <div style={{ fontSize: 11.5, color: "#A8A49D", marginTop: 2 }}><Icone nome="check" /> Anunciante desde {anuncianteDesde}</div>}
-                  {veiculo.loja_id && (
-                    <Link href={`/loja/${veiculo.loja_id}`} style={{ display: "inline-block", fontSize: 11.5, color: "#FF6600", fontWeight: 600, textDecoration: "none", marginTop: 4 }}>Ver loja e outros anúncios →</Link>
-                  )}
                 </div>
               </div>
               <div style={{ padding: "16px 18px", display: "flex", flexDirection: "column", gap: 8 }}>
@@ -446,6 +457,11 @@ Motivo da denúncia:
                 <button onClick={ligar} style={{ width: "100%", padding: 11, background: "#F7F6F3", color: "#1A1917", border: "1.5px solid #E8E6E1", borderRadius: 9, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
                   <Icone nome="telefone" /> Ligar: {telefoneContato}
                 </button>
+                {veiculo.loja_id && (
+                  <Link href={`/loja/${veiculo.loja_id}`} className="toque-facil" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, width: "100%", padding: 11, background: "#FFF5F0", color: "#FF6600", border: "1.5px solid #FF6600", borderRadius: 9, fontSize: 13, fontWeight: 700, textDecoration: "none", boxSizing: "border-box" }}>
+                    <Icone nome="loja" /> Ver revenda <span style={{ fontWeight: 500, color: "#C2570F" }}>· todos os veículos</span>
+                  </Link>
+                )}
               </div>
             </div>
             {mapaLoja}

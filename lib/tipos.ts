@@ -66,6 +66,7 @@ export type Loja = {
   endereco: string | null;
   horario: string | null;
   logo_url?: string | null;   // logo/foto da loja (fase8-logo-loja.sql)
+  capa_url?: string | null;   // foto de capa/fachada (fase11-capa-loja.sql)
   plano: string | null;
   ativo: boolean | null;
   expira_em: string | null;

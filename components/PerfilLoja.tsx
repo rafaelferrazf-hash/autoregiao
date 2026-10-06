@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useState } from "react";
-import { atualizarPerfilLoja, enviarLogoLoja, removerLogoLoja, type PerfilLojaEditavel } from "@/lib/dados/lojas";
+import { atualizarPerfilLoja, enviarCapaLoja, enviarLogoLoja, removerCapaLoja, removerLogoLoja, type PerfilLojaEditavel } from "@/lib/dados/lojas";
 import LogoLoja from "@/components/LogoLoja";
 import type { Loja } from "@/lib/tipos";
 import Icone from "@/components/Icone";
@@ -25,6 +25,8 @@ export default function PerfilLoja({ loja, onSalvo }: { loja: Loja | null; onSal
   const [mensagem, setMensagem] = useState<{ ok: boolean; texto: string } | null>(null);
   const [enviandoLogo, setEnviandoLogo] = useState(false);
   const [avisoLogo, setAvisoLogo] = useState<{ ok: boolean; texto: string } | null>(null);
+  const [enviandoCapa, setEnviandoCapa] = useState(false);
+  const [avisoCapa, setAvisoCapa] = useState<{ ok: boolean; texto: string } | null>(null);
 
   if (!loja) {
     return (
@@ -72,6 +74,35 @@ export default function PerfilLoja({ loja, onSalvo }: { loja: Loja | null; onSal
     setEnviandoLogo(false);
   }
 
+  // Foto de capa (fachada): também salva na hora.
+  async function escolherCapa(e: React.ChangeEvent<HTMLInputElement>) {
+    const arquivo = e.target.files?.[0];
+    e.target.value = "";
+    if (!arquivo || !loja) return;
+    if (!arquivo.type.startsWith("image/")) return setAvisoCapa({ ok: false, texto: "Escolha um arquivo de imagem (foto da loja)." });
+    if (arquivo.size > 20 * 1024 * 1024) return setAvisoCapa({ ok: false, texto: "Imagem muito grande (máximo 20 MB)." });
+    setEnviandoCapa(true); setAvisoCapa(null);
+    try {
+      const { url, error } = await enviarCapaLoja(loja.usuario_id ?? "", loja.id, arquivo, loja.capa_url);
+      if (error || !url) throw error;
+      onSalvo({ ...loja, capa_url: url });
+      setAvisoCapa({ ok: true, texto: "Foto de capa atualizada! Já aparece no topo da página da sua loja." });
+    } catch {
+      setAvisoCapa({ ok: false, texto: "Não foi possível enviar a foto. Tente de novo." });
+    }
+    setEnviandoCapa(false);
+  }
+
+  async function tirarCapa() {
+    if (!loja) return;
+    setEnviandoCapa(true);
+    const { error } = await removerCapaLoja(loja.id, loja.capa_url ?? null);
+    setEnviandoCapa(false);
+    if (error) return setAvisoCapa({ ok: false, texto: "Não foi possível remover. Tente de novo." });
+    onSalvo({ ...loja, capa_url: null });
+    setAvisoCapa({ ok: true, texto: "Foto de capa removida." });
+  }
+
   async function tirarLogo() {
     if (!loja) return;
     setEnviandoLogo(true);
@@ -103,7 +134,28 @@ export default function PerfilLoja({ loja, onSalvo }: { loja: Loja | null; onSal
 
       <div style={{ padding: 18, display: "flex", flexDirection: "column", gap: 16 }}>
         <div>
-          <label style={rotulo}>Logo ou foto da loja</label>
+          <label style={rotulo}>Foto de capa (fachada da loja)</label>
+          <div style={{ width: "100%", maxWidth: 420, aspectRatio: "16 / 9", borderRadius: 10, overflow: "hidden", background: "#1A1A1A", border: "1.5px solid #E8E6E1", display: "flex", alignItems: "center", justifyContent: "center", color: "rgba(255,255,255,0.45)", marginBottom: 8 }}>
+            {loja.capa_url
+              // eslint-disable-next-line @next/next/no-img-element
+              ? <img src={loja.capa_url} alt="Capa da loja" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+              : <div style={{ textAlign: "center", fontSize: 12 }}><Icone nome="camera" tamanho={30} traco={1.5} /><div style={{ marginTop: 4 }}>Sem foto de capa</div></div>}
+          </div>
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+            <label style={{ padding: "9px 14px", background: "#FF6600", color: "#fff", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: enviandoCapa ? "wait" : "pointer", opacity: enviandoCapa ? 0.7 : 1 }}>
+              {enviandoCapa ? "Enviando..." : loja.capa_url ? "Trocar foto de capa" : "Escolher foto de capa"}
+              <input type="file" accept="image/*" onChange={escolherCapa} disabled={enviandoCapa} style={{ display: "none" }} />
+            </label>
+            {loja.capa_url && !enviandoCapa && (
+              <button type="button" onClick={tirarCapa} style={{ padding: "9px 14px", background: "#fff", color: "#7A7670", border: "1.5px solid #E8E6E1", borderRadius: 8, fontSize: 13, cursor: "pointer" }}>Remover</button>
+            )}
+          </div>
+          <div style={ajuda}>Aparece grande no topo da página da sua loja. Use uma foto da fachada ou do pátio, na horizontal (deitada).</div>
+          {avisoCapa && <div style={{ fontSize: 12, marginTop: 6, color: avisoCapa.ok ? "#15803D" : "#B91C1C" }}>{avisoCapa.ok && <><Icone nome="ok" />{" "}</>}{avisoCapa.texto}</div>}
+        </div>
+
+        <div>
+          <label style={rotulo}>Logo da loja</label>
           <div style={{ display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap" }}>
             <LogoLoja url={loja.logo_url} tamanho={72} raio={14} />
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
@@ -116,7 +168,7 @@ export default function PerfilLoja({ loja, onSalvo }: { loja: Loja | null; onSal
               )}
             </div>
           </div>
-          <div style={ajuda}>Aparece na página da sua loja e nos seus anúncios. Pode ser o logo ou uma foto da fachada; de preferência quadrada.</div>
+          <div style={ajuda}>Aparece na página da sua loja e nos seus anúncios. De preferência quadrado.</div>
           {avisoLogo && <div style={{ fontSize: 12, marginTop: 6, color: avisoLogo.ok ? "#15803D" : "#B91C1C" }}>{avisoLogo.ok && <><Icone nome="ok" />{" "}</>}{avisoLogo.texto}</div>}
         </div>
 

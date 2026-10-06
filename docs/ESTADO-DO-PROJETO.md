@@ -53,7 +53,7 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
   `/loja/[id]`, `/favoritos`, `/alerta`, `/anunciar`, `/painel` (+ `/novo-anuncio`, `/planos`), `/admin`,
   `/login`, `/cadastro`, `/recuperar-senha`, `/redefinir-senha`, `/pagamento/retorno`, `/termos`, `/privacidade`, `/offline`.
 - SQL já rodado: `rls-fase0`, `fase1-seguranca`, `fase2`, `fase3`, `fase3-fotos`, `fase4a`, `fase4b`,
-  `fase5-alertas`, `fase6-fipe`, `fase7-filtros`, `fase8-logo-loja`, `fase9-excluir-conta`, `fase10-push`, `fase11-capa-loja`, `fase12-carroceria`. Modelos de e-mail do Auth: `supabase/emails/`.
+  `fase5-alertas`, `fase6-fipe`, `fase7-filtros`, `fase8-logo-loja`, `fase9-excluir-conta`, `fase10-push`, `fase11-capa-loja`, `fase12-carroceria`, `fase13-demonstracao`. Modelos de e-mail do Auth: `supabase/emails/`.
 
 ## Regras de negócio importantes
 - Planos (`lib/planos.ts`): básico R$89/10 anúncios, profissional R$159/30 + destaque, premium R$299/ilimitado + destaque;
@@ -156,5 +156,5 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
 2. **Mercado Pago em produção** — trocar `MP_ACCESS_TOKEN`/`MP_WEBHOOK_SECRET` pelos de produção,
    configurar webhook de produção, pagamento real de R$89 e estorno.
 3. 2FA no Supabase e no Mercado Pago.
-4. Antes do lançamento: trocar os anúncios de teste por reais; revisar textos de /termos e /privacidade.
+4. Antes do lançamento: **apagar os 20 anúncios de demonstração** (`delete from public.veiculos where demonstracao = true;` — fotos em `public/demo/`, licença livre Wikimedia, créditos na descrição) e trocar os de teste por reais; revisar textos de /termos e /privacidade.
 5. Futuro: App Store (US$99/ano), notificações push, planos pagos para particulares.

@@ -53,7 +53,7 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
   `/loja/[id]`, `/favoritos`, `/alerta`, `/anunciar`, `/painel` (+ `/novo-anuncio`, `/planos`), `/admin`,
   `/login`, `/cadastro`, `/recuperar-senha`, `/redefinir-senha`, `/pagamento/retorno`, `/termos`, `/privacidade`, `/offline`.
 - SQL já rodado: `rls-fase0`, `fase1-seguranca`, `fase2`, `fase3`, `fase3-fotos`, `fase4a`, `fase4b`,
-  `fase5-alertas`, `fase6-fipe`, `fase7-filtros`, `fase8-logo-loja`, `fase9-excluir-conta`, `fase10-push`, `fase11-capa-loja`. Modelos de e-mail do Auth: `supabase/emails/`.
+  `fase5-alertas`, `fase6-fipe`, `fase7-filtros`, `fase8-logo-loja`, `fase9-excluir-conta`, `fase10-push`, `fase11-capa-loja`, `fase12-carroceria`. Modelos de e-mail do Auth: `supabase/emails/`.
 
 ## Regras de negócio importantes
 - Planos (`lib/planos.ts`): básico R$89/10 anúncios, profissional R$159/30 + destaque, premium R$299/ilimitado + destaque;
@@ -79,8 +79,9 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
   (também no celular). Favicon (`app/favicon.ico`; não declarar `icons` no metadata).
 - 06/10/2026 (CarroSP, página do anúncio): galeria em faixa larga, preço no topo do cartão da direita,
   caminho clicável (`lib/caminhoVeiculo.ts`, + BreadcrumbList), "ver todas as opções do mesmo modelo".
-  Ideias aprovadas para depois: endereço do anúncio com o nome do carro (SEO); tipo de carroceria
-  (Sedan/Hatch/SUV/Picape) com filtro; "Enviar mensagem/proposta" por e-mail.
+  Tipo de carroceria (`veiculos.carroceria`, `lib/carroceria.ts` com palpite pelo nome da FIPE; obrigatório no
+  cadastro de carro/utilitário; filtro; vitrines /carros/suv, /carros/seda...). Ideias para depois: endereço do
+  anúncio com o nome do carro (SEO); "Enviar mensagem/proposta" por e-mail.
 - 2FA nas contas principais. App instalável (PWA), arrastar fotos, revisão de celular (375/320px).
 - Marca nova (01/10/2026), do manual em `C:\Users\rafae\AutoRegiao-Logo-Novo` (só PNG, sem vetor): logo AR, laranja
   #FF6600, grafite #1A1A1A, Exo 2 nos títulos (h1–h3). Slogan trocado para "COMPRE | VENDA | ANUNCIE" (o manual

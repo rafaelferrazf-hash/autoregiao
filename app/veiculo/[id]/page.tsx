@@ -5,6 +5,7 @@ import { criarClienteAnonimo, criarClienteServidor } from "@/lib/supabase-servid
 import { formatarPreco, formatarKm } from "@/lib/formatar";
 import { NOME_SITE, URL_SITE } from "@/lib/site";
 import type { VeiculoComLoja } from "@/lib/tipos";
+import { caminhoDoVeiculo } from "@/lib/caminhoVeiculo";
 
 const ID = /^[0-9a-f-]{36}$/i;
 const COLUNAS = "*, lojas(nome, cidade, estado, endereco, criado_em, whatsapp, telefone, logo_url)";
@@ -83,9 +84,19 @@ export default async function PaginaVeiculo({ params }: { params: Promise<{ id: 
     } : {}),
   };
 
+  const caminho = caminhoDoVeiculo(v);
+  const dadosCaminho = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [...caminho, { nome: v.nome ?? "Anúncio", href: `/veiculo/${v.id}` }].map((c, i) => ({
+      "@type": "ListItem", position: i + 1, name: c.nome, item: `${URL_SITE}${c.href}`,
+    })),
+  };
+
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(dadosEstruturados).replace(/</g, "\\u003c") }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(dadosCaminho).replace(/</g, "\\u003c") }} />
       <VeiculoCliente inicial={v} />
     </>
   );

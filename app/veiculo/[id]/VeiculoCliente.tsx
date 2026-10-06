@@ -16,6 +16,7 @@ import { registrarEvento } from "@/lib/dados/eventos";
 import type { VeiculoComLoja } from "@/lib/tipos";
 import { EMAIL_CONTATO, URL_SITE } from "@/lib/site";
 import Icone, { type NomeIcone } from "@/components/Icone";
+import { caminhoDoVeiculo, linkMesmoModelo } from "@/lib/caminhoVeiculo";
 
 // O anúncio vem pronto do servidor (page.tsx); aqui ficam as partes interativas.
 export default function Veiculo({ inicial }: { inicial: VeiculoComLoja }) {
@@ -35,6 +36,24 @@ export default function Veiculo({ inicial }: { inicial: VeiculoComLoja }) {
   }, [inicial]);
 
   const fotos = veiculo?.fotos?.length ? veiculo.fotos : ["/sem-foto.png"];
+
+  // Galeria em faixa larga (várias fotos lado a lado no computador; uma por vez no celular, deslizando).
+  const faixa = useRef<HTMLDivElement>(null);
+  const [fotoNaFaixa, setFotoNaFaixa] = useState(0);
+  function aoRolarFaixa() {
+    const el = faixa.current;
+    if (!el || !el.children.length) return;
+    const largura = el.scrollWidth / el.children.length; // foto + espaço entre elas
+    setFotoNaFaixa(Math.min(fotos.length - 1, Math.round(el.scrollLeft / largura)));
+  }
+  function moverFaixa(direcao: 1 | -1) {
+    const el = faixa.current;
+    if (!el || !el.children.length) return;
+    const largura = el.scrollWidth / el.children.length;
+    el.scrollBy({ left: direcao * largura, behavior: "smooth" });
+  }
+  const caminho = caminhoDoVeiculo(veiculo);
+  const mesmoModelo = linkMesmoModelo(veiculo);
 
   // Celular: arrastar o dedo para o lado troca a foto (na foto principal e na ampliada).
   const toque = useRef<{ x: number; y: number } | null>(null);
@@ -166,7 +185,13 @@ Motivo da denúncia:
         @media (max-width: 768px) { .semelhantes-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; } }
         .contato-sticky { position: sticky; top: 76px; }
         .contato-fixo-mobile { display: none !important; }
-        .thumbnails-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
+        .galeria-faixa { display: flex; gap: 8px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; background: #1A1A1A; }
+        .galeria-faixa::-webkit-scrollbar { display: none; }
+        .galeria-item { flex: 0 0 auto; height: 420px; aspect-ratio: 4 / 3; scroll-snap-align: start; position: relative; cursor: zoom-in; background: #2A2A2A; }
+        .galeria-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .caminho-anuncio { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; font-size: 12.5px; color: #7A7670; margin-bottom: 12px; }
+        .caminho-anuncio a { color: #7A7670; text-decoration: none; }
+        .caminho-anuncio a:hover { color: #FF6600; }
         .caracteristicas-grid { display: grid; grid-template-columns: repeat(3, 1fr); }
         .breadcrumb { display: flex !important; }
         .foto-principal:hover { cursor: zoom-in; }
@@ -178,7 +203,9 @@ Motivo da denúncia:
           .contato-fixo-mobile { display: flex !important; }
           .contato-fixo-espaco { display: block !important; height: 76px; }
           .so-celular { display: flex !important; }
-          .thumbnails-grid { grid-template-columns: repeat(4, 1fr) !important; }
+          .galeria-item { width: 100vw; height: 75vw; aspect-ratio: auto; }
+          .galeria-faixa { gap: 0; }
+          .caminho-anuncio { flex-wrap: nowrap; overflow-x: auto; white-space: nowrap; scrollbar-width: none; }
           .caracteristicas-grid { grid-template-columns: repeat(2, 1fr) !important; }
           .breadcrumb { display: none !important; }
         }
@@ -250,13 +277,6 @@ Motivo da denúncia:
           <Link href="/" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none" }}>
             <Logo />
           </Link>
-          <div className="breadcrumb" style={{ alignItems: "center", gap: 6, fontSize: 13, color: "#7A7670" }}>
-            <Link href="/" style={{ color: "#7A7670", textDecoration: "none" }}>Início</Link>
-            <span>›</span>
-            <Link href="/veiculos" style={{ color: "#7A7670", textDecoration: "none" }}>{veiculo.marca}</Link>
-            <span>›</span>
-            <span style={{ color: "#1A1917", fontWeight: 500 }}>{veiculo.nome}</span>
-          </div>
           <div style={{ display: "flex", gap: 8, alignItems: "center" }} className="nav-desktop">
             <Link href="/favoritos" style={{ textDecoration: "none", color: "#7A7670", fontSize: 13.5, fontWeight: 500, marginRight: 8 }}><Icone nome="estrela" /> Favoritos</Link>
             <BotoesConta />
@@ -280,45 +300,42 @@ Motivo da denúncia:
         )}
       </nav>
 
+      {/* GALERIA EM FAIXA LARGA */}
+      <div style={{ position: "relative", marginTop: 60 }}>
+        <div ref={faixa} className="galeria-faixa" onScroll={aoRolarFaixa}>
+          {fotos.map((foto, i) => (
+            <div key={i} className="galeria-item" onClick={() => { setFotoAtiva(i); setLightbox(true); }}>
+              {foto === "/sem-foto.png"
+                ? <Image src="/sem-foto.png" alt="Foto do veículo" fill style={{ objectFit: "cover" }} sizes="100vw" />
+                // eslint-disable-next-line @next/next/no-img-element
+                : <img src={foto} alt={`${veiculo.nome} — foto ${i + 1}`} loading={i < 3 ? "eager" : "lazy"} />}
+            </div>
+          ))}
+        </div>
+        {veiculo.destaque && <span style={{ position: "absolute", top: 12, left: 12, background: "#FF6600", color: "#fff", fontSize: 11, fontWeight: 600, padding: "4px 12px", borderRadius: 20, display: "inline-flex", alignItems: "center", gap: 4, pointerEvents: "none" }}><Icone nome="estrelaCheia" tamanho={12} /> Em Destaque</span>}
+        <span style={{ position: "absolute", bottom: 12, right: 12, background: "rgba(0,0,0,0.6)", color: "#fff", fontSize: 12, padding: "5px 10px", borderRadius: 6, display: "inline-flex", alignItems: "center", gap: 4, pointerEvents: "none" }}><Icone nome="camera" tamanho={14} /> {fotoNaFaixa + 1} / {fotos.length}</span>
+        <BotaoFavorito id={veiculo.id} />
+        {fotos.length > 1 && <>
+          <button onClick={() => moverFaixa(-1)} aria-label="Foto anterior" style={{ position: "absolute", top: "50%", left: 12, transform: "translateY(-50%)", width: 42, height: 42, background: "rgba(255,255,255,0.9)", border: "none", borderRadius: "50%", fontSize: 22, cursor: "pointer", boxShadow: "0 2px 8px rgba(0,0,0,0.25)" }}>‹</button>
+          <button onClick={() => moverFaixa(1)} aria-label="Próxima foto" style={{ position: "absolute", top: "50%", right: 12, transform: "translateY(-50%)", width: 42, height: 42, background: "rgba(255,255,255,0.9)", border: "none", borderRadius: "50%", fontSize: 22, cursor: "pointer", boxShadow: "0 2px 8px rgba(0,0,0,0.25)" }}>›</button>
+        </>}
+      </div>
+
       {/* CONTEÚDO */}
-      <div style={{ maxWidth: 1180, margin: "0 auto", padding: "76px 16px 100px" }}>
+      <div style={{ maxWidth: 1180, margin: "0 auto", padding: "18px 16px 100px" }}>
         <div className="veiculo-grid">
 
           {/* COLUNA ESQUERDA */}
           <div>
-            {/* GALERIA */}
-            <div style={{ marginBottom: 20 }}>
-              <div
-                className="foto-principal"
-                onClick={() => { if (!ignorarSeArrastou()) setLightbox(true); }}
-                onTouchStart={aoTocar}
-                onTouchEnd={aoSoltar}
-                style={{ touchAction: "pan-y", position: "relative", height: 300, borderRadius: 12, overflow: "hidden", marginBottom: 10, border: "1.5px solid #E8E6E1", background: "#F7F6F3" }}
-              >
-                {fotos[fotoAtiva] === "/sem-foto.png" ? (
-                  <Image src="/sem-foto.png" alt="Foto do veículo" fill style={{ objectFit: "cover" }} sizes="100vw" />
-                ) : (
-                  <img src={fotos[fotoAtiva]} alt="Foto do veículo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                )}
-                {veiculo.destaque && <span style={{ position: "absolute", top: 12, left: 12, background: "#FF6600", color: "#fff", fontSize: 11, fontWeight: 500, padding: "4px 12px", borderRadius: 20, display: "inline-flex", alignItems: "center", gap: 4 }}><Icone nome="estrelaCheia" tamanho={12} /> Em Destaque</span>}
-                <span style={{ position: "absolute", bottom: 12, right: 12, background: "rgba(0,0,0,0.55)", color: "#fff", fontSize: 11, padding: "4px 10px", borderRadius: 6, display: "inline-flex", alignItems: "center", gap: 4 }}><Icone nome="camera" tamanho={13} /> {fotoAtiva + 1} / {fotos.length}</span>
-                {/* Ícone de zoom */}
-                <BotaoFavorito id={veiculo.id} />
-                {fotos.length > 1 && <>
-                  <button onClick={e => { e.stopPropagation(); setFotoAtiva(Math.max(0, fotoAtiva - 1)); }} style={{ position: "absolute", top: "50%", left: 10, transform: "translateY(-50%)", width: 36, height: 36, background: "rgba(255,255,255,0.85)", border: "none", borderRadius: 8, fontSize: 16, cursor: "pointer" }}>‹</button>
-                  <button onClick={e => { e.stopPropagation(); setFotoAtiva(Math.min(fotos.length - 1, fotoAtiva + 1)); }} style={{ position: "absolute", top: "50%", right: 10, transform: "translateY(-50%)", width: 36, height: 36, background: "rgba(255,255,255,0.85)", border: "none", borderRadius: 8, fontSize: 16, cursor: "pointer" }}>›</button>
-                </>}
-              </div>
-              {fotos.length > 1 && (
-                <div className="thumbnails-grid">
-                  {fotos.slice(0, 6).map((foto, i) => (
-                    <div key={i} onClick={() => setFotoAtiva(i)} style={{ position: "relative", height: 56, borderRadius: 7, overflow: "hidden", border: fotoAtiva === i ? "2px solid #FF6600" : "1.5px solid #E8E6E1", cursor: "pointer", background: "#F7F6F3" }}>
-                      <img src={foto} alt={`Foto ${i + 1}`} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+            {/* CAMINHO CLICÁVEL */}
+            <nav className="caminho-anuncio" aria-label="Você está em">
+              {caminho.map((c, k) => (
+                <span key={c.href} style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+                  {k > 0 && <span aria-hidden="true">›</span>}
+                  <Link href={c.href}>{c.nome}</Link>
+                </span>
+              ))}
+            </nav>
 
             {/* TÍTULO E PREÇO */}
             <div style={{ marginBottom: 16 }}>
@@ -341,6 +358,11 @@ Motivo da denúncia:
                   )}
                   {veiculo.aceita_troca && <div style={{ fontSize: 12, color: "#16A34A", marginTop: 6, fontWeight: 500 }}><Icone nome="ok" /> Aceita troca</div>}
                 </div>
+                {mesmoModelo && (
+                  <Link href={mesmoModelo} style={{ fontSize: 12.5, color: "#FF6600", fontWeight: 600, textDecoration: "none" }}>
+                    Ver todas as opções do mesmo modelo →
+                  </Link>
+                )}
               </div>
             </div>
 
@@ -442,6 +464,19 @@ Motivo da denúncia:
           {/* COLUNA DIREITA — desktop */}
           <div className="contato-sticky" style={{ display: "flex", flexDirection: "column", gap: 14 }}>
             <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 14, overflow: "hidden" }}>
+              <div style={{ padding: "16px 18px", borderBottom: "1px solid #E8E6E1" }}>
+                <div style={{ fontSize: 11, color: "#7A7670", fontWeight: 600, textTransform: "uppercase", letterSpacing: 0.4, marginBottom: 4 }}>Preço</div>
+                <div style={{ fontSize: 30, fontWeight: 800, color: "#FF6600", lineHeight: 1.05 }}>{formatarPreco(veiculo.preco)}</div>
+                {abaixoDaFipe(veiculo) && (
+                  <div style={{ display: "inline-flex", alignItems: "center", gap: 4, fontSize: 12, fontWeight: 700, color: "#15803D", background: "#DCFCE7", padding: "3px 9px", borderRadius: 20, marginTop: 8 }}>
+                    <Icone nome="abaixo" /> {formatarPreco(veiculo.fipe_valor! - veiculo.preco!)} abaixo da FIPE
+                  </div>
+                )}
+                <div style={{ fontSize: 12.5, color: "#7A7670", marginTop: 8 }}>
+                  {[veiculo.ano, formatarKm(veiculo.km), veiculo.cambio].filter(Boolean).join(" · ")}
+                  {veiculo.aceita_troca && <span style={{ color: "#16A34A", fontWeight: 600 }}> · Aceita troca</span>}
+                </div>
+              </div>
               <div style={{ background: "#1A1917", padding: "16px 18px", display: "flex", alignItems: "center", gap: 12 }}>
                 <LogoLoja url={veiculo.lojas?.logo_url} tamanho={44} />
                 <div style={{ flex: 1 }}>
@@ -491,9 +526,11 @@ Motivo da denúncia:
         {semelhantes.length > 0 && (
           <section style={{ marginTop: 32 }}>
             <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 12, marginBottom: 14, flexWrap: "wrap" }}>
-              <h2 style={{ fontSize: 18, fontWeight: 800, color: "#1A1917" }}>Veículos parecidos</h2>
-              {veiculo.marca && (
-                <Link href={`/veiculos?marca=${encodeURIComponent(veiculo.marca)}`} style={{ fontSize: 13, color: "#FF6600", fontWeight: 600, textDecoration: "none" }}>Ver todos {veiculo.marca} →</Link>
+              <h2 style={{ fontSize: 18, fontWeight: 800, color: "#1A1917" }}>Mais veículos para comprar na região</h2>
+              {mesmoModelo && (
+                <Link href={mesmoModelo} style={{ fontSize: 13, color: "#FF6600", fontWeight: 600, textDecoration: "none" }}>
+                  Ver todas as opções de {veiculo.modelo ? `${veiculo.marca} ${veiculo.modelo}` : veiculo.marca} →
+                </Link>
               )}
             </div>
             <div className="semelhantes-grid">

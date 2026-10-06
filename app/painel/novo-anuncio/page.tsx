@@ -7,6 +7,7 @@ import { buscarLojaDoUsuario } from "@/lib/dados/lojas";
 import { mensagemErroAnuncio } from "@/lib/planos";
 import { criarVeiculo, atualizarVeiculo, buscarVeiculoDoDono, enviarFotoVeiculo, apagarFotos } from "@/lib/dados/veiculos";
 import SeletorFipe, { type EscolhaFipe } from "@/components/SeletorFipe";
+import { adivinharCarroceria, CARROCERIAS } from "@/lib/carroceria";
 import { formatarPreco, lerPreco } from "@/lib/formatar";
 import { lerAnoFipe, modeloBase } from "@/lib/nomesVeiculo";
 import Icone from "@/components/Icone";
@@ -47,7 +48,7 @@ export default function NovoAnuncio() {
   const [form, setForm] = useState({
     tipo: "carro",
     marca: "", modelo: "", versao: "", ano: "", km: "",
-    cambio: "", combustivel: "", cor: "", portas: "",
+    cambio: "", combustivel: "", cor: "", portas: "", carroceria: "",
     preco: "", aceitaTroca: false,
     opcionais: [] as string[],
     descricao: "",
@@ -71,6 +72,8 @@ export default function NovoAnuncio() {
       versao: e.modeloNome!,
       ano,
       combustivel: combustivel || f.combustivel,
+      // Palpite pelo nome da FIPE (o lojista confere); não troca o que ele já escolheu.
+      carroceria: f.carroceria || adivinharCarroceria(f.tipo, e.modeloNome!),
     }));
   }
 
@@ -101,7 +104,7 @@ export default function NovoAnuncio() {
         tipo: v.tipo || "carro",
         marca: v.marca || "", modelo: v.modelo || "", versao: v.versao || "",
         ano: v.ano || "", km: v.km || "",
-        cambio: v.cambio || "", combustivel: v.combustivel || "", cor: v.cor || "", portas: v.portas || "",
+        cambio: v.cambio || "", combustivel: v.combustivel || "", cor: v.cor || "", portas: v.portas || "", carroceria: v.carroceria || "",
         preco: v.preco != null ? String(v.preco) : "", aceitaTroca: !!v.aceita_troca,
         opcionais: v.opcionais || [],
         descricao: v.descricao || "",
@@ -168,6 +171,7 @@ export default function NovoAnuncio() {
       if (!form.marca) { setErro("Preencha a marca."); return false; }
       if (!form.modelo) { setErro("Preencha o modelo."); return false; }
       if (!form.ano || !form.km) { setErro("Preencha o ano e a KM."); return false; }
+      if (form.tipo !== "moto" && !form.carroceria) { setErro("Escolha o tipo de carroceria (Hatch, Sedã, SUV...)."); return false; }
       const preco = lerPreco(form.preco);
       if (!preco) { setErro("Preencha o preço."); return false; }
       if (preco > 20_000_000) { setErro("Confira o preço: ficou acima de R$ 20 milhões."); return false; }
@@ -219,6 +223,7 @@ export default function NovoAnuncio() {
       combustivel: form.combustivel,
       cor: form.cor,
       portas: form.portas,
+      carroceria: form.tipo === "moto" ? null : form.carroceria || null,
       preco: lerPreco(form.preco),
       aceita_troca: form.aceitaTroca,
       opcionais: form.opcionais,
@@ -312,7 +317,7 @@ export default function NovoAnuncio() {
                   <div style={{ fontSize: 11, fontWeight: 600, color: "#7A7670", letterSpacing: 0.5, textTransform: "uppercase", marginBottom: 8 }}>Tipo</div>
                   <div style={{ display: "flex", gap: 8 }}>
                     {([["carro", "Carro"], ["moto", "Moto"], ["utilitario", "Utilitário"]] as const).map(([val, label]) => (
-                      <button key={val} onClick={() => { set("tipo", val); set("marca", ""); set("modelo", ""); set("versao", ""); setFipe(null); }}
+                      <button key={val} onClick={() => { set("tipo", val); set("marca", ""); set("modelo", ""); set("versao", ""); set("carroceria", ""); setFipe(null); }}
                         style={{ flex: 1, padding: "8px", borderRadius: 8, border: "1.5px solid", borderColor: form.tipo === val ? "#FF6600" : "#E8E6E1", background: form.tipo === val ? "#FFF5F1" : "#fff", color: form.tipo === val ? "#FF6600" : "#7A7670", fontWeight: 600, fontSize: 13, cursor: "pointer" }}>
                         <Icone nome={val} /> {label}
                       </button>
@@ -369,6 +374,21 @@ export default function NovoAnuncio() {
                     </div>
                   ))}
                 </div>
+
+                {form.tipo !== "moto" && (
+                  <div>
+                    <label style={labelStyle}>Carroceria <span style={{ color: "#FF6600" }}>*</span></label>
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                      {CARROCERIAS[form.tipo === "utilitario" ? "utilitario" : "carro"].map(c => (
+                        <button key={c} type="button" onClick={() => set("carroceria", c)}
+                          style={{ padding: "7px 12px", borderRadius: 20, border: "1.5px solid", borderColor: form.carroceria === c ? "#FF6600" : "#E8E6E1", background: form.carroceria === c ? "#FFF5F1" : "#fff", color: form.carroceria === c ? "#FF6600" : "#1A1917", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
+                          {c}
+                        </button>
+                      ))}
+                    </div>
+                    {!manual && fipe && form.carroceria && <div style={{ fontSize: 11.5, color: "#A8A49D", marginTop: 4 }}>Sugerido pelo modelo. Confira e troque se precisar.</div>}
+                  </div>
+                )}
 
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
                   <div>

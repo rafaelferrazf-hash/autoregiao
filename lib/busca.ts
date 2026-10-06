@@ -12,6 +12,7 @@ export type Filtros = {
   cidade?: string;
   cambio?: string;
   combustivel?: string;
+  carroceria?: string;        // Hatch, Sedã, SUV, Picape... (?carroceria=SUV)
   ano_min?: number;
   preco_min?: number;
   preco_max?: number;
@@ -23,7 +24,7 @@ export type Filtros = {
 
 const ORDENS: Ordem[] = ["recentes", "menor_preco", "maior_preco", "menor_km"];
 const TIPOS: TipoVeiculo[] = ["carro", "moto", "utilitario"];
-const TEXTOS = ["q", "marca", "cidade", "cambio", "combustivel"] as const;
+const TEXTOS = ["q", "marca", "cidade", "cambio", "combustivel", "carroceria"] as const;
 const NUMEROS = ["ano_min", "preco_min", "preco_max", "km_max"] as const;
 
 // "R$ 90.000" / "90000" / "90.000,00" → 90000 (centavos descartados). Vazio ou inválido → undefined.
@@ -102,6 +103,7 @@ export function aplicarFiltros<Q extends ConsultaFiltravel<Q>>(consulta: Q, f: F
   if (f.cidade) consulta = consulta.ilike("cidade", escaparLike(f.cidade));
   if (f.cambio) consulta = consulta.ilike("cambio", escaparLike(f.cambio));
   if (f.combustivel) consulta = consulta.ilike("combustivel", escaparLike(f.combustivel));
+  if (f.carroceria) consulta = consulta.eq("carroceria", f.carroceria);
   if (f.ano_min) consulta = consulta.gte("ano_num", f.ano_min);
   if (f.preco_min) consulta = consulta.gte("preco", f.preco_min);
   if (f.preco_max) consulta = consulta.lte("preco", f.preco_max);
@@ -119,7 +121,8 @@ const milhar = (n: number) => n.toLocaleString("pt-BR");
 // "Carros · Toyota · até R$ 200.000 · 2018 ou mais novo" — usado no alerta e nos e-mails.
 export function descreverFiltros(f: Filtros): string {
   const partes: string[] = [];
-  if (f.tipo) partes.push(NOME_TIPO[f.tipo]);
+  if (f.carroceria) partes.push(f.carroceria);
+  else if (f.tipo) partes.push(NOME_TIPO[f.tipo]);
   if (f.q) partes.push(`"${f.q}"`);
   if (f.marca) partes.push(f.marca);
   if (f.cidade) partes.push(`em ${f.cidade}`);

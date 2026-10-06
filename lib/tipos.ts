@@ -16,6 +16,7 @@ export type Veiculo = {
   combustivel: string | null;
   cor: string | null;
   portas: string | null;
+  carroceria?: string | null;   // Hatch, Sedã, SUV... (fase12-carroceria.sql)
   preco: number | null;
   aceita_troca: boolean | null;
   descricao: string | null;

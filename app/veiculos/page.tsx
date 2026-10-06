@@ -12,6 +12,7 @@ import CriarAlerta from "@/components/CriarAlerta";
 import { lerFiltros, filtrosParaQuery, temFiltroAtivo, paraNumero, type Filtros, type Ordem, type TipoVeiculo } from "@/lib/busca";
 import type { VeiculoComLoja } from "@/lib/tipos";
 import Icone from "@/components/Icone";
+import { CARROCERIAS, TODAS_CARROCERIAS } from "@/lib/carroceria";
 
 type Opcoes = Awaited<ReturnType<typeof opcoesDeFiltro>>;
 
@@ -75,6 +76,7 @@ function Veiculos() {
     <>
       {([
         ["Marca", "marca", opcoes.marcas, "Todas"],
+        ...(rascunho.tipo === "moto" ? [] : [["Carroceria", "carroceria", rascunho.tipo === "utilitario" ? [...CARROCERIAS.utilitario] : rascunho.tipo === "carro" ? [...CARROCERIAS.carro] : TODAS_CARROCERIAS, "Todas"]]),
         ["Câmbio", "cambio", opcoes.cambios, "Qualquer"],
         ["Combustível", "combustivel", opcoes.combustiveis, "Qualquer"],
       ] as [string, keyof Filtros, string[], string][]).map(([titulo, campo, lista, vazio]) => (

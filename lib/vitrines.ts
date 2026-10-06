@@ -2,6 +2,7 @@ import { criarClienteAnonimo } from "@/lib/supabase-servidor";
 import { aplicarFiltros, type Filtros, type TipoVeiculo } from "@/lib/busca";
 import type { VeiculoComLoja } from "@/lib/tipos";
 import { slug } from "@/lib/nomesVeiculo";
+import { carroceriaDoSlug, pluralCarroceria, slugCarroceria } from "@/lib/carroceria";
 
 // "Vitrines": páginas prontas de busca com endereço próprio, para o Google encontrar
 // (/carros, /carros/chevrolet, /carros/chevrolet/onix, /carros/ate-50-mil, /motos, /utilitarios).
@@ -24,11 +25,11 @@ const faixaDoSlug = (s: string) => {
   return FAIXAS_MIL.includes(n) ? n : null;
 };
 
-type Resumo = { tipo: string | null; marca: string | null; modelo: string | null; preco: number | null; abaixo_fipe: boolean | null };
+type Resumo = { tipo: string | null; marca: string | null; modelo: string | null; preco: number | null; abaixo_fipe: boolean | null; carroceria: string | null };
 
 // Anúncios ativos (só as colunas para montar menus/sitemap). O RLS já esconde lojas inativas.
 export async function resumoDosAnuncios(): Promise<Resumo[]> {
-  const { data } = await criarClienteAnonimo().from("veiculos").select("tipo, marca, modelo, preco, abaixo_fipe").eq("ativo", true).limit(5000);
+  const { data } = await criarClienteAnonimo().from("veiculos").select("tipo, marca, modelo, preco, abaixo_fipe, carroceria").eq("ativo", true).limit(5000);
   return (data ?? []) as Resumo[];
 }
 
@@ -81,6 +82,10 @@ export async function montarVitrine(tipoRota: TipoRota, segmentos: string[]): Pr
     titulo: "Oportunidades",
     links: qtdAbaixo ? [{ nome: "Abaixo da FIPE", href: `${base}/abaixo-da-fipe`, qtd: qtdAbaixo }] : [],
   };
+  const atalhoCarrocerias = {
+    titulo: "Por carroceria",
+    links: contarPor(todos.map(r => r.carroceria)).map(c => ({ nome: c.nome, href: `${base}/${slugCarroceria(c.nome)}`, qtd: c.qtd })),
+  };
   const atalhoMarcas = {
     titulo: "Por marca",
     links: contarPor(todos.map(r => r.marca)).map(m => ({ nome: m.nome, href: `${base}/${slug(m.nome)}`, qtd: m.qtd })),
@@ -90,7 +95,18 @@ export async function montarVitrine(tipoRota: TipoRota, segmentos: string[]): Pr
     return {
       rota: base, titulo: `${t.nome} à venda`, h1: `${t.nome} à venda`,
       descricao: `${t.nome} novos e seminovos à venda em lojas e com particulares da região. Veja fotos, preços e fale direto com o vendedor pelo WhatsApp.`,
-      filtros, caminho, atalhos: [atalhoOportunidades, atalhoMarcas, atalhoFaixas],
+      filtros, caminho, atalhos: [atalhoOportunidades, atalhoCarrocerias, atalhoMarcas, atalhoFaixas],
+    };
+  }
+
+  const carroceria = segmentos.length === 1 && t.tipo !== "moto" ? carroceriaDoSlug(segmentos[0]) : null;
+  if (carroceria) {
+    filtros.carroceria = carroceria;
+    const plural = pluralCarroceria(carroceria);
+    return {
+      rota: `${base}/${segmentos[0]}`, titulo: `${plural} à venda`, h1: `${plural} à venda`,
+      descricao: `${plural} novos e seminovos à venda em lojas e com particulares da região. Compare preços, veja as fotos e fale direto com o vendedor pelo WhatsApp.`,
+      filtros, caminho: [...caminho, { nome: plural, href: `${base}/${segmentos[0]}` }], atalhos: [atalhoCarrocerias, atalhoMarcas, atalhoFaixas],
     };
   }
 
@@ -162,6 +178,7 @@ export async function rotasDeVitrine(): Promise<string[]> {
     if (!doT.length) continue;
     rotas.add(`/${rota}`);
     if (doT.some(r => r.abaixo_fipe)) rotas.add(`/${rota}/abaixo-da-fipe`);
+    if (t.tipo !== "moto") for (const r of doT) if (r.carroceria) rotas.add(`/${rota}/${slugCarroceria(r.carroceria)}`);
     for (const n of FAIXAS_MIL) if (doT.some(r => r.preco && r.preco <= n * 1000)) rotas.add(`/${rota}/ate-${n}-mil`);
     for (const r of doT) {
       if (!r.marca?.trim()) continue;

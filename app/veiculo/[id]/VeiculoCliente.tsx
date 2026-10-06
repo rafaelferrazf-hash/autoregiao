@@ -192,7 +192,7 @@ Motivo da denúncia:
         .caminho-anuncio { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; font-size: 12.5px; color: #7A7670; margin-bottom: 12px; }
         .caminho-anuncio a { color: #7A7670; text-decoration: none; }
         .caminho-anuncio a:hover { color: #FF6600; }
-        .caracteristicas-grid { display: grid; grid-template-columns: repeat(3, 1fr); }
+        .caracteristicas-grid { display: grid; grid-template-columns: repeat(3, 1fr); margin: 0 -1px -1px 0; }
         .breadcrumb { display: flex !important; }
         .foto-principal:hover { cursor: zoom-in; }
         @media (max-width: 768px) {
@@ -345,7 +345,7 @@ Motivo da denúncia:
               </div>
               <h1 style={{ fontSize: 24, fontWeight: 800, color: "#1A1917", marginBottom: 6 }}>{veiculo.nome}</h1>
               <p style={{ fontSize: 14, color: "#7A7670", marginBottom: 14 }}>
-                {[veiculo.ano, formatarKm(veiculo.km), veiculo.combustivel, veiculo.cambio, veiculo.cor].filter(Boolean).join(" · ")}
+                {[veiculo.ano, formatarKm(veiculo.km), veiculo.carroceria, veiculo.combustivel, veiculo.cambio, veiculo.cor].filter(Boolean).join(" · ")}
               </p>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12, padding: 16, background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, marginBottom: 16 }}>
                 <div>
@@ -371,14 +371,15 @@ Motivo da denúncia:
               <div style={{ padding: "14px 18px", borderBottom: "1px solid #E8E6E1", fontSize: 14, fontWeight: 700, color: "#1A1917" }}>Características</div>
               <div className="caracteristicas-grid">
                 {[
+                  ["carro", "Carroceria", veiculo.carroceria],
                   ["calendario", "Ano", veiculo.ano],
                   ["km", "Quilometragem", formatarKm(veiculo.km)],
                   ["combustivel", "Combustível", veiculo.combustivel],
                   ["cambio", "Câmbio", veiculo.cambio],
                   ["cor", "Cor", veiculo.cor],
                   ["porta", "Portas", veiculo.portas],
-                ].filter(([,, v]) => v).map(([icon, label, value], i) => (
-                  <div key={label as string} style={{ padding: "12px 14px", borderRight: (i + 1) % 3 !== 0 ? "1px solid #E8E6E1" : "none", borderBottom: i < 3 ? "1px solid #E8E6E1" : "none" }}>
+                ].filter(([,, v]) => v).map(([icon, label, value]) => (
+                  <div key={label as string} style={{ padding: "12px 14px", boxShadow: "inset -1px -1px 0 #E8E6E1" }}>
                     <div style={{ marginBottom: 4, color: "#FF6600" }}><Icone nome={icon as NomeIcone} tamanho={20} /></div>
                     <div style={{ fontSize: 10, color: "#7A7670", textTransform: "uppercase", letterSpacing: 0.4, marginBottom: 2 }}>{label as string}</div>
                     <div style={{ fontSize: 13, fontWeight: 700, color: "#1A1917" }}>{value as string}</div>

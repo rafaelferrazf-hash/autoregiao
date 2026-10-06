@@ -1,4 +1,4 @@
-import { criarClienteAnonimo } from "@/lib/supabase-servidor";
+import { criarClienteAnonimo, criarClienteServidor } from "@/lib/supabase-servidor";
 import { aplicarFiltros, type Filtros, type TipoVeiculo } from "@/lib/busca";
 import type { VeiculoComLoja } from "@/lib/tipos";
 import { slug } from "@/lib/nomesVeiculo";
@@ -162,7 +162,8 @@ export async function montarVitrine(tipoRota: TipoRota, segmentos: string[]): Pr
 
 export async function veiculosDaVitrine(filtros: Filtros) {
   const consulta = aplicarFiltros(
-    criarClienteAnonimo().from("veiculos").select("*, lojas(nome, cidade)", { count: "exact" }).eq("ativo", true),
+    // Com a sessão de quem visita: o dono também vê os próprios anúncios de demonstração (fase14).
+    (await criarClienteServidor()).from("veiculos").select("*, lojas(nome, cidade)", { count: "exact" }).eq("ativo", true),
     filtros,
   );
   const { data, count } = await consulta.order("destaque", { ascending: false }).order("criado_em", { ascending: false }).limit(60);

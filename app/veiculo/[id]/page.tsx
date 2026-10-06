@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import VeiculoCliente from "./VeiculoCliente";
-import { criarClienteAnonimo, criarClienteServidor } from "@/lib/supabase-servidor";
+import { criarClienteServidor } from "@/lib/supabase-servidor";
 import { formatarPreco, formatarKm } from "@/lib/formatar";
 import { NOME_SITE, URL_SITE } from "@/lib/site";
 import type { VeiculoComLoja } from "@/lib/tipos";
@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const { id } = await params;
   if (!ID.test(id)) return { title: "Anúncio não encontrado — AutoRegião" };
 
-  const { data } = await criarClienteAnonimo().from("veiculos").select(COLUNAS).eq("id", id).maybeSingle();
+  const { data } = await (await criarClienteServidor()).from("veiculos").select(COLUNAS).eq("id", id).maybeSingle();
   const v = data as VeiculoComLoja | null;
   if (!v) return { title: "Anúncio não encontrado — AutoRegião", robots: { index: false } };
   const naoIndexar = v.demonstracao ? { robots: { index: false, follow: false } } : {};

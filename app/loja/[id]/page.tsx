@@ -5,7 +5,7 @@ import MapaLoja from "@/components/MapaLoja";
 import LogoLoja from "@/components/LogoLoja";
 import Rodape from "@/components/Rodape";
 import { notFound } from "next/navigation";
-import { criarClienteAnonimo } from "@/lib/supabase-servidor";
+import { criarClienteAnonimo, criarClienteServidor } from "@/lib/supabase-servidor";
 import type { Loja, Veiculo } from "@/lib/tipos";
 import type { Metadata } from "next";
 import Icone, { type NomeIcone } from "@/components/Icone";
@@ -55,7 +55,8 @@ export default async function PerfilLoja({ params }: { params: Promise<{ id: str
   // Loja desativada pelo admin some do site (os anúncios já somem pelo RLS).
   if (!loja || loja.ativo === false) notFound();
 
-  const { data } = await supabase
+  // Com a sessão de quem visita: o dono também vê os próprios anúncios de demonstração (fase14).
+  const { data } = await (await criarClienteServidor())
     .from("veiculos")
     .select("id, nome, ano, km, combustivel, preco, fotos, destaque, fipe_valor")
     .eq("loja_id", id)

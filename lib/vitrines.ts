@@ -25,11 +25,11 @@ const faixaDoSlug = (s: string) => {
   return FAIXAS_MIL.includes(n) ? n : null;
 };
 
-type Resumo = { tipo: string | null; marca: string | null; modelo: string | null; preco: number | null; abaixo_fipe: boolean | null; carroceria: string | null };
+type Resumo = { tipo: string | null; marca: string | null; modelo: string | null; preco: number | null; abaixo_fipe: boolean | null; carroceria: string | null; demonstracao: boolean | null };
 
 // Anúncios ativos (só as colunas para montar menus/sitemap). O RLS já esconde lojas inativas.
 export async function resumoDosAnuncios(): Promise<Resumo[]> {
-  const { data } = await criarClienteAnonimo().from("veiculos").select("tipo, marca, modelo, preco, abaixo_fipe, carroceria").eq("ativo", true).limit(5000);
+  const { data } = await criarClienteAnonimo().from("veiculos").select("tipo, marca, modelo, preco, abaixo_fipe, carroceria, demonstracao").eq("ativo", true).limit(5000);
   return (data ?? []) as Resumo[];
 }
 
@@ -171,7 +171,7 @@ export async function veiculosDaVitrine(filtros: Filtros) {
 
 // Endereços de vitrine que têm anúncio (para o sitemap).
 export async function rotasDeVitrine(): Promise<string[]> {
-  const todos = await resumoDosAnuncios();
+  const todos = (await resumoDosAnuncios()).filter(r => !r.demonstracao);
   const rotas = new Set<string>();
   for (const [rota, t] of Object.entries(TIPOS_ROTA)) {
     const doT = todos.filter(r => doTipo(r, t.tipo));
@@ -194,11 +194,16 @@ export async function metadadosDaVitrine(tipoRota: TipoRota, segmentos: string[]
   const vitrine = await montarVitrine(tipoRota, segmentos);
   if (!vitrine) return { title: "Página não encontrada — AutoRegião", robots: { index: false } };
   const { total } = await veiculosDaVitrine(vitrine.filtros);
+  // Só anúncios reais contam para o Google (os de demonstração não).
+  const { count: reais } = await aplicarFiltros(
+    criarClienteAnonimo().from("veiculos").select("*", { count: "exact", head: true }).eq("ativo", true).eq("demonstracao", false),
+    vitrine.filtros,
+  );
   return {
     title: `${vitrine.titulo}${total ? ` (${total})` : ""} | AutoRegião`,
     description: vitrine.descricao,
     alternates: { canonical: vitrine.rota },
     openGraph: { title: vitrine.titulo, description: vitrine.descricao, url: vitrine.rota },
-    ...(total === 0 ? { robots: { index: false, follow: true } } : {}),
+    ...(!reais ? { robots: { index: false, follow: true } } : {}),
   };
 }

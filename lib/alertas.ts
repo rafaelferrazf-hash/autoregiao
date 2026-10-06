@@ -135,7 +135,7 @@ export async function cancelarAlerta(token: string, todos = false): Promise<{ ok
 
 async function veiculosNovos(filtros: Filtros, desde: string) {
   const consulta = aplicarFiltros(
-    criarClienteAnonimo().from("veiculos").select("*, lojas(nome, cidade)", { count: "exact" }).eq("ativo", true).gt("criado_em", desde),
+    criarClienteAnonimo().from("veiculos").select("*, lojas(nome, cidade)", { count: "exact" }).eq("ativo", true).eq("demonstracao", false).gt("criado_em", desde),
     filtros,
   );
   const { data, count, error } = await consulta.order("destaque", { ascending: false }).order("criado_em", { ascending: false }).limit(MAX_VEICULOS_POR_ALERTA);

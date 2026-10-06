@@ -25,6 +25,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const { data } = await criarClienteAnonimo().from("veiculos").select(COLUNAS).eq("id", id).maybeSingle();
   const v = data as VeiculoComLoja | null;
   if (!v) return { title: "Anúncio não encontrado — AutoRegião", robots: { index: false } };
+  const naoIndexar = v.demonstracao ? { robots: { index: false, follow: false } } : {};
 
   const local = localDoAnuncio(v);
   // "Chevrolet Onix Plus Premier 2024 à venda em Lençóis Paulista-SP — R$ 89.300"
@@ -37,6 +38,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     title: `${titulo} | ${NOME_SITE}`,
     description: descricao,
     alternates: { canonical: `/veiculo/${id}` },
+    ...naoIndexar,
     openGraph: {
       title: titulo,
       description: descricao,

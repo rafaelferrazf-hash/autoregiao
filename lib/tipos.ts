@@ -41,7 +41,8 @@ export type Veiculo = {
   fipe_codigo: string | null;
   fipe_mes: string | null;
   fipe_em: string | null;
-  abaixo_fipe?: boolean | null;   // calculada pelo banco (fase7-filtros.sql); nunca gravada pelo site
+  abaixo_fipe?: boolean | null;
+  demonstracao?: boolean | null;  // anúncio de demonstração (fase13): fora do Google, do sitemap e dos alertas   // calculada pelo banco (fase7-filtros.sql); nunca gravada pelo site
 };
 
 // Veículo com o join `lojas(nome, cidade)`.

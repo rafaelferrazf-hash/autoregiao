@@ -13,7 +13,7 @@ const comFuso = (data: string) => new Date(/[zZ]|[+-]\d\d:?\d\d$/.test(data) ? d
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const supabase = criarClienteAnonimo();
   const [{ data: veiculos }, { data: lojas }, vitrines] = await Promise.all([
-    supabase.from("veiculos").select("id, criado_em").eq("ativo", true).order("criado_em", { ascending: false }).limit(5000),
+    supabase.from("veiculos").select("id, criado_em").eq("ativo", true).eq("demonstracao", false).order("criado_em", { ascending: false }).limit(5000),
     supabase.from("lojas").select("id").eq("ativo", true).limit(5000),
     rotasDeVitrine(),
   ]);

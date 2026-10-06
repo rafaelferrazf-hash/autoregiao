@@ -98,6 +98,7 @@ export function situacaoDoPlano(plano: string | null | undefined, expiraEm: stri
 export function mensagemErroAnuncio(mensagem: string | undefined): string | null {
   if (!mensagem) return null;
   if (mensagem.includes("plano_vencido")) return "O plano da sua loja venceu. Os anúncios voltam a ser publicados quando o plano estiver ativo.";
+  if (mensagem.includes("anuncio_vendido")) return "Este anúncio foi marcado como vendido e não volta ao ar. Para anunciar de novo, crie um anúncio novo.";
   if (mensagem.includes("limite_anuncios")) return "Você atingiu o limite de anúncios ativos do seu plano. Pause um anúncio ou escolha um plano maior.";
   return null;
 }

@@ -34,6 +34,10 @@ export async function GET() {
     try { pagamentos = await reconciliarPendentes(); } catch (e) { console.error("reconciliar pagamentos:", e); }
   }
 
+  // Plano menor pago antes da hora começa quando o anterior termina (supabase/fase15).
+  const { data: planosVirados, error: erroPlanos } = await criarClienteAdmin().rpc("virar_planos_agendados");
+  if (erroPlanos) console.error("planos agendados:", erroPlanos.message);
+
   let alertas: Awaited<ReturnType<typeof enviarAlertasDoDia>> | null = null;
   if (process.env.RESEND_API_KEY) {
     try { alertas = await enviarAlertasDoDia(); } catch (e) { console.error("alertas:", e); }
@@ -48,6 +52,7 @@ export async function GET() {
     fipe,
     veiculos: count,
     pagamentos,
+    planos_agendados_iniciados: erroPlanos ? null : planosVirados,
     eventos_antigos_apagados: erroLimpeza ? null : apagados ?? 0,
     em: new Date().toISOString(),
   });

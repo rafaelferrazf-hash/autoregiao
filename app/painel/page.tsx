@@ -10,7 +10,7 @@ import ExcluirConta from "@/components/ExcluirConta";
 import { ehAdmin } from "@/lib/admin";
 import { resgatarCupom as resgatarCupomNoBanco } from "@/lib/dados/cupons";
 import { buscarLojaDoUsuario } from "@/lib/dados/lojas";
-import { listarVeiculosDoUsuario, definirAnuncioAtivo, excluirVeiculo } from "@/lib/dados/veiculos";
+import { marcarVendido, listarVeiculosDoUsuario, definirAnuncioAtivo, excluirVeiculo } from "@/lib/dados/veiculos";
 import { formatarPreco, formatarKm } from "@/lib/formatar";
 import { buscarEstatisticasPainel, type EstatisticasPainel } from "@/lib/dados/eventos";
 import type { Loja } from "@/lib/tipos";
@@ -69,6 +69,15 @@ export default function Painel() {
     setAnunciosReais(lista => lista.map(a => a.id === car.id ? { ...a, ativo: reativar, status: reativar ? "ativo" : "pausado" } : a));
   };
 
+  const finalizar = async (car: Anuncio) => {
+    if (!window.confirm(`Marcar "${car.nome}" como VENDIDO?\n\nEle sai do site e fica no painel como "Vendido", com as visualizações e contatos que teve. Não conta no limite do plano e não volta mais ao ar.`)) return;
+    setAcaoEmAndamento(car.id);
+    const { error } = await marcarVendido(car.id);
+    setAcaoEmAndamento(null);
+    if (error) return alert("Não foi possível marcar como vendido. Tente de novo.");
+    setAnunciosReais(lista => lista.map(a => a.id === car.id ? { ...a, ativo: false, status: "vendido" } : a));
+  };
+
   const excluir = async (car: Anuncio) => {
     if (!window.confirm(`Excluir o anúncio "${car.nome}"?\n\nEle sai do site e não dá para desfazer. Se quiser só tirar do ar por um tempo, use Pausar.`)) return;
     setAcaoEmAndamento(car.id);
@@ -111,6 +120,7 @@ export default function Painel() {
       pausado: { bg: "#F7F6F3", color: "#7A7670", label: "Pausado", icone: "pausar" },
       analise: { bg: "rgba(37,99,235,0.08)", color: "#2563EB", label: "Análise", icone: "relogio" },
       fora: { bg: "#FEF2F2", color: "#DC2626", label: "Fora do site", icone: "atencao" },
+      vendido: { bg: "#EEF2F7", color: "#475569", label: "Vendido", icone: "check" },
     };
     const s = (status && map[status]) || map["ativo"];
     return <span style={{ display: "inline-flex", alignItems: "center", fontSize: 10, fontWeight: 500, padding: "3px 8px", borderRadius: 20, background: s.bg, color: s.color, whiteSpace: "nowrap", gap: 3 }}><Icone nome={s.icone} tamanho={12} /> {s.label}</span>;
@@ -128,6 +138,10 @@ export default function Painel() {
   const limite = loja ? limiteDoPlano(loja.plano) : 1;
   const ativos = anunciosReais.filter(a => a.ativo !== false).length;
   const foraDoAr = situacao.tipo === "vencido";
+  // Plano menor já pago que começa quando o atual termina (fase15).
+  const planoProximo = loja?.plano_proximo && loja.plano_proximo_em ? { nome: nomeDoPlano(loja.plano_proximo), em: new Date(loja.plano_proximo_em).toLocaleDateString("pt-BR"), limite: limiteDoPlano(loja.plano_proximo) } : null;
+  const pausados = anunciosReais.filter(a => a.ativo === false && a.status !== "vendido").length;
+  const semVaga = limite !== null && ativos >= limite;
   const dataFim = loja?.expira_em ? new Date(loja.expira_em).toLocaleDateString("pt-BR") : "";
   const textoPeriodo =
     situacao.tipo === "em_dia" ? `${situacao.diasRestantes} ${situacao.diasRestantes === 1 ? "dia restante" : "dias restantes"} (até ${dataFim})`
@@ -270,7 +284,8 @@ export default function Painel() {
                   <span style={{ display: "flex", color: grave ? "#DC2626" : "#FF6600" }}><Icone nome={grave ? "atencao" : "ampulheta"} tamanho={18} /></span>
                   <div style={{ fontSize: 13, color: "#1A1917", lineHeight: 1.5 }}>
                     {situacao.tipo === "sem_loja" && "Sua conta ainda não tem uma loja vinculada. Você pode anunciar 1 veículo como particular."}
-                    {situacao.tipo === "em_dia" && <>{emTrial ? "Período grátis" : `Plano ${nomePlano}`} termina em <strong style={{ color: "#FF6600" }}>{situacao.diasRestantes} {situacao.diasRestantes === 1 ? "dia" : "dias"}</strong> ({dataFim}).</>}
+                    {situacao.tipo === "em_dia" && planoProximo && <>{emTrial ? "Período grátis" : `Plano ${nomePlano}`} até <strong>{planoProximo.em}</strong>. Depois começa o <strong>Plano {planoProximo.nome}</strong> ({planoProximo.limite === null ? "sem limite de anúncios" : `até ${planoProximo.limite} anúncios ativos`}), pago até {dataFim}.</>}
+                    {situacao.tipo === "em_dia" && !planoProximo && <>{emTrial ? "Período grátis" : `Plano ${nomePlano}`} termina em <strong style={{ color: "#FF6600" }}>{situacao.diasRestantes} {situacao.diasRestantes === 1 ? "dia" : "dias"}</strong> ({dataFim}).</>}
                     {situacao.tipo === "carencia" && <>Seu plano <strong>venceu em {dataFim}</strong>. Seus anúncios <strong style={{ color: "#DC2626" }}>saem do site em {situacao.diasAteSairDoAr} {situacao.diasAteSairDoAr === 1 ? "dia" : "dias"}</strong> se o plano não for renovado.</>}
                     {situacao.tipo === "vencido" && <>Seu plano venceu em {dataFim}. <strong style={{ color: "#DC2626" }}>Seus anúncios estão fora do site</strong> e voltam assim que o plano for renovado.</>}
                   </div>
@@ -312,6 +327,13 @@ export default function Painel() {
                   : anunciosReais.length > 5 && <button onClick={() => setAbaAtiva("anuncios")} style={{ fontSize: 12, color: "#FF6600", fontWeight: 500, background: "none", border: "none", cursor: "pointer" }}>Ver todos ({anunciosReais.length}) →</button>}
               </div>
 
+              {pausados > 0 && limite !== null && (
+                <div style={{ padding: "10px 18px", background: semVaga ? "#FEF2F2" : "rgba(255,102,0,0.06)", borderBottom: "1px solid #E8E6E1", fontSize: 12.5, color: "#1A1917", lineHeight: 1.5 }}>
+                  {semVaga
+                    ? <>Seu plano permite <strong>{limite} anúncios ativos</strong> e todos estão em uso. Os pausados só podem ser <strong>marcados como vendidos</strong> ou <strong>excluídos</strong> — ou pause um ativo para liberar uma vaga.</>
+                    : <>Você pode reativar mais <strong>{limite - ativos} {limite - ativos === 1 ? "anúncio" : "anúncios"}</strong> (limite do plano: {limite}).</>}
+                </div>
+              )}
               {anunciosReais.length === 0 ? (
                 <div style={{ padding: "32px", textAlign: "center" }}>
                   <div style={{ marginBottom: 8, color: "#C9C5BE" }}><Icone nome="carro" tamanho={36} traco={1.5} /></div>
@@ -345,13 +367,14 @@ export default function Painel() {
                               </div>
                             </div>
                           </td>
-                          <td style={{ padding: "11px 14px" }}>{statusBadge(car.ativo === false ? "pausado" : foraDoAr ? "fora" : car.status || "ativo")}</td>
+                          <td style={{ padding: "11px 14px" }}>{statusBadge(car.status === "vendido" ? "vendido" : car.ativo === false ? "pausado" : foraDoAr ? "fora" : car.status || "ativo")}</td>
                           <td style={{ padding: "11px 14px", fontSize: 13, fontWeight: 700, color: "#1A1917" }}>{formatarPreco(car.preco)}<SituacaoFipe car={car} /></td>
                           <td style={{ padding: "11px 14px" }}>
                             <div style={{ display: "flex", gap: 5 }}>
                               <Link href={`/veiculo/${car.id}`} style={{ width: 28, height: 28, borderRadius: 6, border: "1.5px solid #E8E6E1", background: "#F7F6F3", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, textDecoration: "none", color: "#1A1917" }}><Icone nome="olho" tamanho={15} /></Link>
                               <Link href={`/painel/novo-anuncio?editar=${car.id}`} title="Editar" style={{ width: 28, height: 28, borderRadius: 6, border: "1.5px solid #E8E6E1", background: "#F7F6F3", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: 12, textDecoration: "none", color: "#1A1917" }}><Icone nome="editar" tamanho={15} /></Link>
-                              <button title={car.ativo === false ? "Reativar" : "Pausar"} disabled={acaoEmAndamento === car.id} onClick={() => alternarPausa(car)} style={{ width: 28, height: 28, borderRadius: 6, border: "1.5px solid #E8E6E1", background: "#F7F6F3", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: 12, opacity: acaoEmAndamento === car.id ? 0.5 : 1 }}><Icone nome={car.ativo === false ? "reativar" : "pausar"} tamanho={15} /></button>
+                              {car.status !== "vendido" && !(car.ativo === false && semVaga) && <button title={car.ativo === false ? "Reativar" : "Pausar"} disabled={acaoEmAndamento === car.id} onClick={() => alternarPausa(car)} style={{ width: 28, height: 28, borderRadius: 6, border: "1.5px solid #E8E6E1", background: "#F7F6F3", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: 12, opacity: acaoEmAndamento === car.id ? 0.5 : 1 }}><Icone nome={car.ativo === false ? "reativar" : "pausar"} tamanho={15} /></button>}
+                              {car.status !== "vendido" && <button title="Marcar como vendido" disabled={acaoEmAndamento === car.id} onClick={() => finalizar(car)} style={{ width: 28, height: 28, borderRadius: 6, border: "1.5px solid #E8E6E1", background: "#F7F6F3", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: "#16A34A" }}><Icone nome="ok" tamanho={15} /></button>}
                               <button title="Excluir" disabled={acaoEmAndamento === car.id} onClick={() => excluir(car)} style={{ width: 28, height: 28, borderRadius: 6, border: "1.5px solid #E8E6E1", background: "#F7F6F3", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: 12, opacity: acaoEmAndamento === car.id ? 0.5 : 1 , color: "#DC2626" }}><Icone nome="lixeira" tamanho={15} /></button>
                             </div>
                           </td>
@@ -372,7 +395,7 @@ export default function Painel() {
                         <div style={{ flex: 1 }}>
                           <div style={{ fontSize: 13, fontWeight: 700, color: "#1A1917", marginBottom: 2 }}>{car.nome}</div>
                           <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                            {statusBadge(car.ativo === false ? "pausado" : foraDoAr ? "fora" : car.status || "ativo")}
+                            {statusBadge(car.status === "vendido" ? "vendido" : car.ativo === false ? "pausado" : foraDoAr ? "fora" : car.status || "ativo")}
                           </div>
                         </div>
                         <div style={{ textAlign: "right" }}>
@@ -380,7 +403,8 @@ export default function Painel() {
                           <div style={{ display: "flex", gap: 4, marginTop: 4 }}>
                             <Link href={`/veiculo/${car.id}`} style={{ width: 26, height: 26, borderRadius: 5, border: "1.5px solid #E8E6E1", background: "#F7F6F3", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, textDecoration: "none", color: "#1A1917" }}><Icone nome="olho" tamanho={15} /></Link>
                             <Link href={`/painel/novo-anuncio?editar=${car.id}`} title="Editar" style={{ width: 26, height: 26, borderRadius: 5, border: "1.5px solid #E8E6E1", background: "#F7F6F3", cursor: "pointer", fontSize: 11, display: "flex", alignItems: "center", justifyContent: "center", textDecoration: "none", color: "#1A1917" }}><Icone nome="editar" tamanho={15} /></Link>
-                            <button title={car.ativo === false ? "Reativar" : "Pausar"} disabled={acaoEmAndamento === car.id} onClick={() => alternarPausa(car)} style={{ width: 26, height: 26, borderRadius: 5, border: "1.5px solid #E8E6E1", background: "#F7F6F3", cursor: "pointer", fontSize: 11 }}><Icone nome={car.ativo === false ? "reativar" : "pausar"} tamanho={15} /></button>
+                            {car.status !== "vendido" && !(car.ativo === false && semVaga) && <button title={car.ativo === false ? "Reativar" : "Pausar"} disabled={acaoEmAndamento === car.id} onClick={() => alternarPausa(car)} style={{ width: 26, height: 26, borderRadius: 5, border: "1.5px solid #E8E6E1", background: "#F7F6F3", cursor: "pointer", fontSize: 11 }}><Icone nome={car.ativo === false ? "reativar" : "pausar"} tamanho={15} /></button>}
+                              {car.status !== "vendido" && <button title="Marcar como vendido" disabled={acaoEmAndamento === car.id} onClick={() => finalizar(car)} style={{ width: 28, height: 28, borderRadius: 6, border: "1.5px solid #E8E6E1", background: "#F7F6F3", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: "#16A34A" }}><Icone nome="ok" tamanho={15} /></button>}
                             <button title="Excluir" disabled={acaoEmAndamento === car.id} onClick={() => excluir(car)} style={{ width: 26, height: 26, borderRadius: 5, border: "1.5px solid #E8E6E1", background: "#F7F6F3", cursor: "pointer", fontSize: 11 , color: "#DC2626" }}><Icone nome="lixeira" tamanho={15} /></button>
                           </div>
                         </div>

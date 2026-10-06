@@ -86,7 +86,9 @@ export default function Planos() {
               {situacao.tipo === "em_dia" && <> · válido até <strong style={{ color: "#1A1917" }}>{dataFim}</strong> ({situacao.diasRestantes} {situacao.diasRestantes === 1 ? "dia" : "dias"})</>}
               {situacao.tipo === "carencia" && <> · <strong style={{ color: "#DC2626" }}>venceu em {dataFim}</strong> — seus anúncios saem do site em {situacao.diasAteSairDoAr} {situacao.diasAteSairDoAr === 1 ? "dia" : "dias"}</>}
               {situacao.tipo === "vencido" && <> · <strong style={{ color: "#DC2626" }}>vencido desde {dataFim}</strong> — seus anúncios estão fora do site</>}
-              {!emApp && <><br />Ao pagar, os dias são <strong style={{ color: "#1A1917" }}>somados</strong> ao que você ainda tem. Se já venceu, contam a partir de hoje.</>}
+              {!emApp && <><br />Ao pagar, os dias são <strong style={{ color: "#1A1917" }}>somados</strong> ao que você ainda tem. Se já venceu, contam a partir de hoje.
+                <br />Plano <strong style={{ color: "#1A1917" }}>maior</strong> que o atual vale na hora. Plano <strong style={{ color: "#1A1917" }}>menor</strong> (ex.: Básico durante o período grátis) começa quando o atual terminar — até lá você mantém o limite atual.
+                Se na troca você tiver mais anúncios ativos que o novo limite, eles são pausados e você escolhe quais reativar.</>}
             </div>
 
             {!emApp && <>

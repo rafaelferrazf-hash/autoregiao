@@ -126,6 +126,11 @@ export async function atualizarVeiculo(id: string, dados: Partial<NovoVeiculo>) 
 }
 
 // Pausar tira o anúncio do site sem apagar; reativar devolve.
+// "Finalizar": vendido. O banco tira do ar e não deixa voltar (supabase/fase15).
+export async function marcarVendido(id: string) {
+  return supabase.from("veiculos").update({ status: "vendido", ativo: false }).eq("id", id).select("id").single();
+}
+
 export async function definirAnuncioAtivo(id: string, ativo: boolean) {
   return supabase
     .from("veiculos")

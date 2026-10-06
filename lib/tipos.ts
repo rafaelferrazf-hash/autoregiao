@@ -42,7 +42,8 @@ export type Veiculo = {
   fipe_mes: string | null;
   fipe_em: string | null;
   abaixo_fipe?: boolean | null;
-  demonstracao?: boolean | null;  // anúncio de demonstração (fase13): fora do Google, do sitemap e dos alertas   // calculada pelo banco (fase7-filtros.sql); nunca gravada pelo site
+  demonstracao?: boolean | null;
+  vendido_em?: string | null;     // "Finalizar" = vendido (fase15): fora do ar para sempre  // anúncio de demonstração (fase13): fora do Google, do sitemap e dos alertas   // calculada pelo banco (fase7-filtros.sql); nunca gravada pelo site
 };
 
 // Veículo com o join `lojas(nome, cidade)`.
@@ -69,6 +70,8 @@ export type Loja = {
   horario: string | null;
   logo_url?: string | null;   // logo/foto da loja (fase8-logo-loja.sql)
   capa_url?: string | null;   // foto de capa/fachada (fase11-capa-loja.sql)
+  plano_proximo?: string | null;     // plano menor já pago, começa em plano_proximo_em (fase15)
+  plano_proximo_em?: string | null;
   plano: string | null;
   ativo: boolean | null;
   expira_em: string | null;

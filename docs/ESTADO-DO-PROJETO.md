@@ -130,7 +130,9 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
      do Google Play** (Play Console → Integridade do app) no assetlinks.json.
    - Textos da ficha e respostas dos questionários: `docs/google-play-ficha.md`. Imagem de destaque 1024×500 e ícone 512
      já em `autoregiao-android\publicar\`. Capturas de tela (5, 1080×1920, com moldura) também lá — refazer com anúncios reais antes do lançamento.
-   - Depois: teste fechado com **12+ testadores por 14 dias** → solicitar acesso à produção.
+   - ✅ 06/10/2026: Painel do Play Console marca "12+ testadores aceitaram" (Rafael diz 16 instalados).
+     Falta só "14 dias com 12+ testadores" — previsão ~20/10/2026; o botão "Solicitar a produção" libera sozinho.
+     Pedir aos testadores para não desinstalar e abrir o app 2–3x/semana; juntar opiniões para o questionário.
 1b. **App Store (iPhone)** — decidido em 05/10/2026: mesmo modelo "app que usa o site" (nada de app
    independente). Para passar na revisão da Apple: notificações push (alertas de carro novo), compartilhar nativo,
    tela offline; botão "Excluir minha conta" dentro do app (regra 5.1.1); sem compra de planos dentro do app

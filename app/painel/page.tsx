@@ -211,7 +211,7 @@ export default function Painel() {
         </div>
         <nav style={{ flex: 1, padding: "12px 10px", display: "flex", flexDirection: "column", gap: 1 }}>
           {[
-            { id: "dashboard", icon: "grafico", label: "Dashboard" },
+            { id: "dashboard", icon: "grafico", label: "Resumo" },
             { id: "anuncios", icon: "carro", label: "Meus Anúncios", badge: anunciosReais.length > 0 ? String(anunciosReais.length) : undefined },
             { id: "novo", icon: "mais", label: "Novo Anúncio" },
             // Mensagens, Avaliações, Estatísticas, Plano & Pagamento e Configurações
@@ -259,7 +259,7 @@ export default function Painel() {
         {/* HEADER */}
         <header style={{ background: "#fff", borderBottom: "1px solid #E8E6E1", padding: "0 16px", height: 58, display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, zIndex: 40 }}>
           <div>
-            <div style={{ fontSize: 15, fontWeight: 800, color: "#1A1917" }}>{abaAtiva === "perfil" ? "Perfil da loja" : abaAtiva === "anuncios" ? "Meus anúncios" : "Dashboard"}</div>
+            <div style={{ fontSize: 15, fontWeight: 800, color: "#1A1917" }}>{abaAtiva === "perfil" ? "Perfil da loja" : abaAtiva === "anuncios" ? "Meus anúncios" : "Resumo"}</div>
             <div style={{ fontSize: 10, color: "#7A7670", textTransform: "capitalize" }}>{hoje}</div>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -362,7 +362,7 @@ export default function Painel() {
                   <table className="tabela-desktop" style={{ width: "100%", borderCollapse: "collapse" }}>
                     <thead>
                       <tr style={{ background: "#F7F6F3" }}>
-                        {["Veículo", "Status", "Preço", "Ações"].map(h => (
+                        {["Veículo", "Situação", "Preço", "Ações"].map(h => (
                           <th key={h} style={{ padding: "9px 14px", fontSize: 10, fontWeight: 500, color: "#7A7670", textAlign: "left", textTransform: "uppercase", whiteSpace: "nowrap" }}>{h}</th>
                         ))}
                       </tr>
@@ -458,7 +458,7 @@ export default function Painel() {
                   <div style={{ display: "flex", alignItems: "flex-end", gap: 6, height: 70, marginBottom: 8 }}>
                     {visitas7d.map((v, i) => {
                       const barraHoje = i === visitas7d.length - 1;
-                      const dia = new Date(v.dia + "T12:00:00").toLocaleDateString("pt-BR", { weekday: "short" }).replace(".", "");
+                      const dia = new Date(String(v.dia).slice(0, 10) + "T12:00:00").toLocaleDateString("pt-BR", { weekday: "short" }).replace(".", "");
                       return (
                         <div key={v.dia} title={`${v.total} visita${v.total === 1 ? "" : "s"}`} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
                           <div style={{ width: "100%", height: Math.max(3, Math.round((v.total / maxVisitas) * 60)), background: barraHoje ? "#FF6600" : "rgba(255,102,0,0.25)", borderRadius: "4px 4px 0 0" }}></div>
@@ -519,7 +519,7 @@ export default function Painel() {
                     />
                     <button onClick={resgatarCupom} disabled={cupomStatus === "loading" || cupomStatus === "ok"}
                       style={{ padding: "8px 14px", background: cupomStatus === "ok" ? "#16A34A" : "#FF6600", color: "#fff", border: "none", borderRadius: 7, fontSize: 12, fontWeight: 600, cursor: cupomStatus === "loading" || cupomStatus === "ok" ? "default" : "pointer", whiteSpace: "nowrap" as const, opacity: cupomStatus === "loading" ? 0.7 : 1 }}>
-                      {cupomStatus === "loading" ? "..." : cupomStatus === "ok" ? "Ok" : "Resgatar"}
+                      {cupomStatus === "loading" ? "..." : cupomStatus === "ok" ? "Aplicado" : "Resgatar"}
                     </button>
                   </div>
                   {msg && <div style={{ fontSize: 11, color: msg.cor, marginTop: 6, fontWeight: 500 }}><Icone nome={cupomStatus === "ok" ? "ok" : "erro"} /> {msg.texto}</div>}

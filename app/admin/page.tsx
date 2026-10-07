@@ -13,7 +13,7 @@ import {
 import { formatarPreco } from "@/lib/formatar";
 import Icone, { type NomeIcone } from "@/components/Icone";
 
-const ABAS = ["Dashboard", "Lojas", "Anúncios", "Usuários"] as const;
+const ABAS = ["Resumo", "Lojas", "Anúncios", "Usuários"] as const;
 type Aba = (typeof ABAS)[number];
 
 const COR_STATUS: Record<string, { bg: string; color: string }> = {
@@ -46,7 +46,7 @@ export default function Admin() {
   const [autorizado, setAutorizado] = useState(false);
   const [verificando, setVerificando] = useState(true);
   const [menuAberto, setMenuAberto] = useState(false);
-  const [aba, setAba] = useState<Aba>("Dashboard");
+  const [aba, setAba] = useState<Aba>("Resumo");
   const [cupomGerado, setCupomGerado] = useState("");
   const [gerando, setGerando] = useState(false);
   const [resumo, setResumo] = useState<ResumoAdmin | null>(null);
@@ -100,7 +100,7 @@ export default function Admin() {
   const n = (v: number | undefined) => (v === undefined ? "…" : v.toLocaleString("pt-BR"));
   const mesAtual = new Date().toLocaleDateString("pt-BR", { month: "long", year: "numeric" });
   const subtitulo: Record<Aba, string> = {
-    Dashboard: `Visão geral do AutoRegião — ${mesAtual.charAt(0).toUpperCase() + mesAtual.slice(1)}`,
+    Resumo: `Visão geral do AutoRegião — ${mesAtual.charAt(0).toUpperCase() + mesAtual.slice(1)}`,
     Lojas: "Estender prazo, desativar ou reativar lojas. A loja vitalícia do dono fica protegida.",
     "Anúncios": "Moderação: pausar ou remover anúncios falsos ou impróprios.",
     "Usuários": "Contas cadastradas no AutoRegião.",
@@ -161,7 +161,7 @@ export default function Admin() {
         </div>
 
         {/* ===================== DASHBOARD ===================== */}
-        {aba === "Dashboard" && (
+        {aba === "Resumo" && (
           <>
             <div className="stats-grid-admin" style={{ marginBottom: 24 }}>
               {[
@@ -258,7 +258,7 @@ export default function Admin() {
               <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 760 }}>
                 <thead>
                   <tr style={{ borderBottom: "1.5px solid #E8E6E1" }}>
-                    {["Loja", "Plano", "Veículos", "Status", "Vencimento", "Ações"].map(h => <th key={h} style={th}>{h}</th>)}
+                    {["Loja", "Plano", "Veículos", "Situação", "Vencimento", "Ações"].map(h => <th key={h} style={th}>{h}</th>)}
                   </tr>
                 </thead>
                 <tbody>
@@ -313,7 +313,7 @@ export default function Admin() {
               <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 720 }}>
                 <thead>
                   <tr style={{ borderBottom: "1.5px solid #E8E6E1" }}>
-                    {["Veículo", "Loja", "Preço", "Status", "Publicado", "Ações"].map(h => <th key={h} style={th}>{h}</th>)}
+                    {["Veículo", "Loja", "Preço", "Situação", "Publicado", "Ações"].map(h => <th key={h} style={th}>{h}</th>)}
                   </tr>
                 </thead>
                 <tbody>

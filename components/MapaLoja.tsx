@@ -17,7 +17,7 @@ export default function MapaLoja({ endereco, cidade, estado, nome, altura = 170 
     <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, overflow: "hidden" }}>
       <iframe
         title={`Mapa: ${nome || "localização da loja"}`}
-        src={`https://maps.google.com/maps?q=${q}&z=16&output=embed`}
+        src={`https://maps.google.com/maps?q=${q}&z=16&output=embed&hl=pt-BR`}
         loading="lazy"
         referrerPolicy="no-referrer-when-downgrade"
         style={{ display: "block", width: "100%", height: altura, border: 0 }}

@@ -46,7 +46,7 @@ export default function Privacidade() {
 
       <h2>3. Para que usamos</h2>
       <ul>
-        <li>Criar e manter a sua conta e permitir o login (execução do contrato — art. 7º, V da LGPD);</li>
+        <li>Criar e manter a sua conta e permitir que você entre nela (execução do contrato — art. 7º, V da LGPD);</li>
         <li>Publicar anúncios e a página da loja, e permitir que compradores entrem em contato (execução do contrato);</li>
         <li>Mostrar estatísticas de visualizações e contatos ao anunciante (legítimo interesse);</li>
         <li>Enviar e-mails do serviço, como confirmação de cadastro e recuperação de senha (execução do contrato);</li>

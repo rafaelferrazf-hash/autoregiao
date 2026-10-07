@@ -36,7 +36,7 @@ export default function Cadastro() {
     });
     if (error) {
       setCarregando(false);
-      if (error.message.includes("already registered")) return setErro("Este e-mail já está cadastrado. Tente fazer login.");
+      if (error.message.includes("already registered")) return setErro("Este e-mail já está cadastrado. Tente entrar com ele.");
       if (error.message.toLowerCase().includes("rate limit")) return setErro("Muitos cadastros seguidos. Aguarde alguns minutos e tente de novo.");
       return setErro("Erro ao criar conta. Tente novamente.");
     }
@@ -51,7 +51,7 @@ export default function Cadastro() {
         <div style={{ fontSize: 26, fontWeight: 800, color: "#1A1917", marginBottom: 8 }}>Cadastro realizado!</div>
         <p style={{ fontSize: 15, color: "#7A7670", marginBottom: 8 }}>Bem-vindo ao AutoRegião, {form.nome.split(" ")[0]}!</p>
         <p style={{ fontSize: 13, color: "#7A7670", marginBottom: 24 }}>Verifique seu e-mail para confirmar a conta.</p>
-        <Link href="/login" style={{ padding: "12px 28px", background: "#FF6600", color: "#fff", borderRadius: 8, textDecoration: "none", fontWeight: 600, fontSize: 15 }}>Ir para o login</Link>
+        <Link href="/login" style={{ padding: "12px 28px", background: "#FF6600", color: "#fff", borderRadius: 8, textDecoration: "none", fontWeight: 600, fontSize: 15 }}>Ir para Entrar</Link>
       </div>
     </main>
   );

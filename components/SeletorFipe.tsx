@@ -40,9 +40,9 @@ function combina(nome: string, palavra: string) {
 const reais = (n: number) => `R$ ${n.toLocaleString("pt-BR")}`;
 
 async function carregar<T>(query: string): Promise<T> {
-  const r = await fetch(`/api/fipe?${query}`);
+  const r = await fetch(`/api/fipe?${query}`).catch(() => { throw new Error("Não foi possível carregar a Tabela FIPE. Confira a internet e tente de novo."); });
   const j = await r.json();
-  if (!r.ok) throw new Error(j.erro || "Erro na FIPE");
+  if (!r.ok) throw new Error(j.erro || "A Tabela FIPE não respondeu agora. Tente de novo em instantes.");
   return j as T;
 }
 

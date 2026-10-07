@@ -72,7 +72,7 @@ export default function Login() {
               <Link href="/cadastro" style={{ flex: 1, padding: "9px 0", borderRadius: 6, background: "transparent", fontSize: 14, fontWeight: 500, color: "#7A7670", textDecoration: "none", textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center" }}>Cadastrar</Link>
             </div>
 
-            {sucesso && <div style={{ background: "#D1FAE5", border: "1.5px solid #6EE7B7", borderRadius: 8, padding: "12px 14px", marginBottom: 16, fontSize: 13, color: "#065F46" }}><Icone nome="ok" /> Login realizado! Redirecionando...</div>}
+            {sucesso && <div style={{ background: "#D1FAE5", border: "1.5px solid #6EE7B7", borderRadius: 8, padding: "12px 14px", marginBottom: 16, fontSize: 13, color: "#065F46" }}><Icone nome="ok" /> Pronto! Entrando na sua conta...</div>}
             {erro && <div style={{ background: "#FEE2E2", border: "1.5px solid #FCA5A5", borderRadius: 8, padding: "12px 14px", marginBottom: 16, fontSize: 13, color: "#991B1B" }}><Icone nome="atencao" /> {erro}</div>}
 
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>

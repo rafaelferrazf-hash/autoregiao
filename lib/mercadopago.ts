@@ -1,5 +1,6 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
 import { criarClienteAdmin } from "@/lib/supabase-servidor";
+import { avisarPagamentoAprovado } from "@/lib/avisosPagamento";
 
 // Integração com o Mercado Pago (Checkout Pro). Só roda no servidor.
 // Credenciais: MP_ACCESS_TOKEN (obrigatória) e MP_WEBHOOK_SECRET (assinatura dos avisos).
@@ -162,6 +163,8 @@ export async function processarPagamento(mpPaymentId: string): Promise<Resultado
   if (pag.status === "approved") {
     const { data, error } = await admin.rpc("aplicar_pagamento_aprovado", { p_pagamento: registro.id });
     aplicado = error ? `erro: ${error.message}` : (data as string);
+    // Só na primeira vez (depois volta "ja_aplicado"): avisa o lojista e o admin por e-mail.
+    if (aplicado === "ok") await avisarPagamentoAprovado(registro.id);
   }
   return { ok: true, status: pag.status, aplicado, pagamentoId: registro.id };
 }

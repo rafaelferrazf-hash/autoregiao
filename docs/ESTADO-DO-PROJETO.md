@@ -167,8 +167,11 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
      no iPhone dele → capturas 6,9" → ficha, privacidade (rótulos) → revisão. Não testado num iPhone ainda.
    - Android 1.0.3 (código 4, abre em `/?origem=app`) gerado e assinado em `autoregiao-android\publicar\` —
      ✅ enviado ao teste fechado em 05/10 (em revisão).
-2. **Mercado Pago em produção** — ✅ chaves e webhook de produção na Vercel (07/10). ⏳ Pagamento real de R$89 (Pix,
-   janela anônima, conta de loja de teste) e estorno no Mercado Pago.
-3. 2FA no Supabase e no Mercado Pago.
+2. **Mercado Pago em produção** — ✅ 07/10: chaves e webhook de produção na Vercel; chave Pix (e-mail) cadastrada
+   na conta MP; pagamento REAL de R$89 por Pix (loja "MaisCAr", mibososantos@gmail.com) aprovado e aplicado sozinho
+   (Rafael decidiu NÃO estornar — vale como venda; Básico até 06/11/2026). E-mails de pagamento aprovado
+   (`lib/avisosPagamento.ts`): lojista + admin ("Nova assinatura: …"); filtro no Gmail do admin marca como
+   importante (marcador "Vendas AutoRegião") → aviso no iPhone pelo app Gmail. O app do MP não avisa vendas online.
+3. 2FA no Supabase e no Mercado Pago (urgente no MP: conta agora recebe dinheiro de verdade).
 4. Antes do lançamento: **apagar os 20 anúncios de demonstração** (só a conta da Auto Paulista logada vê — fase14; `delete from public.veiculos where demonstracao = true;` — fotos em `public/demo/`, licença livre Wikimedia, créditos na descrição) e trocar os de teste por reais; revisar textos de /termos e /privacidade.
 5. Futuro: App Store (US$99/ano), notificações push, planos pagos para particulares.

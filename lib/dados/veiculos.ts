@@ -157,7 +157,9 @@ export async function apagarFotos(urls: string[]) {
   const caminhos = urls
     .map(url => (url.includes(marcador) ? decodeURIComponent(url.split(marcador)[1].split("?")[0]) : null))
     .filter((c): c is string => !!c);
-  if (caminhos.length) await supabase.storage.from("veiculos").remove(caminhos);
+  // Junto com cada foto vai a versão do card ("-card.jpg"), se existir.
+  const comCard = caminhos.flatMap(c => [c, c.replace(/\.[a-z0-9]+$/i, "-card.jpg")]);
+  if (comCard.length) await supabase.storage.from("veiculos").remove(comCard);
 }
 
 // Envia a foto para o bucket "veiculos" e devolve a URL pública (ou null se falhar).
@@ -170,10 +172,17 @@ export async function enviarFotoVeiculo(usuarioId: string, arquivo: File) {
     const r = await reduzirImagem(arquivo, 2048, { jpeg: true, qualidade: 0.88 });
     if (r.blob.size < arquivo.size) { corpo = r.blob; ext = r.extensao; tipo = r.tipo; }
   } catch { /* formato que o navegador não abre: vai a original */ }
-  const caminho = `${usuarioId}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+  const base = `${usuarioId}/${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  const caminho = `${base}.${ext}`;
   const { error } = await supabase.storage
     .from("veiculos")
     .upload(caminho, corpo, { contentType: tipo });
   if (error) return null;
+  // Versão do card (800 px). Se falhar, o card usa a foto grande — o anúncio não é prejudicado.
+  try {
+    const { reduzirImagem } = await import("@/lib/imagem");
+    const card = await reduzirImagem(arquivo, 800, { jpeg: true, qualidade: 0.85 });
+    await supabase.storage.from("veiculos").upload(`${base}-card.jpg`, card.blob, { contentType: "image/jpeg" });
+  } catch { /* sem versão do card */ }
   return supabase.storage.from("veiculos").getPublicUrl(caminho).data.publicUrl;
 }

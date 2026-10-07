@@ -4,6 +4,7 @@ import BotaoFavorito from "@/components/BotaoFavorito";
 import { formatarKm, formatarPreco } from "@/lib/formatar";
 import type { Veiculo } from "@/lib/tipos";
 import Icone from "@/components/Icone";
+import FotoCard from "@/components/FotoCard";
 
 export type DadosCartao = Pick<Veiculo, "id" | "nome" | "ano" | "km" | "preco" | "fotos" | "destaque">
   & Partial<Pick<Veiculo, "combustivel" | "cidade" | "fipe_valor">>
@@ -26,7 +27,7 @@ export default function CartaoVeiculo({ car, mostrarLoja = true }: { car: DadosC
         <BotaoFavorito id={car.id} />
         <div style={{ position: "relative", height: 150, width: "100%", background: "#F7F6F3" }}>
           {car.fotos && car.fotos.length > 0
-            ? <img src={car.fotos[0]} alt={car.nome ?? "Veículo"} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+            ? <FotoCard src={car.fotos[0]} alt={car.nome ?? "Veículo"} />
             : <Image src="/sem-foto.png" alt={car.nome ?? "Veículo"} fill style={{ objectFit: "cover" }} sizes="(max-width: 480px) 100vw, (max-width: 768px) 50vw, 33vw" />}
         </div>
         <div style={{ padding: "10px 12px" }}>

@@ -11,7 +11,6 @@ import CartaoVeiculo, { abaixoDaFipe } from "@/components/CartaoVeiculo";
 import Rodape from "@/components/Rodape";
 import MapaLoja from "@/components/MapaLoja";
 import LogoLoja from "@/components/LogoLoja";
-import EnviarProposta from "@/components/EnviarProposta";
 import { formatarPreco, formatarKm } from "@/lib/formatar";
 import { registrarEvento } from "@/lib/dados/eventos";
 import type { VeiculoComLoja } from "@/lib/tipos";
@@ -366,9 +365,6 @@ Motivo da denúncia:
                   </Link>
                 )}
               </div>
-              <div id="proposta" style={{ marginBottom: 16, scrollMarginTop: 76 }}>
-                <EnviarProposta veiculoId={veiculo.id} nomeVeiculo={veiculo.nome} preco={veiculo.preco} />
-              </div>
             </div>
 
             {/* CARACTERÍSTICAS */}
@@ -497,10 +493,6 @@ Motivo da denúncia:
                 </button>
                 <button onClick={ligar} style={{ width: "100%", padding: 11, background: "#F7F6F3", color: "#1A1917", border: "1.5px solid #E8E6E1", borderRadius: 9, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
                   <Icone nome="telefone" /> Ligar: {telefoneContato}
-                </button>
-                <button type="button" onClick={() => window.dispatchEvent(new Event("abrir-proposta"))}
-                  style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, width: "100%", padding: 11, background: "#fff", color: "#1A1917", border: "1.5px solid #1A1917", borderRadius: 9, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
-                  <Icone nome="real" /> Enviar proposta
                 </button>
                 {veiculo.loja_id && (
                   <Link href={`/loja/${veiculo.loja_id}`} className="toque-facil" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, width: "100%", padding: 11, background: "#FFF5F0", color: "#FF6600", border: "1.5px solid #FF6600", borderRadius: 9, fontSize: 13, fontWeight: 700, textDecoration: "none", boxSizing: "border-box" }}>

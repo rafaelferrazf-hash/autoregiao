@@ -88,7 +88,11 @@ export default function Painel() {
   };
 
   const verTodos = abaAtiva === "anuncios";
-  const anunciosVisiveis = verTodos ? anunciosReais : anunciosReais.slice(0, 5);
+  // "Meus anúncios": ativos/pausados de um lado, vendidos do outro (o resumo mostra só os que não foram vendidos).
+  const [listaVendidos, setListaVendidos] = useState(false);
+  const naoVendidos = anunciosReais.filter(a => a.status !== "vendido");
+  const vendidos = anunciosReais.filter(a => a.status === "vendido");
+  const anunciosVisiveis = verTodos ? (listaVendidos ? vendidos : naoVendidos) : naoVendidos.slice(0, 5);
 
   // CUPOM
   const [cupom, setCupom] = useState("");
@@ -321,10 +325,19 @@ export default function Painel() {
 
             <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, overflow: "hidden" }}>
               <div style={{ padding: "14px 18px", borderBottom: "1px solid #E8E6E1", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                <div style={{ fontSize: 14, fontWeight: 700, color: "#1A1917" }}>{verTodos ? `Meus anúncios (${anunciosReais.length})` : "Anúncios recentes"}</div>
+                {verTodos ? (
+                  <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                    {([[false, `Ativos e pausados (${naoVendidos.length})`], [true, `Vendidos (${vendidos.length})`]] as const).map(([v, rotulo]) => (
+                      <button key={rotulo} onClick={() => setListaVendidos(v)}
+                        style={{ padding: "6px 12px", borderRadius: 20, border: "1.5px solid", borderColor: listaVendidos === v ? "#FF6600" : "#E8E6E1", background: listaVendidos === v ? "#FFF5F1" : "#fff", color: listaVendidos === v ? "#FF6600" : "#1A1917", fontSize: 12.5, fontWeight: 700, cursor: "pointer" }}>
+                        {rotulo}
+                      </button>
+                    ))}
+                  </div>
+                ) : <div style={{ fontSize: 14, fontWeight: 700, color: "#1A1917" }}>Anúncios recentes</div>}
                 {verTodos
                   ? <button onClick={() => setAbaAtiva("dashboard")} style={{ fontSize: 12, color: "#FF6600", fontWeight: 500, background: "none", border: "none", cursor: "pointer" }}>← Voltar ao resumo</button>
-                  : anunciosReais.length > 5 && <button onClick={() => setAbaAtiva("anuncios")} style={{ fontSize: 12, color: "#FF6600", fontWeight: 500, background: "none", border: "none", cursor: "pointer" }}>Ver todos ({anunciosReais.length}) →</button>}
+                  : (naoVendidos.length > 5 || vendidos.length > 0) && <button onClick={() => { setListaVendidos(false); setAbaAtiva("anuncios"); }} style={{ fontSize: 12, color: "#FF6600", fontWeight: 500, background: "none", border: "none", cursor: "pointer" }}>Ver todos ({naoVendidos.length}{vendidos.length ? ` + ${vendidos.length} vendidos` : ""}) →</button>}
               </div>
 
               {pausados > 0 && limite !== null && (
@@ -334,7 +347,11 @@ export default function Painel() {
                     : <>Você pode reativar mais <strong>{limite - ativos} {limite - ativos === 1 ? "anúncio" : "anúncios"}</strong> (limite do plano: {limite}).</>}
                 </div>
               )}
-              {anunciosReais.length === 0 ? (
+              {anunciosReais.length > 0 && anunciosVisiveis.length === 0 ? (
+                <div style={{ padding: 28, textAlign: "center", fontSize: 13, color: "#7A7670" }}>
+                  {listaVendidos ? "Nenhum anúncio marcado como vendido ainda. Use o ✓ verde quando vender um carro." : "Nenhum anúncio ativo ou pausado."}
+                </div>
+              ) : anunciosReais.length === 0 ? (
                 <div style={{ padding: "32px", textAlign: "center" }}>
                   <div style={{ marginBottom: 8, color: "#C9C5BE" }}><Icone nome="carro" tamanho={36} traco={1.5} /></div>
                   <div style={{ fontSize: 13, color: "#7A7670", marginBottom: 12 }}>Nenhum anúncio cadastrado ainda.</div>

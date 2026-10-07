@@ -157,7 +157,10 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
      (Mac na nuvem → TestFlight). Site: `lib/nativo.ts` (compartilhar nativo, notificações), `components/OuvinteNativo`,
      alertas por notificação no app (`alertas.push_token`, `supabase/fase10-push.sql`, `lib/push.ts` APNs direto).
      Variáveis a criar na Vercel depois da conta Apple: `APNS_CHAVE_P8`, `APNS_CHAVE_ID`, `APNS_TIME_ID`.
-     Próximos: Rafael paga/inscreve Apple Developer (US$99/ano, pessoa física) → criar App ID com Push +
+     ✅ 06/10/2026: inscrição no Apple Developer feita pelo SITE (developer.apple.com, pessoa física, nome
+     RAFAEL FERRAZ BARBOSA, ID Apple rafaelferrazf@hotmail.com) — pelo app pedia documento físico, que ele não tem;
+     pelo site não pediu. Pago US$99; aguardando o e-mail "Welcome" (até 2 dias úteis). Endereço de cobrança sem acento.
+     Próximos: criar App ID com Push +
      app no App Store Connect → Codemagic (login GitHub, integração "AutoRegiao" com chave de API) → TestFlight
      no iPhone dele → capturas 6,9" → ficha, privacidade (rótulos) → revisão. Não testado num iPhone ainda.
    - Android 1.0.3 (código 4, abre em `/?origem=app`) gerado e assinado em `autoregiao-android\publicar\` —

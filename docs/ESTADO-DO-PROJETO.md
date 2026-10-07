@@ -89,8 +89,9 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
 - 06/10/2026 (CarroSP, página do anúncio): galeria em faixa larga, preço no topo do cartão da direita,
   caminho clicável (`lib/caminhoVeiculo.ts`, + BreadcrumbList), "ver todas as opções do mesmo modelo".
   Tipo de carroceria (`veiculos.carroceria`, `lib/carroceria.ts` com palpite pelo nome da FIPE; obrigatório no
-  cadastro de carro/utilitário; filtro; vitrines /carros/suv, /carros/seda...). Ideias para depois: endereço do
-  anúncio com o nome do carro (SEO); "Enviar mensagem/proposta" por e-mail.
+  cadastro de carro/utilitário; filtro; vitrines /carros/suv, /carros/seda...). Endereço do anúncio com o nome
+  do carro (`lib/linkVeiculo.ts`, antigo redireciona 308) e "Enviar proposta" por e-mail ao vendedor
+  (`components/EnviarProposta`, `/api/propostas`, reply-to do comprador, anti-robô).
 - 2FA nas contas principais. App instalável (PWA), arrastar fotos, revisão de celular (375/320px).
 - Marca nova (01/10/2026), do manual em `C:\Users\rafae\AutoRegiao-Logo-Novo` (só PNG, sem vetor): logo AR, laranja
   #FF6600, grafite #1A1A1A, Exo 2 nos títulos (h1–h3). Slogan trocado para "COMPRE | VENDA | ANUNCIE" (o manual

@@ -53,7 +53,7 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
   `/loja/[id]`, `/favoritos`, `/alerta`, `/anunciar`, `/painel` (+ `/novo-anuncio`, `/planos`), `/admin`,
   `/login`, `/cadastro`, `/recuperar-senha`, `/redefinir-senha`, `/pagamento/retorno`, `/termos`, `/privacidade`, `/offline`.
 - SQL já rodado: `rls-fase0`, `fase1-seguranca`, `fase2`, `fase3`, `fase3-fotos`, `fase4a`, `fase4b`,
-  `fase5-alertas`, `fase6-fipe`, `fase7-filtros`, `fase8-logo-loja`, `fase9-excluir-conta`, `fase10-push`, `fase11-capa-loja`, `fase12-carroceria`, `fase13-demonstracao`, `fase14-demonstracao-privada`. Modelos de e-mail do Auth: `supabase/emails/`.
+  `fase5-alertas`, `fase6-fipe`, `fase7-filtros`, `fase8-logo-loja`, `fase9-excluir-conta`, `fase10-push`, `fase11-capa-loja`, `fase12-carroceria`, `fase13-demonstracao`, `fase14-demonstracao-privada`, `fase15-planos-agendados-vendido`. Modelos de e-mail do Auth: `supabase/emails/`.
 
 ## Regras de negócio importantes
 - Planos (`lib/planos.ts`): básico R$89/10 anúncios, profissional R$159/30 + destaque, premium R$299/ilimitado + destaque;
@@ -64,6 +64,10 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
   (o lojista vê no painel). Cadastro do anúncio usa a FIPE como base (com opção manual).
 - Alertas: confirmação por e-mail (botão na página, por causa do pré-clique do Outlook), 1 e-mail/dia no cron.
 - Pagamentos: webhook MP + reconciliação diária; assinatura do webhook só gera alerta no log.
+- (06/10) Plano MENOR pago com o atual em dia (ex.: Básico no período grátis) começa quando o atual termina
+  (`lojas.plano_proximo/_em`, virado pelo cron); maior vale na hora; dias sempre somados. Troca de plano com
+  mais anúncios ativos que o limite pausa TODOS e o lojista reativa até o limite (os demais: vendido/excluir).
+  "Marcar como vendido" (`status = 'vendido'`, `vendido_em`): sai do ar para sempre, não conta no limite.
 
 ## Histórico (resumo)
 - Fases 0–4: segurança/RLS, dados reais, busca/filtros, painel, admin, planos e pagamento (teste).

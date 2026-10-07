@@ -68,6 +68,11 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
   (`lojas.plano_proximo/_em`, virado pelo cron); maior vale na hora; dias sempre somados. Troca de plano com
   mais anúncios ativos que o limite pausa TODOS e o lojista reativa até o limite (os demais: vendido/excluir).
   "Marcar como vendido" (`status = 'vendido'`, `vendido_em`): sai do ar para sempre, não conta no limite.
+- Fotos (06/10): reduzidas no aparelho antes do envio (2048 px, JPEG 88%) + versão do card "-card.jpg" (800 px, 85%)
+  usada nos cards (`components/FotoCard`, volta para a grande se não existir). Painel com aba "Vendidos".
+  Limites grátis: Supabase 1 GB fotos / 5 GB tráfego por mês / 500 MB banco (olhar em Usage 1x por mês);
+  Vercel Hobby NÃO permite uso comercial → passar para Pro (US$20/mês) no lançamento. Limpeza de fotos de
+  vendidos (90 dias): só quando o Storage passar de ~50%.
 
 ## Histórico (resumo)
 - Fases 0–4: segurança/RLS, dados reais, busca/filtros, painel, admin, planos e pagamento (teste).

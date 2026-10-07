@@ -34,7 +34,7 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
 | Resend (região SP) | envio de e-mails (Auth do Supabase via SMTP + alertas do site) | rafaelferrazf05@gmail.com |
 | ImprovMX | recebe *@autoregiao.com.br → rafaelferrazf05@gmail.com (pega-tudo) | rafaelferrazf05@gmail.com |
 | Gmail | responde como contato@ ("Enviar e-mail como", SMTP Resend) | rafaelferrazf05@gmail.com |
-| Mercado Pago | Checkout Pro dos planos — **ainda com chave de TESTE** | rafaelferrazf@hotmail.com |
+| Mercado Pago | Checkout Pro dos planos — **PRODUÇÃO na Vercel desde 07/10/2026** (setor "Outros"; webhook de produção em /api/pagamentos/webhook, evento Pagamentos). O `.env.local` continua com a chave de TESTE (vendedor de teste: só paga comprador de teste) | rafaelferrazf@hotmail.com |
 | Google Search Console | propriedade de domínio verificada por TXT; sitemap enviado | rafaelferrazf05@gmail.com |
 - **Admin único do site:** rafaelferrazf05@gmail.com (`NEXT_PUBLIC_ADMIN_EMAILS`). Conta de admin é só admin.
 - **Lojista de teste:** rafaelferrazf@hotmail.com → loja "Auto Paulista" (plano vitalício), 2 anúncios (Civic, Onix).
@@ -167,8 +167,8 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
      no iPhone dele → capturas 6,9" → ficha, privacidade (rótulos) → revisão. Não testado num iPhone ainda.
    - Android 1.0.3 (código 4, abre em `/?origem=app`) gerado e assinado em `autoregiao-android\publicar\` —
      ✅ enviado ao teste fechado em 05/10 (em revisão).
-2. **Mercado Pago em produção** — trocar `MP_ACCESS_TOKEN`/`MP_WEBHOOK_SECRET` pelos de produção,
-   configurar webhook de produção, pagamento real de R$89 e estorno.
+2. **Mercado Pago em produção** — ✅ chaves e webhook de produção na Vercel (07/10). ⏳ Pagamento real de R$89 (Pix,
+   janela anônima, conta de loja de teste) e estorno no Mercado Pago.
 3. 2FA no Supabase e no Mercado Pago.
 4. Antes do lançamento: **apagar os 20 anúncios de demonstração** (só a conta da Auto Paulista logada vê — fase14; `delete from public.veiculos where demonstracao = true;` — fotos em `public/demo/`, licença livre Wikimedia, créditos na descrição) e trocar os de teste por reais; revisar textos de /termos e /privacidade.
 5. Futuro: App Store (US$99/ano), notificações push, planos pagos para particulares.

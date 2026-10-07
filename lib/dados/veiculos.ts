@@ -161,12 +161,19 @@ export async function apagarFotos(urls: string[]) {
 }
 
 // Envia a foto para o bucket "veiculos" e devolve a URL pública (ou null se falhar).
+// Antes de enviar, reduz no próprio aparelho (foto de câmera: 3–8 MB → ~250 KB, lado maior 1600 px),
+// para economizar o espaço do Storage e carregar rápido. Se o aparelho não conseguir reduzir, envia a original.
 export async function enviarFotoVeiculo(usuarioId: string, arquivo: File) {
-  const ext = arquivo.name.split(".").pop();
+  let corpo: Blob = arquivo, ext = arquivo.name.split(".").pop() || "jpg", tipo = arquivo.type;
+  try {
+    const { reduzirImagem } = await import("@/lib/imagem");
+    const r = await reduzirImagem(arquivo, 1600, { jpeg: true, qualidade: 0.82 });
+    if (r.blob.size < arquivo.size) { corpo = r.blob; ext = r.extensao; tipo = r.tipo; }
+  } catch { /* formato que o navegador não abre: vai a original */ }
   const caminho = `${usuarioId}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
   const { error } = await supabase.storage
     .from("veiculos")
-    .upload(caminho, arquivo, { contentType: arquivo.type });
+    .upload(caminho, corpo, { contentType: tipo });
   if (error) return null;
   return supabase.storage.from("veiculos").getPublicUrl(caminho).data.publicUrl;
 }

@@ -4,6 +4,7 @@ import { botaoEmail, enviarEmail, escaparHtml, modeloEmail } from "@/lib/email";
 import { formatarKm, formatarPreco } from "@/lib/formatar";
 import { URL_SITE } from "@/lib/site";
 import { enviarPushes, pushConfigurado } from "@/lib/push";
+import { linkDoVeiculo } from "@/lib/linkVeiculo";
 import type { VeiculoComLoja } from "@/lib/tipos";
 
 // Alertas de veículos por e-mail ou, no app de iPhone, por notificação no aparelho (push_token). Tabela public.alertas (supabase/fase5-alertas.sql), acessada só
@@ -146,7 +147,7 @@ async function veiculosNovos(filtros: Filtros, desde: string) {
 function cartaoVeiculo(v: VeiculoComLoja): string {
   const foto = v.fotos?.[0];
   const detalhes = [v.ano, v.km ? formatarKm(v.km) : null, v.lojas?.nome, v.lojas?.cidade || v.cidade].filter(Boolean).join(" · ");
-  return `<a href="${URL_SITE}/veiculo/${v.id}" style="display:block;text-decoration:none;color:#1A1917;border:1px solid #E8E6E1;border-radius:10px;overflow:hidden;margin:0 0 12px">
+  return `<a href="${URL_SITE}${linkDoVeiculo(v)}" style="display:block;text-decoration:none;color:#1A1917;border:1px solid #E8E6E1;border-radius:10px;overflow:hidden;margin:0 0 12px">
     ${foto ? `<img src="${escaparHtml(foto)}" alt="" width="456" style="display:block;width:100%;max-height:220px;object-fit:cover">` : ""}
     <div style="padding:12px 14px">
       <div style="font-size:15px;font-weight:bold;margin:0 0 4px">${escaparHtml(v.nome ?? "Veículo")}</div>

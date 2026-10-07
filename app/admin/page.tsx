@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { linkDoVeiculo } from "@/lib/linkVeiculo";
 import Logo from "@/components/Logo";
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
@@ -328,7 +329,7 @@ export default function Admin() {
                         <td style={{ ...td, fontSize: 12, color: "#7A7670" }}>{data(a.criado_em)}</td>
                         <td style={td}>
                           <div style={{ display: "flex", gap: 6 }}>
-                            <Link href={`/veiculo/${a.id}`} style={{ ...botao, textDecoration: "none" }}>Ver</Link>
+                            <Link href={linkDoVeiculo(a)} style={{ ...botao, textDecoration: "none" }}>Ver</Link>
                             <button disabled={trabalhando} style={botao}
                               onClick={() => executar(a.id, () => definirAnuncioAtivoAdmin(a.id, !a.ativo))}>{a.ativo ? "Pausar" : "Reativar"}</button>
                             <button disabled={trabalhando} style={botaoPerigo}

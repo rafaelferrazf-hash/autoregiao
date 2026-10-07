@@ -5,6 +5,7 @@ import { formatarKm, formatarPreco } from "@/lib/formatar";
 import type { Veiculo } from "@/lib/tipos";
 import Icone from "@/components/Icone";
 import FotoCard from "@/components/FotoCard";
+import { linkDoVeiculo } from "@/lib/linkVeiculo";
 
 export type DadosCartao = Pick<Veiculo, "id" | "nome" | "ano" | "km" | "preco" | "fotos" | "destaque">
   & Partial<Pick<Veiculo, "combustivel" | "cidade" | "fipe_valor">>
@@ -21,7 +22,7 @@ export function abaixoDaFipe(v: { preco: number | null; fipe_valor?: number | nu
 export default function CartaoVeiculo({ car, mostrarLoja = true }: { car: DadosCartao; mostrarLoja?: boolean }) {
   const local = [car.lojas?.nome, car.lojas?.cidade || car.cidade].filter(Boolean).join(" · ");
   return (
-    <Link href={`/veiculo/${car.id}`} style={{ textDecoration: "none" }}>
+    <Link href={linkDoVeiculo(car)} style={{ textDecoration: "none" }}>
       <div style={{ background: "#fff", borderRadius: 12, overflow: "hidden", border: car.destaque ? "1.5px solid #FF6600" : "1.5px solid #E8E6E1", position: "relative", height: "100%" }}>
         {car.destaque && <span style={{ position: "absolute", top: 8, left: 8, background: "#FF6600", color: "#fff", fontSize: 10, fontWeight: 500, padding: "3px 8px", borderRadius: 20, zIndex: 2, display: "inline-flex", alignItems: "center", gap: 3 }}><Icone nome="estrelaCheia" tamanho={11} /> Destaque</span>}
         <BotaoFavorito id={car.id} />

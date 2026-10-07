@@ -24,9 +24,9 @@ export function botaoEmail(texto: string, link: string): string {
   return `<p style="margin:0 0 24px"><a href="${escaparHtml(link)}" style="display:inline-block;background:#FF6600;color:#ffffff;text-decoration:none;padding:12px 24px;border-radius:8px;font-weight:bold;font-size:15px">${escaparHtml(texto)}</a></p>`;
 }
 
-type Envio = { para: string; assunto: string; html: string; cabecalhos?: Record<string, string> };
+type Envio = { para: string; assunto: string; html: string; cabecalhos?: Record<string, string>; responderPara?: string };
 
-export async function enviarEmail({ para, assunto, html, cabecalhos }: Envio): Promise<{ ok: boolean; erro?: string }> {
+export async function enviarEmail({ para, assunto, html, cabecalhos, responderPara }: Envio): Promise<{ ok: boolean; erro?: string }> {
   const chave = process.env.RESEND_API_KEY;
   if (!chave) return { ok: false, erro: "RESEND_API_KEY não configurada" };
   const r = await fetch("https://api.resend.com/emails", {
@@ -38,6 +38,7 @@ export async function enviarEmail({ para, assunto, html, cabecalhos }: Envio): P
       subject: assunto,
       html,
       headers: cabecalhos,
+      ...(responderPara ? { reply_to: [responderPara] } : {}),
     }),
   });
   if (r.ok) return { ok: true };

@@ -11,12 +11,14 @@ import CartaoVeiculo, { abaixoDaFipe } from "@/components/CartaoVeiculo";
 import Rodape from "@/components/Rodape";
 import MapaLoja from "@/components/MapaLoja";
 import LogoLoja from "@/components/LogoLoja";
+import EnviarProposta from "@/components/EnviarProposta";
 import { formatarPreco, formatarKm } from "@/lib/formatar";
 import { registrarEvento } from "@/lib/dados/eventos";
 import type { VeiculoComLoja } from "@/lib/tipos";
 import { EMAIL_CONTATO, URL_SITE } from "@/lib/site";
 import Icone, { type NomeIcone } from "@/components/Icone";
 import { caminhoDoVeiculo, linkMesmoModelo } from "@/lib/caminhoVeiculo";
+import { linkDoVeiculo } from "@/lib/linkVeiculo";
 
 // O anúncio vem pronto do servidor (page.tsx); aqui ficam as partes interativas.
 export default function Veiculo({ inicial }: { inicial: VeiculoComLoja }) {
@@ -107,7 +109,7 @@ export default function Veiculo({ inicial }: { inicial: VeiculoComLoja }) {
   const [avisoCompartilhar, setAvisoCompartilhar] = useState("");
   async function compartilhar() {
     if (!veiculo) return;
-    const url = `${window.location.origin}/veiculo/${veiculo.id}`;
+    const url = `${window.location.origin}${linkDoVeiculo(veiculo)}`;
     const texto = `${veiculo.nome} por ${formatarPreco(veiculo.preco)} no AutoRegião`;
     if (await compartilharNativo({ title: texto, text: texto, url })) return; // app de iPhone
     if (navigator.share) {
@@ -118,14 +120,14 @@ export default function Veiculo({ inicial }: { inicial: VeiculoComLoja }) {
   }
   function compartilharWhatsApp() {
     if (!veiculo) return;
-    const url = `${window.location.origin}/veiculo/${veiculo.id}`;
+    const url = `${window.location.origin}${linkDoVeiculo(veiculo)}`;
     window.open(`https://wa.me/?text=${encodeURIComponent(`${veiculo.nome} por ${formatarPreco(veiculo.preco)} no AutoRegião: ${url}`)}`, "_blank");
     setAvisoCompartilhar("");
   }
   async function copiarLink() {
     if (!veiculo) return;
     try {
-      await navigator.clipboard.writeText(`${window.location.origin}/veiculo/${veiculo.id}`);
+      await navigator.clipboard.writeText(`${window.location.origin}${linkDoVeiculo(veiculo)}`);
       setAvisoCompartilhar("copiado");
     } catch {
       setAvisoCompartilhar("erro");
@@ -150,7 +152,7 @@ export default function Veiculo({ inicial }: { inicial: VeiculoComLoja }) {
     : null;
   // Denúncia vai por e-mail para o contato@ (chega no Gmail do dono), já com o link do anúncio.
   const linkDenuncia = veiculo
-    ? `mailto:${EMAIL_CONTATO}?subject=${encodeURIComponent(`Denúncia de anúncio: ${veiculo.nome}`)}&body=${encodeURIComponent(`Anúncio: ${typeof window !== "undefined" ? window.location.origin : URL_SITE}/veiculo/${veiculo.id}
+    ? `mailto:${EMAIL_CONTATO}?subject=${encodeURIComponent(`Denúncia de anúncio: ${veiculo.nome}`)}&body=${encodeURIComponent(`Anúncio: ${typeof window !== "undefined" ? window.location.origin : URL_SITE}${linkDoVeiculo(veiculo)}
 
 Motivo da denúncia:
 `)}`
@@ -364,6 +366,9 @@ Motivo da denúncia:
                   </Link>
                 )}
               </div>
+              <div id="proposta" style={{ marginBottom: 16, scrollMarginTop: 76 }}>
+                <EnviarProposta veiculoId={veiculo.id} nomeVeiculo={veiculo.nome} preco={veiculo.preco} />
+              </div>
             </div>
 
             {/* CARACTERÍSTICAS */}
@@ -492,6 +497,10 @@ Motivo da denúncia:
                 </button>
                 <button onClick={ligar} style={{ width: "100%", padding: 11, background: "#F7F6F3", color: "#1A1917", border: "1.5px solid #E8E6E1", borderRadius: 9, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
                   <Icone nome="telefone" /> Ligar: {telefoneContato}
+                </button>
+                <button type="button" onClick={() => window.dispatchEvent(new Event("abrir-proposta"))}
+                  style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, width: "100%", padding: 11, background: "#fff", color: "#1A1917", border: "1.5px solid #1A1917", borderRadius: 9, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
+                  <Icone nome="real" /> Enviar proposta
                 </button>
                 {veiculo.loja_id && (
                   <Link href={`/loja/${veiculo.loja_id}`} className="toque-facil" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, width: "100%", padding: 11, background: "#FFF5F0", color: "#FF6600", border: "1.5px solid #FF6600", borderRadius: 9, fontSize: 13, fontWeight: 700, textDecoration: "none", boxSizing: "border-box" }}>

@@ -7,6 +7,7 @@ import { useEmAppDaLoja } from "@/lib/appLoja";
 import { useState, useEffect } from "react";
 import { usuarioAtual, sair } from "@/lib/dados/usuario";
 import ExcluirConta from "@/components/ExcluirConta";
+import { linkDoVeiculo } from "@/lib/linkVeiculo";
 import { ehAdmin } from "@/lib/admin";
 import { resgatarCupom as resgatarCupomNoBanco } from "@/lib/dados/cupons";
 import { buscarLojaDoUsuario } from "@/lib/dados/lojas";
@@ -388,7 +389,7 @@ export default function Painel() {
                           <td style={{ padding: "11px 14px", fontSize: 13, fontWeight: 700, color: "#1A1917" }}>{formatarPreco(car.preco)}<SituacaoFipe car={car} /></td>
                           <td style={{ padding: "11px 14px" }}>
                             <div style={{ display: "flex", gap: 5 }}>
-                              <Link href={`/veiculo/${car.id}`} style={{ width: 28, height: 28, borderRadius: 6, border: "1.5px solid #E8E6E1", background: "#F7F6F3", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, textDecoration: "none", color: "#1A1917" }}><Icone nome="olho" tamanho={15} /></Link>
+                              <Link href={linkDoVeiculo(car)} style={{ width: 28, height: 28, borderRadius: 6, border: "1.5px solid #E8E6E1", background: "#F7F6F3", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, textDecoration: "none", color: "#1A1917" }}><Icone nome="olho" tamanho={15} /></Link>
                               <Link href={`/painel/novo-anuncio?editar=${car.id}`} title="Editar" style={{ width: 28, height: 28, borderRadius: 6, border: "1.5px solid #E8E6E1", background: "#F7F6F3", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: 12, textDecoration: "none", color: "#1A1917" }}><Icone nome="editar" tamanho={15} /></Link>
                               {car.status !== "vendido" && !(car.ativo === false && semVaga) && <button title={car.ativo === false ? "Reativar" : "Pausar"} disabled={acaoEmAndamento === car.id} onClick={() => alternarPausa(car)} style={{ width: 28, height: 28, borderRadius: 6, border: "1.5px solid #E8E6E1", background: "#F7F6F3", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: 12, opacity: acaoEmAndamento === car.id ? 0.5 : 1 }}><Icone nome={car.ativo === false ? "reativar" : "pausar"} tamanho={15} /></button>}
                               {car.status !== "vendido" && <button title="Marcar como vendido" disabled={acaoEmAndamento === car.id} onClick={() => finalizar(car)} style={{ width: 28, height: 28, borderRadius: 6, border: "1.5px solid #E8E6E1", background: "#F7F6F3", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: "#16A34A" }}><Icone nome="ok" tamanho={15} /></button>}
@@ -418,7 +419,7 @@ export default function Painel() {
                         <div style={{ textAlign: "right" }}>
                           <div style={{ fontSize: 13, fontWeight: 700, color: "#1A1917" }}>{formatarPreco(car.preco)}<SituacaoFipe car={car} /></div>
                           <div style={{ display: "flex", gap: 4, marginTop: 4 }}>
-                            <Link href={`/veiculo/${car.id}`} style={{ width: 26, height: 26, borderRadius: 5, border: "1.5px solid #E8E6E1", background: "#F7F6F3", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, textDecoration: "none", color: "#1A1917" }}><Icone nome="olho" tamanho={15} /></Link>
+                            <Link href={linkDoVeiculo(car)} style={{ width: 26, height: 26, borderRadius: 5, border: "1.5px solid #E8E6E1", background: "#F7F6F3", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, textDecoration: "none", color: "#1A1917" }}><Icone nome="olho" tamanho={15} /></Link>
                             <Link href={`/painel/novo-anuncio?editar=${car.id}`} title="Editar" style={{ width: 26, height: 26, borderRadius: 5, border: "1.5px solid #E8E6E1", background: "#F7F6F3", cursor: "pointer", fontSize: 11, display: "flex", alignItems: "center", justifyContent: "center", textDecoration: "none", color: "#1A1917" }}><Icone nome="editar" tamanho={15} /></Link>
                             {car.status !== "vendido" && !(car.ativo === false && semVaga) && <button title={car.ativo === false ? "Reativar" : "Pausar"} disabled={acaoEmAndamento === car.id} onClick={() => alternarPausa(car)} style={{ width: 26, height: 26, borderRadius: 5, border: "1.5px solid #E8E6E1", background: "#F7F6F3", cursor: "pointer", fontSize: 11 }}><Icone nome={car.ativo === false ? "reativar" : "pausar"} tamanho={15} /></button>}
                               {car.status !== "vendido" && <button title="Marcar como vendido" disabled={acaoEmAndamento === car.id} onClick={() => finalizar(car)} style={{ width: 28, height: 28, borderRadius: 6, border: "1.5px solid #E8E6E1", background: "#F7F6F3", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: "#16A34A" }}><Icone nome="ok" tamanho={15} /></button>}

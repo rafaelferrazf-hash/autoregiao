@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import VeiculoCliente from "./VeiculoCliente";
 import { criarClienteServidor } from "@/lib/supabase-servidor";
 import { formatarPreco, formatarKm } from "@/lib/formatar";
 import { NOME_SITE, URL_SITE } from "@/lib/site";
 import type { VeiculoComLoja } from "@/lib/tipos";
 import { caminhoDoVeiculo } from "@/lib/caminhoVeiculo";
+import { codigoDoEndereco, linkDoVeiculo } from "@/lib/linkVeiculo";
 
-const ID = /^[0-9a-f-]{36}$/i;
 const COLUNAS = "*, lojas(nome, cidade, estado, endereco, criado_em, whatsapp, telefone, logo_url)";
 
 // "Lençóis Paulista-SP"
@@ -19,8 +19,8 @@ function localDoAnuncio(v: Pick<VeiculoComLoja, "cidade" | "lojas">) {
 
 // Título, descrição e foto: o que o Google e o WhatsApp mostram do link.
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
-  const { id } = await params;
-  if (!ID.test(id)) return { title: "Anúncio não encontrado — AutoRegião" };
+  const id = codigoDoEndereco((await params).id);
+  if (!id) return { title: "Anúncio não encontrado — AutoRegião" };
 
   const { data } = await (await criarClienteServidor()).from("veiculos").select(COLUNAS).eq("id", id).maybeSingle();
   const v = data as VeiculoComLoja | null;
@@ -37,12 +37,12 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   return {
     title: `${titulo} | ${NOME_SITE}`,
     description: descricao,
-    alternates: { canonical: `/veiculo/${id}` },
+    alternates: { canonical: linkDoVeiculo(v) },
     ...naoIndexar,
     openGraph: {
       title: titulo,
       description: descricao,
-      url: `/veiculo/${id}`,
+      url: linkDoVeiculo(v),
       ...(foto ? { images: [{ url: foto, alt: v.nome }] } : {}),
     },
     twitter: { card: foto ? "summary_large_image" : "summary", title: titulo, description: descricao, ...(foto ? { images: [foto] } : {}) },
@@ -52,19 +52,22 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 // A página chega pronta do servidor (bom para o Google, que lê o conteúdo sem esperar o navegador).
 // Usa a sessão do visitante: o dono ainda consegue ver o próprio anúncio pausado.
 export default async function PaginaVeiculo({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
-  if (!ID.test(id)) notFound();
+  const parte = decodeURIComponent((await params).id);
+  const id = codigoDoEndereco(parte);
+  if (!id) notFound();
   const supabase = await criarClienteServidor();
   const { data } = await supabase.from("veiculos").select(COLUNAS).eq("id", id).maybeSingle();
   const v = data as VeiculoComLoja | null;
   if (!v) notFound();
+  // Endereço antigo (só o código) ou nome desatualizado: vai para o endereço com o nome do carro.
+  if (`/veiculo/${parte}` !== linkDoVeiculo(v)) permanentRedirect(linkDoVeiculo(v));
 
   // Dados estruturados (schema.org): ajudam o Google a mostrar preço, ano e km no resultado.
   const dadosEstruturados = {
     "@context": "https://schema.org",
     "@type": "Car",
     name: v.nome,
-    url: `${URL_SITE}/veiculo/${v.id}`,
+    url: `${URL_SITE}${linkDoVeiculo(v)}`,
     ...(v.fotos?.length ? { image: v.fotos.slice(0, 5) } : {}),
     ...(v.marca ? { brand: { "@type": "Brand", name: v.marca } } : {}),
     ...(v.modelo ? { model: v.modelo } : {}),
@@ -80,7 +83,7 @@ export default async function PaginaVeiculo({ params }: { params: Promise<{ id: 
         price: v.preco,
         priceCurrency: "BRL",
         availability: v.ativo ? "https://schema.org/InStock" : "https://schema.org/SoldOut",
-        url: `${URL_SITE}/veiculo/${v.id}`,
+        url: `${URL_SITE}${linkDoVeiculo(v)}`,
         ...(v.lojas?.nome || v.nome_contato ? { seller: { "@type": v.lojas ? "AutoDealer" : "Person", name: v.lojas?.nome || v.nome_contato } } : {}),
       },
     } : {}),
@@ -90,7 +93,7 @@ export default async function PaginaVeiculo({ params }: { params: Promise<{ id: 
   const dadosCaminho = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
-    itemListElement: [...caminho, { nome: v.nome ?? "Anúncio", href: `/veiculo/${v.id}` }].map((c, i) => ({
+    itemListElement: [...caminho, { nome: v.nome ?? "Anúncio", href: linkDoVeiculo(v) }].map((c, i) => ({
       "@type": "ListItem", position: i + 1, name: c.nome, item: `${URL_SITE}${c.href}`,
     })),
   };

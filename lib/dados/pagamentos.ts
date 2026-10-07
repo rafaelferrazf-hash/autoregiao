@@ -17,6 +17,9 @@ export async function listarMeusPagamentos() {
   const { data } = await supabase
     .from("pagamentos")
     .select("id, plano, meses, valor, status, metodo, criado_em, aprovado_em")
+    // "pendente" = abriu o Mercado Pago e voltou sem pagar: não é pagamento, não aparece para o lojista.
+    // Se virar pagamento depois, o aviso do Mercado Pago muda a situação e ele passa a aparecer.
+    .neq("status", "pendente")
     .order("criado_em", { ascending: false })
     .limit(20);
   return (data ?? []) as PagamentoHistorico[];

@@ -39,7 +39,8 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
 - **Admin único do site:** rafaelferrazf05@gmail.com (`NEXT_PUBLIC_ADMIN_EMAILS`). Conta de admin é só admin.
 - **Lojista de teste:** rafaelferrazf@hotmail.com → loja "Auto Paulista" (plano vitalício), 2 anúncios (Civic, Onix).
 - 2FA ligado em: Gmail, Registro.br, Vercel, Hotmail, GitHub, Mercado Pago (08/10: chaves de acesso, celular, e-mail,
-  reconhecimento facial, QR code). Falta: Supabase.
+  reconhecimento facial, QR code) e Supabase (08/10: 2 autenticadores — Google Authenticator + app Senhas do iPhone;
+  o Supabase NÃO recupera conta sem autenticador).
 - Variáveis (Vercel + `.env.local`): `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`,
   `SUPABASE_SERVICE_KEY`, `NEXT_PUBLIC_ADMIN_EMAILS`, `MP_ACCESS_TOKEN`, `MP_WEBHOOK_SECRET`, `RESEND_API_KEY`.
 
@@ -173,6 +174,6 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
    (Rafael decidiu NÃO estornar — vale como venda; Básico até 06/11/2026). E-mails de pagamento aprovado
    (`lib/avisosPagamento.ts`): lojista + admin ("Nova assinatura: …"); filtro no Gmail do admin marca como
    importante (marcador "Vendas AutoRegião") → aviso no iPhone pelo app Gmail. O app do MP não avisa vendas online.
-3. 2FA no Supabase (Mercado Pago ✅ 08/10).
+3. ✅ 2FA em todas as contas importantes (Mercado Pago e Supabase em 08/10).
 4. Antes do lançamento: **apagar os 20 anúncios de demonstração** (só a conta da Auto Paulista logada vê — fase14; `delete from public.veiculos where demonstracao = true;` — fotos em `public/demo/`, licença livre Wikimedia, créditos na descrição) e trocar os de teste por reais; revisar textos de /termos e /privacidade.
 5. Futuro: App Store (US$99/ano), notificações push, planos pagos para particulares.

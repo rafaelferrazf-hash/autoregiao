@@ -15,7 +15,7 @@ export default function PaginaSimples({ children }: { children: React.ReactNode 
       <nav style={{ background: "#fff", borderBottom: "1px solid #E8E6E1", height: 60, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 16px" }}>
         <Link href="/" style={{ display: "flex", alignItems: "center", textDecoration: "none" }}><Logo /></Link>
         <div className="simples-links" style={{ display: "flex", gap: 24 }}>
-          {[["Buscar veículos", "/veiculos"], ["Tabela FIPE", "/tabela-fipe"], ["Anunciar", "/anunciar"]].map(([nome, href]) => (
+          {[["Buscar veículos", "/veiculos"], ["Lojas", "/lojas"], ["Tabela FIPE", "/tabela-fipe"], ["Anunciar", "/anunciar"]].map(([nome, href]) => (
             <Link key={href} href={href} style={{ textDecoration: "none", color: "#7A7670", fontSize: 13.5, fontWeight: 500 }}>{nome}</Link>
           ))}
         </div>

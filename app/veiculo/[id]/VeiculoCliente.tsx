@@ -292,7 +292,7 @@ Motivo da denúncia:
         </div>
         {menuAberto && (
           <div style={{ borderTop: "1px solid #E8E6E1", background: "#fff", padding: "16px", display: "flex", flexDirection: "column", gap: 14 }}>
-            {[["Buscar veículos", "/veiculos"], ["Favoritos", "/favoritos"], ["Tabela FIPE", "/tabela-fipe"], ["Anunciar", "/anunciar"]].map(([item, href]) => (
+            {[["Buscar veículos", "/veiculos"], ["Favoritos", "/favoritos"], ["Lojas", "/lojas"], ["Tabela FIPE", "/tabela-fipe"], ["Anunciar", "/anunciar"]].map(([item, href]) => (
               <Link key={item} href={href} style={{ textDecoration: "none", color: "#1A1917", fontSize: 15, fontWeight: 500 }}>{item === "Favoritos" && <Icone nome="estrela" style={{ marginRight: 4 }} />}{item}</Link>
             ))}
             <div style={{ display: "flex", gap: 8, paddingTop: 8, borderTop: "1px solid #E8E6E1" }}>

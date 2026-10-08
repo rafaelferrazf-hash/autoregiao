@@ -4,6 +4,7 @@ import "./globals.css";
 import { NOME_SITE, URL_SITE } from "@/lib/site";
 import AppInstalavel from "@/components/AppInstalavel";
 import OuvinteNativo from "@/components/OuvinteNativo";
+import BarraComparar from "@/components/BarraComparar";
 
 // Fonte única do site (títulos, preços e textos), servida pelo próprio site.
 const fonte = Plus_Jakarta_Sans({
@@ -55,6 +56,7 @@ export default function RootLayout({
         {children}
         <AppInstalavel />
         <OuvinteNativo />
+        <BarraComparar />
       </body>
     </html>
   );

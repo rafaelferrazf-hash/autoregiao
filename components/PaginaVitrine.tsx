@@ -29,7 +29,7 @@ export default function PaginaVitrine({ vitrine, veiculos, total }: { vitrine: V
           <Logo />
         </Link>
         <div className="vit-links" style={{ display: "flex", gap: 24 }}>
-          {[["Buscar veículos", "/veiculos"], ["Favoritos", "/favoritos"], ["Tabela FIPE", "/tabela-fipe"], ["Anunciar", "/anunciar"]].map(([nome, href]) => (
+          {[["Buscar veículos", "/veiculos"], ["Favoritos", "/favoritos"], ["Lojas", "/lojas"], ["Tabela FIPE", "/tabela-fipe"], ["Anunciar", "/anunciar"]].map(([nome, href]) => (
             <Link key={href} href={href} style={{ textDecoration: "none", color: "#7A7670", fontSize: 13.5, fontWeight: 500 }}>{nome === "Favoritos" && <Icone nome="estrela" style={{ marginRight: 4 }} />}{nome}</Link>
           ))}
         </div>

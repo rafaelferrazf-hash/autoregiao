@@ -5,7 +5,8 @@ import { formatarKm, formatarPreco } from "@/lib/formatar";
 import type { Veiculo } from "@/lib/tipos";
 import Icone from "@/components/Icone";
 import { seloDePreco } from "@/lib/precoFipe";
-import FotoCard from "@/components/FotoCard";
+import GaleriaCard from "@/components/GaleriaCard";
+import BotaoComparar from "@/components/BotaoComparar";
 import { linkDoVeiculo } from "@/lib/linkVeiculo";
 
 export type DadosCartao = Pick<Veiculo, "id" | "nome" | "ano" | "km" | "preco" | "fotos" | "destaque">
@@ -41,8 +42,9 @@ export default function CartaoVeiculo({ car, mostrarLoja = true }: { car: DadosC
         <BotaoFavorito id={car.id} />
         <div style={{ position: "relative", height: 150, width: "100%", background: "#F7F6F3" }}>
           {car.fotos && car.fotos.length > 0
-            ? <FotoCard src={car.fotos[0]} alt={car.nome ?? "Veículo"} />
+            ? <GaleriaCard fotos={car.fotos} alt={car.nome ?? "Veículo"} />
             : <Image src="/sem-foto.png" alt={car.nome ?? "Veículo"} fill style={{ objectFit: "cover" }} sizes="(max-width: 480px) 100vw, (max-width: 768px) 50vw, 33vw" />}
+          <BotaoComparar id={car.id} />
         </div>
         <div style={{ padding: "10px 12px" }}>
           <div style={{ fontSize: 13, fontWeight: 700, color: "#1A1917", marginBottom: 4 }}>{car.nome}</div>

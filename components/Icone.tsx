@@ -4,7 +4,7 @@ import {
   IconCopy, IconCrown, IconCurrencyReal, IconDeviceMobile, IconEye, IconFlag, IconGasStation, IconGift, IconLink,
   IconLogout, IconManualGearbox, IconMapPin, IconMotorbike, IconNavigation, IconPalette, IconPencil, IconPhone,
   IconPlus, IconRocket, IconSearch, IconShare, IconShieldCheck, IconStar, IconStarFilled, IconTicket, IconTrash,
-  IconTrendingDown, IconTrophy, IconTruck, IconUser, IconUsers, IconX, IconQrcode, IconGauge, IconHourglass, IconInfoCircle, IconPlayerPause, IconPlayerPlay, IconDoor,
+  IconTrendingDown, IconTrophy, IconTruck, IconUser, IconUsers, IconX, IconQrcode, IconGauge, IconHourglass, IconInfoCircle, IconPlayerPause, IconPlayerPlay, IconDoor, IconArrowsLeftRight,
   type Icon,
 } from "@tabler/icons-react";
 import type { CSSProperties } from "react";
@@ -22,7 +22,7 @@ const ICONES = {
   estrela: IconStar, estrelaCheia: IconStarFilled, cupom: IconTicket, lixeira: IconTrash, abaixo: IconTrendingDown,
   trofeu: IconTrophy, utilitario: IconTruck, usuario: IconUser, usuarios: IconUsers, fechar: IconX, qrcode: IconQrcode,
   km: IconGauge, ampulheta: IconHourglass, info: IconInfoCircle,
-  pausar: IconPlayerPause, reativar: IconPlayerPlay, porta: IconDoor,
+  pausar: IconPlayerPause, reativar: IconPlayerPlay, porta: IconDoor, comparar: IconArrowsLeftRight,
 } satisfies Record<string, Icon>;
 
 export type NomeIcone = keyof typeof ICONES;

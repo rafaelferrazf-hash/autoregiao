@@ -47,3 +47,11 @@ button, input, select, textarea {
     padding-bottom: 7px;
   }
 }
+
+/* Fotos deslizáveis no card do anúncio (components/GaleriaCard) */
+.galeria-card-faixa { display: flex; width: 100%; height: 100%; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+.galeria-card-faixa::-webkit-scrollbar { display: none; }
+.galeria-card-item { flex: 0 0 100%; height: 100%; scroll-snap-align: start; }
+.galeria-card-seta { position: absolute; top: 50%; transform: translateY(-50%); width: 28px; height: 28px; border-radius: 50%; border: none; background: rgba(255,255,255,0.92); color: #1A1917; font-size: 18px; line-height: 1; cursor: pointer; box-shadow: 0 1px 4px rgba(0,0,0,0.25); opacity: 0; transition: opacity 0.15s; z-index: 2; }
+.galeria-card:hover .galeria-card-seta { opacity: 1; }
+@media (hover: none) { .galeria-card-seta { display: none; } }

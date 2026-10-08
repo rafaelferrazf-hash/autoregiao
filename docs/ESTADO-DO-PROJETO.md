@@ -98,8 +98,10 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
   "Bom preço" (`lib/precoFipe.ts`, `SeloPreco` no CartaoVeiculo); "Situação do veículo" (`veiculos.condicoes`,
   `lib/situacaoVeiculo.ts`: IPVA pago, licenciado, único dono, revisões em dia, laudo, garantia — cadastro, selo,
   filtro ?cond=); busca por parcela (`lib/financiamento.ts`, ?parcela_max=, "ou cerca de R$ X/mês" no anúncio);
-  estilos (`lib/estilos.ts`: /carros/primeiro-carro, familia, economicos, trabalho, 4x4). Ideias do Mobiauto
-  para depois: Tabela FIPE pública (SEO), comparar veículos, fotos deslizáveis no card, página "Encontre lojistas".
+  estilos (`lib/estilos.ts`: /carros/primeiro-carro, familia, economicos, trabalho, 4x4). Tabela FIPE pública
+  (`/tabela-fipe` com `components/ConsultaFipe`, `/tabela-fipe/[carros|motos]/[marca]` com os modelos; no sitemap;
+  API Parallelum ~1000/dia → listas em cache 7 dias, valor 1 dia; NÃO criar página por modelo/ano com valor).
+  Ideias do Mobiauto para depois: comparar veículos, fotos deslizáveis no card, página "Encontre lojistas".
 - 2FA nas contas principais. App instalável (PWA), arrastar fotos, revisão de celular (375/320px).
 - Marca nova (01/10/2026), do manual em `C:\Users\rafae\AutoRegiao-Logo-Novo` (só PNG, sem vetor): logo AR, laranja
   #FF6600, grafite #1A1A1A, Exo 2 nos títulos (h1–h3). Slogan trocado para "COMPRE | VENDA | ANUNCIE" (o manual

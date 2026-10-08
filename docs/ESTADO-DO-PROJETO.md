@@ -55,7 +55,7 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
   `/loja/[id]`, `/favoritos`, `/alerta`, `/anunciar`, `/painel` (+ `/novo-anuncio`, `/planos`), `/admin`,
   `/login`, `/cadastro`, `/recuperar-senha`, `/redefinir-senha`, `/pagamento/retorno`, `/termos`, `/privacidade`, `/offline`.
 - SQL já rodado: `rls-fase0`, `fase1-seguranca`, `fase2`, `fase3`, `fase3-fotos`, `fase4a`, `fase4b`,
-  `fase5-alertas`, `fase6-fipe`, `fase7-filtros`, `fase8-logo-loja`, `fase9-excluir-conta`, `fase10-push`, `fase11-capa-loja`, `fase12-carroceria`, `fase13-demonstracao`, `fase14-demonstracao-privada`, `fase15-planos-agendados-vendido`. Modelos de e-mail do Auth: `supabase/emails/`.
+  `fase5-alertas`, `fase6-fipe`, `fase7-filtros`, `fase8-logo-loja`, `fase9-excluir-conta`, `fase10-push`, `fase11-capa-loja`, `fase12-carroceria`, `fase13-demonstracao`, `fase14-demonstracao-privada`, `fase15-planos-agendados-vendido`, `fase16-situacao-veiculo`. Modelos de e-mail do Auth: `supabase/emails/`.
 
 ## Regras de negócio importantes
 - Planos (`lib/planos.ts`): básico R$89/10 anúncios, profissional R$159/30 + destaque, premium R$299/ilimitado + destaque;
@@ -94,6 +94,12 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
   cadastro de carro/utilitário; filtro; vitrines /carros/suv, /carros/seda...). Endereço do anúncio com o nome
   do carro (`lib/linkVeiculo.ts`, antigo redireciona 308). "Enviar proposta" foi feito e REMOVIDO a pedido
   do Rafael (propostas absurdas): contato só por WhatsApp/Ligar.
+- 08/10/2026 (Mobiauto — concorrente com ~62 usados em Teixeira): selo "Super preço" (≥10% abaixo da FIPE) /
+  "Bom preço" (`lib/precoFipe.ts`, `SeloPreco` no CartaoVeiculo); "Situação do veículo" (`veiculos.condicoes`,
+  `lib/situacaoVeiculo.ts`: IPVA pago, licenciado, único dono, revisões em dia, laudo, garantia — cadastro, selo,
+  filtro ?cond=); busca por parcela (`lib/financiamento.ts`, ?parcela_max=, "ou cerca de R$ X/mês" no anúncio);
+  estilos (`lib/estilos.ts`: /carros/primeiro-carro, familia, economicos, trabalho, 4x4). Ideias do Mobiauto
+  para depois: Tabela FIPE pública (SEO), comparar veículos, fotos deslizáveis no card, página "Encontre lojistas".
 - 2FA nas contas principais. App instalável (PWA), arrastar fotos, revisão de celular (375/320px).
 - Marca nova (01/10/2026), do manual em `C:\Users\rafae\AutoRegiao-Logo-Novo` (só PNG, sem vetor): logo AR, laranja
   #FF6600, grafite #1A1A1A, Exo 2 nos títulos (h1–h3). Slogan trocado para "COMPRE | VENDA | ANUNCIE" (o manual

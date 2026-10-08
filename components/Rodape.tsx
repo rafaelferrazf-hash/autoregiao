@@ -10,6 +10,7 @@ export default function Rodape() {
         <span>© {new Date().getFullYear()} <span style={{ color: "#FF6600" }}>AutoRegião</span></span>
         <Link href="/veiculos" style={link}>Buscar veículos</Link>
         <Link href="/favoritos" style={link}>Favoritos</Link>
+        <Link href="/tabela-fipe" style={link}>Tabela FIPE</Link>
         <Link href="/anunciar" style={link}>Anunciar</Link>
         <Link href="/termos" style={link}>Termos de Uso</Link>
         <Link href="/privacidade" style={link}>Política de Privacidade</Link>

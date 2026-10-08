@@ -1,3 +1,6 @@
+import { ESTILOS, ehEstilo, type Estilo } from "@/lib/estilos";
+import { precoMaximoPelaParcela } from "@/lib/financiamento";
+import { condicaoDoSlug, slugDaCondicao } from "@/lib/situacaoVeiculo";
 // Filtros da busca de veículos. Ficam na URL (?marca=Honda&preco_max=90000) para a busca
 // poder ser compartilhada e para o botão "voltar" do navegador funcionar.
 
@@ -20,12 +23,15 @@ export type Filtros = {
   ordem?: Ordem;
   abaixo_fipe?: boolean;       // só anúncios abaixo da Tabela FIPE (?abaixo_fipe=1)
   anunciante?: Anunciante;     // loja ou particular (?anunciante=loja)
+  parcela_max?: number;        // "busca por parcela": parcela estimada até X por mês (lib/financiamento.ts)
+  estilo?: Estilo;             // primeiro-carro, familia, economicos, trabalho, 4x4 (lib/estilos.ts)
+  condicoes?: string[];        // situação do veículo, todas exigidas (?cond=ipva-pago,unico-dono)
 };
 
 const ORDENS: Ordem[] = ["recentes", "menor_preco", "maior_preco", "menor_km"];
 const TIPOS: TipoVeiculo[] = ["carro", "moto", "utilitario"];
 const TEXTOS = ["q", "marca", "cidade", "cambio", "combustivel", "carroceria"] as const;
-const NUMEROS = ["ano_min", "preco_min", "preco_max", "km_max"] as const;
+const NUMEROS = ["ano_min", "preco_min", "preco_max", "km_max", "parcela_max"] as const;
 
 // "R$ 90.000" / "90000" / "90.000,00" → 90000 (centavos descartados). Vazio ou inválido → undefined.
 export function paraNumero(v: string | null | undefined): number | undefined {
@@ -49,6 +55,10 @@ export function lerFiltros(params: URLSearchParams): Filtros {
   if (params.get("abaixo_fipe") === "1") f.abaixo_fipe = true;
   const anunciante = params.get("anunciante");
   if (anunciante === "loja" || anunciante === "particular") f.anunciante = anunciante;
+  const estilo = params.get("estilo");
+  if (ehEstilo(estilo)) f.estilo = estilo;
+  const cond = (params.get("cond") ?? "").split(",").map(c => condicaoDoSlug(c.trim())).filter((c): c is string => !!c);
+  if (cond.length) f.condicoes = [...new Set(cond)];
   const ordem = params.get("ordem");
   if (ordem && (ORDENS as string[]).includes(ordem) && ordem !== "recentes") f.ordem = ordem as Ordem;
   return f;
@@ -58,6 +68,11 @@ export function filtrosParaQuery(f: Filtros): string {
   const p = new URLSearchParams();
   for (const [k, v] of Object.entries(f)) {
     if (v === undefined || v === "" || v === false || (k === "ordem" && v === "recentes")) continue;
+    if (k === "condicoes") {
+      const slugs = (v as string[]).map(slugDaCondicao).filter(Boolean);
+      if (slugs.length) p.set("cond", slugs.join(","));
+      continue;
+    }
     p.set(k, v === true ? "1" : String(v));
   }
   const s = p.toString();
@@ -89,6 +104,8 @@ type ConsultaFiltravel<Q> = {
   lte(coluna: string, valor: number): Q;
   is(coluna: string, valor: null): Q;
   not(coluna: string, operador: string, valor: null): Q;
+  in(coluna: string, valores: string[]): Q;
+  contains(coluna: string, valores: string[]): Q;
 };
 
 export function aplicarFiltros<Q extends ConsultaFiltravel<Q>>(consulta: Q, f: Filtros): Q {
@@ -108,6 +125,13 @@ export function aplicarFiltros<Q extends ConsultaFiltravel<Q>>(consulta: Q, f: F
   if (f.preco_min) consulta = consulta.gte("preco", f.preco_min);
   if (f.preco_max) consulta = consulta.lte("preco", f.preco_max);
   if (f.km_max) consulta = consulta.lte("km_num", f.km_max);
+  if (f.parcela_max) consulta = consulta.lte("preco", precoMaximoPelaParcela(f.parcela_max));
+  if (f.condicoes?.length) consulta = consulta.contains("condicoes", f.condicoes);
+  if (f.estilo === "primeiro-carro") consulta = consulta.eq("carroceria", "Hatch").lte("preco", 60000);
+  if (f.estilo === "familia") consulta = consulta.in("carroceria", ["SUV", "Sedã", "Minivan", "Perua"]);
+  if (f.estilo === "trabalho") consulta = consulta.in("carroceria", ["Picape", "Van", "Furgão", "Caminhão"]);
+  if (f.estilo === "economicos") consulta = consulta.or("versao.ilike.%1.0%,nome.ilike.%1.0%");
+  if (f.estilo === "4x4") consulta = consulta.or("versao.ilike.%4x4%,nome.ilike.%4x4%,versao.ilike.%4wd%,versao.ilike.%awd%");
   // abaixo_fipe: coluna calculada pelo banco (supabase/fase7-filtros.sql).
   if (f.abaixo_fipe) consulta = consulta.eq("abaixo_fipe", "true");
   if (f.anunciante === "loja") consulta = consulta.not("loja_id", "is", null);
@@ -121,6 +145,7 @@ const milhar = (n: number) => n.toLocaleString("pt-BR");
 // "Carros · Toyota · até R$ 200.000 · 2018 ou mais novo" — usado no alerta e nos e-mails.
 export function descreverFiltros(f: Filtros): string {
   const partes: string[] = [];
+  if (f.estilo) partes.push(ESTILOS[f.estilo].nome);
   if (f.carroceria) partes.push(f.carroceria);
   else if (f.tipo) partes.push(NOME_TIPO[f.tipo]);
   if (f.q) partes.push(`"${f.q}"`);
@@ -131,6 +156,8 @@ export function descreverFiltros(f: Filtros): string {
   else if (f.preco_min) partes.push(`a partir de R$ ${milhar(f.preco_min)}`);
   if (f.ano_min) partes.push(`${f.ano_min} ou mais novo`);
   if (f.km_max) partes.push(`até ${milhar(f.km_max)} km`);
+  if (f.parcela_max) partes.push(`parcela até R$ ${milhar(f.parcela_max)}/mês`);
+  if (f.condicoes?.length) partes.push(f.condicoes.join(", "));
   if (f.cambio) partes.push(`câmbio ${f.cambio.toLowerCase()}`);
   if (f.combustivel) partes.push(f.combustivel);
   if (f.abaixo_fipe) partes.push("abaixo da FIPE");

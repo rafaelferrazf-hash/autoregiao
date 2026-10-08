@@ -3,6 +3,7 @@ import { aplicarFiltros, type Filtros, type TipoVeiculo } from "@/lib/busca";
 import type { VeiculoComLoja } from "@/lib/tipos";
 import { slug } from "@/lib/nomesVeiculo";
 import { carroceriaDoSlug, pluralCarroceria, slugCarroceria } from "@/lib/carroceria";
+import { ESTILOS, ehEstilo } from "@/lib/estilos";
 
 // "Vitrines": páginas prontas de busca com endereço próprio, para o Google encontrar
 // (/carros, /carros/chevrolet, /carros/chevrolet/onix, /carros/ate-50-mil, /motos, /utilitarios).
@@ -95,7 +96,27 @@ export async function montarVitrine(tipoRota: TipoRota, segmentos: string[]): Pr
     return {
       rota: base, titulo: `${t.nome} à venda`, h1: `${t.nome} à venda`,
       descricao: `${t.nome} novos e seminovos à venda em lojas e com particulares da região. Veja fotos, preços e fale direto com o vendedor pelo WhatsApp.`,
-      filtros, caminho, atalhos: [atalhoOportunidades, atalhoCarrocerias, atalhoMarcas, atalhoFaixas],
+      filtros, caminho, atalhos: [
+        atalhoOportunidades,
+        ...(tipoRota === "carros" ? [{ titulo: "Por estilo", links: Object.entries(ESTILOS).map(([e, x]) => ({ nome: x.nome, href: `/carros/${e}` })) }] : []),
+        atalhoCarrocerias, atalhoMarcas, atalhoFaixas,
+      ],
+    };
+  }
+
+  const atalhoEstilos = {
+    titulo: "Por estilo",
+    links: Object.entries(ESTILOS).map(([slugEstilo, e]) => ({ nome: e.nome, href: `/carros/${slugEstilo}` })),
+  };
+
+  // Estilos: /carros/primeiro-carro, /carros/familia, /carros/economicos, /carros/trabalho, /carros/4x4
+  if (segmentos.length === 1 && tipoRota === "carros" && ehEstilo(segmentos[0])) {
+    const e = ESTILOS[segmentos[0]];
+    filtros.estilo = segmentos[0];
+    return {
+      rota: `${base}/${segmentos[0]}`, titulo: `Carros: ${e.nome.toLowerCase()}`, h1: `Carros — ${e.nome}`,
+      descricao: `${e.resumo}. Carros à venda em lojas e com particulares da região: veja as fotos e fale direto com o vendedor pelo WhatsApp.`,
+      filtros, caminho: [...caminho, { nome: e.nome, href: `${base}/${segmentos[0]}` }], atalhos: [atalhoEstilos, atalhoMarcas, atalhoFaixas],
     };
   }
 
@@ -180,6 +201,7 @@ export async function rotasDeVitrine(): Promise<string[]> {
     rotas.add(`/${rota}`);
     if (doT.some(r => r.abaixo_fipe)) rotas.add(`/${rota}/abaixo-da-fipe`);
     if (t.tipo !== "moto") for (const r of doT) if (r.carroceria) rotas.add(`/${rota}/${slugCarroceria(r.carroceria)}`);
+    if (rota === "carros") for (const e of Object.keys(ESTILOS)) rotas.add(`/carros/${e}`);
     for (const n of FAIXAS_MIL) if (doT.some(r => r.preco && r.preco <= n * 1000)) rotas.add(`/${rota}/ate-${n}-mil`);
     for (const r of doT) {
       if (!r.marca?.trim()) continue;

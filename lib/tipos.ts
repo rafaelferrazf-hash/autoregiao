@@ -43,7 +43,8 @@ export type Veiculo = {
   fipe_em: string | null;
   abaixo_fipe?: boolean | null;
   demonstracao?: boolean | null;
-  vendido_em?: string | null;     // "Finalizar" = vendido (fase15): fora do ar para sempre  // anúncio de demonstração (fase13): fora do Google, do sitemap e dos alertas   // calculada pelo banco (fase7-filtros.sql); nunca gravada pelo site
+  vendido_em?: string | null;
+  condicoes?: string[] | null;    // situação do veículo (fase16): IPVA pago, licenciado, único dono...     // "Finalizar" = vendido (fase15): fora do ar para sempre  // anúncio de demonstração (fase13): fora do Google, do sitemap e dos alertas   // calculada pelo banco (fase7-filtros.sql); nunca gravada pelo site
 };
 
 // Veículo com o join `lojas(nome, cidade)`.

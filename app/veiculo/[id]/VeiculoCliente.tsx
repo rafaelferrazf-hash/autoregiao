@@ -7,7 +7,7 @@ import BotoesConta from "@/components/BotoesConta";
 import { useState, useEffect, useRef } from "react";
 import { buscarSemelhantes } from "@/lib/dados/veiculos";
 import BotaoFavorito from "@/components/BotaoFavorito";
-import CartaoVeiculo, { abaixoDaFipe } from "@/components/CartaoVeiculo";
+import CartaoVeiculo, { abaixoDaFipe, SeloPreco } from "@/components/CartaoVeiculo";
 import Rodape from "@/components/Rodape";
 import MapaLoja from "@/components/MapaLoja";
 import LogoLoja from "@/components/LogoLoja";
@@ -17,6 +17,7 @@ import type { VeiculoComLoja } from "@/lib/tipos";
 import { EMAIL_CONTATO, URL_SITE } from "@/lib/site";
 import Icone, { type NomeIcone } from "@/components/Icone";
 import { caminhoDoVeiculo, linkMesmoModelo } from "@/lib/caminhoVeiculo";
+import { ENTRADA_PADRAO, parcelaMensal } from "@/lib/financiamento";
 import { linkDoVeiculo } from "@/lib/linkVeiculo";
 
 // O anúncio vem pronto do servidor (page.tsx); aqui ficam as partes interativas.
@@ -352,12 +353,16 @@ Motivo da denúncia:
                 <div>
                   <div style={{ fontSize: 28, fontWeight: 800, color: "#1A1917", lineHeight: 1 }}>{formatarPreco(veiculo.preco)}</div>
                   {abaixoDaFipe(veiculo) && (
-                    <div style={{ display: "inline-block", fontSize: 12.5, fontWeight: 700, color: "#15803D", background: "#DCFCE7", padding: "4px 10px", borderRadius: 20, marginTop: 8 }}>
-                      <Icone nome="abaixo" /> {formatarPreco(veiculo.fipe_valor! - veiculo.preco!)} abaixo da FIPE
-                      {veiculo.fipe_mes && <span style={{ fontWeight: 500, color: "#166534" }}> · ref. {veiculo.fipe_mes}</span>}
+                    <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginTop: 8 }}>
+                      <SeloPreco v={veiculo} grande />
+                      <span style={{ fontSize: 12.5, fontWeight: 600, color: "#15803D" }}>
+                        {formatarPreco(veiculo.fipe_valor! - veiculo.preco!)} abaixo da FIPE
+                        {veiculo.fipe_mes && <span style={{ fontWeight: 500, color: "#166534" }}> · ref. {veiculo.fipe_mes}</span>}
+                      </span>
                     </div>
                   )}
                   {veiculo.aceita_troca && <div style={{ fontSize: 12, color: "#16A34A", marginTop: 6, fontWeight: 500 }}><Icone nome="ok" /> Aceita troca</div>}
+                  {!!veiculo.preco && <div style={{ fontSize: 12, color: "#7A7670", marginTop: 6 }}>ou cerca de <strong style={{ color: "#1A1917" }}>R$ {parcelaMensal(veiculo.preco * (1 - ENTRADA_PADRAO)).toLocaleString("pt-BR")}/mês</strong> (entrada de 20% + 60x, simulação)</div>}
                 </div>
                 {mesmoModelo && (
                   <Link href={mesmoModelo} style={{ fontSize: 12.5, color: "#FF6600", fontWeight: 600, textDecoration: "none" }}>
@@ -394,6 +399,21 @@ Motivo da denúncia:
               <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, marginBottom: 16, overflow: "hidden" }}>
                 <div style={{ padding: "14px 18px", borderBottom: "1px solid #E8E6E1", fontSize: 14, fontWeight: 700, color: "#1A1917" }}>Descrição</div>
                 <div style={{ padding: "16px 18px", fontSize: 14, lineHeight: 1.7, color: "#1A1917", whiteSpace: "pre-wrap" }}>{veiculo.descricao}</div>
+              </div>
+            )}
+
+            {/* SITUAÇÃO DO VEÍCULO */}
+            {(veiculo.condicoes?.length ?? 0) > 0 && (
+              <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, marginBottom: 16, overflow: "hidden" }}>
+                <div style={{ padding: "14px 18px", borderBottom: "1px solid #E8E6E1", fontSize: 14, fontWeight: 700, color: "#1A1917" }}>Situação do veículo</div>
+                <div style={{ padding: "14px 18px", display: "flex", flexWrap: "wrap", gap: 8 }}>
+                  {veiculo.condicoes!.map(c => (
+                    <span key={c} style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "7px 12px", background: "#F0FDF4", border: "1px solid #BBF7D0", borderRadius: 20, fontSize: 13, fontWeight: 600, color: "#15803D" }}>
+                      <Icone nome="ok" tamanho={16} /> {c}
+                    </span>
+                  ))}
+                </div>
+                <div style={{ padding: "0 18px 12px", fontSize: 11, color: "#A8A49D" }}>Informado pelo vendedor. Confira os documentos antes de fechar negócio.</div>
               </div>
             )}
 
@@ -470,8 +490,9 @@ Motivo da denúncia:
                 <div style={{ fontSize: 11, color: "#7A7670", fontWeight: 600, textTransform: "uppercase", letterSpacing: 0.4, marginBottom: 4 }}>Preço</div>
                 <div style={{ fontSize: 30, fontWeight: 800, color: "#FF6600", lineHeight: 1.05 }}>{formatarPreco(veiculo.preco)}</div>
                 {abaixoDaFipe(veiculo) && (
-                  <div style={{ display: "inline-flex", alignItems: "center", gap: 4, fontSize: 12, fontWeight: 700, color: "#15803D", background: "#DCFCE7", padding: "3px 9px", borderRadius: 20, marginTop: 8 }}>
-                    <Icone nome="abaixo" /> {formatarPreco(veiculo.fipe_valor! - veiculo.preco!)} abaixo da FIPE
+                  <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap", marginTop: 8 }}>
+                    <SeloPreco v={veiculo} />
+                    <span style={{ fontSize: 12, fontWeight: 600, color: "#15803D" }}>{formatarPreco(veiculo.fipe_valor! - veiculo.preco!)} abaixo da FIPE</span>
                   </div>
                 )}
                 <div style={{ fontSize: 12.5, color: "#7A7670", marginTop: 8 }}>

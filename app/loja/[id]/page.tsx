@@ -58,11 +58,11 @@ export default async function PerfilLoja({ params }: { params: Promise<{ id: str
   // Com a sessão de quem visita: o dono também vê os próprios anúncios de demonstração (fase14).
   const { data } = await (await criarClienteServidor())
     .from("veiculos")
-    .select("id, nome, ano, km, combustivel, preco, fotos, destaque, fipe_valor")
+    .select("id, nome, ano, km, combustivel, preco, fotos, destaque, fipe_valor, condicoes")
     .eq("loja_id", id)
     .eq("ativo", true)
     .order("criado_em", { ascending: false });
-  const veiculos = (data ?? []) as Pick<Veiculo, "id" | "nome" | "ano" | "km" | "combustivel" | "preco" | "fotos" | "destaque" | "fipe_valor">[];
+  const veiculos = (data ?? []) as Pick<Veiculo, "id" | "nome" | "ano" | "km" | "combustivel" | "preco" | "fotos" | "destaque" | "fipe_valor" | "condicoes">[];
 
   const telefone = (loja.telefone || "").replace(/\D/g, "");
   const whatsapp = (loja.whatsapp || loja.telefone || "").replace(/\D/g, "");

@@ -8,6 +8,7 @@ import { mensagemErroAnuncio } from "@/lib/planos";
 import { criarVeiculo, atualizarVeiculo, buscarVeiculoDoDono, enviarFotoVeiculo, apagarFotos } from "@/lib/dados/veiculos";
 import SeletorFipe, { type EscolhaFipe } from "@/components/SeletorFipe";
 import { adivinharCarroceria, CARROCERIAS } from "@/lib/carroceria";
+import { CONDICOES } from "@/lib/situacaoVeiculo";
 import { formatarPreco, lerPreco } from "@/lib/formatar";
 import { lerAnoFipe, modeloBase } from "@/lib/nomesVeiculo";
 import Icone from "@/components/Icone";
@@ -51,6 +52,7 @@ export default function NovoAnuncio() {
     cambio: "", combustivel: "", cor: "", portas: "", carroceria: "",
     preco: "", aceitaTroca: false,
     opcionais: [] as string[],
+    condicoes: [] as string[],
     descricao: "",
     nome: "", telefone: "", cidade: "",
   });
@@ -107,6 +109,7 @@ export default function NovoAnuncio() {
         cambio: v.cambio || "", combustivel: v.combustivel || "", cor: v.cor || "", portas: v.portas || "", carroceria: v.carroceria || "",
         preco: v.preco != null ? String(v.preco) : "", aceitaTroca: !!v.aceita_troca,
         opcionais: v.opcionais || [],
+        condicoes: v.condicoes || [],
         descricao: v.descricao || "",
         // Anúncio sem contato próprio: completa com o da loja/cadastro.
         nome: v.nome_contato || padrao?.nome || "", telefone: v.telefone || padrao?.telefone || "", cidade: v.cidade || padrao?.cidade || "",
@@ -121,6 +124,10 @@ export default function NovoAnuncio() {
       setFotosOriginais(v.fotos || []);
     })();
   }, []);
+
+  const alternarCondicao = (c: string) => {
+    setForm(f => ({ ...f, condicoes: f.condicoes.includes(c) ? f.condicoes.filter(x => x !== c) : [...f.condicoes, c] }));
+  };
 
   const toggleOpcional = (op: string) => {
     setForm(f => ({
@@ -139,7 +146,7 @@ export default function NovoAnuncio() {
     "Câmera de ré", "Sensor de estacionamento", "Controle de cruzeiro", "Volante multifuncional",
     "Computador de bordo", "Partida sem chave", "Carregador sem fio", "Faróis de LED",
     "Faróis de neblina", "Sensor de chuva", "Rodas de liga", "Teto solar", "Bancos de couro",
-    "Banco com regulagem de altura", "Tração 4x4", "Alarme", "Único dono", "Revisões na concessionária",
+    "Banco com regulagem de altura", "Tração 4x4", "Alarme",
   ];
 
   const inputStyle = {
@@ -227,6 +234,7 @@ export default function NovoAnuncio() {
       preco: lerPreco(form.preco),
       aceita_troca: form.aceitaTroca,
       opcionais: form.opcionais,
+      condicoes: form.condicoes,
       descricao: form.descricao,
       nome_contato: form.nome,
       telefone: form.telefone,
@@ -479,6 +487,23 @@ export default function NovoAnuncio() {
                       ))}
                     </div>
                   )}
+                </div>
+
+                {/* SITUAÇÃO DO VEÍCULO */}
+                <div>
+                  <div style={{ fontSize: 12, fontWeight: 500, color: "#1A1917", marginBottom: 4 }}>Situação do veículo</div>
+                  <div style={{ fontSize: 11.5, color: "#A8A49D", marginBottom: 10 }}>Marque só o que for verdade: aparece como selo no anúncio e o comprador pode filtrar por isso.</div>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                    {CONDICOES.map(({ nome }) => {
+                      const marcada = form.condicoes.includes(nome);
+                      return (
+                        <button key={nome} type="button" onClick={() => alternarCondicao(nome)}
+                          style={{ display: "inline-flex", alignItems: "center", gap: 5, padding: "7px 12px", borderRadius: 20, border: "1.5px solid", borderColor: marcada ? "#16A34A" : "#E8E6E1", background: marcada ? "#F0FDF4" : "#fff", color: marcada ? "#15803D" : "#1A1917", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
+                          {marcada && <Icone nome="check" tamanho={14} traco={2.6} />} {nome}
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
 
                 {/* OPCIONAIS */}

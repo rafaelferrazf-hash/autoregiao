@@ -12,6 +12,8 @@ import { listarVeiculosAtivos, opcoesDeFiltro } from "@/lib/dados/veiculos";
 import { filtrosParaQuery } from "@/lib/busca";
 import type { VeiculoComLoja } from "@/lib/tipos";
 import Icone from "@/components/Icone";
+import { ESTILOS } from "@/lib/estilos";
+import { FAIXAS_PARCELA } from "@/lib/financiamento";
 
 const MAX_HOME = 9;
 
@@ -131,6 +133,8 @@ export default function Home() {
                 <div style={{ fontSize: 16, fontWeight: 800, color: "#1A1917", marginBottom: 12 }}>Explore</div>
                 {[
                   ["Tipo", [["Carros", "/carros"], ["Motos", "/motos"], ["Utilitários", "/utilitarios"], ["Abaixo da FIPE", "/carros/abaixo-da-fipe"]]],
+                  ["Estilo", Object.entries(ESTILOS).map(([e, x]) => [x.nome, `/carros/${e}`])],
+                  ["Parcela", FAIXAS_PARCELA.map(p => [`Até R$ ${p.toLocaleString("pt-BR")}/mês`, `/veiculos?parcela_max=${p}`])],
                   ["Preço", [30, 50, 80, 100, 150].map(n => [`Carros até R$ ${n} mil`, `/carros/ate-${n}-mil`])],
                   ["Marcas", [...new Set(carros.filter(c => c.marca && c.tipo !== "moto" && c.tipo !== "utilitario").map(c => c.marca!.trim()))]
                     .sort((a, b) => a.localeCompare(b, "pt-BR")).map(m => [m, `/carros/${slug(m)}`])],

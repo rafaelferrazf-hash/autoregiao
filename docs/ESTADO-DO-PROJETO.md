@@ -101,7 +101,8 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
   estilos (`lib/estilos.ts`: /carros/primeiro-carro, familia, economicos, trabalho, 4x4). Tabela FIPE pública
   (`/tabela-fipe` com `components/ConsultaFipe`, `/tabela-fipe/[carros|motos]/[marca]` com os modelos; no sitemap;
   API Parallelum ~1000/dia → listas em cache 7 dias, valor 1 dia; NÃO criar página por modelo/ano com valor).
-  Ideias do Mobiauto para depois: comparar veículos, fotos deslizáveis no card, página "Encontre lojistas".
+  Página /lojas (lojas com veículos à venda, filtro por cidade); fotos deslizáveis no card (`components/GaleriaCard`,
+  até 6); comparar veículos (`lib/comparar.ts` no aparelho, até 3; `BotaoComparar`, `BarraComparar`, /comparar).
 - 2FA nas contas principais. App instalável (PWA), arrastar fotos, revisão de celular (375/320px).
 - Marca nova (01/10/2026), do manual em `C:\Users\rafae\AutoRegiao-Logo-Novo` (só PNG, sem vetor): logo AR, laranja
   #FF6600, grafite #1A1A1A, Exo 2 nos títulos (h1–h3). Slogan trocado para "COMPRE | VENDA | ANUNCIE" (o manual

@@ -10,9 +10,13 @@ workflows:
     integrations:
       app_store_connect: AutoRegiao
     environment:
+      # Perfil e certificado pelo "Reference name" de Settings → Code signing identities
+      # (a busca automática por bundle_identifier não achou o perfil).
       ios_signing:
-        distribution_type: app_store
-        bundle_identifier: br.com.autoregiao.app
+        provisioning_profiles:
+          - AutoRegiao App Store
+        certificates:
+          - AutoRegiao Distribuicao
       node: 22
       xcode: latest
     scripts:

@@ -182,9 +182,10 @@ Motivo da denúncia:
         .veiculo-grid { display: grid; grid-template-columns: 1fr 340px; gap: 24px; align-items: start; }
         .contato-fixo-espaco { display: none; }
         .so-celular { display: none; }
-        .semelhantes-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
-        @media (max-width: 900px) { .semelhantes-grid { grid-template-columns: repeat(3, 1fr); } }
-        @media (max-width: 768px) { .semelhantes-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; } }
+        .semelhantes-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+        @media (max-width: 900px) { .semelhantes-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+        @media (max-width: 480px) { .semelhantes-grid { grid-template-columns: minmax(0, 1fr) !important; } }
+        @media (max-width: 768px) { .semelhantes-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; } }
         .contato-sticky { position: sticky; top: 76px; }
         .contato-fixo-mobile { display: none !important; }
         .galeria-faixa { display: flex; gap: 8px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; background: #1A1A1A; }

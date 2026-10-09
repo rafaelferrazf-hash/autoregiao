@@ -82,7 +82,7 @@ export default async function PerfilLoja({ params }: { params: Promise<{ id: str
         .loja-grid { display: grid; grid-template-columns: 1fr 320px; gap: 20px; }
         .loja-topo { display: grid; grid-template-columns: minmax(0, 2.2fr) minmax(300px, 1fr); gap: 18px; align-items: stretch; }
         .loja-capa { background: #1A1A1A; border-radius: 14px; overflow: hidden; aspect-ratio: 16 / 9; max-width: 100%; }
-        .loja-carros { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
+        .loja-carros { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(240px, 100%), 1fr)); gap: 14px; }
         @media (max-width: 768px) {
           .loja-grid { grid-template-columns: 1fr !important; }
           .loja-topo { grid-template-columns: 1fr !important; }

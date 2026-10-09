@@ -36,10 +36,10 @@ export default function Favoritos() {
   return (
     <main style={{ background: "#F7F6F3", minHeight: "100vh" }}>
       <style>{`
-        .fav-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
-        @media (max-width: 900px) { .fav-grid { grid-template-columns: repeat(3, 1fr); } }
-        @media (max-width: 768px) { .fav-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; } .fav-nav-links { display: none !important; } }
-        @media (max-width: 480px) { .fav-grid { grid-template-columns: 1fr; } }
+        .fav-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+        @media (max-width: 900px) { .fav-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+        @media (max-width: 768px) { .fav-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; } .fav-nav-links { display: none !important; } }
+        @media (max-width: 480px) { .fav-grid { grid-template-columns: minmax(0, 1fr); } }
       `}</style>
 
       <nav style={{ background: "#fff", borderBottom: "1px solid #E8E6E1", height: 60, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 16px" }}>

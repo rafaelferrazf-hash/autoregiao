@@ -47,15 +47,15 @@ export default function Home() {
       <style>{`
         .nav-desktop { display: flex !important; }
         .nav-mobile { display: none !important; }
-        .cars-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
-        @media (max-width: 1024px) { .cars-grid { grid-template-columns: repeat(3, 1fr); } }
+        .cars-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+        @media (max-width: 1024px) { .cars-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
         @media (max-width: 768px) {
           .nav-desktop { display: none !important; }
           .nav-mobile { display: flex !important; }
-          .cars-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 10px !important; }
+          .cars-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 10px !important; }
         }
         @media (max-width: 480px) {
-          .cars-grid { grid-template-columns: 1fr !important; }
+          .cars-grid { grid-template-columns: minmax(0, 1fr) !important; }
         }
       `}</style>
 

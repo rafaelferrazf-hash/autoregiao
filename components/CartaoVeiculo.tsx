@@ -80,12 +80,12 @@ export default function CartaoVeiculo({ car, mostrarLoja = true, largura }: { ca
             {versao && <div style={{ fontSize: 12.5, color: "#7A7670", marginTop: 1, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{versao}</div>}
           </div>
 
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: 8, marginTop: 12 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: 8, marginTop: 12, flexWrap: "wrap" }}>
             <div style={{ display: "flex", flexDirection: "column", gap: 5, fontSize: 12, color: "#4A4740", minWidth: 0 }}>
               {formatarKm(car.km) && <span style={icone}><Icone nome="km" tamanho={15} /> {formatarKm(car.km)}</span>}
               {car.ano && <span style={icone}><Icone nome="calendario" tamanho={15} /> {car.ano}</span>}
             </div>
-            <div style={{ textAlign: "right" }}>
+            <div style={{ textAlign: "right", marginLeft: "auto" }}>
               <SeloPreco v={car} />
               <div style={{ fontSize: 19, fontWeight: 800, color: "#1A1917", lineHeight: 1.1, marginTop: 4, whiteSpace: "nowrap" }}>{formatarPreco(car.preco)}</div>
               {!!car.preco && <div style={{ fontSize: 11, color: "#7A7670", marginTop: 2, whiteSpace: "nowrap" }}>ou ≈ R$ {parcelaMensal(car.preco * (1 - ENTRADA_PADRAO)).toLocaleString("pt-BR")}/mês</div>}

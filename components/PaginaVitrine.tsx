@@ -18,10 +18,10 @@ export default function PaginaVitrine({ vitrine, veiculos, total }: { vitrine: V
     <main style={{ background: "#F7F6F3", minHeight: "100vh" }}>
       <style>{`
         .vit-grid { display: grid; grid-template-columns: 1fr 280px; gap: 20px; align-items: start; }
-        .vit-carros { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+        .vit-carros { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
         @media (max-width: 900px) { .vit-grid { grid-template-columns: 1fr; } }
-        @media (max-width: 768px) { .vit-carros { grid-template-columns: repeat(2, 1fr); gap: 10px; } .vit-links { display: none !important; } }
-        @media (max-width: 480px) { .vit-carros { grid-template-columns: 1fr; } }
+        @media (max-width: 768px) { .vit-carros { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; } .vit-links { display: none !important; } }
+        @media (max-width: 480px) { .vit-carros { grid-template-columns: minmax(0, 1fr); } }
       `}</style>
 
       <nav style={{ background: "#fff", borderBottom: "1px solid #E8E6E1", height: 60, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 16px" }}>

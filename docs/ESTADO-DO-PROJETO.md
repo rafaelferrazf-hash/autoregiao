@@ -171,8 +171,9 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
      Variáveis a criar na Vercel depois da conta Apple: `APNS_CHAVE_P8`, `APNS_CHAVE_ID`, `APNS_TIME_ID`.
      ✅ 06/10/2026: inscrição no Apple Developer feita pelo SITE (developer.apple.com, pessoa física, nome
      RAFAEL FERRAZ BARBOSA, ID Apple rafaelferrazf@hotmail.com) — pelo app pedia documento físico, que ele não tem;
-     pelo site não pediu. Cobrança RECUSADA pelo banco (compra internacional à noite): em 07/10 Rafael libera no banco e RESPONDE o
-     e-mail da Apple (texto pronto, sem dados do cartão); depois vem o "Welcome" (até 2 dias úteis). Endereço de cobrança sem acento.
+     pelo site não pediu. 1ª cobrança RECUSADA pelo banco (compra internacional à noite; "Duplicate order" ao tentar de novo).
+     09/10: a conta liberou "conclua a sua compra"; novo pedido feito de dia (cartão Visa no nome dele, CEP e telefone
+     preenchidos) → e-mail "Thank you for your order". Aguardando cobrança e o "Welcome" (até 2 dias úteis).
      Próximos: criar App ID com Push +
      app no App Store Connect → Codemagic (login GitHub, integração "AutoRegiao" com chave de API) → TestFlight
      no iPhone dele → capturas 6,9" → ficha, privacidade (rótulos) → revisão. Não testado num iPhone ainda.

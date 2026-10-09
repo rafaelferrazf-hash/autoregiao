@@ -23,6 +23,7 @@ export default function Painel() {
   // Dentro dos apps das lojas: sem cupom nem compra de plano (ver lib/appLoja.ts).
   const emApp = useEmAppDaLoja();
   const [abaAtiva, setAbaAtiva] = useState("dashboard");
+  const [menuConta, setMenuConta] = useState(false);
   const [nomeUsuario, setNomeUsuario] = useState("...");
   const [nomeLoja, setNomeLoja] = useState("Minha Loja");
   const [anunciosReais, setAnunciosReais] = useState<Awaited<ReturnType<typeof listarVeiculosDoUsuario>>["veiculos"]>([]);
@@ -272,9 +273,28 @@ export default function Painel() {
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <Link href="/painel/novo-anuncio" className="header-novo" style={{ padding: "7px 14px", background: "#FF6600", borderRadius: 7, fontSize: 12, fontWeight: 700, color: "#fff", textDecoration: "none", alignItems: "center" }}>+ Novo Anúncio</Link>
-            <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "5px 10px", border: "1.5px solid #E8E6E1", borderRadius: 8, background: "#F7F6F3", cursor: "pointer" }}>
-              <div style={{ width: 26, height: 26, background: "#FF6600", borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center", color: "#fff" }}><Icone nome="usuario" tamanho={16} /></div>
-              <span style={{ fontSize: 12, fontWeight: 500, color: "#1A1917" }}>{nomeUsuario}</span>
+            {/* Menu da conta (no celular é o único lugar com "Sair"; a barra lateral só aparece no computador). */}
+            <div style={{ position: "relative" }}>
+              <button type="button" onClick={() => setMenuConta(m => !m)} aria-expanded={menuConta} style={{ display: "flex", alignItems: "center", gap: 6, padding: "5px 10px", border: "1.5px solid #E8E6E1", borderRadius: 8, background: "#F7F6F3", cursor: "pointer" }}>
+                <div style={{ width: 26, height: 26, background: "#FF6600", borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center", color: "#fff" }}><Icone nome="usuario" tamanho={16} /></div>
+                <span style={{ fontSize: 12, fontWeight: 500, color: "#1A1917" }}>{nomeUsuario}</span>
+              </button>
+              {menuConta && (
+                <>
+                  <div onClick={() => setMenuConta(false)} style={{ position: "fixed", inset: 0, zIndex: 60 }} />
+                  <div style={{ position: "absolute", right: 0, top: "calc(100% + 6px)", zIndex: 61, background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 10, boxShadow: "0 8px 24px rgba(0,0,0,0.12)", minWidth: 190, overflow: "hidden" }}>
+                    {[
+                      { rotulo: "Ver o site", icone: "carro" as NomeIcone, acao: () => { window.location.href = "/"; } },
+                      { rotulo: "Perfil da loja", icone: "loja" as NomeIcone, acao: () => { setAbaAtiva("perfil"); setMenuConta(false); } },
+                      { rotulo: "Sair da conta", icone: "sair" as NomeIcone, acao: async () => { await sair(); window.location.href = "/login"; }, perigo: true },
+                    ].map(item => (
+                      <button key={item.rotulo} type="button" onClick={item.acao} style={{ display: "flex", alignItems: "center", gap: 10, width: "100%", padding: "12px 14px", border: "none", borderTop: item.perigo ? "1px solid #E8E6E1" : "none", background: "#fff", color: item.perigo ? "#DC2626" : "#1A1917", fontSize: 14, fontWeight: 500, cursor: "pointer", textAlign: "left" }}>
+                        <Icone nome={item.icone} tamanho={18} /> {item.rotulo}
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </header>

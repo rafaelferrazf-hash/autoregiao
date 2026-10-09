@@ -140,21 +140,6 @@ export default function Cadastro() {
               </div>
             ))}
 
-            {tipo === "particular" && (
-              <>
-                <div style={{ marginBottom: 14 }}>
-                  <div style={{ fontSize: 12, fontWeight: 500, color: "#1A1917", marginBottom: 5 }}>Veículo que deseja vender <span style={{ color: "#FF6600" }}>*</span></div>
-                  <input placeholder="Ex: Chevrolet Onix 2022" value={form.loja} onChange={e => setForm({ ...form, loja: e.target.value })}
-                    style={{ width: "100%", padding: "12px 14px", border: "1.5px solid #E8E6E1", borderRadius: 8, fontSize: 15, color: "#1A1917", background: "#F7F6F3", outline: "none", boxSizing: "border-box" }} />
-                </div>
-                <div style={{ marginBottom: 14 }}>
-                  <div style={{ fontSize: 12, fontWeight: 500, color: "#1A1917", marginBottom: 5 }}>Cidade <span style={{ color: "#FF6600" }}>*</span></div>
-                  <input placeholder="Ex: Teixeira de Freitas" value={form.cidade} onChange={e => setForm({ ...form, cidade: e.target.value })}
-                    style={{ width: "100%", padding: "12px 14px", border: "1.5px solid #E8E6E1", borderRadius: 8, fontSize: 15, color: "#1A1917", background: "#F7F6F3", outline: "none", boxSizing: "border-box" }} />
-                </div>
-              </>
-            )}
-
             {tipo === "lojista" && (
               <>
                 <div style={{ marginBottom: 14 }}>

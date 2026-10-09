@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { EMAIL_CONTATO } from "@/lib/site";
+import LinkDiagnostico from "@/components/LinkDiagnostico";
 
 // Rodapé das páginas públicas: links + aviso de que a AutoRegião só divulga anúncios.
 export default function Rodape() {
@@ -15,6 +16,7 @@ export default function Rodape() {
         <Link href="/anunciar" style={link}>Anunciar</Link>
         <Link href="/termos" style={link}>Termos de Uso</Link>
         <Link href="/privacidade" style={link}>Política de Privacidade</Link>
+        <LinkDiagnostico estilo={link} />
         <a href={`mailto:${EMAIL_CONTATO}`} style={link}>{EMAIL_CONTATO}</a>
       </div>
       <p style={{ maxWidth: 720, margin: "0 auto", fontSize: 11, lineHeight: 1.5, color: "#A8A49D" }}>

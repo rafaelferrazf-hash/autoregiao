@@ -34,6 +34,23 @@ export default function Diagnostico() {
       { timeout: 20000, maximumAge: 0 },
     )), 30000);
     log(`7. Resposta: ${r}`);
+    if (p.Geolocation) {
+      log("8. Localização nativa: pedindo...");
+      try { log(`8. Permissão: ${JSON.stringify(await comTempo(p.Geolocation.requestPermissions(), 30000))}`); } catch (e) { log(`8. ERRO: ${(e as Error).message}`); }
+      try {
+        const g = await comTempo(p.Geolocation.getCurrentPosition({ enableHighAccuracy: false, timeout: 20000 }) as Promise<{ coords: { accuracy: number } }>, 30000);
+        log(`8. Resposta: ${g === "SEM RESPOSTA" ? g : `ok (precisão ${Math.round(g.coords.accuracy)} m)`}`);
+      } catch (e) { log(`8. ERRO: ${(e as Error).message}`); }
+    } else log("8. Localização nativa: ainda não está no app (precisa da versão nova pelo TestFlight)");
+    if (p.PushNotifications) {
+      log("9. Registrando o celular para avisos...");
+      const reg = await comTempo(new Promise<string>(res => {
+        p.PushNotifications.addListener("registration", (t: unknown) => res(`ok (código recebido, ${String((t as { value?: string }).value ?? "").length} caracteres)`));
+        p.PushNotifications.addListener("registrationError", (e: unknown) => res(`erro: ${JSON.stringify(e)}`));
+        p.PushNotifications.register().catch((e: unknown) => res(`erro: ${String(e)}`));
+      }), 20000);
+      log(`9. Resposta: ${reg}`);
+    }
     log("Fim. Tire um print desta tela.");
     setRodando(false);
   }

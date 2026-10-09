@@ -35,6 +35,24 @@ const COORDENADAS: Record<string, [number, number]> = {
   "sao mateus": [-18.716, -39.859],
 };
 
+// Nome para mostrar ("Você está em ..."), a partir da chave sem acento.
+const NOMES = ["Teixeira de Freitas", "Alcobaça", "Caravelas", "Nova Viçosa", "Posto da Mata", "Mucuri", "Prado", "Itamaraju",
+  "Medeiros Neto", "Itanhém", "Vereda", "Lajedão", "Ibirapuã", "Jucuruçu", "Eunápolis", "Porto Seguro", "Itabela", "Guaratinga",
+  "Santa Cruz Cabrália", "Belmonte", "Itagimirim", "Nanuque", "Serra dos Aimorés", "Carlos Chagas", "Pedro Canário", "Mucurici",
+  "Montanha", "Pinheiros", "Conceição da Barra", "São Mateus"];
+
+// Cidade (da lista da região) onde a pessoa está: a mais próxima, até 35 km. Fora disso, null.
+export function cidadeOndeEsta(posicao: [number, number]): string | null {
+  let melhor: { nome: string; km: number } | null = null;
+  for (const nome of NOMES) {
+    const coord = COORDENADAS[normalizar(nome)];
+    if (!coord) continue;
+    const km = distanciaKm(posicao, coord);
+    if (!melhor || km < melhor.km) melhor = { nome, km };
+  }
+  return melhor && melhor.km <= 35 ? melhor.nome : null;
+}
+
 // Mais longe que isso não é "perto": melhor avisar que ainda não há anúncios na região.
 export const RAIO_MAXIMO_KM = 150;
 
@@ -81,6 +99,9 @@ export function distanciaAte(cidade: string | null | undefined, posicao: [number
 
 // Pede a localização (o aparelho mostra o pedido de permissão na 1ª vez e lembra a resposta).
 export function pegarLocalizacao(): Promise<[number, number]> {
+  // No app de iPhone a localização do navegador (WKWebView) nunca responde: usa a nativa do iPhone.
+  const nativa = localizacaoNativa();
+  if (nativa) return nativa.then(guardarPosicao);
   return new Promise((resolve, reject) => {
     if (typeof navigator === "undefined" || !navigator.geolocation) return reject(new Error("indisponivel"));
     // Alguns aparelhos/apps nunca respondem: o botão não pode ficar em "Procurando..." para sempre.
@@ -88,12 +109,42 @@ export function pegarLocalizacao(): Promise<[number, number]> {
     navigator.geolocation.getCurrentPosition(
       p => {
         clearTimeout(tempo);
-        posicaoAtual = [p.coords.latitude, p.coords.longitude];
-        ouvintes.forEach(o => o());
-        resolve(posicaoAtual);
+        resolve(guardarPosicao([p.coords.latitude, p.coords.longitude]));
       },
       e => { clearTimeout(tempo); reject(new Error(e.code === e.PERMISSION_DENIED ? "negada" : "falhou")); },
       { enableHighAccuracy: false, timeout: 15000, maximumAge: 10 * 60 * 1000 },
     );
+  });
+}
+
+function guardarPosicao(posicao: [number, number]): [number, number] {
+  posicaoAtual = posicao;
+  ouvintes.forEach(o => o());
+  return posicao;
+}
+
+// Plugin @capacitor/geolocation do app de iPhone (app-ios/). Ele mesmo pede a permissão.
+type PluginLocal = {
+  checkPermissions: () => Promise<{ location: string }>;
+  requestPermissions: () => Promise<{ location: string }>;
+  getCurrentPosition: (o: { enableHighAccuracy?: boolean; timeout?: number; maximumAge?: number }) => Promise<{ coords: { latitude: number; longitude: number } }>;
+};
+function localizacaoNativa(): Promise<[number, number]> | null {
+  if (typeof window === "undefined") return null;
+  const cap = (window as unknown as { Capacitor?: { isNativePlatform?: () => boolean; Plugins?: Record<string, unknown> } }).Capacitor;
+  const geo = cap?.isNativePlatform?.() ? (cap.Plugins?.Geolocation as PluginLocal | undefined) : undefined;
+  if (!geo) return null;
+  return new Promise((resolve, reject) => {
+    const tempo = setTimeout(() => reject(new Error("falhou")), 60_000);
+    (async () => {
+      let permissao = (await geo.checkPermissions()).location;
+      if (permissao !== "granted") permissao = (await geo.requestPermissions()).location;
+      if (permissao !== "granted") throw new Error("negada");
+      const p = await geo.getCurrentPosition({ enableHighAccuracy: false, timeout: 20_000, maximumAge: 10 * 60 * 1000 });
+      return [p.coords.latitude, p.coords.longitude] as [number, number];
+    })().then(r => { clearTimeout(tempo); resolve(r); }, e => {
+      clearTimeout(tempo);
+      reject(new Error(/denied|negada|permission/i.test(String((e as Error)?.message)) ? "negada" : "falhou"));
+    });
   });
 }

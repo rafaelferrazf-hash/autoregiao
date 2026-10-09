@@ -66,6 +66,8 @@
 	<array>
 		<string>remote-notification</string>
 	</array>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Usamos sua localização só quando você toca em "Perto de mim", para mostrar os veículos da cidade mais próxima. Ela não é guardada.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Usamos sua localização só quando você toca em "Perto de mim", para mostrar os veículos da cidade mais próxima. Ela não é guardada.</string>
 	<key>ITSAppUsesNonExemptEncryption</key>

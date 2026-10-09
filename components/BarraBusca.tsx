@@ -1,8 +1,8 @@
 "use client";
-import { useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { paraNumero, type Filtros, type TipoVeiculo } from "@/lib/busca";
 import Icone, { type NomeIcone } from "@/components/Icone";
-import { cidadeMaisProxima, pegarLocalizacao } from "@/lib/pertoDeMim";
+import { cidadeMaisProxima, cidadeOndeEsta, lerPosicao, ouvirPosicao, pegarLocalizacao } from "@/lib/pertoDeMim";
 
 export const ANOS: [string, string][] = [["", "Qualquer ano"], ["2024", "2024 ou mais novo"], ["2021", "2021 ou mais novo"], ["2018", "2018 ou mais novo"], ["2015", "2015 ou mais novo"], ["2010", "2010 ou mais novo"]];
 const ABAS: [TipoVeiculo | undefined, string, NomeIcone | null][] = [[undefined, "Todos", null], ["carro", "Carros", "carro"], ["moto", "Motos", "moto"], ["utilitario", "Utilitários", "utilitario"]];
@@ -28,14 +28,23 @@ export default function BarraBusca({ filtros, cidades, onBuscar }: {
   // "Perto de mim": só pede a localização quando a pessoa toca; busca na cidade com anúncios mais próxima.
   const [procurando, setProcurando] = useState(false);
   const [avisoLocal, setAvisoLocal] = useState("");
+  // Cidade onde a pessoa está (depois do "Perto de mim"; posição só na memória da aba).
+  const posicao = useSyncExternalStore(ouvirPosicao, lerPosicao, () => null);
+  const localAtual = posicao ? cidadeOndeEsta(posicao) : null;
   async function pertoDeMim() {
     setAvisoLocal("");
     setProcurando(true);
     try {
-      const perto = cidadeMaisProxima(await pegarLocalizacao(), cidades);
+      const aqui = await pegarLocalizacao();
+      const ondeEsta = cidadeOndeEsta(aqui);
+      const perto = cidadeMaisProxima(aqui, cidades);
       if (!perto) {
-        setAvisoLocal("Ainda não há veículos anunciados perto de você. Veja as cidades disponíveis na lista.");
+        setAvisoLocal(`${ondeEsta ? `Você está em ${ondeEsta}. ` : ""}Ainda não há veículos anunciados perto de você. Veja as cidades disponíveis na lista.`);
       } else {
+        // Ex.: está em Prado, mas os anúncios mais perto são de Teixeira de Freitas.
+        if (ondeEsta && ondeEsta.toLowerCase() !== perto.cidade.toLowerCase()) {
+          setAvisoLocal(`Você está em ${ondeEsta}. Mostrando os veículos mais perto: ${perto.cidade} (a ${Math.round(perto.km)} km).`);
+        }
         setRascunho(r => ({ ...r, cidade: perto.cidade }));
         onBuscar({ ...rascunho, cidade: perto.cidade });
       }
@@ -90,6 +99,11 @@ export default function BarraBusca({ filtros, cidades, onBuscar }: {
           <div>{rotulo("KM até")}<input inputMode="numeric" placeholder="Qualquer km" value={rascunho.km_max ? rascunho.km_max.toLocaleString("pt-BR") : ""} onChange={e => mudaNumero("km_max", e.target.value)} style={campo} /></div>
           <button type="submit" style={{ padding: "10px 22px", background: "#FF6600", color: "#fff", border: "none", borderRadius: 7, fontSize: 14, fontWeight: 700, cursor: "pointer", whiteSpace: "nowrap" }}><Icone nome="buscar" /> Buscar</button>
         </form>
+        {localAtual && !avisoLocal && (
+          <div style={{ marginTop: 10, fontSize: 12.5, color: "rgba(255,255,255,0.8)", display: "flex", alignItems: "center", gap: 5 }}>
+            <Icone nome="local" cor="#FF8A3D" tamanho={14} /> Você está em <strong style={{ color: "#fff" }}>{localAtual}</strong>
+          </div>
+        )}
         {avisoLocal && <div role="status" style={{ marginTop: 10, fontSize: 12.5, color: "rgba(255,255,255,0.75)", lineHeight: 1.5 }}><Icone nome="info" /> {avisoLocal}</div>}
       </div>
     </section>

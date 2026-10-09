@@ -173,7 +173,7 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
      RAFAEL FERRAZ BARBOSA, ID Apple rafaelferrazf@hotmail.com) — pelo app pedia documento físico, que ele não tem;
      pelo site não pediu. 1ª cobrança RECUSADA pelo banco (compra internacional à noite; "Duplicate order" ao tentar de novo).
      09/10: a conta liberou "conclua a sua compra"; novo pedido feito de dia (cartão Visa no nome dele, CEP e telefone
-     preenchidos) → e-mail "Thank you for your order". Aguardando cobrança e o "Welcome" (até 2 dias úteis).
+     preenchidos) → pedido D005334001; COBRANÇA APROVADA no banco em 09/10. Aguardando o "Welcome" (até 2 dias úteis).
      Próximos: criar App ID com Push +
      app no App Store Connect → Codemagic (login GitHub, integração "AutoRegiao" com chave de API) → TestFlight
      no iPhone dele → capturas 6,9" → ficha, privacidade (rótulos) → revisão. Não testado num iPhone ainda.

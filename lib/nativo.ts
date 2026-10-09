@@ -41,7 +41,11 @@ export async function compartilharNativo(o: { title: string; text: string; url: 
 export async function pedirTokenPush(): Promise<string | null> {
   const push = plugin<PluginPush>("PushNotifications");
   if (!push) return null;
-  const permissao = await push.requestPermissions();
+  // Nunca deixa o botão travado em "Ativando...": se o iPhone não responder, desiste em 60 s.
+  const permissao = await Promise.race([
+    push.requestPermissions(),
+    new Promise<{ receive: string }>(resolve => setTimeout(() => resolve({ receive: "sem-resposta" }), 60_000)),
+  ]);
   if (permissao.receive !== "granted") return null;
   return new Promise(resolve => {
     const ouvintes: Promise<Ouvinte>[] = [];

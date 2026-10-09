@@ -83,13 +83,16 @@ export function distanciaAte(cidade: string | null | undefined, posicao: [number
 export function pegarLocalizacao(): Promise<[number, number]> {
   return new Promise((resolve, reject) => {
     if (typeof navigator === "undefined" || !navigator.geolocation) return reject(new Error("indisponivel"));
+    // Alguns aparelhos/apps nunca respondem: o botão não pode ficar em "Procurando..." para sempre.
+    const tempo = setTimeout(() => reject(new Error("falhou")), 25_000);
     navigator.geolocation.getCurrentPosition(
       p => {
+        clearTimeout(tempo);
         posicaoAtual = [p.coords.latitude, p.coords.longitude];
         ouvintes.forEach(o => o());
         resolve(posicaoAtual);
       },
-      e => reject(new Error(e.code === e.PERMISSION_DENIED ? "negada" : "falhou")),
+      e => { clearTimeout(tempo); reject(new Error(e.code === e.PERMISSION_DENIED ? "negada" : "falhou")); },
       { enableHighAccuracy: false, timeout: 15000, maximumAge: 10 * 60 * 1000 },
     );
   });

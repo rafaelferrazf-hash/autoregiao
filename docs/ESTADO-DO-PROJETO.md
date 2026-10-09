@@ -55,7 +55,7 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
   `/loja/[id]`, `/favoritos`, `/alerta`, `/anunciar`, `/painel` (+ `/novo-anuncio`, `/planos`), `/admin`,
   `/login`, `/cadastro`, `/recuperar-senha`, `/redefinir-senha`, `/pagamento/retorno`, `/termos`, `/privacidade`, `/offline`.
 - SQL já rodado: `rls-fase0`, `fase1-seguranca`, `fase2`, `fase3`, `fase3-fotos`, `fase4a`, `fase4b`,
-  `fase5-alertas`, `fase6-fipe`, `fase7-filtros`, `fase8-logo-loja`, `fase9-excluir-conta`, `fase10-push`, `fase11-capa-loja`, `fase12-carroceria`, `fase13-demonstracao`, `fase14-demonstracao-privada`, `fase15-planos-agendados-vendido`, `fase16-situacao-veiculo`, `fase17-prioridade-premium`. Modelos de e-mail do Auth: `supabase/emails/`.
+  `fase5-alertas`, `fase6-fipe`, `fase7-filtros`, `fase8-logo-loja`, `fase9-excluir-conta`, `fase10-push`, `fase11-capa-loja`, `fase12-carroceria`, `fase13-demonstracao`, `fase14-demonstracao-privada`, `fase15-planos-agendados-vendido`, `fase16-situacao-veiculo`, `fase17-prioridade-premium`, `fase18-lojas-teste` (30 lojas fictícias, 450 anúncios demo; apagar antes do lançamento — linhas no topo do arquivo), `fase19`+`fase20` (lista `acesso_demonstracao`: e-mails que veem os anúncios demo; mibososantos@gmail.com liberado). Modelos de e-mail do Auth: `supabase/emails/`.
 
 ## Regras de negócio importantes
 - Planos (`lib/planos.ts`): básico R$89/10 anúncios, profissional R$159/30 + destaque, premium R$299/ilimitado + destaque;
@@ -191,6 +191,9 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
      "repetido" apagou o único). submit_to_testflight: false (teste interno não precisa de revisão).
      ✅ 09/10: 1ª montagem OK (compilação 5, versão 1.0.0) → TestFlight, grupo interno "Equipe" com o Rafael → app ABRIU
      no iPhone dele (barra de status ok, site carregando).
+     ✅ 09/10: nova compilação com faixa grafite fixa atrás da barra de status (`AppViewController` em
+     SceneDelegate.swift — o site passava por baixo da hora) e permissão de localização ("Perto de mim") —
+     testada no iPhone: OK. Mudanças só do app (faixa, abertura, permissões) exigem nova montagem + atualizar no TestFlight.
      Próximos (antigo): app no App Store Connect → Codemagic (login GitHub, integração "AutoRegiao" com chave de API) → TestFlight
      no iPhone dele → capturas 6,9" → ficha, privacidade (rótulos) → revisão. Não testado num iPhone ainda.
    - Android 1.0.3 (código 4, abre em `/?origem=app`) gerado e assinado em `autoregiao-android\publicar\` —

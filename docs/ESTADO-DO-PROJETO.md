@@ -176,7 +176,15 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
      preenchidos) → pedido D005334001; COBRANÇA APROVADA no banco em 09/10; conta ATIVA em 09/10.
      ✅ 09/10: App ID "AutoRegiao" (br.com.autoregiao.app, Push Notifications) registrado; chave APNs "AutoRegiao Push"
      (Sandbox & Production, Team Scoped) criada — .p8 baixado (cópia no Drive do Rafael); APNS_CHAVE_P8/_ID/TIME_ID na Vercel (Production).
-     Próximos: app no App Store Connect → Codemagic (login GitHub, integração "AutoRegiao" com chave de API) → TestFlight
+     ✅ 09/10: app no App Store Connect ("AutoRegião: Carros da Região", SKU autoregiao-ios, pt-BR); chave de API "Codemagic"
+     (Gerente de apps) cadastrada no Codemagic como integração "AutoRegiao"; Codemagic (login GitHub, acesso só ao repo
+     autoregiao, Personal Account): certificado "AutoRegiao Distribuicao" (Apple Distribution, gerado pelo Codemagic) e perfil
+     "AutoRegiao App Store" (criado no portal da Apple, ENVIADO MANUALMENTE com esse Reference name) — o yaml aponta os dois
+     pelo nome (a busca automática falhava; cuidado: a tela do Codemagic chegou a mostrar itens repetidos, e apagar o
+     "repetido" apagou o único). submit_to_testflight: false (teste interno não precisa de revisão).
+     ✅ 09/10: 1ª montagem OK (compilação 5, versão 1.0.0) → TestFlight, grupo interno "Equipe" com o Rafael → app ABRIU
+     no iPhone dele (barra de status ok, site carregando).
+     Próximos (antigo): app no App Store Connect → Codemagic (login GitHub, integração "AutoRegiao" com chave de API) → TestFlight
      no iPhone dele → capturas 6,9" → ficha, privacidade (rótulos) → revisão. Não testado num iPhone ainda.
    - Android 1.0.3 (código 4, abre em `/?origem=app`) gerado e assinado em `autoregiao-android\publicar\` —
      ✅ enviado ao teste fechado em 05/10 (em revisão).

@@ -55,7 +55,7 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
   `/loja/[id]`, `/favoritos`, `/alerta`, `/anunciar`, `/painel` (+ `/novo-anuncio`, `/planos`), `/admin`,
   `/login`, `/cadastro`, `/recuperar-senha`, `/redefinir-senha`, `/pagamento/retorno`, `/termos`, `/privacidade`, `/offline`.
 - SQL já rodado: `rls-fase0`, `fase1-seguranca`, `fase2`, `fase3`, `fase3-fotos`, `fase4a`, `fase4b`,
-  `fase5-alertas`, `fase6-fipe`, `fase7-filtros`, `fase8-logo-loja`, `fase9-excluir-conta`, `fase10-push`, `fase11-capa-loja`, `fase12-carroceria`, `fase13-demonstracao`, `fase14-demonstracao-privada`, `fase15-planos-agendados-vendido`, `fase16-situacao-veiculo`. Modelos de e-mail do Auth: `supabase/emails/`.
+  `fase5-alertas`, `fase6-fipe`, `fase7-filtros`, `fase8-logo-loja`, `fase9-excluir-conta`, `fase10-push`, `fase11-capa-loja`, `fase12-carroceria`, `fase13-demonstracao`, `fase14-demonstracao-privada`, `fase15-planos-agendados-vendido`, `fase16-situacao-veiculo`, `fase17-prioridade-premium`. Modelos de e-mail do Auth: `supabase/emails/`.
 
 ## Regras de negócio importantes
 - Planos (`lib/planos.ts`): básico R$89/10 anúncios, profissional R$159/30 + destaque, premium R$299/ilimitado + destaque;
@@ -103,6 +103,13 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
   API Parallelum ~1000/dia → listas em cache 7 dias, valor 1 dia; NÃO criar página por modelo/ano com valor).
   Página /lojas (lojas com veículos à venda, filtro por cidade); fotos deslizáveis no card (`components/GaleriaCard`,
   até 6); comparar veículos (`lib/comparar.ts` no aparelho, até 3; `BotaoComparar`, `BarraComparar`, /comparar).
+- 09/10/2026: card novo (modelo Mobiauto + nosso): MARCA MODELO / versão, km e ano com ícones, preço + "ou ≈ R$/mês",
+  botão WhatsApp no card (conta como contato) + "Ver detalhes", cidade com "a X km" após "Perto de mim"
+  (`lib/pertoDeMim.ts`, localização só na memória da aba; botão na BarraBusca; permissão NSLocationWhenInUse no iOS).
+  Planos diferenciados (fase17, `veiculos.prioridade` calculada pelo banco): Premium/vitalício = 2 (vitrine "Ofertas em
+  destaque" na página inicial — `components/VitrinePremium`, logo da loja no card, "Loja Premium"); Profissional e
+  período grátis = 1 (borda + "Destaque"); Básico/particular = 0. Listas ordenam por prioridade. Painel no celular
+  reorganizado + menu da conta com "Sair". Cadastro de particular sem veículo/cidade. App iPhone no TestFlight.
 - 2FA nas contas principais. App instalável (PWA), arrastar fotos, revisão de celular (375/320px).
 - Marca nova (01/10/2026), do manual em `C:\Users\rafae\AutoRegiao-Logo-Novo` (só PNG, sem vetor): logo AR, laranja
   #FF6600, grafite #1A1A1A, Exo 2 nos títulos (h1–h3). Slogan trocado para "COMPRE | VENDA | ANUNCIE" (o manual

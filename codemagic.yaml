@@ -37,4 +37,6 @@ workflows:
     publishing:
       app_store_connect:
         auth: integration
-        submit_to_testflight: true
+        # Teste interno (Rafael) não precisa de revisão; "true" manda para a revisão do teste externo,
+        # que exige "Informações de teste" preenchidas no App Store Connect.
+        submit_to_testflight: false

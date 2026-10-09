@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { paraNumero, type Filtros, type TipoVeiculo } from "@/lib/busca";
 import Icone, { type NomeIcone } from "@/components/Icone";
+import { cidadeMaisProxima, pegarLocalizacao } from "@/lib/pertoDeMim";
 
 export const ANOS: [string, string][] = [["", "Qualquer ano"], ["2024", "2024 ou mais novo"], ["2021", "2021 ou mais novo"], ["2018", "2018 ou mais novo"], ["2015", "2015 ou mais novo"], ["2010", "2010 ou mais novo"]];
 const ABAS: [TipoVeiculo | undefined, string, NomeIcone | null][] = [[undefined, "Todos", null], ["carro", "Carros", "carro"], ["moto", "Motos", "moto"], ["utilitario", "Utilitários", "utilitario"]];
@@ -23,6 +24,28 @@ export default function BarraBusca({ filtros, cidades, onBuscar }: {
   }
 
   const muda = (campo: keyof Filtros, valor: string) => setRascunho(r => ({ ...r, [campo]: valor || undefined }));
+
+  // "Perto de mim": só pede a localização quando a pessoa toca; busca na cidade com anúncios mais próxima.
+  const [procurando, setProcurando] = useState(false);
+  const [avisoLocal, setAvisoLocal] = useState("");
+  async function pertoDeMim() {
+    setAvisoLocal("");
+    setProcurando(true);
+    try {
+      const perto = cidadeMaisProxima(await pegarLocalizacao(), cidades);
+      if (!perto) {
+        setAvisoLocal("Ainda não há veículos anunciados perto de você. Veja as cidades disponíveis na lista.");
+      } else {
+        setRascunho(r => ({ ...r, cidade: perto.cidade }));
+        onBuscar({ ...rascunho, cidade: perto.cidade });
+      }
+    } catch (e) {
+      setAvisoLocal((e as Error).message === "negada"
+        ? "Localização não permitida. Para usar, libere a localização nos ajustes do celular, ou escolha a cidade na lista."
+        : "Não foi possível saber onde você está. Escolha a cidade na lista.");
+    }
+    setProcurando(false);
+  }
   const mudaNumero = (campo: keyof Filtros, valor: string) => setRascunho(r => ({ ...r, [campo]: paraNumero(valor) }));
 
   const rotulo = (t: string) => <div style={{ fontSize: 10, fontWeight: 500, color: "rgba(255,255,255,0.5)", letterSpacing: 0.4, textTransform: "uppercase", marginBottom: 5 }}>{t}</div>;
@@ -46,7 +69,13 @@ export default function BarraBusca({ filtros, cidades, onBuscar }: {
         </div>
         <form className="barra-busca-grid" onSubmit={e => { e.preventDefault(); onBuscar(rascunho); }}>
           <div>{rotulo("Marca / Modelo")}<input placeholder="Ex: Onix, HB20..." value={rascunho.q ?? ""} onChange={e => muda("q", e.target.value)} style={campo} /></div>
-          <div>{rotulo("Cidade")}
+          <div>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8 }}>
+              {rotulo("Cidade")}
+              <button type="button" onClick={pertoDeMim} disabled={procurando} style={{ background: "none", border: "none", padding: 0, marginBottom: 5, color: "#FF8A3D", fontSize: 11.5, fontWeight: 600, cursor: "pointer", whiteSpace: "nowrap", display: "inline-flex", alignItems: "center", gap: 3 }}>
+                <Icone nome="local" tamanho={13} /> {procurando ? "Procurando..." : "Perto de mim"}
+              </button>
+            </div>
             <select value={rascunho.cidade ?? ""} onChange={e => muda("cidade", e.target.value)} style={{ ...campo, color: rascunho.cidade ? "#fff" : "rgba(255,255,255,0.6)" }}>
               <option value="" style={opcao}>Todas as cidades</option>
               {cidades.map(c => <option key={c} value={c} style={opcao}>{c}</option>)}
@@ -61,6 +90,7 @@ export default function BarraBusca({ filtros, cidades, onBuscar }: {
           <div>{rotulo("KM até")}<input inputMode="numeric" placeholder="Qualquer km" value={rascunho.km_max ? rascunho.km_max.toLocaleString("pt-BR") : ""} onChange={e => mudaNumero("km_max", e.target.value)} style={campo} /></div>
           <button type="submit" style={{ padding: "10px 22px", background: "#FF6600", color: "#fff", border: "none", borderRadius: 7, fontSize: 14, fontWeight: 700, cursor: "pointer", whiteSpace: "nowrap" }}><Icone nome="buscar" /> Buscar</button>
         </form>
+        {avisoLocal && <div role="status" style={{ marginTop: 10, fontSize: 12.5, color: "rgba(255,255,255,0.75)", lineHeight: 1.5 }}><Icone nome="info" /> {avisoLocal}</div>}
       </div>
     </section>
   );

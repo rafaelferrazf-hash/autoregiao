@@ -17,7 +17,7 @@ function jwtApns(): string {
   if (jwtGuardado && Date.now() - jwtGuardado.em < 50 * 60_000) return jwtGuardado.valor;
   const b64 = (o: object) => Buffer.from(JSON.stringify(o)).toString("base64url");
   const corpo = `${b64({ alg: "ES256", kid: process.env.APNS_CHAVE_ID })}.${b64({ iss: process.env.APNS_TIME_ID, iat: Math.floor(Date.now() / 1000) })}`;
-  const chave = createPrivateKey((process.env.APNS_CHAVE_P8 as string).replace(/\n/g, "\n"));
+  const chave = createPrivateKey((process.env.APNS_CHAVE_P8 as string).replace(/\\n/g, "\n"));
   const assinatura = sign("sha256", Buffer.from(corpo), { key: chave, dsaEncoding: "ieee-p1363" }).toString("base64url");
   jwtGuardado = { valor: `${corpo}.${assinatura}`, em: Date.now() };
   return jwtGuardado.valor;

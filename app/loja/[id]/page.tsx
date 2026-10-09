@@ -6,7 +6,7 @@ import LogoLoja from "@/components/LogoLoja";
 import Rodape from "@/components/Rodape";
 import { notFound } from "next/navigation";
 import { criarClienteAnonimo, criarClienteServidor } from "@/lib/supabase-servidor";
-import type { Loja, Veiculo } from "@/lib/tipos";
+import { COLUNAS_CARD, type Loja, type VeiculoComLoja } from "@/lib/tipos";
 import type { Metadata } from "next";
 import Icone, { type NomeIcone } from "@/components/Icone";
 
@@ -58,11 +58,11 @@ export default async function PerfilLoja({ params }: { params: Promise<{ id: str
   // Com a sessão de quem visita: o dono também vê os próprios anúncios de demonstração (fase14).
   const { data } = await (await criarClienteServidor())
     .from("veiculos")
-    .select("id, nome, ano, km, combustivel, preco, fotos, destaque, fipe_valor, condicoes")
+    .select(COLUNAS_CARD)
     .eq("loja_id", id)
     .eq("ativo", true)
     .order("criado_em", { ascending: false });
-  const veiculos = (data ?? []) as Pick<Veiculo, "id" | "nome" | "ano" | "km" | "combustivel" | "preco" | "fotos" | "destaque" | "fipe_valor" | "condicoes">[];
+  const veiculos = (data ?? []) as VeiculoComLoja[];
 
   const telefone = (loja.telefone || "").replace(/\D/g, "");
   const whatsapp = (loja.whatsapp || loja.telefone || "").replace(/\D/g, "");

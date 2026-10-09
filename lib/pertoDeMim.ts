@@ -65,12 +65,30 @@ export function cidadeMaisProxima(posicao: [number, number], cidades: string[]):
   return melhor && melhor.km <= RAIO_MAXIMO_KM ? melhor : null;
 }
 
+// Última posição do "Perto de mim", só na memória da aba (some ao fechar; nada é guardado).
+// Os cards usam para mostrar "a X km".
+let posicaoAtual: [number, number] | null = null;
+const ouvintes = new Set<() => void>();
+export function ouvirPosicao(ouvinte: () => void) {
+  ouvintes.add(ouvinte);
+  return () => { ouvintes.delete(ouvinte); };
+}
+export const lerPosicao = () => posicaoAtual;
+export function distanciaAte(cidade: string | null | undefined, posicao: [number, number] | null): number | null {
+  const coord = cidade ? COORDENADAS[normalizar(cidade)] : undefined;
+  return coord && posicao ? distanciaKm(posicao, coord) : null;
+}
+
 // Pede a localização (o aparelho mostra o pedido de permissão na 1ª vez e lembra a resposta).
 export function pegarLocalizacao(): Promise<[number, number]> {
   return new Promise((resolve, reject) => {
     if (typeof navigator === "undefined" || !navigator.geolocation) return reject(new Error("indisponivel"));
     navigator.geolocation.getCurrentPosition(
-      p => resolve([p.coords.latitude, p.coords.longitude]),
+      p => {
+        posicaoAtual = [p.coords.latitude, p.coords.longitude];
+        ouvintes.forEach(o => o());
+        resolve(posicaoAtual);
+      },
       e => reject(new Error(e.code === e.PERMISSION_DENIED ? "negada" : "falhou")),
       { enableHighAccuracy: false, timeout: 15000, maximumAge: 10 * 60 * 1000 },
     );

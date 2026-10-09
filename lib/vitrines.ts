@@ -1,6 +1,6 @@
 import { criarClienteAnonimo, criarClienteServidor } from "@/lib/supabase-servidor";
 import { aplicarFiltros, type Filtros, type TipoVeiculo } from "@/lib/busca";
-import type { VeiculoComLoja } from "@/lib/tipos";
+import { COLUNAS_CARD, type VeiculoComLoja } from "@/lib/tipos";
 import { slug } from "@/lib/nomesVeiculo";
 import { carroceriaDoSlug, pluralCarroceria, slugCarroceria } from "@/lib/carroceria";
 import { ESTILOS, ehEstilo } from "@/lib/estilos";
@@ -184,10 +184,10 @@ export async function montarVitrine(tipoRota: TipoRota, segmentos: string[]): Pr
 export async function veiculosDaVitrine(filtros: Filtros) {
   const consulta = aplicarFiltros(
     // Com a sessão de quem visita: o dono também vê os próprios anúncios de demonstração (fase14).
-    (await criarClienteServidor()).from("veiculos").select("*, lojas(nome, cidade)", { count: "exact" }).eq("ativo", true),
+    (await criarClienteServidor()).from("veiculos").select(COLUNAS_CARD, { count: "exact" }).eq("ativo", true),
     filtros,
   );
-  const { data, count } = await consulta.order("destaque", { ascending: false }).order("criado_em", { ascending: false }).limit(60);
+  const { data, count } = await consulta.order("prioridade", { ascending: false }).order("criado_em", { ascending: false }).limit(60);
   return { veiculos: (data ?? []) as VeiculoComLoja[], total: count ?? 0 };
 }
 

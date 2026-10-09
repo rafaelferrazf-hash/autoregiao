@@ -145,7 +145,7 @@ export default function Anunciar() {
             <div style={{ fontSize: 12, fontWeight: 600, color: "#FF6600", letterSpacing: 1, textTransform: "uppercase", marginBottom: 10 }}>Para lojas e revendas</div>
             <h2 style={{ fontSize: 32, fontWeight: 800, color: "#1A1917", marginBottom: 12 }}>Planos para lojistas</h2>
             <p style={{ fontSize: 15, color: "#7A7670", maxWidth: 520, margin: "0 auto", lineHeight: 1.6 }}>
-              Escolha o plano ideal para o tamanho da sua revenda. Toda loja nova começa com {DIAS_GRATIS} dias grátis. Pagamento por Pix, cartão ou boleto.
+              Escolha o plano ideal para o tamanho da sua revenda. Toda loja nova começa com {DIAS_GRATIS} dias grátis, com os recursos do Profissional. Pagamento por Pix, cartão ou boleto.
             </p>
           </div>
 

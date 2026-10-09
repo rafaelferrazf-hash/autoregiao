@@ -44,8 +44,12 @@ export type Veiculo = {
   abaixo_fipe?: boolean | null;
   demonstracao?: boolean | null;
   vendido_em?: string | null;
+  prioridade?: number | null;     // 2 Premium, 1 Profissional/grátis, 0 Básico/particular (fase17, calculada pelo banco)
   condicoes?: string[] | null;    // situação do veículo (fase16): IPVA pago, licenciado, único dono...     // "Finalizar" = vendido (fase15): fora do ar para sempre  // anúncio de demonstração (fase13): fora do Google, do sitemap e dos alertas   // calculada pelo banco (fase7-filtros.sql); nunca gravada pelo site
 };
+
+// Colunas dos cards (todas as listas): logo da loja (Premium) e telefones (botão do WhatsApp no card).
+export const COLUNAS_CARD = "*, lojas(nome, cidade, logo_url, whatsapp, telefone)";
 
 // Veículo com o join `lojas(nome, cidade)`.
 export type VeiculoComLoja = Veiculo & {

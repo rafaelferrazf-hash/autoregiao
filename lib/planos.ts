@@ -21,18 +21,19 @@ export type PlanoPago = {
   recursos: string[];
 };
 
+// Ordem nas listas (supabase/fase17): Premium > Profissional (e período grátis) > Básico.
 export const PLANOS: PlanoPago[] = [
   {
     id: "basico", nome: "Básico", precoMensal: 89, limite: 10, destaque: false,
-    recursos: ["Até 10 anúncios ativos", "Fotos em todos os anúncios", "Contato direto pelo WhatsApp", "Página da loja", "Estatísticas de visualizações e contatos"],
+    recursos: ["Até 10 anúncios ativos", "Página da loja com logo, capa e mapa", "Contato direto pelo WhatsApp", "Estatísticas de visualizações e contatos"],
   },
   {
     id: "profissional", nome: "Profissional", precoMensal: 159, limite: 30, destaque: true,
-    recursos: ["Até 30 anúncios ativos", "Destaque: seus anúncios aparecem primeiro", "Fotos em todos os anúncios", "Contato direto pelo WhatsApp", "Página da loja", "Estatísticas de visualizações e contatos"],
+    recursos: ["Até 30 anúncios ativos", "Seus anúncios aparecem antes dos do plano Básico", "Destaque: borda laranja e etiqueta “Destaque” nos anúncios", "Página da loja com logo, capa e mapa", "Contato direto pelo WhatsApp", "Estatísticas de visualizações e contatos"],
   },
   {
     id: "premium", nome: "Premium", precoMensal: 299, limite: null, destaque: true,
-    recursos: ["Anúncios ilimitados", "Destaque: seus anúncios aparecem primeiro", "Fotos em todos os anúncios", "Contato direto pelo WhatsApp", "Página da loja", "Estatísticas de visualizações e contatos"],
+    recursos: ["Anúncios ilimitados", "Vitrine “Ofertas em destaque” no topo da página inicial", "Seus anúncios aparecem antes de todos na busca", "Logo da sua loja nos anúncios e selo “Loja Premium”", "Destaque: borda laranja e etiqueta “Destaque”", "Página da loja com logo, capa e mapa", "Contato direto pelo WhatsApp", "Estatísticas de visualizações e contatos"],
   },
 ];
 

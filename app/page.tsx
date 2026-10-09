@@ -8,6 +8,7 @@ import BotoesConta from "@/components/BotoesConta";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import BarraBusca from "@/components/BarraBusca";
+import VitrinePremium from "@/components/VitrinePremium";
 import { listarVeiculosAtivos, opcoesDeFiltro } from "@/lib/dados/veiculos";
 import { filtrosParaQuery } from "@/lib/busca";
 import type { VeiculoComLoja } from "@/lib/tipos";
@@ -15,7 +16,7 @@ import Icone from "@/components/Icone";
 import { ESTILOS } from "@/lib/estilos";
 import { FAIXAS_PARCELA } from "@/lib/financiamento";
 
-const MAX_HOME = 9;
+const MAX_HOME = 8;
 
 export default function Home() {
   const router = useRouter();
@@ -46,7 +47,8 @@ export default function Home() {
       <style>{`
         .nav-desktop { display: flex !important; }
         .nav-mobile { display: none !important; }
-        .cars-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+        .cars-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+        @media (max-width: 1024px) { .cars-grid { grid-template-columns: repeat(3, 1fr); } }
         @media (max-width: 768px) {
           .nav-desktop { display: none !important; }
           .nav-mobile { display: flex !important; }
@@ -96,6 +98,8 @@ export default function Home() {
 
       <BarraBusca filtros={{}} cidades={cidades} onBuscar={f => router.push(`/veiculos${filtrosParaQuery(f)}`)} />
 
+      <VitrinePremium />
+
       {/* CONTEÚDO */}
       <div style={{ maxWidth: 1180, margin: "0 auto", padding: "16px" }}>
 
@@ -104,7 +108,7 @@ export default function Home() {
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14, flexWrap: "wrap", gap: 8 }}>
               <div>
                 <span style={{ fontSize: 16, fontWeight: 800, color: "#1A1917" }}>{carregando ? "..." : `${total} ${total === 1 ? "veículo" : "veículos"}`}</span>
-                <span style={{ fontSize: 12, color: "#7A7670", marginLeft: 6 }}>anunciados · mais recentes</span>
+                <span style={{ fontSize: 12, color: "#7A7670", marginLeft: 6 }}>anunciados</span>
               </div>
               <Link href="/veiculos" className="toque-facil" style={{ fontSize: 13, color: "#FF6600", fontWeight: 600, textDecoration: "none" }}>Buscar com filtros →</Link>
             </div>

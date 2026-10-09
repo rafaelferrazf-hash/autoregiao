@@ -1,13 +1,13 @@
 import { supabase } from "@/lib/supabase";
-import type { NovoVeiculo, Veiculo, VeiculoComLoja } from "@/lib/tipos";
+import { COLUNAS_CARD, type NovoVeiculo, type Veiculo, type VeiculoComLoja } from "@/lib/tipos";
 import { aplicarFiltros, escaparLike, type Filtros } from "@/lib/busca";
 
 export async function listarVeiculosAtivos() {
   const { data, error, count } = await supabase
     .from("veiculos")
-    .select("*, lojas(nome, cidade)", { count: "exact" })
+    .select(COLUNAS_CARD, { count: "exact" })
     .eq("ativo", true)
-    .order("destaque", { ascending: false })
+    .order("prioridade", { ascending: false })
     .order("criado_em", { ascending: false });
   return { veiculos: (data ?? []) as VeiculoComLoja[], total: count ?? data?.length ?? 0, error };
 }
@@ -16,7 +16,7 @@ export async function listarVeiculosAtivos() {
 export async function buscarVeiculosFiltrados(f: Filtros) {
   let consulta = supabase
     .from("veiculos")
-    .select("*, lojas(nome, cidade)", { count: "exact" })
+    .select(COLUNAS_CARD, { count: "exact" })
     .eq("ativo", true);
 
   consulta = aplicarFiltros(consulta, f);
@@ -25,12 +25,25 @@ export async function buscarVeiculosFiltrados(f: Filtros) {
     case "menor_preco": consulta = consulta.order("preco", { ascending: true, nullsFirst: false }); break;
     case "maior_preco": consulta = consulta.order("preco", { ascending: false, nullsFirst: false }); break;
     case "menor_km": consulta = consulta.order("km_num", { ascending: true, nullsFirst: false }); break;
-    default: consulta = consulta.order("destaque", { ascending: false });
+    default: consulta = consulta.order("prioridade", { ascending: false }); // Premium > Profissional > Básico
   }
   consulta = consulta.order("criado_em", { ascending: false });
 
   const { data, error, count } = await consulta;
   return { veiculos: (data ?? []) as VeiculoComLoja[], total: count ?? data?.length ?? 0, error };
+}
+
+// Vitrine "Ofertas em destaque" da página inicial: anúncios de lojas Premium (prioridade 2),
+// em ordem aleatória a cada visita para todas as lojas Premium terem a mesma chance.
+export async function listarVitrinePremium(quantos = 8) {
+  const { data } = await supabase.from("veiculos").select(COLUNAS_CARD).eq("ativo", true).eq("prioridade", 2)
+    .order("criado_em", { ascending: false }).limit(40);
+  const lista = [...((data ?? []) as VeiculoComLoja[])];
+  for (let i = lista.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [lista[i], lista[j]] = [lista[j], lista[i]];
+  }
+  return lista.slice(0, quantos);
 }
 
 // Opções dos filtros a partir dos anúncios que existem (sem marca/cidade "fantasma").
@@ -63,7 +76,7 @@ export async function buscarVeiculo(id: string) {
 // fim o mesmo tipo (carro/moto/utilitário) numa faixa de preço próxima (±30%).
 export async function buscarSemelhantes(v: Veiculo, limite = 6) {
   const achados: VeiculoComLoja[] = [];
-  const base = () => supabase.from("veiculos").select("*, lojas(nome, cidade)").eq("ativo", true).neq("id", v.id);
+  const base = () => supabase.from("veiculos").select(COLUNAS_CARD).eq("ativo", true).neq("id", v.id);
   const juntar = (lista: unknown[] | null) => {
     for (const item of (lista ?? []) as VeiculoComLoja[]) {
       if (achados.length < limite && !achados.some(a => a.id === item.id)) achados.push(item);
@@ -92,7 +105,7 @@ export async function buscarSemelhantes(v: Veiculo, limite = 6) {
 // Página /favoritos: só os anúncios que ainda estão ativos.
 export async function buscarVeiculosPorIds(ids: string[]) {
   if (!ids.length) return { veiculos: [] as VeiculoComLoja[], error: null };
-  const { data, error } = await supabase.from("veiculos").select("*, lojas(nome, cidade)").eq("ativo", true).in("id", ids.slice(0, 100));
+  const { data, error } = await supabase.from("veiculos").select(COLUNAS_CARD).eq("ativo", true).in("id", ids.slice(0, 100));
   const porId = new Map(((data ?? []) as VeiculoComLoja[]).map(v => [v.id, v]));
   // Mantém a ordem em que foram salvos (o mais recente primeiro).
   return { veiculos: ids.map(id => porId.get(id)).filter((v): v is VeiculoComLoja => !!v), error };

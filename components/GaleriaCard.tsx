@@ -34,7 +34,7 @@ export default function GaleriaCard({ fotos, alt }: { fotos: string[]; alt: stri
       </div>
       {atual > 0 && <button type="button" aria-label="Foto anterior" className="galeria-card-seta" style={{ left: 6 }} onClick={e => mover(e, -1)}>‹</button>}
       {atual < lista.length - 1 && <button type="button" aria-label="Próxima foto" className="galeria-card-seta" style={{ right: 6 }} onClick={e => mover(e, 1)}>›</button>}
-      <span style={{ position: "absolute", bottom: 6, right: 6, background: "rgba(0,0,0,0.6)", color: "#fff", fontSize: 10.5, fontWeight: 600, padding: "2px 7px", borderRadius: 10, pointerEvents: "none" }}>
+      <span style={{ position: "absolute", bottom: 8, left: 8, background: "rgba(0,0,0,0.6)", color: "#fff", fontSize: 11, fontWeight: 600, padding: "2px 8px", borderRadius: 10, pointerEvents: "none" }}>
         {atual + 1} / {fotos.length}
       </span>
     </div>

@@ -17,7 +17,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const supabase = criarClienteAnonimo();
   const [{ data: veiculos }, { data: lojas }, vitrines] = await Promise.all([
     supabase.from("veiculos").select("id, nome, criado_em").eq("ativo", true).eq("demonstracao", false).order("criado_em", { ascending: false }).limit(5000),
-    supabase.from("lojas").select("id").eq("ativo", true).limit(5000),
+    supabase.from("lojas").select("*").eq("ativo", true).limit(5000), // "*": filtra as lojas de teste (fase18) abaixo
     rotasDeVitrine(),
   ]);
   // Tabela FIPE por marca (listas em cache de 7 dias).
@@ -43,7 +43,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Páginas prontas de busca (/carros, /carros/chevrolet, /carros/ate-50-mil...).
     ...vitrines.map(rota => ({ url: `${URL_SITE}${rota}`, changeFrequency: "daily" as const, priority: rota.split("/").length === 2 ? 0.9 : 0.7 })),
     ...(veiculos ?? []).map(v => ({ url: `${URL_SITE}${linkDoVeiculo(v)}`, lastModified: comFuso(v.criado_em), changeFrequency: "weekly" as const, priority: 0.8 })),
-    ...(lojas ?? []).map(l => ({ url: `${URL_SITE}/loja/${l.id}`, changeFrequency: "weekly" as const, priority: 0.7 })),
+    ...(lojas ?? []).filter(l => !l.demonstracao).map(l => ({ url: `${URL_SITE}/loja/${l.id}`, changeFrequency: "weekly" as const, priority: 0.7 })),
     ...[...new Set(paginasFipe)].map(rota => ({ url: `${URL_SITE}${rota}`, changeFrequency: "monthly" as const, priority: 0.5 })),
   ];
 }

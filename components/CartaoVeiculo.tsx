@@ -44,8 +44,8 @@ function tituloDoCard(car: DadosCartao): { titulo: string; versao: string } {
 }
 
 // Card de anúncio usado em todas as listas (início, vitrine, busca, loja, favoritos, parecidos).
-// Básico/particular: card simples. Profissional (e período grátis): borda laranja + "Destaque".
-// Premium: também o logo da loja sobre a foto e "Loja Premium" (lib/planos, supabase/fase17).
+// Básico/particular: card simples. Profissional (e período grátis): etiqueta "Destaque".
+// Premium: etiqueta + borda laranja + logo da loja sobre a foto e "Loja Premium" (lib/planos, supabase/fase17).
 // `mostrarLoja`: some na página da própria loja, onde seria repetido.
 export default function CartaoVeiculo({ car, mostrarLoja = true, largura }: { car: DadosCartao; mostrarLoja?: boolean; largura?: number }) {
   const premium = (car.prioridade ?? 0) >= 2;
@@ -56,7 +56,7 @@ export default function CartaoVeiculo({ car, mostrarLoja = true, largura }: { ca
   const icone = { display: "inline-flex", alignItems: "center", gap: 5, whiteSpace: "nowrap" } as const;
   return (
     <Link href={linkDoVeiculo(car)} style={{ textDecoration: "none", display: "block", width: largura, height: "100%", flexShrink: 0 }}>
-      <div style={{ background: "#fff", borderRadius: 14, overflow: "hidden", border: car.destaque ? "1.5px solid #FF6600" : "1.5px solid #E8E6E1", position: "relative", height: "100%", display: "flex", flexDirection: "column" }}>
+      <div style={{ background: "#fff", borderRadius: 14, overflow: "hidden", border: premium ? "1.5px solid #FF6600" : "1.5px solid #E8E6E1", position: "relative", height: "100%", display: "flex", flexDirection: "column" }}>
         {/* FOTO */}
         <div style={{ position: "relative", aspectRatio: "4 / 3", width: "100%", background: "#F7F6F3" }}>
           {car.fotos && car.fotos.length > 0

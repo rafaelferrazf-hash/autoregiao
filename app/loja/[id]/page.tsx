@@ -35,6 +35,8 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     title: `${loja.nome}${local ? ` — ${local}` : ""} | AutoRegião`,
     description: descricao,
     alternates: { canonical: `/loja/${id}` },
+    // Lojas fictícias de teste (fase18) ficam fora do Google.
+    ...(loja.demonstracao ? { robots: { index: false, follow: false } } : {}),
     openGraph: {
       title: loja.nome,
       description: descricao,

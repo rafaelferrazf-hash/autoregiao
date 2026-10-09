@@ -78,6 +78,7 @@ export type Loja = {
   plano_proximo?: string | null;     // plano menor já pago, começa em plano_proximo_em (fase15)
   plano_proximo_em?: string | null;
   plano: string | null;
+  demonstracao?: boolean | null;     // loja fictícia de teste (fase18)
   ativo: boolean | null;
   expira_em: string | null;
   criado_em: string | null;

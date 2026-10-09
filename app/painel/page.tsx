@@ -420,32 +420,40 @@ export default function Painel() {
                   </table>
 
                   <div className="cards-mobile" style={{ flexDirection: "column" }}>
-                    {anunciosVisiveis.map(car => (
-                      <div key={car.id} style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 16px", borderBottom: "1px solid #E8E6E1" }}>
-                        <div style={{ width: 56, height: 42, borderRadius: 7, overflow: "hidden", flexShrink: 0, border: "1px solid #E8E6E1", background: "#F7F6F3" }}>
-                          {car.fotos && car.fotos.length > 0
-                            ? <img src={car.fotos[0]} alt={car.nome} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                            : <Image src="/sem-foto.png" alt={car.nome} width={56} height={42} style={{ objectFit: "cover" }} />
-                          }
-                        </div>
-                        <div style={{ flex: 1 }}>
-                          <div style={{ fontSize: 13, fontWeight: 700, color: "#1A1917", marginBottom: 2 }}>{car.nome}</div>
-                          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                            {statusBadge(car.status === "vendido" ? "vendido" : car.ativo === false ? "pausado" : foraDoAr ? "fora" : car.status || "ativo")}
+                    {anunciosVisiveis.map(car => {
+                      // Celular: nome em largura total em cima; preço + botões numa linha embaixo.
+                      const botao: React.CSSProperties = { width: 36, height: 36, borderRadius: 8, border: "1.5px solid #E8E6E1", background: "#F7F6F3", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", textDecoration: "none", color: "#1A1917", padding: 0, opacity: acaoEmAndamento === car.id ? 0.5 : 1 };
+                      return (
+                        <div key={car.id} style={{ padding: "14px 16px", borderBottom: "1px solid #E8E6E1" }}>
+                          <div style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
+                            <div style={{ width: 84, height: 63, borderRadius: 8, overflow: "hidden", flexShrink: 0, border: "1px solid #E8E6E1", background: "#F7F6F3" }}>
+                              {car.fotos && car.fotos.length > 0
+                                ? <img src={car.fotos[0]} alt={car.nome} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                                : <Image src="/sem-foto.png" alt={car.nome} width={84} height={63} style={{ objectFit: "cover" }} />
+                              }
+                            </div>
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                              <div style={{ fontSize: 14, fontWeight: 700, color: "#1A1917", lineHeight: 1.3, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{car.nome}</div>
+                              <div style={{ fontSize: 12, color: "#7A7670", margin: "3px 0 6px" }}>{[car.ano, formatarKm(car.km)].filter(Boolean).join(" · ")}</div>
+                              {statusBadge(car.status === "vendido" ? "vendido" : car.ativo === false ? "pausado" : foraDoAr ? "fora" : car.status || "ativo")}
+                            </div>
+                          </div>
+                          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginTop: 12 }}>
+                            <div style={{ minWidth: 0 }}>
+                              <div style={{ fontSize: 16, fontWeight: 800, color: "#1A1917" }}>{formatarPreco(car.preco)}</div>
+                              <SituacaoFipe car={car} />
+                            </div>
+                            <div style={{ display: "flex", gap: 6, flexShrink: 0 }}>
+                              <Link href={linkDoVeiculo(car)} title="Ver anúncio" style={botao}><Icone nome="olho" tamanho={17} /></Link>
+                              <Link href={`/painel/novo-anuncio?editar=${car.id}`} title="Editar" style={botao}><Icone nome="editar" tamanho={17} /></Link>
+                              {car.status !== "vendido" && !(car.ativo === false && semVaga) && <button title={car.ativo === false ? "Reativar" : "Pausar"} disabled={acaoEmAndamento === car.id} onClick={() => alternarPausa(car)} style={botao}><Icone nome={car.ativo === false ? "reativar" : "pausar"} tamanho={17} /></button>}
+                              {car.status !== "vendido" && <button title="Marcar como vendido" disabled={acaoEmAndamento === car.id} onClick={() => finalizar(car)} style={{ ...botao, color: "#16A34A" }}><Icone nome="ok" tamanho={17} /></button>}
+                              <button title="Excluir" disabled={acaoEmAndamento === car.id} onClick={() => excluir(car)} style={{ ...botao, color: "#DC2626" }}><Icone nome="lixeira" tamanho={17} /></button>
+                            </div>
                           </div>
                         </div>
-                        <div style={{ textAlign: "right" }}>
-                          <div style={{ fontSize: 13, fontWeight: 700, color: "#1A1917" }}>{formatarPreco(car.preco)}<SituacaoFipe car={car} /></div>
-                          <div style={{ display: "flex", gap: 4, marginTop: 4 }}>
-                            <Link href={linkDoVeiculo(car)} style={{ width: 26, height: 26, borderRadius: 5, border: "1.5px solid #E8E6E1", background: "#F7F6F3", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, textDecoration: "none", color: "#1A1917" }}><Icone nome="olho" tamanho={15} /></Link>
-                            <Link href={`/painel/novo-anuncio?editar=${car.id}`} title="Editar" style={{ width: 26, height: 26, borderRadius: 5, border: "1.5px solid #E8E6E1", background: "#F7F6F3", cursor: "pointer", fontSize: 11, display: "flex", alignItems: "center", justifyContent: "center", textDecoration: "none", color: "#1A1917" }}><Icone nome="editar" tamanho={15} /></Link>
-                            {car.status !== "vendido" && !(car.ativo === false && semVaga) && <button title={car.ativo === false ? "Reativar" : "Pausar"} disabled={acaoEmAndamento === car.id} onClick={() => alternarPausa(car)} style={{ width: 26, height: 26, borderRadius: 5, border: "1.5px solid #E8E6E1", background: "#F7F6F3", cursor: "pointer", fontSize: 11 }}><Icone nome={car.ativo === false ? "reativar" : "pausar"} tamanho={15} /></button>}
-                              {car.status !== "vendido" && <button title="Marcar como vendido" disabled={acaoEmAndamento === car.id} onClick={() => finalizar(car)} style={{ width: 28, height: 28, borderRadius: 6, border: "1.5px solid #E8E6E1", background: "#F7F6F3", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: "#16A34A" }}><Icone nome="ok" tamanho={15} /></button>}
-                            <button title="Excluir" disabled={acaoEmAndamento === car.id} onClick={() => excluir(car)} style={{ width: 26, height: 26, borderRadius: 5, border: "1.5px solid #E8E6E1", background: "#F7F6F3", cursor: "pointer", fontSize: 11 , color: "#DC2626" }}><Icone nome="lixeira" tamanho={15} /></button>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </>
               )}

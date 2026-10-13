@@ -8,6 +8,7 @@ import { useState, useEffect, useRef } from "react";
 import { buscarSemelhantes } from "@/lib/dados/veiculos";
 import BotaoFavorito from "@/components/BotaoFavorito";
 import CartaoVeiculo, { abaixoDaFipe, SeloPreco } from "@/components/CartaoVeiculo";
+import SeloVerificada from "@/components/SeloVerificada";
 import Rodape from "@/components/Rodape";
 import MapaLoja from "@/components/MapaLoja";
 import LogoLoja from "@/components/LogoLoja";
@@ -471,6 +472,7 @@ Motivo da denúncia:
                     <LogoLoja url={veiculo.lojas.logo_url} tamanho={44} />
                     <div style={{ minWidth: 0 }}>
                       <div style={{ fontSize: 14, fontWeight: 700, color: "#1A1917" }}>{veiculo.lojas.nome}</div>
+                      {veiculo.lojas.verificada && <div style={{ marginTop: 4 }}><SeloVerificada /></div>}
                       <div style={{ fontSize: 12, color: "#7A7670", marginTop: 2 }}><Icone nome="local" /> {veiculo.lojas.cidade || veiculo.cidade}</div>
                     </div>
                   </div>
@@ -505,6 +507,7 @@ Motivo da denúncia:
                 <LogoLoja url={veiculo.lojas?.logo_url} tamanho={44} />
                 <div style={{ flex: 1 }}>
                   <div style={{ fontSize: 14, fontWeight: 700, color: "#fff" }}>{veiculo.lojas?.nome || veiculo.nome_contato}</div>
+                  {veiculo.lojas?.verificada && <div style={{ marginTop: 4 }}><SeloVerificada claro /></div>}
                   <div style={{ fontSize: 11.5, color: "#7A7670", marginTop: 2 }}><Icone nome="local" /> {veiculo.lojas?.cidade || veiculo.cidade}</div>
                   {anuncianteDesde && <div style={{ fontSize: 11.5, color: "#A8A49D", marginTop: 2 }}><Icone nome="check" /> Anunciante desde {anuncianteDesde}</div>}
                 </div>

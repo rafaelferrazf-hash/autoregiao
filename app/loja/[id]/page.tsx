@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Logo from "@/components/Logo";
 import CartaoVeiculo from "@/components/CartaoVeiculo";
+import SeloVerificada from "@/components/SeloVerificada";
 import MapaLoja from "@/components/MapaLoja";
 import LogoLoja from "@/components/LogoLoja";
 import Rodape from "@/components/Rodape";
@@ -107,6 +108,7 @@ export default async function PerfilLoja({ params }: { params: Promise<{ id: str
           <div style={{ maxWidth: 1200, margin: "0 auto", padding: "20px 16px 24px" }}>
             <h1 style={{ fontSize: 22, fontWeight: 800, color: "#1A1917", margin: "0 0 14px", lineHeight: 1.25 }}>
               {loja.nome}{local && <span style={{ color: "#7A7670", fontWeight: 600 }}> · {local}</span>}
+              {loja.verificada && <span style={{ marginLeft: 10, verticalAlign: "middle", display: "inline-block" }}><SeloVerificada /></span>}
             </h1>
             <div className="loja-topo">
               <div className="loja-capa">

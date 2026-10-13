@@ -7,6 +7,7 @@ import { useEmAppDaLoja } from "@/lib/appLoja";
 import { useState, useEffect } from "react";
 import { usuarioAtual, sair } from "@/lib/dados/usuario";
 import ExcluirConta from "@/components/ExcluirConta";
+import RelatorioPainel from "@/components/RelatorioPainel";
 import { linkDoVeiculo } from "@/lib/linkVeiculo";
 import { ehAdmin } from "@/lib/admin";
 import { resgatarCupom as resgatarCupomNoBanco } from "@/lib/dados/cupons";
@@ -339,6 +340,7 @@ export default function Painel() {
           )}
 
           {/* STATS */}
+          {abaAtiva === "dashboard" && loja && <RelatorioPainel lojaId={loja.id} />}
           <div className="stats-grid" style={{ marginBottom: 16 }}>
             {[
               { label: "Visualizações (30 dias)", value: stats ? stats.visualizacoes_30d.toLocaleString("pt-BR") : "—", change: varVisitas.texto, up: varVisitas.up, icon: "olho", bg: "rgba(255,102,0,0.08)" },

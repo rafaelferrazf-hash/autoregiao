@@ -5,7 +5,8 @@ import { ehVitalicio } from "@/lib/planos";
 //  { acao: "estender", dias: 30 }  → soma dias ao vencimento (a partir de hoje, se já venceu)
 //  { acao: "desativar" }           → loja e anúncios somem do site (policy veiculos_select_public)
 //  { acao: "reativar" }
-// Loja vitalícia (conta do dono) não aceita nenhuma ação.
+//  { acao: "verificar" } / { acao: "desverificar" } → selo "Loja verificada" (fase21; vale também para a vitalícia)
+// Fora o selo, a loja vitalícia (conta do dono) não aceita nenhuma ação.
 export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const r = await exigirAdmin();
   if ("erro" in r) return r.erro;
@@ -17,6 +18,12 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
 
   const { data: loja } = await r.admin.from("lojas").select("id, plano, expira_em, ativo").eq("id", id).maybeSingle();
   if (!loja) return Response.json({ erro: "Loja não encontrada." }, { status: 404 });
+  if (corpo.acao === "verificar" || corpo.acao === "desverificar") {
+    const verificada = corpo.acao === "verificar";
+    const { error } = await r.admin.from("lojas").update({ verificada, verificada_em: verificada ? new Date().toISOString() : null }).eq("id", id);
+    if (error) return Response.json({ erro: error.message }, { status: 500 });
+    return Response.json({ ok: true });
+  }
   if (ehVitalicio(loja.plano)) return Response.json({ erro: "A loja vitalícia do dono não pode ser alterada por aqui." }, { status: 400 });
 
   let mudanca: Record<string, unknown>;

@@ -8,7 +8,7 @@ import type { VeiculoComLoja } from "@/lib/tipos";
 import { caminhoDoVeiculo } from "@/lib/caminhoVeiculo";
 import { codigoDoEndereco, linkDoVeiculo } from "@/lib/linkVeiculo";
 
-const COLUNAS = "*, lojas(nome, cidade, estado, endereco, criado_em, whatsapp, telefone, logo_url)";
+const COLUNAS = "*, lojas(nome, cidade, estado, endereco, criado_em, whatsapp, telefone, logo_url, verificada)";
 
 // "Lençóis Paulista-SP"
 function localDoAnuncio(v: Pick<VeiculoComLoja, "cidade" | "lojas">) {

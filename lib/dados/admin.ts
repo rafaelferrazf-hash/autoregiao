@@ -5,7 +5,7 @@ export type StatusLoja = "vitalicio" | "desativada" | "assinante" | "trial" | "v
 export type ResumoAdmin = {
   totais: { lojas: number; lojas_7d: number; veiculos_ativos: number; veiculos_7d: number; usuarios: number; usuarios_30d: number; visualizacoes_30d: number; contatos_30d: number; receita_30d: number; receita_total: number; pagamentos_30d: number };
   status: { vitalicio: number; assinante: number; trial: number; vencida: number; desativada: number };
-  lojas: { id: string; nome: string; cidade: string; plano: string; veiculos: number; status: StatusLoja; protegida: boolean; ativo: boolean; vencimento: string }[];
+  lojas: { id: string; nome: string; cidade: string; plano: string; veiculos: number; status: StatusLoja; protegida: boolean; ativo: boolean; verificada: boolean; teste: boolean; vencimento: string }[];
   anuncios: { id: string; nome: string; loja: string; preco: number | null; ativo: boolean; criado_em: string | null }[];
   usuarios: { id: string; email: string; nome: string; cadastro: string; confirmado: boolean; ultimo_acesso: string | null; loja: string | null; admin: boolean }[];
 };
@@ -37,3 +37,21 @@ export const estenderLoja = (id: string, dias: number) => chamar(`/api/admin/loj
 export const definirLojaAtiva = (id: string, ativo: boolean) => chamar(`/api/admin/lojas/${id}`, "PATCH", { acao: ativo ? "reativar" : "desativar" });
 export const definirAnuncioAtivoAdmin = (id: string, ativo: boolean) => chamar(`/api/admin/anuncios/${id}`, "PATCH", { acao: ativo ? "reativar" : "pausar" });
 export const removerAnuncioAdmin = (id: string) => chamar(`/api/admin/anuncios/${id}`, "DELETE");
+export const verificarLoja = (id: string, sim: boolean) => chamar(`/api/admin/lojas/${id}`, "PATCH", { acao: sim ? "verificar" : "desverificar" });
+
+// Aba "Relatórios" (relatório mensal das lojas, lib/relatorioMensal.ts).
+export type RelatorioAdmin = {
+  loja_id: string; loja: string; cidade: string; telefone: string | null; texto: string;
+  email_em: string | null; whatsapp_em: string | null;
+  dados: { visualizacoes: number; whatsapp: number; ligacoes: number; no_ar: number };
+};
+export async function carregarRelatorios(mes?: string): Promise<{ mes: string; nome: string; relatorios: RelatorioAdmin[] } | null> {
+  try {
+    const resp = await fetch(`/api/admin/relatorios${mes ? `?mes=${mes}` : ""}`, { cache: "no-store" });
+    return resp.ok ? await resp.json() : null;
+  } catch {
+    return null;
+  }
+}
+export const prepararRelatoriosAdmin = (mes: string) => chamar("/api/admin/relatorios", "POST", { acao: "preparar", mes });
+export const marcarRelatorioWhatsApp = (mes: string, loja_id: string) => chamar("/api/admin/relatorios", "POST", { acao: "whatsapp", mes, loja_id });

@@ -49,14 +49,14 @@ export type Veiculo = {
 };
 
 // Colunas dos cards (todas as listas): logo da loja (Premium) e telefones (botão do WhatsApp no card).
-export const COLUNAS_CARD = "*, lojas(nome, cidade, logo_url, whatsapp, telefone)";
+export const COLUNAS_CARD = "*, lojas(nome, cidade, logo_url, whatsapp, telefone, verificada)";
 
 // Veículo com o join `lojas(nome, cidade)`.
 export type VeiculoComLoja = Veiculo & {
   // estado/endereco/criado_em/whatsapp/telefone só vêm na página do anúncio (buscarVeiculo).
   lojas: {
     nome: string; cidade: string;
-    estado?: string | null; endereco?: string | null; criado_em?: string | null; whatsapp?: string | null; telefone?: string | null; logo_url?: string | null;
+    estado?: string | null; endereco?: string | null; criado_em?: string | null; whatsapp?: string | null; telefone?: string | null; logo_url?: string | null; verificada?: boolean | null;
   } | null;
 };
 
@@ -79,6 +79,7 @@ export type Loja = {
   plano_proximo_em?: string | null;
   plano: string | null;
   demonstracao?: boolean | null;     // loja fictícia de teste (fase18)
+  verificada?: boolean | null;       // selo "Loja verificada" (fase21, só o admin marca)
   ativo: boolean | null;
   expira_em: string | null;
   criado_em: string | null;

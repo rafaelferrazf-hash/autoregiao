@@ -10,11 +10,12 @@ import BotaoComparar from "@/components/BotaoComparar";
 import { linkDoVeiculo } from "@/lib/linkVeiculo";
 import BotaoWhatsAppCard from "@/components/BotaoWhatsAppCard";
 import DistanciaCidade from "@/components/DistanciaCidade";
+import SeloVerificada from "@/components/SeloVerificada";
 import { ENTRADA_PADRAO, parcelaMensal } from "@/lib/financiamento";
 
 export type DadosCartao = Pick<Veiculo, "id" | "nome" | "ano" | "km" | "preco" | "fotos" | "destaque">
   & Partial<Pick<Veiculo, "combustivel" | "cidade" | "fipe_valor" | "condicoes" | "marca" | "modelo" | "versao" | "telefone" | "prioridade">>
-  & { lojas?: { nome: string | null; cidade: string | null; logo_url?: string | null; whatsapp?: string | null; telefone?: string | null } | null };
+  & { lojas?: { nome: string | null; cidade: string | null; logo_url?: string | null; whatsapp?: string | null; telefone?: string | null; verificada?: boolean | null } | null };
 
 // Selo "Abaixo da FIPE": só aparece quando é vantagem para o comprador (preço acima da FIPE não é
 // mostrado em lugar nenhum do site).
@@ -107,8 +108,8 @@ export default function CartaoVeiculo({ car, mostrarLoja = true, largura }: { ca
 
           <div style={{ fontSize: 11.5, color: "#7A7670", marginTop: 10, display: "flex", flexDirection: "column", gap: 3 }}>
             {mostrarLoja && car.lojas?.nome && (premium
-              ? <span style={{ ...icone, gap: 4, color: "#B45309", fontWeight: 700 }}><Icone nome="coroa" tamanho={13} /> {car.lojas.nome} · Loja Premium</span>
-              : <span style={{ ...icone, gap: 4 }}><Icone nome="loja" tamanho={13} /> {car.lojas.nome}</span>)}
+              ? <span style={{ ...icone, gap: 4, color: "#B45309", fontWeight: 700 }}><Icone nome="coroa" tamanho={13} /> {car.lojas.nome} · Loja Premium{car.lojas.verificada && <SeloVerificada tipo="icone" />}</span>
+              : <span style={{ ...icone, gap: 4 }}><Icone nome="loja" tamanho={13} /> {car.lojas.nome}{car.lojas.verificada && <SeloVerificada tipo="icone" />}</span>)}
             {mostrarLoja && !car.lojas && <span style={{ ...icone, gap: 4 }}><Icone nome="usuario" tamanho={13} /> Particular</span>}
             {cidade && <span style={{ ...icone, gap: 4 }}><Icone nome="local" tamanho={13} /> {cidade}<DistanciaCidade cidade={cidade} /></span>}
           </div>

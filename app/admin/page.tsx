@@ -8,13 +8,14 @@ import { supabase } from "@/lib/supabase";
 import { ehAdmin } from "@/lib/admin";
 import { gerarCupom as gerarCupomNoServidor } from "@/lib/dados/cupons";
 import {
-  carregarResumoAdmin, estenderLoja, definirLojaAtiva, definirAnuncioAtivoAdmin, removerAnuncioAdmin,
-  type ResumoAdmin,
+  carregarResumoAdmin, estenderLoja, definirLojaAtiva, definirAnuncioAtivoAdmin, removerAnuncioAdmin, verificarLoja,
+  carregarRelatorios, prepararRelatoriosAdmin, marcarRelatorioWhatsApp,
+  type ResumoAdmin, type RelatorioAdmin,
 } from "@/lib/dados/admin";
 import { formatarPreco } from "@/lib/formatar";
 import Icone, { type NomeIcone } from "@/components/Icone";
 
-const ABAS = ["Resumo", "Lojas", "Anúncios", "Usuários"] as const;
+const ABAS = ["Resumo", "Lojas", "Relatórios", "Anúncios", "Usuários"] as const;
 type Aba = (typeof ABAS)[number];
 
 const COR_STATUS: Record<string, { bg: string; color: string }> = {
@@ -54,6 +55,21 @@ export default function Admin() {
   const [erroResumo, setErroResumo] = useState("");
   const [ocupado, setOcupado] = useState<string | null>(null);
   const [diasPorLoja, setDiasPorLoja] = useState<Record<string, number>>({});
+  const [mostrarTeste, setMostrarTeste] = useState(false);
+  // Aba Relatórios: mês escolhido (primeiro dia) e os relatórios dele.
+  const [mesRel, setMesRel] = useState(() => {
+    const d = new Date(); d.setDate(1); d.setMonth(d.getMonth() - 1);
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-01`;
+  });
+  const [rel, setRel] = useState<{ nome: string; relatorios: RelatorioAdmin[] } | null>(null);
+  const [preparando, setPreparando] = useState(false);
+  const recarregarRel = useCallback(async (mes: string) => { setRel(await carregarRelatorios(mes)); }, []);
+  useEffect(() => {
+    if (!autorizado || aba !== "Relatórios") return;
+    let ativo = true;
+    carregarRelatorios(mesRel).then(r => { if (ativo) setRel(r); });
+    return () => { ativo = false; };
+  }, [autorizado, aba, mesRel]);
 
   const recarregar = useCallback(async () => {
     const r = await carregarResumoAdmin();
@@ -102,7 +118,8 @@ export default function Admin() {
   const mesAtual = new Date().toLocaleDateString("pt-BR", { month: "long", year: "numeric" });
   const subtitulo: Record<Aba, string> = {
     Resumo: `Visão geral do AutoRegião — ${mesAtual.charAt(0).toUpperCase() + mesAtual.slice(1)}`,
-    Lojas: "Estender prazo, desativar ou reativar lojas. A loja vitalícia do dono fica protegida.",
+    Lojas: "Estender prazo, desativar/reativar lojas e dar o selo “Loja verificada”. A loja vitalícia do dono fica protegida.",
+    "Relatórios": "Relatório do mês de cada loja: vai por e-mail sozinho no dia 1º; aqui você manda pelo WhatsApp.",
     "Anúncios": "Moderação: pausar ou remover anúncios falsos ou impróprios.",
     "Usuários": "Contas cadastradas no AutoRegião.",
   };
@@ -254,16 +271,21 @@ export default function Admin() {
         {/* ===================== LOJAS ===================== */}
         {aba === "Lojas" && (
           <div style={cartao}>
-            <div style={tituloCartao}>Lojas cadastradas ({n(resumo?.lojas.length)})</div>
+            <div style={{ ...tituloCartao, display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+              <span>Lojas cadastradas ({n(resumo?.lojas.filter(l => mostrarTeste || !l.teste).length)})</span>
+              <label style={{ fontSize: 12, fontWeight: 500, color: "#7A7670", display: "flex", alignItems: "center", gap: 6, cursor: "pointer" }}>
+                <input type="checkbox" checked={mostrarTeste} onChange={e => setMostrarTeste(e.target.checked)} /> Mostrar lojas de teste
+              </label>
+            </div>
             <div className="tabela-rolavel">
               <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 760 }}>
                 <thead>
                   <tr style={{ borderBottom: "1.5px solid #E8E6E1" }}>
-                    {["Loja", "Plano", "Veículos", "Situação", "Vencimento", "Ações"].map(h => <th key={h} style={th}>{h}</th>)}
+                    {["Loja", "Plano", "Veículos", "Situação", "Vencimento", "Selo", "Ações"].map(h => <th key={h} style={th}>{h}</th>)}
                   </tr>
                 </thead>
                 <tbody>
-                  {(resumo?.lojas ?? []).map(loja => {
+                  {(resumo?.lojas ?? []).filter(l => mostrarTeste || !l.teste).map(loja => {
                     const dias = diasPorLoja[loja.id] ?? 30;
                     const trabalhando = ocupado === loja.id;
                     return (
@@ -276,6 +298,19 @@ export default function Admin() {
                         <td style={td}>{loja.veiculos}</td>
                         <td style={td}><Etiqueta status={loja.status} /></td>
                         <td style={{ ...td, fontSize: 12, color: "#7A7670" }}>{loja.vencimento}</td>
+                        <td style={td}>
+                          {loja.verificada ? (
+                            <button disabled={trabalhando} style={{ ...botao, color: "#1D4ED8", borderColor: "#BFDBFE", background: "#EFF6FF" }} title="Tirar o selo"
+                              onClick={() => window.confirm(`Tirar o selo "Loja verificada" de "${loja.nome}"?`) && executar(loja.id, () => verificarLoja(loja.id, false))}>
+                              <Icone nome="escudo" /> Verificada
+                            </button>
+                          ) : (
+                            <button disabled={trabalhando} style={botao}
+                              onClick={() => window.confirm(`Dar o selo "Loja verificada" para "${loja.nome}"?\n\nConfira antes: CNPJ ativo, endereço real e telefone que atende.`) && executar(loja.id, () => verificarLoja(loja.id, true))}>
+                              Verificar
+                            </button>
+                          )}
+                        </td>
                         <td style={td}>
                           {loja.protegida ? (
                             <span style={{ fontSize: 12, color: "#7A7670" }}><Icone nome="coroa" /> Protegida (dono)</span>
@@ -303,6 +338,68 @@ export default function Admin() {
                 </tbody>
               </table>
             </div>
+          </div>
+        )}
+
+        {/* ===================== RELATÓRIOS ===================== */}
+        {aba === "Relatórios" && (
+          <div style={cartao}>
+            <div style={{ ...tituloCartao, display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+              <span>Relatório de {rel?.nome ?? "…"}</span>
+              <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
+                <select value={mesRel} onChange={e => setMesRel(e.target.value)} style={{ ...botao, padding: "5px 8px" }}>
+                  {[1, 2, 3, 4].map(k => {
+                    const d = new Date(); d.setDate(1); d.setMonth(d.getMonth() - k);
+                    const v = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-01`;
+                    return <option key={v} value={v}>{d.toLocaleDateString("pt-BR", { month: "long", year: "numeric" })}</option>;
+                  })}
+                </select>
+                <button disabled={preparando} style={botao} onClick={async () => {
+                  setPreparando(true);
+                  const r = await prepararRelatoriosAdmin(mesRel);
+                  setPreparando(false);
+                  if (!r.ok) alert("Não deu certo: " + (r.erro || "erro desconhecido"));
+                  await recarregarRel(mesRel);
+                }}>{preparando ? "Preparando..." : "Preparar relatórios"}</button>
+              </div>
+            </div>
+            <div style={{ fontSize: 12.5, color: "#7A7670", marginBottom: 14, lineHeight: 1.5 }}>
+              No dia 1º os relatórios são preparados e enviados por e-mail sozinhos. &quot;Preparar relatórios&quot; calcula agora, <strong>sem mandar e-mail</strong>.
+              Toque em <strong>WhatsApp</strong>: a conversa abre com a mensagem pronta, é só apertar Enviar.
+            </div>
+            {!rel ? <div style={{ fontSize: 13, color: "#7A7670" }}>Carregando...</div>
+              : rel.relatorios.length === 0 ? <div style={{ fontSize: 13, color: "#7A7670" }}>Nenhum relatório preparado para este mês ainda. Toque em &quot;Preparar relatórios&quot;.</div>
+              : (
+                <div className="tabela-rolavel">
+                  <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 640 }}>
+                    <thead>
+                      <tr style={{ borderBottom: "1.5px solid #E8E6E1" }}>
+                        {["Loja", "Visualizações", "Contatos", "No ar", "E-mail", "WhatsApp"].map(h => <th key={h} style={th}>{h}</th>)}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {rel.relatorios.map(rl => (
+                        <tr key={rl.loja_id} style={{ borderBottom: "1px solid #F7F6F3" }}>
+                          <td style={td}><div style={{ fontWeight: 600 }}>{rl.loja}</div><div style={{ fontSize: 11, color: "#7A7670" }}>{rl.cidade}</div></td>
+                          <td style={td}>{rl.dados.visualizacoes.toLocaleString("pt-BR")}</td>
+                          <td style={td}>{(rl.dados.whatsapp + rl.dados.ligacoes).toLocaleString("pt-BR")}</td>
+                          <td style={td}>{rl.dados.no_ar}</td>
+                          <td style={{ ...td, fontSize: 12, color: "#7A7670" }}>{rl.email_em ? `Enviado ${data(rl.email_em)}` : "—"}</td>
+                          <td style={td}>
+                            {rl.telefone ? (
+                              <a href={`https://wa.me/55${rl.telefone}?text=${encodeURIComponent(rl.texto)}`} target="_blank" rel="noopener noreferrer"
+                                onClick={() => { marcarRelatorioWhatsApp(mesRel, rl.loja_id).then(() => recarregarRel(mesRel)); }}
+                                style={{ ...botao, display: "inline-flex", alignItems: "center", gap: 5, textDecoration: "none", color: "#fff", background: "#25D366", borderColor: "#25D366" }}>
+                                <Icone nome="whatsapp" /> {rl.whatsapp_em ? `Reenviar (enviado ${data(rl.whatsapp_em)})` : "WhatsApp"}
+                              </a>
+                            ) : <span style={{ fontSize: 12, color: "#7A7670" }}>Sem telefone</span>}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
           </div>
         )}
 

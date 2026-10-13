@@ -55,7 +55,7 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
   `/loja/[id]`, `/favoritos`, `/alerta`, `/anunciar`, `/painel` (+ `/novo-anuncio`, `/planos`), `/admin`,
   `/login`, `/cadastro`, `/recuperar-senha`, `/redefinir-senha`, `/pagamento/retorno`, `/termos`, `/privacidade`, `/offline`.
 - SQL já rodado: `rls-fase0`, `fase1-seguranca`, `fase2`, `fase3`, `fase3-fotos`, `fase4a`, `fase4b`,
-  `fase5-alertas`, `fase6-fipe`, `fase7-filtros`, `fase8-logo-loja`, `fase9-excluir-conta`, `fase10-push`, `fase11-capa-loja`, `fase12-carroceria`, `fase13-demonstracao`, `fase14-demonstracao-privada`, `fase15-planos-agendados-vendido`, `fase16-situacao-veiculo`, `fase17-prioridade-premium`, `fase18-lojas-teste` (30 lojas fictícias, 450 anúncios demo; apagar antes do lançamento — linhas no topo do arquivo), `fase19`+`fase20` (lista `acesso_demonstracao`: e-mails que veem os anúncios demo; mibososantos@gmail.com liberado), `fase21-relatorio-selo` (selo `lojas.verificada` + `relatorios_mensais` + `dados_relatorio_mensal`). Modelos de e-mail do Auth: `supabase/emails/`.
+  `fase5-alertas`, `fase6-fipe`, `fase7-filtros`, `fase8-logo-loja`, `fase9-excluir-conta`, `fase10-push`, `fase11-capa-loja`, `fase12-carroceria`, `fase13-demonstracao`, `fase14-demonstracao-privada`, `fase15-planos-agendados-vendido`, `fase16-situacao-veiculo`, `fase17-prioridade-premium`, `fase18-lojas-teste` (30 lojas fictícias, 450 anúncios demo; apagar antes do lançamento — linhas no topo do arquivo), `fase19`+`fase20` (lista `acesso_demonstracao`: e-mails que veem os anúncios demo; mibososantos@gmail.com liberado), `fase21-relatorio-selo` (selo `lojas.verificada` + `relatorios_mensais` + `dados_relatorio_mensal`), `fase22-banners` (banners pagos). Modelos de e-mail do Auth: `supabase/emails/`.
 
 ## Regras de negócio importantes
 - Planos (`lib/planos.ts`): básico R$89/10 anúncios, profissional R$159/30 + destaque, premium R$299/ilimitado + destaque;
@@ -116,6 +116,14 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
   (`components/SeloVerificada`, botão Verificar no /admin → Lojas; para qualquer loja conferida, pagante ou não).
   Planos: Rafael inseguro com valores — sugerido preço de lançamento (R$49/20, R$99/50, R$179/ilimitado + "preço de
   fundador"); AINDA NÃO DECIDIDO. Lacunas vs grandes portais: importar estoque (maior obstáculo), vídeo, avaliações.
+- 13/10/2026: filtro de ano De/Até (`components/CampoAnos`, ano_max); menu da página Anunciar corrigido; página Lojas com
+  a sessão (contas liberadas veem lojas de teste). Carrossel no topo da página inicial estilo Mobiauto
+  (`components/CarrosselTopo`, fotos Pexels em `public/banners/`): encontre o carro, banners pagos, app (só quando
+  `APP_ANDROID/APP_IPHONE.publicado` em `lib/site.ts` = true — ligar ao publicar; badge App Store está em inglês),
+  FIPE, anuncie (fora dos apps). Banners pagos (fase22): vendidos pelo Rafael por Pix/WhatsApp para lojas e negócios
+  do ramo, 4 vagas, sem desconto Premium; aba "Banners" no /admin (`components/AdminBanners`), etiqueta "Patrocinado",
+  contagem de vistos/cliques (`contar_banner`), e-mail ao admin 3 dias antes de vencer. Lojas Premium NÃO entram no
+  carrossel (decisão do Rafael). Planos: proposta de 2 planos (Loja R$79/30 · Loja Premium R$159/ilimitado) — AGUARDA decisão.
 - 2FA nas contas principais. App instalável (PWA), arrastar fotos, revisão de celular (375/320px).
 - Marca nova (01/10/2026), do manual em `C:\Users\rafae\AutoRegiao-Logo-Novo` (só PNG, sem vetor): logo AR, laranja
   #FF6600, grafite #1A1A1A, Exo 2 nos títulos (h1–h3). Slogan trocado para "COMPRE | VENDA | ANUNCIE" (o manual

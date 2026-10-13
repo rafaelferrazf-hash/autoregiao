@@ -3,10 +3,11 @@ import Link from "next/link";
 import PaginaSimples from "@/components/PaginaSimples";
 import LogoLoja from "@/components/LogoLoja";
 import Icone from "@/components/Icone";
-import { criarClienteAnonimo } from "@/lib/supabase-servidor";
+import { criarClienteServidor } from "@/lib/supabase-servidor";
 
 // "Lojas da região": todas as lojas com veículos à venda (o RLS já esconde anúncios de lojas
 // vencidas/desativadas e os de demonstração). Ordem: mais veículos primeiro.
+// Com a sessão de quem visita: contas liberadas (fase19/20) também veem as lojas de teste.
 export const metadata: Metadata = {
   title: "Lojas de veículos da região | AutoRegião",
   description: "Conheça as lojas e revendas de carros, motos e utilitários da região: veja o endereço, os veículos à venda e fale direto pelo WhatsApp.",
@@ -17,7 +18,7 @@ type LojaLista = { id: string; nome: string; cidade: string | null; estado: stri
 
 export default async function Lojas({ searchParams }: { searchParams: Promise<{ cidade?: string }> }) {
   const { cidade: filtroCidade } = await searchParams;
-  const supabase = criarClienteAnonimo();
+  const supabase = await criarClienteServidor();
   const [{ data: lojas }, { data: veiculos }] = await Promise.all([
     supabase.from("lojas").select("id, nome, cidade, estado, endereco, logo_url, capa_url, ativo").neq("ativo", false),
     supabase.from("veiculos").select("loja_id").eq("ativo", true).not("loja_id", "is", null).limit(10000),

@@ -96,7 +96,13 @@ export default function AdminBanners() {
           <label><span style={rotulo}>Fim *</span><input type="date" style={campo} value={form.fim} onChange={muda("fim")} /></label>
           <label style={{ gridColumn: "1 / -1" }}>
             <span style={rotulo}>Foto * (deitada/horizontal; a pessoa ou o produto à direita fica melhor)</span>
-            <input type="file" accept="image/jpeg,image/png,image/webp" onChange={e => { const f = e.target.files?.[0] ?? null; setFoto(f); setPrevia(f ? URL.createObjectURL(f) : ""); }} />
+            <span style={{ display: "flex", alignItems: "center", gap: 10, padding: "14px 16px", border: "2px dashed #FDBA74", borderRadius: 10, background: "#FFF7ED", cursor: "pointer" }}>
+              <span style={{ padding: "8px 14px", background: "#FF6600", color: "#fff", borderRadius: 8, fontWeight: 700, fontSize: 13.5, display: "inline-flex", alignItems: "center", gap: 6, flexShrink: 0 }}>
+                <Icone nome="camera" tamanho={16} /> {foto ? "Trocar foto" : "Escolher foto"}
+              </span>
+              <span style={{ fontSize: 13, color: foto ? "#1A1917" : "#7A7670", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{foto ? foto.name : "JPG, PNG ou WEBP — a foto é reduzida sozinha antes de enviar"}</span>
+            </span>
+            <input type="file" accept="image/jpeg,image/png,image/webp" style={{ display: "none" }} onChange={e => { const f = e.target.files?.[0] ?? null; setFoto(f); setPrevia(f ? URL.createObjectURL(f) : ""); }} />
           </label>
         </div>
 

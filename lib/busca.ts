@@ -16,7 +16,8 @@ export type Filtros = {
   cambio?: string;
   combustivel?: string;
   carroceria?: string;        // Hatch, Sedã, SUV, Picape... (?carroceria=SUV)
-  ano_min?: number;
+  ano_min?: number;            // ano "De" (?ano_min=2015)
+  ano_max?: number;            // ano "Até" (?ano_max=2020)
   preco_min?: number;
   preco_max?: number;
   km_max?: number;
@@ -31,7 +32,7 @@ export type Filtros = {
 const ORDENS: Ordem[] = ["recentes", "menor_preco", "maior_preco", "menor_km"];
 const TIPOS: TipoVeiculo[] = ["carro", "moto", "utilitario"];
 const TEXTOS = ["q", "marca", "cidade", "cambio", "combustivel", "carroceria"] as const;
-const NUMEROS = ["ano_min", "preco_min", "preco_max", "km_max", "parcela_max"] as const;
+const NUMEROS = ["ano_min", "ano_max", "preco_min", "preco_max", "km_max", "parcela_max"] as const;
 
 // "R$ 90.000" / "90000" / "90.000,00" → 90000 (centavos descartados). Vazio ou inválido → undefined.
 export function paraNumero(v: string | null | undefined): number | undefined {
@@ -61,6 +62,8 @@ export function lerFiltros(params: URLSearchParams): Filtros {
   if (cond.length) f.condicoes = [...new Set(cond)];
   const ordem = params.get("ordem");
   if (ordem && (ORDENS as string[]).includes(ordem) && ordem !== "recentes") f.ordem = ordem as Ordem;
+  // "De 2020 até 2015" vira "de 2015 a 2020".
+  if (f.ano_min && f.ano_max && f.ano_min > f.ano_max) [f.ano_min, f.ano_max] = [f.ano_max, f.ano_min];
   return f;
 }
 
@@ -122,6 +125,7 @@ export function aplicarFiltros<Q extends ConsultaFiltravel<Q>>(consulta: Q, f: F
   if (f.combustivel) consulta = consulta.ilike("combustivel", escaparLike(f.combustivel));
   if (f.carroceria) consulta = consulta.eq("carroceria", f.carroceria);
   if (f.ano_min) consulta = consulta.gte("ano_num", f.ano_min);
+  if (f.ano_max) consulta = consulta.lte("ano_num", f.ano_max);
   if (f.preco_min) consulta = consulta.gte("preco", f.preco_min);
   if (f.preco_max) consulta = consulta.lte("preco", f.preco_max);
   if (f.km_max) consulta = consulta.lte("km_num", f.km_max);
@@ -154,7 +158,9 @@ export function descreverFiltros(f: Filtros): string {
   if (f.preco_min && f.preco_max) partes.push(`R$ ${milhar(f.preco_min)} a R$ ${milhar(f.preco_max)}`);
   else if (f.preco_max) partes.push(`até R$ ${milhar(f.preco_max)}`);
   else if (f.preco_min) partes.push(`a partir de R$ ${milhar(f.preco_min)}`);
-  if (f.ano_min) partes.push(`${f.ano_min} ou mais novo`);
+  if (f.ano_min && f.ano_max) partes.push(f.ano_min === f.ano_max ? `ano ${f.ano_min}` : `de ${f.ano_min} a ${f.ano_max}`);
+  else if (f.ano_min) partes.push(`${f.ano_min} ou mais novo`);
+  else if (f.ano_max) partes.push(`até ${f.ano_max}`);
   if (f.km_max) partes.push(`até ${milhar(f.km_max)} km`);
   if (f.parcela_max) partes.push(`parcela até R$ ${milhar(f.parcela_max)}/mês`);
   if (f.condicoes?.length) partes.push(f.condicoes.join(", "));

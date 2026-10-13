@@ -7,7 +7,8 @@ import BotoesConta from "@/components/BotoesConta";
 import { Suspense, useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { buscarVeiculosFiltrados, opcoesDeFiltro } from "@/lib/dados/veiculos";
-import BarraBusca, { ANOS } from "@/components/BarraBusca";
+import BarraBusca from "@/components/BarraBusca";
+import CampoAnos from "@/components/CampoAnos";
 import CriarAlerta from "@/components/CriarAlerta";
 import { lerFiltros, filtrosParaQuery, temFiltroAtivo, paraNumero, type Filtros, type Ordem, type TipoVeiculo } from "@/lib/busca";
 import type { VeiculoComLoja } from "@/lib/tipos";
@@ -91,10 +92,11 @@ function Veiculos() {
         </div>
       ))}
       <div style={{ marginBottom: 16 }}>
-        <div style={estiloTitulo}>Ano</div>
-        <select value={rascunho.ano_min ?? ""} onChange={e => mudaNumero("ano_min", e.target.value)} style={estiloSelect}>
-          {ANOS.map(([v, rotulo]) => <option key={v} value={v}>{rotulo}</option>)}
-        </select>
+        <div style={{ ...estiloTitulo, display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+          <span>Ano</span>
+          {(rascunho.ano_min || rascunho.ano_max) && <button type="button" onClick={() => setRascunho(r => ({ ...r, ano_min: undefined, ano_max: undefined }))} style={{ background: "none", border: "none", padding: 0, color: "#2563EB", fontSize: 11.5, fontWeight: 600, cursor: "pointer", textTransform: "none", letterSpacing: 0 }}>Ver tudo</button>}
+        </div>
+        <CampoAnos de={rascunho.ano_min} ate={rascunho.ano_max} onMudar={mudaNumero} />
       </div>
       <div style={{ marginBottom: 18 }}>
         <div style={estiloTitulo}>Faixa de preço (R$)</div>

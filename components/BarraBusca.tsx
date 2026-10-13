@@ -2,9 +2,9 @@
 import { useState, useSyncExternalStore } from "react";
 import { paraNumero, type Filtros, type TipoVeiculo } from "@/lib/busca";
 import Icone, { type NomeIcone } from "@/components/Icone";
+import CampoAnos from "@/components/CampoAnos";
 import { cidadeMaisProxima, cidadeOndeEsta, lerPosicao, ouvirPosicao, pegarLocalizacao } from "@/lib/pertoDeMim";
 
-export const ANOS: [string, string][] = [["", "Qualquer ano"], ["2024", "2024 ou mais novo"], ["2021", "2021 ou mais novo"], ["2018", "2018 ou mais novo"], ["2015", "2015 ou mais novo"], ["2010", "2010 ou mais novo"]];
 const ABAS: [TipoVeiculo | undefined, string, NomeIcone | null][] = [[undefined, "Todos", null], ["carro", "Carros", "carro"], ["moto", "Motos", "moto"], ["utilitario", "Utilitários", "utilitario"]];
 
 // Barra escura de busca (página inicial e /veiculos).
@@ -64,7 +64,7 @@ export default function BarraBusca({ filtros, cidades, onBuscar }: {
   return (
     <section style={{ marginTop: 60, background: "#1A1917", padding: "20px 16px" }}>
       <style>{`
-        .barra-busca-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr auto; gap: 10px; align-items: end; }
+        .barra-busca-grid { display: grid; grid-template-columns: 1.8fr 1fr 1.35fr 0.9fr 0.9fr auto; gap: 10px; align-items: end; }
         @media (max-width: 768px) { .barra-busca-grid { grid-template-columns: 1fr !important; } }
       `}</style>
       <div style={{ maxWidth: 1180, margin: "0 auto" }}>
@@ -91,9 +91,7 @@ export default function BarraBusca({ filtros, cidades, onBuscar }: {
             </select>
           </div>
           <div>{rotulo("Ano")}
-            <select value={rascunho.ano_min ?? ""} onChange={e => mudaNumero("ano_min", e.target.value)} style={{ ...campo, color: rascunho.ano_min ? "#fff" : "rgba(255,255,255,0.6)" }}>
-              {ANOS.map(([v, r]) => <option key={v} value={v} style={opcao}>{r}</option>)}
-            </select>
+            <CampoAnos escuro de={rascunho.ano_min} ate={rascunho.ano_max} onMudar={mudaNumero} />
           </div>
           <div>{rotulo("Preço até")}<input inputMode="numeric" placeholder="Qualquer valor" value={rascunho.preco_max ? rascunho.preco_max.toLocaleString("pt-BR") : ""} onChange={e => mudaNumero("preco_max", e.target.value)} style={campo} /></div>
           <div>{rotulo("KM até")}<input inputMode="numeric" placeholder="Qualquer km" value={rascunho.km_max ? rascunho.km_max.toLocaleString("pt-BR") : ""} onChange={e => mudaNumero("km_max", e.target.value)} style={campo} /></div>

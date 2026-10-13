@@ -7,14 +7,12 @@ import { useEmAppDaLoja } from "@/lib/appLoja";
 import { useState } from "react";
 import Icone, { type NomeIcone } from "@/components/Icone";
 
-// Itens do menu de navegação.
-// href: "#" nos itens ainda sem página pronta (Revendas, Tabela FIPE, Financiamento).
-// Quando você criar essas páginas, é só trocar o "#" pela rota real (ex: "/revendas").
+// Itens do menu de navegação (os mesmos das outras páginas).
 const menuItens = [
   { nome: "Buscar veículos", href: "/veiculos" },
-  { nome: "Revendas", href: "#" },
-  { nome: "Tabela FIPE", href: "#" },
-  { nome: "Financiamento", href: "#" },
+  { nome: "Favoritos", href: "/favoritos" },
+  { nome: "Lojas", href: "/lojas" },
+  { nome: "Tabela FIPE", href: "/tabela-fipe" },
   { nome: "Anunciar", href: "/anunciar" },
 ];
 

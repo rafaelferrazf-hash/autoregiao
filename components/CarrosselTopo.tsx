@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useEmAppDaLoja } from "@/lib/appLoja";
 import { APP_ANDROID, APP_IPHONE } from "@/lib/site";
 import LogoLoja from "@/components/LogoLoja";
+import { supabase } from "@/lib/supabase";
+import type { BannerPublico } from "@/lib/banners";
 
 // Banner grande no topo da página inicial (estilo Mobiauto): troca sozinho a cada 6 s, setas
 // semitransparentes, bolinhas e arrastar no celular. Fotos: Pexels (licença livre), em public/banners/.
@@ -14,27 +16,55 @@ type Slide = {
   titulo: React.ReactNode; texto: string;
   botao?: { rotulo: string; href: string };
   lojasDeApps?: boolean; // botões Google Play / App Store no lugar do botão
+  banner?: string;       // id do banner pago (conta visualização e clique)
 };
 
 const destaque = (t: string) => <span style={{ color: "#FF7A1F" }}>{t}</span>;
 const TEMPO = 6000;
+const estiloBotao = { alignSelf: "flex-start", marginTop: 6, padding: "12px 22px", background: "#FF6600", color: "#fff", borderRadius: 9, fontWeight: 700, fontSize: 15, textDecoration: "none" } as const;
 
 export default function CarrosselTopo() {
   const emApp = useEmAppDaLoja();
   const [atual, setAtual] = useState(0);
   const [pausado, setPausado] = useState(false);
   const toque = useRef<number | null>(null);
+  const [banners, setBanners] = useState<BannerPublico[]>([]);
+  const vistos = useRef(new Set<string>());
 
+  // Banners pagos no ar hoje (o banco só devolve os que estão no período).
+  useEffect(() => {
+    let ativo = true;
+    supabase.from("banners").select("id, titulo, destaque, texto, botao, link, imagem_url").order("inicio").limit(4)
+      .then(({ data }) => { if (ativo && data) setBanners(data as BannerPublico[]); });
+    return () => { ativo = false; };
+  }, []);
 
   const temApp = !emApp && (APP_ANDROID.publicado || APP_IPHONE.publicado);
   const slides: Slide[] = [
     { chave: "carro", foto: "/banners/carro-ideal.jpg", titulo: <>Encontre o carro ideal {destaque("na sua região")}</>, texto: "Carros, motos e utilitários de Teixeira de Freitas e região.", botao: { rotulo: "Buscar veículos", href: "/veiculos" } },
+    ...banners.map(b => ({
+      chave: `banner-${b.id}`, banner: b.id, foto: b.imagem_url,
+      titulo: b.destaque && b.titulo.includes(b.destaque)
+        ? <>{b.titulo.split(b.destaque)[0]}{destaque(b.destaque)}{b.titulo.split(b.destaque).slice(1).join(b.destaque)}</>
+        : <>{b.titulo}</>,
+      texto: b.texto ?? "",
+      botao: { rotulo: b.botao, href: b.link },
+    })),
     ...(temApp ? [{ chave: "app", foto: "/banners/app.jpg", largura: "36%", titulo: <>O seu próximo carro {destaque("na palma da mão")}</>, texto: "Baixe o app AutoRegião e receba aviso de carro novo no celular.", lojasDeApps: true }] : []),
     { chave: "fipe", foto: "/banners/fipe.jpg", largura: "28%", titulo: <>Consulte a {destaque("Tabela FIPE")} de graça</>, texto: "Saiba o preço justo antes de comprar ou vender.", botao: { rotulo: "Consultar FIPE", href: "/tabela-fipe" } },
     ...(!emApp ? [{ chave: "anuncie", foto: "/banners/anuncie.jpg", largura: "46%", titulo: <>Anuncie sua revenda: {destaque("60 dias grátis")}</>, texto: "Seus carros na vitrine de quem compra na região.", botao: { rotulo: "Quero anunciar", href: "/anunciar" } }] : []),
   ];
   const total = slides.length;
   const indice = total ? atual % total : 0;
+
+  // Conta 1 visualização por banner por visita, quando ele aparece na tela.
+  const bannerAtual = slides[indice]?.banner;
+  useEffect(() => {
+    if (!bannerAtual || vistos.current.has(bannerAtual)) return;
+    vistos.current.add(bannerAtual);
+    supabase.rpc("contar_banner", { p_id: bannerAtual, p_tipo: "visualizacao" }).then(() => {});
+  }, [bannerAtual]);
+  const contarClique = (id?: string) => { if (id) supabase.rpc("contar_banner", { p_id: id, p_tipo: "clique" }).then(() => {}); };
 
   const ir = useCallback((n: number) => setAtual(a => ((((a % total) + n) % total) + total) % total), [total]);
   useEffect(() => {
@@ -93,10 +123,13 @@ export default function CarrosselTopo() {
           {/* Texto */}
           <div className="carrossel-conteudo" style={{ position: "relative", zIndex: 2, maxWidth: 1180, height: "100%", margin: "0 auto", padding: "0 24px 26px", boxSizing: "border-box", display: "flex", flexDirection: "column", justifyContent: "center", gap: 12 }}>
             {s.logo && s.foto && <LogoLoja url={s.logo} tamanho={56} raio={28} />}
+            {s.banner && <span style={{ alignSelf: "flex-start", fontSize: 10.5, fontWeight: 700, letterSpacing: 0.6, textTransform: "uppercase", color: "rgba(255,255,255,0.7)", border: "1px solid rgba(255,255,255,0.35)", padding: "2px 8px", borderRadius: 4 }}>Patrocinado</span>}
             <h2 className="carrossel-titulo" style={{ margin: 0, color: "#fff", fontWeight: 800, lineHeight: 1.1, maxWidth: 560 }}>{s.titulo}</h2>
             <p className="carrossel-texto" style={{ margin: 0, color: "rgba(255,255,255,0.85)", maxWidth: 480, lineHeight: 1.45 }}>{s.texto}</p>
             {s.botao && (
-              <Link href={s.botao.href} style={{ alignSelf: "flex-start", marginTop: 6, padding: "12px 22px", background: "#FF6600", color: "#fff", borderRadius: 9, fontWeight: 700, fontSize: 15, textDecoration: "none" }}>{s.botao.rotulo} →</Link>
+              s.botao.href.startsWith("/")
+                ? <Link href={s.botao.href} onClick={() => contarClique(s.banner)} style={estiloBotao}>{s.botao.rotulo} →</Link>
+                : <a href={s.botao.href} target="_blank" rel="noopener noreferrer sponsored" onClick={() => contarClique(s.banner)} style={estiloBotao}>{s.botao.rotulo} →</a>
             )}
             {s.lojasDeApps && (
               <div style={{ display: "flex", gap: 10, marginTop: 6, flexWrap: "wrap", alignItems: "center" }}>

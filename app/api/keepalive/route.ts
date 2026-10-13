@@ -3,6 +3,7 @@ import { reconciliarPendentes } from "@/lib/mercadopago";
 import { enviarAlertasDoDia } from "@/lib/alertas";
 import { atualizarFipesVencidas } from "@/lib/fipe";
 import { diaDoMesBrasilia, mesAnterior, prepararRelatorios } from "@/lib/relatorioMensal";
+import { avisarBannersVencendo } from "@/lib/avisosBanners";
 
 // Chamado 1x por dia pelo Cron da Vercel (ver vercel.json).
 // 1. O Supabase no plano gratuito pausa o projeto após ~7 dias sem uso; uma consulta
@@ -12,6 +13,7 @@ import { diaDoMesBrasilia, mesAnterior, prepararRelatorios } from "@/lib/relator
 // 4. Manda os e-mails dos alertas de veículos (anúncios novos do último dia).
 // 5. Atualiza o valor da FIPE dos anúncios (a tabela muda todo mês).
 // 6. Dia 1º: relatório do mês anterior de cada loja, por e-mail (o WhatsApp é pelo /admin).
+// 7. Banners pagos que vencem em 3 dias: e-mail para o admin oferecer a renovação.
 export const dynamic = "force-dynamic";
 
 const RETENCAO_EVENTOS_DIAS = 365;
@@ -53,9 +55,15 @@ export async function GET() {
     try { relatorios = await prepararRelatorios(mesAnterior(), true); } catch (e) { console.error("relatórios:", e); }
   }
 
+  let bannersVencendo: number | null = null;
+  if (process.env.RESEND_API_KEY) {
+    try { bannersVencendo = await avisarBannersVencendo(); } catch (e) { console.error("banners:", e); }
+  }
+
   return Response.json({
     ok: true,
     relatorios,
+    banners_vencendo: bannersVencendo,
     alertas,
     fipe,
     veiculos: count,

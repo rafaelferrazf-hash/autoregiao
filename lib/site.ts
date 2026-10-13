@@ -10,3 +10,8 @@ export const NOME_SITE = "AutoRegião";
 export const RESPONSAVEL = "Rafael Ferraz";
 export const CIDADE_RESPONSAVEL = "Teixeira de Freitas/BA";
 export const EMAIL_CONTATO = "contato@autoregiao.com.br";
+
+// Apps nas lojas: o slide "Baixe o app" e os botões só aparecem depois de publicados.
+// Ao aprovar cada um, trocar para true (Android ~20/10; iPhone depois da revisão da Apple).
+export const APP_ANDROID = { publicado: false, link: "https://play.google.com/store/apps/details?id=br.com.autoregiao.app" };
+export const APP_IPHONE = { publicado: false, link: "https://apps.apple.com/br/app/id6820997830" };

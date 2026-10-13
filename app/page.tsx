@@ -9,6 +9,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import BarraBusca from "@/components/BarraBusca";
 import VitrinePremium from "@/components/VitrinePremium";
+import CarrosselTopo from "@/components/CarrosselTopo";
 import { listarVeiculosAtivos, opcoesDeFiltro } from "@/lib/dados/veiculos";
 import { filtrosParaQuery } from "@/lib/busca";
 import type { VeiculoComLoja } from "@/lib/tipos";
@@ -96,7 +97,8 @@ export default function Home() {
         )}
       </nav>
 
-      <BarraBusca filtros={{}} cidades={cidades} onBuscar={f => router.push(`/veiculos${filtrosParaQuery(f)}`)} />
+      <CarrosselTopo />
+      <BarraBusca abaixoDoBanner filtros={{}} cidades={cidades} onBuscar={f => router.push(`/veiculos${filtrosParaQuery(f)}`)} />
 
       <VitrinePremium />
 

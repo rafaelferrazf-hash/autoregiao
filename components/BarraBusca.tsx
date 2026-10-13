@@ -9,10 +9,11 @@ const ABAS: [TipoVeiculo | undefined, string, NomeIcone | null][] = [[undefined,
 
 // Barra escura de busca (página inicial e /veiculos).
 // `onBuscar` recebe os filtros do formulário; as abas de tipo buscam na hora.
-export default function BarraBusca({ filtros, cidades, onBuscar }: {
+export default function BarraBusca({ filtros, cidades, onBuscar, abaixoDoBanner = false }: {
   filtros: Filtros;
   cidades: string[];
   onBuscar: (f: Filtros) => void;
+  abaixoDoBanner?: boolean; // página inicial: logo abaixo do carrossel (sem espaço da barra fixa do topo)
 }) {
   const [rascunho, setRascunho] = useState<Filtros>(filtros);
   // Quando a URL muda (voltar do navegador, limpar filtros), o formulário acompanha.
@@ -62,7 +63,7 @@ export default function BarraBusca({ filtros, cidades, onBuscar }: {
   const opcao = { color: "#1A1917" };
 
   return (
-    <section style={{ marginTop: 60, background: "#1A1917", padding: "20px 16px" }}>
+    <section style={{ marginTop: abaixoDoBanner ? 0 : 60, background: "#1A1917", padding: "20px 16px", borderTop: abaixoDoBanner ? "1px solid rgba(255,255,255,0.08)" : undefined }}>
       <style>{`
         .barra-busca-grid { display: grid; grid-template-columns: 1.8fr 1fr 1.35fr 0.9fr 0.9fr auto; gap: 10px; align-items: end; }
         @media (max-width: 768px) { .barra-busca-grid { grid-template-columns: 1fr !important; } }

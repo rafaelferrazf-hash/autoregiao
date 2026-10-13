@@ -45,12 +45,13 @@ function tituloDoCard(car: DadosCartao): { titulo: string; versao: string } {
 }
 
 // Card de anúncio usado em todas as listas (início, vitrine, busca, loja, favoritos, parecidos).
-// Básico/particular: card simples. Profissional (e período grátis): etiqueta "Destaque".
-// Premium: etiqueta + borda laranja + logo da loja sobre a foto e "Loja Premium" (lib/planos, supabase/fase17).
+// Básico/particular: card simples. Profissional (e período grátis): etiqueta "Destaque" + logo da loja sobre a foto.
+// Premium: tudo isso + borda laranja e "Loja Premium" (lib/planos, supabase/fase17).
 // `mostrarLoja`: some na página da própria loja, onde seria repetido.
 export default function CartaoVeiculo({ car, mostrarLoja = true, largura }: { car: DadosCartao; mostrarLoja?: boolean; largura?: number }) {
   const premium = (car.prioridade ?? 0) >= 2;
-  const logo = premium ? car.lojas?.logo_url : null;
+  // Logo da loja no card: Profissional (e período grátis) e Premium.
+  const logo = (car.prioridade ?? 0) >= 1 ? car.lojas?.logo_url : null;
   const { titulo, versao } = tituloDoCard(car);
   const cidade = car.lojas?.cidade || car.cidade;
   const telefone = (car.telefone || car.lojas?.whatsapp || car.lojas?.telefone || "").replace(/\D/g, "");

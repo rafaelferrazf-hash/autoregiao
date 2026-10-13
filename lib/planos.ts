@@ -22,18 +22,19 @@ export type PlanoPago = {
 };
 
 // Ordem nas listas (supabase/fase17): Premium > Profissional (e período grátis) > Básico.
+// Preços de lançamento (13/10/2026). Limites também no banco (fase23: limite_anuncios) — manter iguais.
 export const PLANOS: PlanoPago[] = [
   {
-    id: "basico", nome: "Básico", precoMensal: 89, limite: 10, destaque: false,
-    recursos: ["Até 10 anúncios ativos", "Página da loja com logo, capa e mapa", "Contato direto pelo WhatsApp", "Estatísticas de visualizações e contatos"],
+    id: "basico", nome: "Básico", precoMensal: 69, limite: 15, destaque: false,
+    recursos: ["Até 15 anúncios ativos", "Página da loja com logo, capa e mapa", "Contato direto pelo WhatsApp", "Relatório mensal de visualizações e contatos"],
   },
   {
-    id: "profissional", nome: "Profissional", precoMensal: 159, limite: 30, destaque: true,
-    recursos: ["Até 30 anúncios ativos", "Seus anúncios aparecem antes dos do plano Básico", "Etiqueta “Destaque” nos seus anúncios", "Página da loja com logo, capa e mapa", "Contato direto pelo WhatsApp", "Estatísticas de visualizações e contatos"],
+    id: "profissional", nome: "Profissional", precoMensal: 129, limite: 40, destaque: true,
+    recursos: ["Até 40 anúncios ativos", "Seus anúncios aparecem antes dos do plano Básico", "Etiqueta “Destaque” nos seus anúncios", "Logo da sua loja nos anúncios", "Página da loja com logo, capa e mapa", "Contato direto pelo WhatsApp", "Relatório mensal de visualizações e contatos"],
   },
   {
-    id: "premium", nome: "Premium", precoMensal: 299, limite: null, destaque: true,
-    recursos: ["Anúncios ilimitados", "Vitrine “Ofertas em destaque” no topo da página inicial", "Seus anúncios aparecem antes de todos na busca", "Logo da sua loja nos anúncios e selo “Loja Premium”", "Anúncios com borda laranja e etiqueta “Destaque”", "Página da loja com logo, capa e mapa", "Contato direto pelo WhatsApp", "Estatísticas de visualizações e contatos"],
+    id: "premium", nome: "Premium", precoMensal: 249, limite: null, destaque: true,
+    recursos: ["Anúncios ilimitados", "Seus anúncios aparecem primeiro na busca", "Vitrine “Ofertas em destaque” no topo da página inicial", "Anúncios com borda laranja, etiqueta “Destaque” e selo “Loja Premium”", "Logo da sua loja nos anúncios", "Página da loja com logo, capa e mapa", "Contato direto pelo WhatsApp", "Relatório mensal de visualizações e contatos"],
   },
 ];
 
@@ -71,9 +72,9 @@ export function nomeDoPlano(plano: string | null | undefined): string {
 
 export function limiteDoPlano(plano: string | null | undefined): number | null {
   if (ehVitalicio(plano)) return null;
-  if (!plano || plano === "trial") return 30;
+  if (!plano || plano === "trial") return 40;
   const p = PLANOS.find(x => x.id === plano);
-  return p ? p.limite : 10;
+  return p ? p.limite : 15;
 }
 
 // Situação do plano da loja para os avisos do painel.

@@ -4,6 +4,7 @@ import Logo from "@/components/Logo";
 import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 import Icone from "@/components/Icone";
+import CampoSenha from "@/components/CampoSenha";
 
 export default function Cadastro() {
   const [tipo, setTipo] = useState<"comprador" | "lojista" | "particular">("comprador");
@@ -158,7 +159,7 @@ export default function Cadastro() {
             {[["Senha", "senha", "Mínimo 8 caracteres"], ["Confirmar senha", "confirmarSenha", "Repita a senha"]].map(([label, field, placeholder]) => (
               <div key={field} style={{ marginBottom: 14 }}>
                 <div style={{ fontSize: 12, fontWeight: 500, color: "#1A1917", marginBottom: 5 }}>{label} <span style={{ color: "#FF6600" }}>*</span></div>
-                <input type="password" placeholder={placeholder} value={form[field as keyof typeof form]}
+                <CampoSenha placeholder={placeholder} value={form[field as keyof typeof form]}
                   onChange={e => setForm({ ...form, [field]: e.target.value })}
                   style={{ width: "100%", padding: "12px 14px", border: "1.5px solid #E8E6E1", borderRadius: 8, fontSize: 15, color: "#1A1917", background: "#F7F6F3", outline: "none", boxSizing: "border-box" }} />
               </div>

@@ -1,7 +1,7 @@
 import {
   IconAdjustmentsHorizontal, IconAlertTriangle, IconArrowBackUp, IconBell, IconBrandWhatsapp, IconBuildingStore,
   IconCalendar, IconCamera, IconCar, IconChartBar, IconCheck, IconCircleCheck, IconCircleX, IconClock, IconConfetti,
-  IconCopy, IconCrown, IconCurrencyReal, IconDeviceMobile, IconEye, IconFlag, IconGasStation, IconGift, IconLink,
+  IconCopy, IconCrown, IconCurrencyReal, IconDeviceMobile, IconEye, IconEyeOff, IconFlag, IconGasStation, IconGift, IconLink,
   IconLogout, IconManualGearbox, IconMapPin, IconMotorbike, IconNavigation, IconPalette, IconPencil, IconPhone,
   IconPlus, IconRocket, IconSearch, IconShare, IconShieldCheck, IconStar, IconStarFilled, IconTicket, IconTrash,
   IconTrendingDown, IconTrophy, IconTruck, IconUser, IconUsers, IconX, IconQrcode, IconGauge, IconHourglass, IconInfoCircle, IconPlayerPause, IconPlayerPlay, IconDoor, IconArrowsLeftRight,
@@ -15,7 +15,7 @@ const ICONES = {
   ajustes: IconAdjustmentsHorizontal, atencao: IconAlertTriangle, estorno: IconArrowBackUp, sino: IconBell,
   whatsapp: IconBrandWhatsapp, loja: IconBuildingStore, calendario: IconCalendar, camera: IconCamera, carro: IconCar,
   grafico: IconChartBar, check: IconCheck, ok: IconCircleCheck, erro: IconCircleX, relogio: IconClock, festa: IconConfetti,
-  copiar: IconCopy, coroa: IconCrown, real: IconCurrencyReal, celular: IconDeviceMobile, olho: IconEye, bandeira: IconFlag,
+  copiar: IconCopy, coroa: IconCrown, real: IconCurrencyReal, celular: IconDeviceMobile, olho: IconEye, olhoFechado: IconEyeOff, bandeira: IconFlag,
   combustivel: IconGasStation, presente: IconGift, link: IconLink, sair: IconLogout, cambio: IconManualGearbox,
   local: IconMapPin, moto: IconMotorbike, navegar: IconNavigation, cor: IconPalette, editar: IconPencil, telefone: IconPhone,
   mais: IconPlus, foguete: IconRocket, buscar: IconSearch, compartilhar: IconShare, escudo: IconShieldCheck,

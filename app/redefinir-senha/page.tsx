@@ -4,6 +4,7 @@ import Logo from "@/components/Logo";
 import { useState, useEffect, useSyncExternalStore } from "react";
 import { supabase } from "@/lib/supabase";
 import Icone from "@/components/Icone";
+import CampoSenha from "@/components/CampoSenha";
 
 const semAssinatura = () => () => {};
 function linkTemErro() {
@@ -113,11 +114,11 @@ export default function RedefinirSenha() {
               <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
                 <div>
                   <label style={labelStyle}>Senha nova</label>
-                  <input type="password" placeholder="Mínimo 6 caracteres" value={senha} onChange={e => setSenha(e.target.value)} style={inputStyle} />
+                  <CampoSenha placeholder="Mínimo 6 caracteres" value={senha} onChange={e => setSenha(e.target.value)} style={inputStyle} />
                 </div>
                 <div>
                   <label style={labelStyle}>Confirmar senha</label>
-                  <input type="password" placeholder="Repita a senha" value={confirmacao} onChange={e => setConfirmacao(e.target.value)} onKeyDown={e => e.key === "Enter" && handleSalvar()} style={inputStyle} />
+                  <CampoSenha placeholder="Repita a senha" value={confirmacao} onChange={e => setConfirmacao(e.target.value)} onKeyDown={e => e.key === "Enter" && handleSalvar()} style={inputStyle} />
                 </div>
                 <button onClick={handleSalvar} disabled={carregando || sucesso}
                   style={{ width: "100%", padding: "14px", background: carregando ? "#C44818" : "#FF6600", color: "#fff", border: "none", borderRadius: 9, fontSize: 16, fontWeight: 700, cursor: carregando ? "not-allowed" : "pointer", opacity: carregando ? 0.8 : 1 }}>

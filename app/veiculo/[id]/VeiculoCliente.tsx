@@ -9,13 +9,13 @@ import { buscarSemelhantes } from "@/lib/dados/veiculos";
 import BotaoFavorito from "@/components/BotaoFavorito";
 import CartaoVeiculo, { abaixoDaFipe, SeloPreco } from "@/components/CartaoVeiculo";
 import SeloVerificada from "@/components/SeloVerificada";
+import DenunciarAnuncio from "@/components/DenunciarAnuncio";
 import Rodape from "@/components/Rodape";
 import MapaLoja from "@/components/MapaLoja";
 import LogoLoja from "@/components/LogoLoja";
 import { formatarPreco, formatarKm } from "@/lib/formatar";
 import { registrarEvento } from "@/lib/dados/eventos";
 import type { VeiculoComLoja } from "@/lib/tipos";
-import { EMAIL_CONTATO, URL_SITE } from "@/lib/site";
 import Icone, { type NomeIcone } from "@/components/Icone";
 import { caminhoDoVeiculo, linkMesmoModelo } from "@/lib/caminhoVeiculo";
 import { ENTRADA_PADRAO, parcelaMensal } from "@/lib/financiamento";
@@ -152,12 +152,6 @@ export default function Veiculo({ inicial }: { inicial: VeiculoComLoja }) {
     ? new Date(veiculo.lojas.criado_em).toLocaleDateString("pt-BR", { month: "long", year: "numeric" })
     : null;
   // Denúncia vai por e-mail para o contato@ (chega no Gmail do dono), já com o link do anúncio.
-  const linkDenuncia = veiculo
-    ? `mailto:${EMAIL_CONTATO}?subject=${encodeURIComponent(`Denúncia de anúncio: ${veiculo.nome}`)}&body=${encodeURIComponent(`Anúncio: ${typeof window !== "undefined" ? window.location.origin : URL_SITE}${linkDoVeiculo(veiculo)}
-
-Motivo da denúncia:
-`)}`
-    : "";
   const caixaSeguranca = veiculo && (
     <div style={{ background: "rgba(22,163,74,0.08)", border: "1.5px solid rgba(22,163,74,0.15)", borderRadius: 12, padding: "14px 16px" }}>
       <div style={{ fontSize: 13, fontWeight: 700, color: "#16A34A", marginBottom: 10 }}><Icone nome="escudo" /> Compre com segurança</div>
@@ -166,7 +160,7 @@ Motivo da denúncia:
           <span style={{ color: "#16A34A", display: "flex" }}><Icone nome="check" tamanho={14} traco={2.2} /></span> {item}
         </div>
       ))}
-      <a href={linkDenuncia} className="toque-facil" style={{ display: "inline-block", marginTop: 6, fontSize: 12, color: "#7A7670", textDecoration: "underline" }}><Icone nome="bandeira" /> Denunciar este anúncio</a>
+      <DenunciarAnuncio veiculoId={veiculo.id} />
     </div>
   );
 

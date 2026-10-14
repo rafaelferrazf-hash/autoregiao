@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { useEmAppDaLoja } from "@/lib/appLoja";
 import { AVULSOS, DIAS_GRATIS_PARTICULAR, formatarReais, type IdAvulso } from "@/lib/planos";
@@ -8,7 +7,7 @@ import Icone from "@/components/Icone";
 
 // Antes do cadastro de um anúncio de PESSOA FÍSICA (supabase/fase24):
 //  - ainda não usou o grátis → pede CPF + WhatsApp e libera 1 anúncio grátis de 60 dias;
-//  - já usou → anúncio avulso pago (30 ou 60 dias) ou planos de loja.
+//  - já usou → anúncio avulso pago (30 ou 60 dias).
 // Loja, quem já tem uma liberação sobrando, ou edição de anúncio: passa direto (children).
 type Situacao = "carregando" | "livre" | "gratis" | "pago";
 
@@ -104,9 +103,6 @@ export default function PortaoParticular({ ativo, onLiberado, children }: { ativ
         <button type="submit" disabled={enviando} style={{ width: "100%", padding: 13, background: "#FF6600", color: "#fff", border: "none", borderRadius: 9, fontWeight: 700, fontSize: 15, cursor: "pointer" }}>
           {enviando ? "Conferindo..." : "Liberar meu anúncio grátis"}
         </button>
-        <div style={{ fontSize: 12.5, color: "#7A7670", marginTop: 14, textAlign: "center" }}>
-          É revenda? <Link href="/anunciar" style={{ color: "#FF6600", fontWeight: 600 }}>Conheça os planos para lojas</Link>
-        </div>
       </form>
     );
   }
@@ -124,7 +120,7 @@ export default function PortaoParticular({ ativo, onLiberado, children }: { ativ
       ) : (
         <>
           <p style={{ fontSize: 14, color: "#4A4843", lineHeight: 1.55, margin: "0 0 16px" }}>Para anunciar outro veículo, escolha um <strong>anúncio avulso</strong>. Paga uma vez só, por Pix ou cartão.</p>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 12, marginBottom: 18 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 12 }}>
             {AVULSOS.map(a => (
               <button key={a.id} type="button" disabled={!!pagando} onClick={() => pagar(a.id)}
                 style={{ textAlign: "left", padding: 16, borderRadius: 12, cursor: "pointer", border: a.dias === 60 ? "2px solid #FF6600" : "1.5px solid #E8E6E1", background: a.dias === 60 ? "#FFF7ED" : "#fff" }}>
@@ -133,10 +129,6 @@ export default function PortaoParticular({ ativo, onLiberado, children }: { ativ
                 <div style={{ fontSize: 13, color: "#FF6600", fontWeight: 700 }}>{pagando === a.id ? "Abrindo o pagamento..." : "Anunciar →"}</div>
               </button>
             ))}
-          </div>
-          <div style={{ padding: 14, borderRadius: 10, background: "#F7F6F3", fontSize: 13.5, color: "#4A4843", lineHeight: 1.5 }}>
-            <strong style={{ color: "#1A1917" }}>Vende carros com frequência?</strong> Conheça os planos para revendas, a partir de R$ 69/mês com até 15 anúncios.{" "}
-            <Link href="/anunciar" style={{ color: "#FF6600", fontWeight: 700 }}>Ver planos</Link>
           </div>
         </>
       )}

@@ -17,8 +17,8 @@ export async function POST(request: Request) {
   if (!resultado.ok) return Response.json({ status: "desconhecido", erro: resultado.motivo }, { status: 404 });
 
   // Confere que o pagamento é deste usuário (RLS: só enxerga os próprios).
-  const { data: meu } = await sessao.from("pagamentos").select("id").eq("id", resultado.pagamentoId).maybeSingle();
+  const { data: meu } = await sessao.from("pagamentos").select("id, plano").eq("id", resultado.pagamentoId).maybeSingle();
   if (!meu) return Response.json({ erro: "Pagamento de outra conta." }, { status: 403 });
 
-  return Response.json({ status: resultado.status, aplicado: resultado.aplicado });
+  return Response.json({ status: resultado.status, aplicado: resultado.aplicado, avulso: String(meu.plano).startsWith("avulso") });
 }

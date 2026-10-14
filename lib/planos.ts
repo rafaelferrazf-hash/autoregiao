@@ -60,6 +60,14 @@ export function formatarReais(valor: number): string {
   return valor.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 }
 
+// Pessoa física (supabase/fase24): 1 anúncio grátis por CPF/WhatsApp (60 dias); depois, anúncio avulso.
+export const DIAS_GRATIS_PARTICULAR = 60;
+export const AVULSOS = [
+  { id: "avulso30", dias: 30, preco: 19.9 },
+  { id: "avulso60", dias: 60, preco: 29.9 },
+] as const;
+export type IdAvulso = (typeof AVULSOS)[number]["id"];
+
 export const DIAS_GRATIS = 60;
 export const DIAS_CARENCIA = 3;
 export const LIMITE_PARTICULAR = 1;
@@ -67,6 +75,8 @@ export const LIMITE_PARTICULAR = 1;
 export function nomeDoPlano(plano: string | null | undefined): string {
   if (ehVitalicio(plano)) return "Acesso vitalício";
   if (!plano || plano === "trial") return "Período grátis";
+  const avulso = AVULSOS.find(a => a.id === plano);
+  if (avulso) return `Anúncio avulso (${avulso.dias} dias)`;
   return PLANOS.find(p => p.id === plano)?.nome ?? plano;
 }
 
@@ -101,6 +111,8 @@ export function mensagemErroAnuncio(mensagem: string | undefined): string | null
   if (!mensagem) return null;
   if (mensagem.includes("plano_vencido")) return "O plano da sua loja venceu. Os anúncios voltam a ser publicados quando o plano estiver ativo.";
   if (mensagem.includes("anuncio_vendido")) return "Este anúncio foi marcado como vendido e não volta ao ar. Para anunciar de novo, crie um anúncio novo.";
+  if (mensagem.includes("sem_anuncio_particular")) return "Você já usou seu anúncio grátis. Para publicar outro veículo, escolha um anúncio avulso.";
+  if (mensagem.includes("anuncio_vencido")) return "Este anúncio venceu. Para voltar ao ar, publique um anúncio avulso.";
   if (mensagem.includes("limite_anuncios")) return "Você atingiu o limite de anúncios ativos do seu plano. Pause um anúncio ou escolha um plano maior.";
   return null;
 }

@@ -44,6 +44,7 @@ export type Veiculo = {
   abaixo_fipe?: boolean | null;
   demonstracao?: boolean | null;
   vendido_em?: string | null;
+  expira_em?: string | null;      // fim do anúncio de pessoa física (fase24: 60 dias grátis ou avulso)
   prioridade?: number | null;     // 2 Premium, 1 Profissional/grátis, 0 Básico/particular (fase17, calculada pelo banco)
   condicoes?: string[] | null;    // situação do veículo (fase16): IPVA pago, licenciado, único dono...     // "Finalizar" = vendido (fase15): fora do ar para sempre  // anúncio de demonstração (fase13): fora do Google, do sitemap e dos alertas   // calculada pelo banco (fase7-filtros.sql); nunca gravada pelo site
 };

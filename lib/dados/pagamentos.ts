@@ -39,7 +39,7 @@ export async function iniciarPagamento(plano: IdPlanoPago, meses: MesesPeriodo):
   }
 }
 
-export async function verificarPagamento(paymentId: string): Promise<{ status?: string; aplicado?: string | null; erro?: string }> {
+export async function verificarPagamento(paymentId: string): Promise<{ status?: string; aplicado?: string | null; erro?: string; avulso?: boolean }> {
   try {
     const resp = await fetch("/api/pagamentos/verificar", {
       method: "POST",

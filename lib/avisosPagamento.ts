@@ -24,6 +24,7 @@ export async function avisarPagamentoAprovado(pagamentoId: string) {
     const { data: dono } = await admin.auth.admin.getUserById(pag.usuario_id);
     const emailLojista = dono?.user?.email;
 
+    if (String(pag.plano).startsWith("avulso")) return await avisarAvulso(pag.plano, Number(pag.valor), pag.metodo, emailLojista);
     const plano = nomeDoPlano(pag.plano);
     const periodo = `${pag.meses} ${pag.meses === 1 ? "mês" : "meses"}`;
     const valor = formatarReais(Number(pag.valor));
@@ -65,5 +66,34 @@ export async function avisarPagamentoAprovado(pagamentoId: string) {
     }
   } catch (e) {
     console.error("aviso pagamento:", e);
+  }
+}
+
+// Anúncio avulso de pessoa física (supabase/fase24): avisa quem pagou (com o link para publicar) e o admin.
+async function avisarAvulso(plano: string, valorPago: number, metodoMp: string | null, email: string | undefined) {
+  const nome = nomeDoPlano(plano);
+  const valor = formatarReais(valorPago);
+  const metodo = METODOS[metodoMp ?? ""] ?? "Mercado Pago";
+  if (email) {
+    const r = await enviarEmail({
+      para: email,
+      assunto: `Pagamento aprovado — ${nome}`,
+      html: modeloEmail(
+        "Pagamento aprovado!",
+        `<p style="margin:0 0 12px;font-size:15px;line-height:1.5;color:#4A4843">Recebemos <strong>${escaparHtml(valor)}</strong> (${escaparHtml(metodo)}) do <strong>${escaparHtml(nome)}</strong>.</p>
+         <p style="margin:0 0 24px;font-size:15px;line-height:1.5;color:#4A4843">Agora é só cadastrar o seu veículo. O prazo começa a contar quando o anúncio for publicado.</p>
+         ${botaoEmail("Publicar meu anúncio", `${URL_SITE}/painel/novo-anuncio`)}`,
+        "O comprovante do pagamento fica no Mercado Pago. Dúvidas: contato@autoregiao.com.br.",
+      ),
+    });
+    if (!r.ok) console.error("aviso avulso (anunciante):", r.erro);
+  }
+  const admins = (process.env.NEXT_PUBLIC_ADMIN_EMAILS || "").split(",").map(e => e.trim()).filter(Boolean);
+  for (const para of admins) {
+    await enviarEmail({
+      para,
+      assunto: `Nova venda: ${nome} — ${valor}`,
+      html: modeloEmail("Novo anúncio avulso vendido", `<p style="margin:0;font-size:15px;line-height:1.5;color:#4A4843">${email ? escaparHtml(email) : "Um anunciante"} pagou <strong>${escaparHtml(valor)}</strong> por <strong>${escaparHtml(metodo)}</strong> (${escaparHtml(nome)}).</p>`, "Aviso automático do AutoRegião."),
+    }).catch(() => {});
   }
 }

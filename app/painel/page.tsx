@@ -425,7 +425,7 @@ export default function Painel() {
                               </div>
                             </div>
                           </td>
-                          <td style={{ padding: "11px 14px" }}>{statusBadge(car.status === "vendido" ? "vendido" : car.ativo === false ? "pausado" : foraDoAr ? "fora" : car.status || "ativo")}</td>
+                          <td style={{ padding: "11px 14px" }}>{statusBadge(car.status === "vendido" ? "vendido" : car.ativo === false ? "pausado" : foraDoAr ? "fora" : car.status || "ativo")}<Vencimento iso={car.expira_em} /></td>
                           <td style={{ padding: "11px 14px", fontSize: 13, fontWeight: 700, color: "#1A1917" }}>{formatarPreco(car.preco)}<SituacaoFipe car={car} /></td>
                           <td style={{ padding: "11px 14px" }}>
                             <div style={{ display: "flex", gap: 5 }}>
@@ -458,6 +458,7 @@ export default function Painel() {
                               <div style={{ fontSize: 14, fontWeight: 700, color: "#1A1917", lineHeight: 1.3, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{car.nome}</div>
                               <div style={{ fontSize: 12, color: "#7A7670", margin: "3px 0 6px" }}>{[car.ano, formatarKm(car.km)].filter(Boolean).join(" · ")}</div>
                               {statusBadge(car.status === "vendido" ? "vendido" : car.ativo === false ? "pausado" : foraDoAr ? "fora" : car.status || "ativo")}
+                              <Vencimento iso={car.expira_em} />
                             </div>
                           </div>
                           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginTop: 12 }}>
@@ -618,6 +619,12 @@ export default function Painel() {
 
     </div>
   );
+}
+
+// Anúncio de pessoa física (fase24): até quando fica no ar.
+function Vencimento({ iso }: { iso?: string | null }) {
+  if (!iso) return null;
+  return <div style={{ fontSize: 11, fontWeight: 600, color: "#7A7670", marginTop: 4 }}>Vence em {new Date(iso).toLocaleDateString("pt-BR")}</div>;
 }
 
 // Só o lojista vê: como o preço está em relação à FIPE (o site mostra apenas o selo quando está abaixo).

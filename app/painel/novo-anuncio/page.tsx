@@ -12,6 +12,7 @@ import { CONDICOES } from "@/lib/situacaoVeiculo";
 import { formatarPreco, lerPreco } from "@/lib/formatar";
 import { lerAnoFipe, modeloBase } from "@/lib/nomesVeiculo";
 import Icone from "@/components/Icone";
+import PortaoParticular from "@/components/PortaoParticular";
 
 // Foto nova (file, ainda não enviada) ou já publicada (url, no modo edição).
 type FotoPreview = { file?: File; url?: string; preview: string };
@@ -297,6 +298,7 @@ export default function NovoAnuncio() {
 
       <div style={{ paddingTop: 80, paddingBottom: 60, display: "flex", justifyContent: "center", padding: "80px 24px 60px" }}>
         <div style={{ width: "100%", maxWidth: 600 }}>
+          <PortaoParticular ativo onLiberado={tel => setForm(f => ({ ...f, telefone: f.telefone || tel }))}>
           <div style={{ marginBottom: 24 }}>
             <div style={{ fontSize: 24, fontWeight: 800, color: "#1A1917", marginBottom: 4 }}>{editandoId ? "Editar anúncio" : "Novo anúncio"}</div>
             <p style={{ fontSize: 14, color: "#7A7670" }}>{carregandoEdicao ? "Carregando o anúncio..." : editandoId ? "Altere o que precisar e salve" : "Preencha os dados do veículo para publicar"}</p>
@@ -573,6 +575,7 @@ export default function NovoAnuncio() {
               </button>
             </div>
           </div>
+          </PortaoParticular>
         </div>
       </div>
     </main>

@@ -2,7 +2,7 @@
 import Link from "next/link";
 import Logo from "@/components/Logo";
 import BotoesConta from "@/components/BotoesConta";
-import { PLANOS, DIAS_GRATIS } from "@/lib/planos";
+import { PLANOS, DIAS_GRATIS, DIAS_GRATIS_PARTICULAR, AVULSOS, formatarReais } from "@/lib/planos";
 import { useEmAppDaLoja } from "@/lib/appLoja";
 import { useState } from "react";
 import Icone, { type NomeIcone } from "@/components/Icone";
@@ -123,7 +123,7 @@ export default function Anunciar() {
               ["trofeu", "Lançamento 2026", "Portal de veículos focado na nossa região"],
               ["local", "Teixeira de Freitas", "Cidade sede, com expansão para as cidades vizinhas"],
               ["presente", `${DIAS_GRATIS} dias grátis`, "Para lojas cadastradas no período de lançamento"],
-              ["usuario", "Particular anuncia grátis", "1 veículo por pessoa no período de lançamento"],
+              ["usuario", "Pessoa física anuncia grátis", `1 anúncio por ${DIAS_GRATIS_PARTICULAR} dias, por CPF`],
             ].map(([icon, title, desc]) => (
               <div key={title} style={{ textAlign: "center", padding: "20px 16px" }}>
                 <div style={{ marginBottom: 12, color: "#FF6600" }}><Icone nome={icon as NomeIcone} tamanho={38} traco={1.5} /></div>
@@ -189,9 +189,20 @@ export default function Anunciar() {
             <div style={{ fontSize: 12, fontWeight: 600, color: "#FF6600", letterSpacing: 1, textTransform: "uppercase", marginBottom: 10 }}>Para pessoas físicas</div>
             <h2 style={{ fontSize: 32, fontWeight: 800, color: "#1A1917", marginBottom: 12 }}>Quer vender seu carro?</h2>
             <p style={{ fontSize: 15, color: "#7A7670", maxWidth: 520, margin: "0 auto", lineHeight: 1.6 }}>
-              Anuncie seu veículo como particular. No período de lançamento é <strong style={{ color: "#1A1917" }}>grátis</strong>: 1 veículo por pessoa, com fotos e contato direto pelo WhatsApp.
+              Anuncie seu veículo como pessoa física. O primeiro anúncio é <strong style={{ color: "#1A1917" }}>grátis por {DIAS_GRATIS_PARTICULAR} dias</strong> (1 por CPF), com fotos e contato direto pelo WhatsApp.
             </p>
           </div>
+          {!emApp && (
+            <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap", marginBottom: 28 }}>
+              {[{ titulo: "1º anúncio", preco: "Grátis", detalhe: `${DIAS_GRATIS_PARTICULAR} dias no ar` }, ...AVULSOS.map(a => ({ titulo: "Anúncio avulso", preco: formatarReais(a.preco), detalhe: `${a.dias} dias no ar` }))].map(o => (
+                <div key={o.detalhe + o.preco} style={{ minWidth: 170, padding: "16px 18px", border: "1.5px solid #E8E6E1", borderRadius: 12, textAlign: "center", background: "#F7F6F3" }}>
+                  <div style={{ fontSize: 12, fontWeight: 600, color: "#7A7670", textTransform: "uppercase", letterSpacing: 0.4 }}>{o.titulo}</div>
+                  <div style={{ fontSize: 24, fontWeight: 800, color: o.preco === "Grátis" ? "#16A34A" : "#1A1917", margin: "4px 0" }}>{o.preco}</div>
+                  <div style={{ fontSize: 13, color: "#7A7670" }}>{o.detalhe}</div>
+                </div>
+              ))}
+            </div>
+          )}
           <div style={{ textAlign: "center" }}>
             <Link href="/cadastro" style={{ display: "inline-block", padding: "13px 32px", background: "#FF6600", color: "#fff", borderRadius: 9, fontSize: 15, fontWeight: 700, textDecoration: "none" }}>
               Anunciar meu carro grátis →

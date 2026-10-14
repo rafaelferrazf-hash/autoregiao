@@ -10,6 +10,8 @@ type Estado = "conferindo" | "aprovado" | "pendente" | "recusado" | "sem_pagamen
 
 export default function RetornoPagamento() {
   const [estado, setEstado] = useState<Estado>("conferindo");
+  // Anúncio avulso de pessoa física (fase24): depois de pagar, vai direto cadastrar o veículo.
+  const [avulso, setAvulso] = useState(false);
 
   useEffect(() => {
     const q = new URLSearchParams(window.location.search);
@@ -22,6 +24,7 @@ export default function RetornoPagamento() {
     verificarPagamento(id).then(r => {
       // Pagou em outro navegador/celular (sem login no AutoRegião): o plano é ativado pelo
       // aviso do Mercado Pago ou ao abrir o painel — não precisa de login aqui.
+      if (r.avulso) setAvulso(true);
       if (r.erro === "Não autenticado.") setEstado("sem_login");
       else if (r.status === "approved") setEstado("aprovado");
       else if (r.status === "pending" || r.status === "in_process" || r.status === "authorized") setEstado("pendente");
@@ -39,7 +42,11 @@ export default function RetornoPagamento() {
     sem_pagamento: { icone: "info", titulo: "Pagamento não concluído", texto: "Você saiu do Mercado Pago antes de pagar. Quando quiser, é só escolher o plano de novo." },
     erro: { icone: "atencao", titulo: "Não conseguimos confirmar agora", texto: "Se você pagou, fique tranquilo: a confirmação chega automaticamente em alguns minutos. Confira em Planos → Meus pagamentos." },
   };
-  const c = conteudo[estado];
+  const c = avulso && estado === "aprovado"
+    ? { icone: "ok" as NomeIcone, titulo: "Pagamento aprovado!", texto: "Agora é só cadastrar o seu veículo. O prazo do anúncio começa a contar quando ele for publicado." }
+    : avulso && estado === "pendente"
+      ? { icone: "ampulheta" as NomeIcone, titulo: "Aguardando o pagamento", texto: "Assim que o Mercado Pago confirmar (Pix em minutos), você pode cadastrar o seu veículo. Avisamos por e-mail." }
+      : conteudo[estado];
 
   return (
     <main style={{ background: "#F7F6F3", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
@@ -48,7 +55,9 @@ export default function RetornoPagamento() {
         <h1 style={{ fontSize: 22, fontWeight: 800, color: "#1A1917", marginBottom: 10 }}>{c.titulo}</h1>
         <p style={{ fontSize: 14, color: "#7A7670", lineHeight: 1.6, marginBottom: 24 }}>{c.texto}</p>
         <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
-          <Link href="/painel" style={{ padding: "10px 20px", background: "#FF6600", color: "#fff", borderRadius: 8, textDecoration: "none", fontWeight: 600, fontSize: 14 }}>Ir para o painel</Link>
+          {avulso && estado === "aprovado"
+            ? <Link href="/painel/novo-anuncio" style={{ padding: "10px 20px", background: "#FF6600", color: "#fff", borderRadius: 8, textDecoration: "none", fontWeight: 600, fontSize: 14 }}>Publicar meu anúncio</Link>
+            : <Link href="/painel" style={{ padding: "10px 20px", background: "#FF6600", color: "#fff", borderRadius: 8, textDecoration: "none", fontWeight: 600, fontSize: 14 }}>Ir para o painel</Link>}
           {(estado === "recusado" || estado === "sem_pagamento" || estado === "erro") && (
             <Link href="/painel/planos" style={{ padding: "10px 20px", border: "1.5px solid #E8E6E1", color: "#1A1917", borderRadius: 8, textDecoration: "none", fontWeight: 500, fontSize: 14 }}>Ver planos</Link>
           )}

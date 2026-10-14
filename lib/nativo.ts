@@ -47,18 +47,20 @@ export async function pedirTokenPush(): Promise<string | null> {
     new Promise<{ receive: string }>(resolve => setTimeout(() => resolve({ receive: "sem-resposta" }), 60_000)),
   ]);
   if (permissao.receive !== "granted") return null;
-  return new Promise(resolve => {
-    const ouvintes: Promise<Ouvinte>[] = [];
-    const fim = (token: string | null) => {
-      clearTimeout(tempo);
-      ouvintes.forEach(o => o.then(x => x.remove()).catch(() => {}));
-      resolve(token);
-    };
-    const tempo = setTimeout(() => fim(null), 15_000);
-    ouvintes.push(push.addListener("registration", d => fim((d as { value?: string }).value ?? null)));
-    ouvintes.push(push.addListener("registrationError", () => fim(null)));
-    push.register().catch(() => fim(null));
-  });
+  // Começa a "escutar" ANTES de pedir o código: quando o iPhone já tem o código guardado, ele responde
+  // na hora e a resposta se perderia (o botão ficava parado em "Ativando...").
+  let resolver: (token: string | null) => void = () => {};
+  const resposta = new Promise<string | null>(r => { resolver = r; });
+  const ouvintes = await Promise.all([
+    push.addListener("registration", d => resolver((d as { value?: string }).value ?? null)),
+    push.addListener("registrationError", () => resolver(null)),
+  ]).catch(() => [] as Ouvinte[]);
+  push.register().catch(() => resolver(null));
+  const tempo = setTimeout(() => resolver(null), 20_000);
+  const token = await resposta;
+  clearTimeout(tempo);
+  ouvintes.forEach(o => o.remove().catch(() => {}));
+  return token;
 }
 
 // Toque numa notificação: abre a página que veio junto (ex.: a busca do alerta).

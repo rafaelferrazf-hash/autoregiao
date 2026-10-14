@@ -11,6 +11,7 @@ import Icone from "@/components/Icone";
 export default function CriarAlerta({ filtros, busca }: { filtros: Filtros; busca: string }) {
   const [email, setEmail] = useState("");
   const [enviando, setEnviando] = useState(false);
+  const [ativando, setAtivando] = useState(false); // botão "Avisar neste celular" (separado do e-mail)
   const [erro, setErro] = useState("");
   const [enviadoPara, setEnviadoPara] = useState("");
   const appNativo = useAppNativo();
@@ -19,7 +20,7 @@ export default function CriarAlerta({ filtros, busca }: { filtros: Filtros; busc
 
   async function avisarNoCelular() {
     setErro("");
-    setEnviando(true);
+    setAtivando(true);
     try {
       const token = await pedirTokenPush();
       if (!token) {
@@ -39,7 +40,7 @@ export default function CriarAlerta({ filtros, busca }: { filtros: Filtros; busc
     } catch {
       setErro("Erro de conexão. Tente de novo.");
     }
-    setEnviando(false);
+    setAtivando(false);
   }
 
   async function alertasDoCelular(token: string, cancelar?: string) {
@@ -103,9 +104,9 @@ export default function CriarAlerta({ filtros, busca }: { filtros: Filtros; busc
         </div>
       ) : (
         <div style={{ marginBottom: 12 }}>
-          <button onClick={avisarNoCelular} disabled={enviando}
+          <button onClick={avisarNoCelular} disabled={ativando}
             style={{ width: "100%", padding: "11px", background: "#FF6600", color: "#fff", border: "none", borderRadius: 7, fontSize: 14, fontWeight: 700, cursor: "pointer", opacity: enviando ? 0.7 : 1 }}>
-            {enviando ? "Ativando..." : <><Icone nome="sino" /> Avisar neste celular</>}
+            {ativando ? "Ativando..." : <><Icone nome="sino" /> Avisar neste celular</>}
           </button>
           <div style={{ fontSize: 11.5, color: "#A8A49D", margin: "10px 0 0", textAlign: "center" }}>ou receba por e-mail:</div>
         </div>

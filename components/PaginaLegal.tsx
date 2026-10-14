@@ -7,6 +7,7 @@ export default function PaginaLegal({ titulo, atualizadoEm, children }: { titulo
     <main style={{ background: "#F7F6F3", minHeight: "100vh" }}>
       <style>{`
         .legal h2 { font-family: inherit; font-size: 18px; font-weight: 800; color: #1A1917; margin: 28px 0 10px; }
+        .legal h3 { font-family: inherit; font-size: 15.5px; font-weight: 700; color: #1A1917; margin: 18px 0 8px; }
         .legal p, .legal li { font-size: 14.5px; line-height: 1.7; color: #3F3D39; }
         .legal p { margin: 0 0 12px; }
         .legal ul { margin: 0 0 12px; padding-left: 20px; }

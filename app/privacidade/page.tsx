@@ -10,12 +10,12 @@ export const metadata: Metadata = {
 
 export default function Privacidade() {
   return (
-    <PaginaLegal titulo="Política de Privacidade" atualizadoEm="2 de outubro de 2026">
+    <PaginaLegal titulo="Política de Privacidade" atualizadoEm="14 de outubro de 2026">
       <p>
         Esta Política explica quais dados pessoais o <strong>AutoRegião</strong> coleta, para que usa e quais são os seus
         direitos, conforme a Lei Geral de Proteção de Dados (Lei nº 13.709/2018 — LGPD). Ela vale para o site
-        www.autoregiao.com.br e para o <strong>app AutoRegião</strong> (Android e app instalável pelo navegador), que exibe
-        o mesmo conteúdo do site.
+        www.autoregiao.com.br e para o <strong>app AutoRegião</strong> (Android, iPhone e app instalável pelo navegador), que
+        exibe o mesmo conteúdo do site.
       </p>
 
       <h2>1. Quem é o responsável pelos seus dados</h2>
@@ -36,23 +36,39 @@ export default function Privacidade() {
           endereço de internet e do navegador. <strong>Não guardamos o seu endereço IP</strong> e não identificamos quem clicou.</li>
         <li><strong>Alertas de veículos:</strong> se você criar um alerta, guardamos o seu e-mail e a busca escolhida (marca,
           preço etc.) para avisar sobre anúncios novos. Não é preciso ter conta.</li>
-        <li><strong>Favoritos:</strong> os anúncios que você salva com a estrela ficam guardados <strong>só no seu
-          aparelho</strong> (armazenamento do navegador/app); não recebemos essa lista.</li>
+        <li><strong>Favoritos e comparação:</strong> os anúncios que você salva com a estrela ou escolhe para comparar ficam
+          guardados <strong>só no seu aparelho</strong> (armazenamento do navegador/app); não recebemos essas listas.</li>
+        <li><strong>CPF e WhatsApp do anúncio grátis de pessoa física:</strong> usamos para conferir que cada pessoa tem só 1
+          anúncio grátis. <strong>Não guardamos o número do CPF nem o do WhatsApp</strong> para isso: guardamos apenas um código
+          gerado a partir deles, que não permite ler o número de volta e serve só para saber se já foram usados. O CPF nunca
+          aparece no site. (O WhatsApp que você escolher mostrar no anúncio fica público, como os demais dados do anúncio.)</li>
+        <li><strong>Localização (&quot;Perto de mim&quot;):</strong> só quando você toca em &quot;Perto de mim&quot; e permite. A
+          localização é usada <strong>no seu aparelho</strong> para achar a cidade mais próxima e mostrar a distância dos
+          anúncios; ela <strong>não é enviada nem guardada</strong> por nós e é esquecida ao fechar a página.</li>
+        <li><strong>Notificações do app:</strong> se você pedir alertas de carro novo pelo app, guardamos um código do aparelho
+          fornecido pela Apple ou pelo Google, só para enviar esses avisos.</li>
+        <li><strong>Pagamentos:</strong> plano ou anúncio contratado, valor, data e situação do pagamento. Os dados do cartão
+          ficam com o Mercado Pago; nós não os recebemos.</li>
+        <li><strong>Banners patrocinados:</strong> contamos quantas vezes cada banner foi exibido e clicado, sem identificar
+          quem viu ou clicou.</li>
       </ul>
       <p>
-        O app não acessa sua localização, contatos, câmera, microfone ou arquivos do aparelho (fotos de anúncios só são
-        enviadas quando o anunciante as escolhe no cadastro do anúncio).
+        O app não acessa seus contatos, microfone ou arquivos do aparelho. A câmera e as fotos só são usadas quando você
+        escolhe imagens para um anúncio, e a localização só como descrito acima.
       </p>
 
       <h2>3. Para que usamos</h2>
       <ul>
         <li>Criar e manter a sua conta e permitir que você entre nela (execução do contrato — art. 7º, V da LGPD);</li>
         <li>Publicar anúncios e a página da loja, e permitir que compradores entrem em contato (execução do contrato);</li>
-        <li>Mostrar estatísticas de visualizações e contatos ao anunciante (legítimo interesse);</li>
+        <li>Mostrar estatísticas de visualizações e contatos ao anunciante e enviar à loja o relatório mensal por e-mail e
+          WhatsApp (execução do contrato);</li>
         <li>Enviar e-mails do serviço, como confirmação de cadastro e recuperação de senha (execução do contrato);</li>
         <li>Enviar os alertas de veículos que você pediu e confirmou — no máximo um e-mail por dia, com link para cancelar em
           todos (consentimento);</li>
-        <li>Prevenir fraudes e moderar anúncios irregulares (legítimo interesse);</li>
+        <li>Prevenir fraudes, moderar anúncios irregulares e conferir que cada pessoa física tem só 1 anúncio grátis, inclusive
+          com o código gerado a partir do CPF e do WhatsApp (legítimo interesse);</li>
+        <li>Processar pagamentos de planos, anúncios avulsos e banners (execução do contrato);</li>
         <li>Cumprir obrigações legais, inclusive fiscais quando houver pagamentos (obrigação legal).</li>
       </ul>
       <p>Não vendemos seus dados e não os usamos para publicidade de terceiros.</p>
@@ -72,10 +88,12 @@ export default function Privacidade() {
         <li><strong>Resend</strong> — envio dos e-mails do serviço e dos alertas;</li>
         <li><strong>Google Maps</strong> — mapa com o endereço das lojas que cadastraram endereço e o botão &quot;Como chegar&quot;
           (ao exibir o mapa ou abrir a rota, o Google recebe dados de navegação conforme a política dele);</li>
-        <li><strong>Google Play</strong> — distribuição do app Android (o Google pode coletar dados de instalação conforme a
-          política dele);</li>
-        <li><strong>Provedor de pagamentos</strong> (ex.: Mercado Pago), quando houver planos pagos — ele recebe os dados
-          necessários à cobrança; nós não guardamos dados de cartão.</li>
+        <li><strong>Google Play e Apple App Store</strong> — distribuição dos apps e envio das notificações (Google e Apple
+          podem coletar dados de instalação conforme as políticas deles);</li>
+        <li><strong>Mercado Pago</strong> — pagamentos de planos e anúncios avulsos; ele recebe os dados necessários à cobrança
+          e nós não guardamos dados de cartão;</li>
+        <li><strong>WhatsApp</strong> — quando você toca em um botão de WhatsApp, a conversa acontece no app do WhatsApp, conforme
+          a política dele.</li>
       </ul>
       <p>
         Esses provedores podem manter servidores fora do Brasil. Nesses casos, a transferência internacional segue as
@@ -94,6 +112,10 @@ export default function Privacidade() {
           a lei obrigar a manter;</li>
         <li>Anúncios excluídos: removidos do site na hora, com as fotos;</li>
         <li>Contagem de visualizações e cliques: até 12 meses;</li>
+        <li>Registros de pagamento: pelo prazo exigido pela legislação fiscal (em geral, 5 anos);</li>
+        <li>Código gerado a partir do CPF e do WhatsApp do anúncio grátis: mantido mesmo após a exclusão da conta, só para
+          impedir que o mesmo CPF ou WhatsApp use o anúncio grátis de novo. Ele não identifica você diretamente;</li>
+        <li>Anúncios de pessoa física: saem do ar ao fim do prazo (60 dias no grátis, 30 ou 60 no avulso);</li>
         <li>Alertas: até você cancelar (pelo link em qualquer e-mail de alerta) — pedidos não confirmados podem ser apagados.</li>
       </ul>
 

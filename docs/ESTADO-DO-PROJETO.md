@@ -217,6 +217,10 @@ e lançamento sugerido em 03/11/2026. Seguir e marcar por lá.
      ✅ 09/10: nova compilação com faixa grafite fixa atrás da barra de status (`AppViewController` em
      SceneDelegate.swift — o site passava por baixo da hora) e permissão de localização ("Perto de mim") —
      testada no iPhone: OK. Mudanças só do app (faixa, abertura, permissões) exigem nova montagem + atualizar no TestFlight.
+     ✅ 14/10: compilação 10 (commit d4628e2) com localização nativa (@capacitor/geolocation — a do WKWebView nunca
+     respondia) → "Perto de mim" OK no iPhone; "Avisar neste celular" OK (tinha corrida: escutar "registration" ANTES de
+     register()). Tela temporária /diagnostico-app removida. Próximo: ficha da App Store (textos, palavras-chave,
+     capturas 6,9", rótulos de privacidade) e envio para revisão.
      Próximos (antigo): app no App Store Connect → Codemagic (login GitHub, integração "AutoRegiao" com chave de API) → TestFlight
      no iPhone dele → capturas 6,9" → ficha, privacidade (rótulos) → revisão. Não testado num iPhone ainda.
    - Android 1.0.3 (código 4, abre em `/?origem=app`) gerado e assinado em `autoregiao-android\publicar\` —

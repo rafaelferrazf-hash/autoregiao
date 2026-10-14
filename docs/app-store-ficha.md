@@ -109,16 +109,19 @@ Marcar os tipos abaixo. Para **todos**: "Vinculado à identidade do usuário" co
 | Compras → **Histórico de compras** (planos/anúncios pagos no site) | Funcionalidade do app | Sim |
 | Identificadores → **ID do usuário** (conta) | Funcionalidade do app | Sim |
 | Uso → **Interação com o produto** (visualizações e cliques contados de forma anônima) | Análises; Funcionalidade do app | **Não** |
+| Histórico de pesquisa → **Histórico de buscas** (buscas salvas nos alertas) | Funcionalidade do app | Sim |
 | Outros dados → **Outros tipos de dados** (código gerado a partir do CPF/WhatsApp do anúncio grátis) | Funcionalidade do app (prevenção de fraude) | Sim |
 
-**Não marcar:** Localização (fica só no aparelho, não é enviada), Saúde, Financeiro (cartão fica com o Mercado Pago), Contatos, Histórico de navegação, Diagnóstico, Dados sensíveis.
+**Não marcar:** Localização (fica só no aparelho, não é enviada), Saúde, Financeiro (cartão fica com o Mercado Pago), Contatos, Histórico de navegação, Diagnóstico, Dados sensíveis, Dados de publicidade (banners só somam totais anônimos).
 
 ## 5. Classificação etária
 
 Responder **"Nenhum" / "Não"** em todos os itens (violência, conteúdo sexual, palavrões, drogas, jogos de azar, terror, medicina etc.).
-- Conteúdo gerado por usuário / mensagens entre usuários: **Não** (não há chat dentro do app; o contato é por WhatsApp/telefone, fora do app)
+- Conteúdo gerado por usuário: **Sim** (anúncios publicados pelos usuários; há botão "Denunciar este anúncio")
 - Acesso irrestrito à web: **Não** (o app abre só o site do AutoRegião)
-- Compras dentro do app / anúncios: **Não**
+- Compras dentro do app: **Não** · Publicidade: **Sim** (banners patrocinados)
+- Preço: Grátis · Disponibilidade: **só Brasil** · Liberação manual
+- **Enviado para revisão em 14/10/2026** (versão 1.0.0, compilação 10).
 
 ## 6. Capturas de tela
 

@@ -151,6 +151,15 @@ custo por inserção e evitar ponto no mesmo caminho do P3). Com 40 inserções/
 menos vezes: usar **1 vídeo por vez** (começar pelo V1 Comprador; trocar pelo V3 Lojista se a Target permitir
 troca no mês) em vez de revezar 3. Formato do P3: **1456×624 px, deitado**.
 
+**Critério do Rafael para os outros 2 painéis: perto de semáforo** (o motorista parado no vermelho olha
+por mais tempo). Ao avaliar cada ponto, conferir:
+- O painel fica **de frente para a fila que para no vermelho** (e não de costas, nem só para quem já passou)?
+- Quanto tempo dura o vermelho ali e **quanto tempo dura a volta completa dos anúncios** do painel. Quanto
+  mais curta a volta, maior a chance de o nosso passar enquanto o carro está parado
+- Horários de mais trânsito parado (saída do trabalho, escola)
+- Mesmo parado, **nada de QR code para o motorista** (mexer no celular dirigindo é infração). Dá para usar um
+  pouco mais de texto que num painel de passagem, mas ainda curto
+
 Sugestão original (antes da decisão): **P3 com 80/dia (R$ 950) + P1 com 80/dia (R$ 500) = R$ 1.450/mês.**
 Variação mais barata: só P3 com 80/dia (R$ 950). Variação com 3 painéis: + P2 com 40/dia (R$ 500) = R$ 1.950.
 

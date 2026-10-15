@@ -13,7 +13,7 @@ import { useSyncExternalStore } from "react";
 const CHAVE = "autoregiao:app-loja";
 const semAssinatura = () => () => {};
 
-function detectar(): boolean {
+export function detectar(): boolean {
   if (/AutoRegiaoApp/i.test(navigator.userAgent)) return true;
   try {
     const veioDoApp = new URLSearchParams(location.search).get("origem") === "app"

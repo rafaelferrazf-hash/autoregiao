@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function Privacidade() {
   return (
-    <PaginaLegal titulo="Política de Privacidade" atualizadoEm="14 de outubro de 2026">
+    <PaginaLegal titulo="Política de Privacidade" atualizadoEm="15 de outubro de 2026">
       <p>
         Esta Política explica quais dados pessoais o <strong>AutoRegião</strong> coleta, para que usa e quais são os seus
         direitos, conforme a Lei Geral de Proteção de Dados (Lei nº 13.709/2018 — LGPD). Ela vale para o site
@@ -33,7 +33,10 @@ export default function Privacidade() {
         <li><strong>Anúncios:</strong> dados do veículo, fotos, preço, nome de contato, telefone e cidade.</li>
         <li><strong>Uso do site:</strong> contamos visualizações de anúncios e cliques nos botões de WhatsApp e Ligar para mostrar
           esses números ao anunciante. Para não contar a mesma pessoa várias vezes, geramos um código anônimo a partir do
-          endereço de internet e do navegador. <strong>Não guardamos o seu endereço IP</strong> e não identificamos quem clicou.</li>
+          endereço de internet e do navegador. <strong>Não guardamos o seu endereço IP</strong> e não identificamos quem clicou.
+          Também contamos as páginas abertas no site e nos apps (tipo de página, celular ou computador, site de onde você veio
+          e a marca/modelo buscados), com um código anônimo que muda todo dia, para sabermos quantas pessoas usam o AutoRegião.
+          Não usamos cookies de rastreamento nem ferramentas de publicidade.</li>
         <li><strong>Alertas de veículos:</strong> se você criar um alerta, guardamos o seu e-mail e a busca escolhida (marca,
           preço etc.) para avisar sobre anúncios novos. Não é preciso ter conta.</li>
         <li><strong>Favoritos e comparação:</strong> os anúncios que você salva com a estrela ou escolhe para comparar ficam
@@ -112,6 +115,7 @@ export default function Privacidade() {
           a lei obrigar a manter;</li>
         <li>Anúncios excluídos: removidos do site na hora, com as fotos;</li>
         <li>Contagem de visualizações e cliques: até 12 meses;</li>
+        <li>Contagem de páginas abertas: o detalhe por até 90 dias; depois ficam só os totais de cada dia;</li>
         <li>Registros de pagamento: pelo prazo exigido pela legislação fiscal (em geral, 5 anos);</li>
         <li>Código gerado a partir do CPF e do WhatsApp do anúncio grátis: mantido mesmo após a exclusão da conta, só para
           impedir que o mesmo CPF ou WhatsApp use o anúncio grátis de novo. Ele não identifica você diretamente;</li>

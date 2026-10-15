@@ -4,6 +4,8 @@ import "./globals.css";
 import { NOME_SITE, URL_SITE } from "@/lib/site";
 import AppInstalavel from "@/components/AppInstalavel";
 import OuvinteNativo from "@/components/OuvinteNativo";
+import ContadorVisitas from "@/components/ContadorVisitas";
+import { Suspense } from "react";
 import BarraComparar from "@/components/BarraComparar";
 
 // Fonte única do site (títulos, preços e textos), servida pelo próprio site.
@@ -56,6 +58,7 @@ export default function RootLayout({
         {children}
         <AppInstalavel />
         <OuvinteNativo />
+        <Suspense fallback={null}><ContadorVisitas /></Suspense>
         <BarraComparar />
       </body>
     </html>

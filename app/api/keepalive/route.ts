@@ -15,6 +15,7 @@ import { avisarBannersVencendo } from "@/lib/avisosBanners";
 // 6. Dia 1º: relatório do mês anterior de cada loja, por e-mail (o WhatsApp é pelo /admin).
 // 7. Banners pagos que vencem em 3 dias: e-mail para o admin oferecer a renovação.
 // 8. Anúncios de pessoa física vencidos (60 dias grátis / avulso) saem do ar (supabase/fase24).
+// 9. Visitas com mais de 90 dias: guarda os totais do dia e apaga o detalhe (supabase/fase25).
 export const dynamic = "force-dynamic";
 
 const RETENCAO_EVENTOS_DIAS = 365;
@@ -60,6 +61,9 @@ export async function GET() {
     .update({ ativo: false, status: "pausado" }, { count: "exact" })
     .is("loja_id", null).eq("ativo", true).lt("expira_em", new Date().toISOString());
 
+  const { data: visitasApagadas, error: erroVisitas } = await criarClienteAdmin().rpc("limpar_visitas");
+  if (erroVisitas) console.error("visitas:", erroVisitas.message);
+
   let bannersVencendo: number | null = null;
   if (process.env.RESEND_API_KEY) {
     try { bannersVencendo = await avisarBannersVencendo(); } catch (e) { console.error("banners:", e); }
@@ -70,6 +74,7 @@ export async function GET() {
     relatorios,
     banners_vencendo: bannersVencendo,
     particulares_vencidos: particularesVencidos ?? 0,
+    visitas_antigas_apagadas: erroVisitas ? null : visitasApagadas,
     alertas,
     fipe,
     veiculos: count,

@@ -187,6 +187,8 @@ Um site de classificados vazio no dia do lançamento passa a impressão de aband
 
 ## Etapa 5 — Divulgação preparada (27/10 – 31/10)
 
+**Plano completo (tráfego pago para lojistas e compradores, telões, orçamento, calendário): `docs/PLANO-MARKETING.md`.**
+
 | # | Item | Quem | Pronto quando |
 |---|---|---|---|
 | 5.1 🟡 | Instagram da AutoRegião (perfil, bio com o link, 6–9 posts prontos para a semana) | 👤 · 🤖 textos | Perfil pronto |

@@ -55,7 +55,7 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
   `/loja/[id]`, `/favoritos`, `/alerta`, `/anunciar`, `/painel` (+ `/novo-anuncio`, `/planos`), `/admin`,
   `/login`, `/cadastro`, `/recuperar-senha`, `/redefinir-senha`, `/pagamento/retorno`, `/termos`, `/privacidade`, `/offline`.
 - SQL já rodado: `rls-fase0`, `fase1-seguranca`, `fase2`, `fase3`, `fase3-fotos`, `fase4a`, `fase4b`,
-  `fase5-alertas`, `fase6-fipe`, `fase7-filtros`, `fase8-logo-loja`, `fase9-excluir-conta`, `fase10-push`, `fase11-capa-loja`, `fase12-carroceria`, `fase13-demonstracao`, `fase14-demonstracao-privada`, `fase15-planos-agendados-vendido`, `fase16-situacao-veiculo`, `fase17-prioridade-premium`, `fase18-lojas-teste` (30 lojas fictícias, 450 anúncios demo; apagar antes do lançamento — linhas no topo do arquivo), `fase19`+`fase20` (lista `acesso_demonstracao`: e-mails que veem os anúncios demo; mibososantos@gmail.com liberado), `fase21-relatorio-selo` (selo `lojas.verificada` + `relatorios_mensais` + `dados_relatorio_mensal`), `fase22-banners` (banners pagos), `fase23-planos-novos` (limites 15/40/ilimitado), `fase24-particular` (pessoa física: liberações, avulso, expira_em). Modelos de e-mail do Auth: `supabase/emails/`.
+  `fase5-alertas`, `fase6-fipe`, `fase7-filtros`, `fase8-logo-loja`, `fase9-excluir-conta`, `fase10-push`, `fase11-capa-loja`, `fase12-carroceria`, `fase13-demonstracao`, `fase14-demonstracao-privada`, `fase15-planos-agendados-vendido`, `fase16-situacao-veiculo`, `fase17-prioridade-premium`, `fase18-lojas-teste` (30 lojas fictícias, 450 anúncios demo; apagar antes do lançamento — linhas no topo do arquivo), `fase19`+`fase20` (lista `acesso_demonstracao`: e-mails que veem os anúncios demo; mibososantos@gmail.com liberado), `fase21-relatorio-selo` (selo `lojas.verificada` + `relatorios_mensais` + `dados_relatorio_mensal`), `fase22-banners` (banners pagos), `fase23-planos-novos` (limites 15/40/ilimitado), `fase24-particular` (pessoa física: liberações, avulso, expira_em), `fase25-visitas` (contador anônimo de páginas → aba "Visitas" do /admin). Modelos de e-mail do Auth: `supabase/emails/`.
 
 ## Regras de negócio importantes
 - Planos (`lib/planos.ts`, desde 13/10/2026 — fase23): básico R$69/15 anúncios, profissional R$129/40 + destaque + logo no card
@@ -130,6 +130,9 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
   do ramo, 4 vagas, sem desconto Premium; aba "Banners" no /admin (`components/AdminBanners`), etiqueta "Patrocinado",
   contagem de vistos/cliques (`contar_banner`), e-mail ao admin 3 dias antes de vencer. Lojas Premium NÃO entram no
   carrossel (decisão do Rafael). Planos: Rafael decidiu manter 3 planos (âncora do "mais popular") com preços de lançamento 69/129/249 (fase23).
+- 15/10/2026: aba "Visitas" no /admin (`components/AdminVisitas`, `components/ContadorVisitas` no layout → `/api/visitas`,
+  função `painel_visitas`): pessoas por dia (código anônimo que muda todo dia), site × Android × iPhone, aparelho, origem,
+  páginas, buscas. Não conta admin nem localhost. Detalhe 90 dias, depois `visitas_totais` (cron). Botão de olho nas senhas.
 - 2FA nas contas principais. App instalável (PWA), arrastar fotos, revisão de celular (375/320px).
 - Marca nova (01/10/2026), do manual em `C:\Users\rafae\AutoRegiao-Logo-Novo` (só PNG, sem vetor): logo AR, laranja
   #FF6600, grafite #1A1A1A, Exo 2 nos títulos (h1–h3). Slogan trocado para "COMPRE | VENDA | ANUNCIE" (o manual

@@ -145,7 +145,13 @@ Análise:
   **Contratar mensal em nov e dez**; pedir o preço semestral para um pacote de 2 meses.
 - Cada painel tem um **formato diferente** (quadrado, em pé, deitado): são versões diferentes de cada vídeo.
 
-**Sugestão (cabe no orçamento Recomendado):** **P3 com 80/dia (R$ 950) + P1 com 80/dia (R$ 500) = R$ 1.450/mês.**
+**✅ DECISÃO DO RAFAEL (15/10/2026): Target = só o P3 (Getúlio Vargas × São Paulo), 40 inserções/dia,
+mensal, R$ 500/mês.** Os outros dois painéis virão de **outro fornecedor** (orçamento a receber; comparar
+custo por inserção e evitar ponto no mesmo caminho do P3). Com 40 inserções/dia o nosso vídeo aparece
+menos vezes: usar **1 vídeo por vez** (começar pelo V1 Comprador; trocar pelo V3 Lojista se a Target permitir
+troca no mês) em vez de revezar 3. Formato do P3: **1456×624 px, deitado**.
+
+Sugestão original (antes da decisão): **P3 com 80/dia (R$ 950) + P1 com 80/dia (R$ 500) = R$ 1.450/mês.**
 Variação mais barata: só P3 com 80/dia (R$ 950). Variação com 3 painéis: + P2 com 40/dia (R$ 500) = R$ 1.950.
 
 **Perguntas para a Target antes de fechar** (👤 pergunta pelo WhatsApp da empresa, que está no PDF):

@@ -126,6 +126,40 @@ Funcionam melhor **junto** com o tráfego pago, no mesmo período.
 Faixa de preço comum em cidades médias: **R$ 400 a R$ 1.500 por painel por mês** (confirmar nos orçamentos).
 Contratar **novembro e dezembro** (lançamento + 13º + Natal) e avaliar se renova em janeiro.
 
+#### Orçamento 1 — TARGET (recebido 15/10/2026, PDF "PLanos painel led TARGET")
+
+| Painel | Local | Tamanho / resolução (formato) | Mensal (40 · 80 · 120 · 160 inserções/dia) | Semestral / anual (por mês, 40 ins.) |
+|---|---|---|---|---|
+| **P1** | Av. Mal. Castelo Branco 167, em frente à Prefeitura — Teixeira | 3×3 m · 384×384 px (**quadrado**, resolução baixa) | R$ 300 · 500 · 700 · 950 (200/dia: R$ 1.100) | não informado |
+| **P2** | Av. São Paulo 132, rotatória em frente ao Posto Caraípe — Teixeira | 3×6 m · 576×1152 px (**em pé**) | R$ 500 · 950 · 1.200 · 1.600 | R$ 450 / R$ 400 |
+| **P3** | Av. Getúlio Vargas esquina com Av. São Paulo — Teixeira | 3×7 m · 1456×624 px (**deitado**, o maior) | R$ 500 · 950 · 1.200 · 1.600 | R$ 450 / R$ 400 |
+| **P4** | Rotatória da Praça da Bíblia — **Nanuque/MG** | "3×3 m" mas 1456×624 px (conferir) | R$ 400 · 700 · 850 · 1.100 | R$ 350 / R$ 300 |
+
+Análise:
+- **Preço por inserção:** P1 sai por ~R$ 0,21 (80/dia); P2 e P3 por ~R$ 0,40. P1 é o mais barato, mas tem
+  tela pequena e de baixa resolução: no máximo **3–4 palavras grandes** por tela.
+- **P2 e P3 ficam na mesma Av. São Paulo.** Se o mesmo carro passa pelos dois, pagamos duas vezes pelo mesmo
+  público. Rafael conhece o trânsito: escolher o de maior movimento.
+- **P4 (Nanuque/MG)** é outra cidade: deixar para quando houver lojas de lá no site.
+- **Semestral/anual** economiza 10–20%, mas prende 6–12 meses antes de saber se o telão funciona.
+  **Contratar mensal em nov e dez**; pedir o preço semestral para um pacote de 2 meses.
+- Cada painel tem um **formato diferente** (quadrado, em pé, deitado): são versões diferentes de cada vídeo.
+
+**Sugestão (cabe no orçamento Recomendado):** **P3 com 80/dia (R$ 950) + P1 com 80/dia (R$ 500) = R$ 1.450/mês.**
+Variação mais barata: só P3 com 80/dia (R$ 950). Variação com 3 painéis: + P2 com 40/dia (R$ 500) = R$ 1.950.
+
+**Perguntas para a Target antes de fechar** (👤 pergunta pelo WhatsApp da empresa, que está no PDF):
+1. Quantos segundos tem cada inserção (10 ou 15 s)?
+2. Horário em que o painel fica ligado e **quantos anunciantes dividem o painel** (de quantos em quantos minutos o nosso aparece)?
+3. As inserções são espalhadas o dia inteiro ou concentradas?
+4. Dá para revezar 2 ou 3 vídeos diferentes dentro do mesmo pacote? E trocar no meio do mês?
+5. Eles montam o vídeo? Tem custo? Aceitam imagem parada (JPG) ou só vídeo (MP4)?
+6. Confirmar as resoluções (o P4 diz 3×3 m com 1456×624 px; o P2 é mesmo em pé?).
+7. Mandam comprovação (foto/vídeo do anúncio passando, relatório)?
+8. Desconto para 2 painéis e preço de semestral num pacote de **2 meses (nov + dez)**?
+9. Começar em **03/11**: até quando precisam receber os arquivos? Emitem nota fiscal? Forma de pagamento?
+10. Têm estimativa do movimento de veículos em cada ponto?
+
 **Vídeos (10–15 s, sem som, letra grande, 1 mensagem por vídeo, laranja #FF6600 e grafite da marca):**
 
 | Vídeo | Tela 1 (0–5 s) | Tela 2 (5–10 s) | Tela 3 (10–15 s) |

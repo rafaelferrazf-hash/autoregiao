@@ -3,6 +3,7 @@ import Link from "next/link";
 import PaginaSimples from "@/components/PaginaSimples";
 import LogoLoja from "@/components/LogoLoja";
 import Icone from "@/components/Icone";
+import BuscaLojas from "@/components/BuscaLojas";
 import { criarClienteServidor } from "@/lib/supabase-servidor";
 
 // "Lojas da região": todas as lojas com veículos à venda (o RLS já esconde anúncios de lojas
@@ -47,6 +48,10 @@ export default async function Lojas({ searchParams }: { searchParams: Promise<{ 
       <p style={{ fontSize: 14, color: "#7A7670", margin: "0 0 16px", lineHeight: 1.6 }}>
         {lista.length} {lista.length === 1 ? "loja com veículos à venda" : "lojas com veículos à venda"}{filtroCidade ? ` em ${filtroCidade}` : ""}. Veja os carros de cada uma e fale direto pelo WhatsApp.
       </p>
+
+      {comVeiculos.length > 0 && (
+        <BuscaLojas lojas={comVeiculos.map(l => ({ id: l.id, nome: l.nome, local: [l.cidade, l.estado].filter(Boolean).join(", "), logo_url: l.logo_url, veiculos: qtd.get(l.id) ?? 0 }))} />
+      )}
 
       {cidades.length > 1 && (
         <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 16 }}>

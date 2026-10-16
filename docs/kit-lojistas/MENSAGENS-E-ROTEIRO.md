@@ -72,6 +72,7 @@ Depois de cadastrar, mande o link da página da loja para o lojista. Ele vai que
 | Ele diz | Você responde |
 |---|---|
 | "Já anuncio na OLX / Mobiauto." | "Ótimo, continua lá. Aqui é mais um lugar, só da região e grátis por 60 dias. O cliente daqui está perto, pode ir na loja." |
+| "Já anuncio no CarroSP." | "Continua lá se quiser. Compare: lá até 17 carros custa R$ 193 por mês. Aqui até 15 é R$ 69, até 40 é R$ 129 e sem limite é R$ 249. E os primeiros 60 dias são grátis." (falar na conversa; **não** colocar o nome do concorrente em folheto ou anúncio) |
 | "Não tenho tempo." | "Por isso eu cadastro para você. Me manda as fotos que eu coloco no ar." |
 | "Quanto custa depois?" | "A partir de R$ 69 por mês. A maioria das lojas vai para o Profissional, R$ 129, até 40 carros com destaque. Mas você só decide depois dos 60 dias, vendo quantos clientes chamaram." |
 | "Quem vai ver isso?" | "No lançamento, em 03/11, tem telão na Getúlio Vargas, anúncio no Instagram e Facebook da região e app na loja de aplicativos. E todo mês você recebe um relatório com quantas pessoas viram e chamaram." |
@@ -96,3 +97,13 @@ Meta diária para chegar em 10 lojas em 2 semanas: **3 contatos novos por dia + 
 Mande para as outras lojas (prova social):
 > "[nome], a [Loja A], a [Loja B] e a [Loja C] já estão no AutoRegião. No pré-lançamento ainda dá para entrar
 > com os 60 dias grátis contando só a partir de 03/11. Bora colocar a sua também?"
+
+## 9. Referência: preços do concorrente CarroSP (informados pelo Rafael em 16/10/2026)
+
+| CarroSP (por mês) | Por carro | AutoRegião equivalente |
+|---|---|---|
+| até 17 veículos: R$ 193 | R$ 11,35 | Básico, até 15: **R$ 69** (−64%) |
+| até 37 veículos: R$ 243 | R$ 6,57 | Profissional, até 40: **R$ 129** (−47%) |
+| até 57 veículos: R$ 293 | R$ 5,14 | Premium, ilimitado: **R$ 249** |
+| até 77 veículos: R$ 343 | R$ 4,45 | Premium, ilimitado: **R$ 249** (−27%) |
+| até 97 veículos: R$ 393 | R$ 4,05 | Premium, ilimitado: **R$ 249** (−37%) |

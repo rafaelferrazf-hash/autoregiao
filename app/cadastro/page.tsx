@@ -5,6 +5,7 @@ import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 import Icone from "@/components/Icone";
 import CampoSenha from "@/components/CampoSenha";
+import { textoOfertaLoja } from "@/lib/lancamento";
 
 export default function Cadastro() {
   const [tipo, setTipo] = useState<"comprador" | "lojista" | "particular">("comprador");
@@ -192,8 +193,8 @@ export default function Cadastro() {
             <div style={{ marginTop: 16, background: "#1A1917", borderRadius: 12, padding: "16px 20px", display: "flex", alignItems: "center", gap: 14 }}>
               <div style={{ color: "#FF6600" }}><Icone nome="presente" tamanho={28} /></div>
               <div>
-                <div style={{ fontSize: 13, fontWeight: 700, color: "#fff", marginBottom: 3 }}>60 dias grátis para lojistas</div>
-                <div style={{ fontSize: 12, color: "rgba(255,255,255,0.6)" }}>Anuncie todos os seus veículos sem custo durante o período de lançamento.</div>
+                <div style={{ fontSize: 13, fontWeight: 700, color: "#fff", marginBottom: 3 }}>{textoOfertaLoja().titulo}</div>
+                <div style={{ fontSize: 12, color: "rgba(255,255,255,0.6)" }}>{textoOfertaLoja().texto}</div>
               </div>
             </div>
           )}

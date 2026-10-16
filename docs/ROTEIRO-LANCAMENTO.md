@@ -35,7 +35,7 @@ de 20/10) e da Apple (1 a 3 dias). Terça é melhor que sexta: se algo quebrar, 
 | 1.1 🔴 | **Valores dos planos.** Hoje no código, ainda não publicados: Básico R$69/15, Profissional R$129/40, Premium R$249/ilimitado. Decidir se fica assim, se muda, ou se vai com 2 planos | 👤 decide · 🤖 ajusta | ✅ 13/10: 69/129/249, 3 planos |
 | 1.2 🔴 | Rodar `supabase/fase23-planos-novos.sql` (limites no banco) e só **depois** publicar o código | 👤 SQL · 🤖 publica | ✅ 13/10 (fase23 rodada e publicada) |
 | 1.3 🟡 | **"Preço de fundador"**: as primeiras lojas pagam o valor de lançamento enquanto se mantiverem assinantes? Decidir sim ou não e por quanto tempo | 👤 | Regra escrita aqui |
-| 1.4 🟡 | Período grátis de 60 dias: manter para todas as lojas que entrarem no lançamento? (sugestão: sim, é o principal argumento de venda) | 👤 | Decidido |
+| 1.4 🟡 | Período grátis de 60 dias: manter para todas as lojas que entrarem no lançamento? | 👤 | ✅ 16/10: **pré-lançamento** = 60 dias para lojas cadastradas até 30/11; quem entra antes de 03/11 conta a partir do lançamento (fase26, `lib/lancamento.ts`). Depois o Rafael decide se reduz para 30 (não divulgar) |
 | 1.5 🔴 | **Parte fiscal:** você vende planos como pessoa física (CPF). Conversar com um contador sobre abrir um MEI/CNPJ e emitir nota fiscal. Não sou contador, então essa conversa é com ele | 👤 | Conversa com o contador feita, decisão anotada |
 | 1.6 🟡 | Confirmar a **data do lançamento** (sugestão: 03/11) | 👤 | Data fixada |
 
@@ -230,6 +230,7 @@ Fazer **de manhã cedo**, nesta ordem (cerca de 1 hora). Eu acompanho cada passo
 | 4 | Decidir o que fazer com a loja de teste "Auto Paulista" (Civic e Onix de teste): apagar os 2 anúncios ou desativar a loja | 👤 · 🤖 |
 | 5 | Esvaziar a lista `acesso_demonstracao` e tirar as fotos demo do site (`public/demo/`), se não forem mais usadas | 🤖 SQL e código · 👤 roda |
 | 6 | Conferir **sem login** e numa aba anônima: página inicial, busca, uma loja, um anúncio. Não pode aparecer nada de teste | 🤖 · 👤 |
+| 6b | **Publicar o site de novo no dia** (as páginas Anunciar/Cadastro guardam o texto da oferta; a nova publicação troca "contam a partir de 03/11" por "até 30/11"). Repetir em **01/12**, quando a oferta acaba | 🤖 |
 | 7 | Ligar os botões dos apps aprovados (3.9). O iPhone já foi liberado na App Store na segunda 02/11 (Etapa 3, Fase B) | 🤖 |
 | 8 | Fazer 1 cadastro de teste com um e-mail novo e confirmar que o e-mail chega. Depois apagar a conta | 👤 |
 | 9 | **Divulgar**: Instagram, WhatsApp, lojas parceiras compartilham | 👤 |

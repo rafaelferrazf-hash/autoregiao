@@ -6,6 +6,7 @@ import { PLANOS, DIAS_GRATIS, DIAS_GRATIS_PARTICULAR, AVULSOS, formatarReais } f
 import { useEmAppDaLoja } from "@/lib/appLoja";
 import { useState } from "react";
 import Icone, { type NomeIcone } from "@/components/Icone";
+import { faseOferta, textoOfertaLoja } from "@/lib/lancamento";
 
 // Itens do menu de navegação (os mesmos das outras páginas).
 const menuItens = [
@@ -18,6 +19,7 @@ const menuItens = [
 
 export default function Anunciar() {
   const emApp = useEmAppDaLoja();
+  const oferta = textoOfertaLoja();
   const [menuAberto, setMenuAberto] = useState(false);
 
   return (
@@ -122,7 +124,7 @@ export default function Anunciar() {
             {[
               ["trofeu", "Lançamento 2026", "Portal de veículos focado na nossa região"],
               ["local", "Teixeira de Freitas", "Cidade sede, com expansão para as cidades vizinhas"],
-              ["presente", `${DIAS_GRATIS} dias grátis`, "Para lojas cadastradas no período de lançamento"],
+              ["presente", `${DIAS_GRATIS} dias grátis`, faseOferta() === "antes" ? "No pré-lançamento: contam só a partir de 03/11" : faseOferta() === "pre" ? "Para lojas cadastradas até 30/11" : "Para lojas novas"],
               ["usuario", "Pessoa física anuncia grátis", `1 anúncio por ${DIAS_GRATIS_PARTICULAR} dias, por CPF`],
             ].map(([icon, title, desc]) => (
               <div key={title} style={{ textAlign: "center", padding: "20px 16px" }}>
@@ -219,7 +221,7 @@ export default function Anunciar() {
             Pronto para vender<br /><span style={{ color: "#FF6600" }}>mais rápido?</span>
           </h2>
           <p style={{ fontSize: 15, color: "rgba(255,255,255,0.6)", marginBottom: 32, lineHeight: 1.6 }}>
-            Cadastre sua loja agora e aproveite 60 dias grátis. Sem cartão de crédito.
+            {oferta.texto}
           </p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
             <Link href="/cadastro" style={{ padding: "14px 32px", background: "#FF6600", borderRadius: 9, color: "#fff", fontSize: 16, fontWeight: 700, textDecoration: "none" }}>

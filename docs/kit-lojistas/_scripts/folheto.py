@@ -100,9 +100,10 @@ for item in ["Página da loja com logo, fotos e mapa", "Cliente fala direto com 
 yb = H - 62
 c.append(texto("60 DIAS GRÁTIS", M, yb + 17, 11, GRA, EXO))
 c.append(texto("Sem cartão. Sem compromisso.", M, yb + 25, 4.4, GRA, JAKB))
-c.append(texto("Aponte a câmera do celular", M, yb + 36, 4, GRA))
-c.append(texto("para cadastrar sua loja:", M, yb + 41.5, 4, GRA))
-c.append(texto("autoregiao.com.br", M, yb + 52, 6, GRA, EXO))
+c.append(texto("Contam só a partir do lançamento.", M, yb + 31, 3.8, GRA))
+c.append(texto("Para lojas cadastradas até 30/11.", M, yb + 36, 3.8, GRA))
+c.append(texto("Aponte a câmera para cadastrar:", M, yb + 44.5, 4, GRA))
+c.append(texto("autoregiao.com.br", M, yb + 53.5, 6, GRA, EXO))
 c.append(qr(W - M - 34, yb + 12, 34, LINK))
 frente = salvar("frente", "".join(c), GRA)
 

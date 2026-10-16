@@ -1,6 +1,10 @@
 # Kit para falar com as lojas — mensagens e roteiro de visita
 
-Criado em 16/10/2026. Meta (roteiro, Etapa 4): **10 lojas e 150 anúncios reais até 30/10**.
+Criado em 16/10/2026.
+**Oferta de pré-lançamento (decidida 16/10):** 60 dias grátis para lojas cadastradas **até 30/11**; para quem
+entra antes de 03/11, os 60 dias **só começam a contar no lançamento** (fase26). Não divulgar que depois serão 30.
+
+Meta (roteiro, Etapa 4): **10 lojas e 150 anúncios reais até 30/10**.
 Folheto para imprimir: `folheto-lojistas_A5_frente-e-verso_com-sangria-3mm.pdf` (A5, frente e verso, papel couchê
 150–250 g; avisar a gráfica que o arquivo **já tem 3 mm de sangria**). Controle das lojas: `controle-lojas.csv`.
 
@@ -16,7 +20,8 @@ chama a loja direto no WhatsApp.
 > Lancei o **AutoRegião**, um site e app só com carros de Teixeira e região. Quem procura carro aqui
 > encontra o estoque da sua loja e chama direto no **seu WhatsApp**, sem intermediário e sem comissão.
 >
-> Estou chamando as primeiras lojas para entrar com **60 dias grátis**, sem cartão e sem compromisso.
+> Estamos no **pré-lançamento**: as lojas que entrarem agora ganham **60 dias grátis**, e eles **só começam a
+> contar no dia do lançamento** (03/11). Sem cartão e sem compromisso.
 > Se você não tiver tempo, **eu mesmo cadastro seus carros**: é só me mandar as fotos.
 >
 > Posso passar aí uns 5 minutinhos para te mostrar? Ou dá uma olhada: www.autoregiao.com.br
@@ -33,8 +38,8 @@ curto** (abaixo). Áudio de 30 segundos com a sua voz passa mais confiança que 
 
 ## 3. Lembrete (2 dias depois, se não respondeu)
 
-> Oi, [nome]! Só reforçando: as vagas com **60 dias grátis** são para as primeiras lojas, antes da
-> divulgação oficial em **03/11** (vai ter telão na Getúlio Vargas e anúncio no Instagram).
+> Oi, [nome]! Só reforçando: no pré-lançamento sua loja entra com **60 dias grátis**, contando só a partir
+> do lançamento em **03/11** (vai ter telão na Getúlio Vargas e anúncio no Instagram). A oferta vai até 30/11.
 > Quer que eu já deixe sua loja pronta? Você só me manda as fotos dos carros. 👍
 
 (Se não responder de novo: **visitar**. Não mandar uma terceira mensagem.)
@@ -55,7 +60,8 @@ Depois de cadastrar, mande o link da página da loja para o lojista. Ele vai que
 1. **Abrir com a dor dele** (não com o site): "Hoje, de onde vêm os seus clientes? OLX, Instagram, indicação?"
 2. **Mostrar no celular** (já com o site aberto): busca por cidade → um carro → botão do WhatsApp → página de uma loja.
    Se a loja dele já estiver cadastrada, mostre **a página da loja dele**, porque isso convence na hora.
-3. **A oferta:** "60 dias grátis, sem cartão. Se não gostar, é só não continuar."
+3. **A oferta:** "É pré-lançamento: 60 dias grátis, e eles só começam a contar no dia do lançamento. Sem cartão.
+   Se não gostar, é só não continuar."
 4. **Tirar o trabalho dele:** "Se você não tiver tempo, eu cadastro. Me manda as fotos no WhatsApp."
 5. **Fechar com um próximo passo concreto:** "Posso já cadastrar a loja agora com você?" ou "Me manda as
    fotos de 3 carros hoje que amanhã já estão no ar."
@@ -73,6 +79,7 @@ Depois de cadastrar, mande o link da página da loja para o lojista. Ele vai que
 | "Precisa de cartão?" | "Não. Depois, se quiser continuar, paga por Pix ou cartão pelo site." |
 | "Tem comissão sobre a venda?" | "Não. O cliente fala direto com você, e a venda é toda sua." |
 | "Vocês financiam?" | "Não. O AutoRegião só mostra os carros. Financiamento continua com você." |
+| "Entro depois do lançamento." | "Pode, mas quem entra agora já aparece no primeiro dia da divulgação, e os 60 dias só começam a contar em 03/11. Você não perde nada entrando antes." |
 | "Vou pensar." | "Tranquilo. Posso cadastrar só 3 carros para você ver como fica? Não custa nada." |
 
 ## 7. Ordem sugerida de abordagem
@@ -87,5 +94,5 @@ Meta diária para chegar em 10 lojas em 2 semanas: **3 contatos novos por dia + 
 ## 8. Quando chegar em 5 lojas
 
 Mande para as outras lojas (prova social):
-> "[nome], a [Loja A], a [Loja B] e a [Loja C] já estão no AutoRegião. Ainda tenho vaga com os 60 dias
-> grátis até o lançamento em 03/11. Bora colocar a sua também?"
+> "[nome], a [Loja A], a [Loja B] e a [Loja C] já estão no AutoRegião. No pré-lançamento ainda dá para entrar
+> com os 60 dias grátis contando só a partir de 03/11. Bora colocar a sua também?"

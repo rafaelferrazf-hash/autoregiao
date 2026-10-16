@@ -121,7 +121,9 @@ export default function SeletorFipe({ tipoAnuncio, marcaSugerida, preco, inicial
     let cancelado = false;
     carregar<{ valor: Valor | null }>(`tipo=${tipo}&marca=${marca}&modelo=${modelo}&ano=${ano}`)
       .then(({ valor }) => !cancelado && setValor({ chave: chaveValor, dado: valor }))
-      .catch(e => !cancelado && setErro(e.message));
+      // Só o valor falhou (a FIPE oficial às vezes fica fora): a escolha já vale e o anúncio pode ser
+      // salvo; o cron diário grava o valor depois (fipe_em fica vazio até conseguir).
+      .catch(() => !cancelado && setErro("O valor da FIPE não carregou agora (o site da FIPE está instável). Pode continuar e salvar o anúncio: o valor é conferido sozinho mais tarde."));
     return () => { cancelado = true; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chaveValor]);
@@ -201,7 +203,7 @@ export default function SeletorFipe({ tipoAnuncio, marcaSugerida, preco, inicial
         </div>
       </div>
 
-      {erro && <div style={{ fontSize: 12, color: "#B91C1C", marginTop: 10 }}>{erro}</div>}
+      {erro && <div style={{ fontSize: 12, color: erro.startsWith("O valor da FIPE") ? "#92400E" : "#B91C1C", marginTop: 10 }}>{erro}</div>}
 
       {chaveValor && !dadoValor && !erro && <div style={{ fontSize: 12, color: "#7A7670", marginTop: 12 }}>Consultando a FIPE...</div>}
 

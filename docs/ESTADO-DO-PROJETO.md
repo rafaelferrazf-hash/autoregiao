@@ -138,6 +138,9 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
   #FF6600, grafite #1A1A1A, Exo 2 nos títulos (h1–h3). Slogan trocado para "COMPRE | VENDA | ANUNCIE" (o manual
   dizia "financia", que o site não faz). Peças em `public/marca/` e `public/icones/`; `components/Logo`.
   Para impressão grande (fachada, adesivo), pedir ao designer o arquivo vetorial.
+  16/10/2026: logo VETORIZADO por mim (vtracer, a partir do logo-completo.png; versões fundo claro/escuro) e arquivos de
+  plotagem do Fiat Punto 4 portas branco em `docs/plotagem-carro/` (laterais 1:1, vidro traseiro microperfurado A/B,
+  folha para o adesivador; scripts em `_scripts/`; pacote `docs/AutoRegiao-plotagem-Punto.zip`). Reusar o vetor para telões/folhetos.
   O logo foi **gerado com IA** (confirmado pelo Rafael): na Google Play, ícone e banner rotulados como "criados com IA"
   (capturas de tela não). Sugestão pendente: redesenho em vetor por designer e registro da marca no INPI.
 

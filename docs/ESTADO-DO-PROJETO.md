@@ -55,7 +55,7 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
   `/loja/[id]`, `/favoritos`, `/alerta`, `/anunciar`, `/painel` (+ `/novo-anuncio`, `/planos`), `/admin`,
   `/login`, `/cadastro`, `/recuperar-senha`, `/redefinir-senha`, `/pagamento/retorno`, `/termos`, `/privacidade`, `/offline`.
 - SQL já rodado: `rls-fase0`, `fase1-seguranca`, `fase2`, `fase3`, `fase3-fotos`, `fase4a`, `fase4b`,
-  `fase5-alertas`, `fase6-fipe`, `fase7-filtros`, `fase8-logo-loja`, `fase9-excluir-conta`, `fase10-push`, `fase11-capa-loja`, `fase12-carroceria`, `fase13-demonstracao`, `fase14-demonstracao-privada`, `fase15-planos-agendados-vendido`, `fase16-situacao-veiculo`, `fase17-prioridade-premium`, `fase18-lojas-teste` (30 lojas fictícias, 450 anúncios demo; apagar antes do lançamento — linhas no topo do arquivo), `fase19`+`fase20` (lista `acesso_demonstracao`: e-mails que veem os anúncios demo; mibososantos@gmail.com liberado), `fase21-relatorio-selo` (selo `lojas.verificada` + `relatorios_mensais` + `dados_relatorio_mensal`), `fase22-banners` (banners pagos), `fase23-planos-novos` (limites 15/40/ilimitado), `fase24-particular` (pessoa física: liberações, avulso, expira_em), `fase25-visitas` (contador anônimo de páginas → aba "Visitas" do /admin). **`fase26-pre-lancamento`** (60 dias contam do lançamento 03/11 para quem se cadastra antes; `public.data_lancamento()` + `lib/lancamento.ts`). `fase27-precos-premium-80` (Premium com limite 80; rodada e publicada em 16/10). Modelos de e-mail do Auth: `supabase/emails/`.
+  `fase5-alertas`, `fase6-fipe`, `fase7-filtros`, `fase8-logo-loja`, `fase9-excluir-conta`, `fase10-push`, `fase11-capa-loja`, `fase12-carroceria`, `fase13-demonstracao`, `fase14-demonstracao-privada`, `fase15-planos-agendados-vendido`, `fase16-situacao-veiculo`, `fase17-prioridade-premium`, `fase18-lojas-teste` (30 lojas fictícias, 450 anúncios demo; apagar antes do lançamento — linhas no topo do arquivo), `fase19`+`fase20` (lista `acesso_demonstracao`: e-mails que veem os anúncios demo; mibososantos@gmail.com liberado), `fase21-relatorio-selo` (selo `lojas.verificada` + `relatorios_mensais` + `dados_relatorio_mensal`), `fase22-banners` (banners pagos), `fase23-planos-novos` (limites 15/40/ilimitado), `fase24-particular` (pessoa física: liberações, avulso, expira_em), `fase25-visitas` (contador anônimo de páginas → aba "Visitas" do /admin). **`fase26-pre-lancamento`** (60 dias contam do lançamento 03/11 para quem se cadastra antes; `public.data_lancamento()` + `lib/lancamento.ts`). `fase27-precos-premium-80` (Premium com limite 80; rodada e publicada em 16/10). `fase28-anuncio-flutuante` (anúncio pago flutuante, rodada em 16/10). Modelos de e-mail do Auth: `supabase/emails/`.
 
 ## Regras de negócio importantes
 - Planos (`lib/planos.ts`, revistos em 16/10/2026 — fase27, comparados ao CarroSP R$193/17…R$393/97): básico R$99/15 anúncios,
@@ -144,6 +144,13 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
   folha para o adesivador; scripts em `_scripts/`; pacote `docs/AutoRegiao-plotagem-Punto.zip`). Reusar o vetor para telões/folhetos.
   O logo foi **gerado com IA** (confirmado pelo Rafael): na Google Play, ícone e banner rotulados como "criados com IA"
   (capturas de tela não). Sugestão pendente: redesenho em vetor por designer e registro da marca no INPI.
+
+- 16/10/2026: ANÚNCIO FLUTUANTE pago (fase28, `anuncios_flutuantes`): bolinha com logo + selo (ex.: -10%) no canto inferior
+  esquerdo; ao tocar abre cartão (frase, linha verde, botão WhatsApp/link, "Patrocinado"); "x" esconde até o dia seguinte.
+  Até 5 vagas (`VAGAS_FLUTUANTE` em `lib/banners.ts`), 1 sorteado por visita (sessionStorage). Só na inicial, /veiculos e
+  vitrines (não na página do anúncio). Contagem: visualizações/aberturas/cliques (`contar_flutuante`). Admin: aba Banners →
+  "Anúncio flutuante" (`AdminPublicidade`, `AdminFlutuantes`, `/api/admin/flutuantes`). E-mail 3 dias antes de vencer.
+  Também: busca de loja por nome em /lojas (`BuscaLojas`), logo do topo 40px.
 
 ## Pendências (em ordem sugerida)
 **Roteiro do lançamento (13/10/2026): `docs/ROTEIRO-LANCAMENTO.md`**. Etapas, responsáveis, checagem final em 30/10

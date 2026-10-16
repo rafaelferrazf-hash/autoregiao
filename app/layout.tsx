@@ -5,6 +5,7 @@ import { NOME_SITE, URL_SITE } from "@/lib/site";
 import AppInstalavel from "@/components/AppInstalavel";
 import OuvinteNativo from "@/components/OuvinteNativo";
 import ContadorVisitas from "@/components/ContadorVisitas";
+import ExibirFlutuante from "@/components/ExibirFlutuante";
 import { Suspense } from "react";
 import BarraComparar from "@/components/BarraComparar";
 
@@ -59,6 +60,7 @@ export default function RootLayout({
         <AppInstalavel />
         <OuvinteNativo />
         <Suspense fallback={null}><ContadorVisitas /></Suspense>
+        <ExibirFlutuante />
         <BarraComparar />
       </body>
     </html>

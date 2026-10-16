@@ -37,3 +37,17 @@ export function lotacaoNoPeriodo(outros: { inicio: string; fim: string }[], inic
   }
   return maior;
 }
+
+// Anúncio flutuante (supabase/fase28): bolinha com a logo + selo que abre um cartão.
+// Até 5 no ar ao mesmo tempo; cada visitante vê um, sorteado a cada visita.
+export const VAGAS_FLUTUANTE = 5;
+
+export type Flutuante = {
+  id: string; anunciante: string; telefone: string | null; selo: string | null;
+  titulo: string; texto: string | null; botao: string; link: string; logo_url: string;
+  inicio: string; fim: string; ativo: boolean; valor: number | null;
+  visualizacoes: number; aberturas: number; cliques: number; criado_em: string;
+};
+
+// Só o que o site público precisa (sem telefone, valor e números).
+export type FlutuantePublico = Pick<Flutuante, "id" | "anunciante" | "selo" | "titulo" | "texto" | "botao" | "link" | "logo_url">;

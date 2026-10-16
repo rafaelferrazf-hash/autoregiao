@@ -14,7 +14,7 @@ import {
 } from "@/lib/dados/admin";
 import { formatarPreco } from "@/lib/formatar";
 import Icone, { type NomeIcone } from "@/components/Icone";
-import AdminBanners from "@/components/AdminBanners";
+import AdminPublicidade from "@/components/AdminPublicidade";
 import AdminVisitas from "@/components/AdminVisitas";
 
 const ABAS = ["Resumo", "Visitas", "Lojas", "Relatórios", "Banners", "Anúncios", "Usuários"] as const;
@@ -122,7 +122,7 @@ export default function Admin() {
     Resumo: `Visão geral do AutoRegião — ${mesAtual.charAt(0).toUpperCase() + mesAtual.slice(1)}`,
     Visitas: "Quantas pessoas abrem o site e os apps, de onde vêm e o que procuram.",
     Lojas: "Estender prazo, desativar/reativar lojas e dar o selo “Loja verificada”. A loja vitalícia do dono fica protegida.",
-    "Banners": "Banners pagos do carrossel da página inicial: até 4 no ar ao mesmo tempo.",
+    "Banners": "Publicidade paga: banners do carrossel (até 4 no ar) e anúncio flutuante (até 5, sorteados a cada visita).",
     "Relatórios": "Relatório do mês de cada loja: vai por e-mail sozinho no dia 1º; aqui você manda pelo WhatsApp.",
     "Anúncios": "Moderação: pausar ou remover anúncios falsos ou impróprios.",
     "Usuários": "Contas cadastradas no AutoRegião.",
@@ -409,7 +409,7 @@ export default function Admin() {
 
         {/* ===================== BANNERS ===================== */}
         {aba === "Visitas" && <AdminVisitas />}
-        {aba === "Banners" && <AdminBanners />}
+        {aba === "Banners" && <AdminPublicidade />}
 
         {/* ===================== ANÚNCIOS ===================== */}
         {aba === "Anúncios" && (

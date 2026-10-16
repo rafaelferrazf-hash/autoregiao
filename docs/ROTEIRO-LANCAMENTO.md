@@ -264,3 +264,6 @@ anterior em 1 clique (Deployments → versão anterior → "Promote to Productio
 - Logo em vetor por um designer + registro da marca no INPI
 - Planos pagos para particulares
 - Limpeza de fotos de vendidos (quando o Storage passar de ~50%)
+- Publicidade por cidade/região (quando o site crescer para outras regiões): no cadastro do banner e do anúncio
+  flutuante, escolher em quais cidades aparece (ou "todas"); usar a cidade escolhida na busca ou a do "Perto de mim"
+  (sem guardar localização); quem não informou cidade vê os de "todas". Hoje todos veem os mesmos anúncios.

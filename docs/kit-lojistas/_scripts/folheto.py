@@ -80,7 +80,12 @@ M = SANG + 10  # margem segura
 # ---------------- FRENTE (fundo grafite) ----------------
 c = []
 c.append(f'<rect x="0" y="{H - 62}" width="{W}" height="62" fill="{LAR}"/>')
-c.append(logo((W - 92) / 2, SANG + 12, 92, "neg"))
+c.append(logo((W - 80) / 2, SANG + 9, 80, "neg"))
+# Selo de pré-lançamento
+_pl = largura("PRÉ-LANÇAMENTO", 4.2, JAKB) + 8
+c.append(f'<rect x="{M}" y="{SANG + 51}" width="{_pl}" height="7.5" rx="3.75" fill="{LAR}"/>')
+c.append(texto("PRÉ-LANÇAMENTO", M + 4, SANG + 56.4, 4.2, BRA, JAKB))
+c.append(texto("Lançamento oficial em novembro", M + _pl + 3, SANG + 56.4, 4, "#D0D0D0"))
 y = SANG + 72
 for linha in ["Seus carros no", "app da região."]:
     c.append(texto(linha, M, y, 13.5, BRA, EXO)); y += 14

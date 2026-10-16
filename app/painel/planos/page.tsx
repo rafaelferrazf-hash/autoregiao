@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { usuarioAtual } from "@/lib/dados/usuario";
 import { buscarLojaDoUsuario } from "@/lib/dados/lojas";
 import { iniciarPagamento, listarMeusPagamentos, rotuloMetodo, rotuloStatusPagamento, type PagamentoHistorico } from "@/lib/dados/pagamentos";
-import { ehVitalicio, formatarReais, nomeDoPlano, PERIODOS, PLANOS, situacaoDoPlano, valorDoPeriodo, type IdPlanoPago, type MesesPeriodo } from "@/lib/planos";
+import { ehVitalicio, formatarReais, nomeDoPlano, PERIODOS, PLANOS, situacaoDoPlano, TEXTO_SOB_CONSULTA, valorDoPeriodo, type IdPlanoPago, type MesesPeriodo } from "@/lib/planos";
 import type { Loja } from "@/lib/tipos";
 import { useEmAppDaLoja } from "@/lib/appLoja";
 import Icone from "@/components/Icone";
@@ -133,6 +133,7 @@ export default function Planos() {
               })}
             </div>
             <p style={{ fontSize: 12, color: "#7A7670", marginTop: 14, lineHeight: 1.6 }}>
+              {TEXTO_SOB_CONSULTA} <a href="mailto:contato@autoregiao.com.br" style={{ color: "#FF6600" }}>contato@autoregiao.com.br</a><br />
               Pagamento pelo Mercado Pago: Pix (aprovação na hora), cartão de crédito ou boleto (até 3 dias úteis). A renovação não é automática — avisamos no painel antes de vencer.
               Você pode desistir em até 7 dias após o pagamento com reembolso total (<Link href="/termos" style={{ color: "#FF6600" }}>Termos de Uso</Link>).
             </p>

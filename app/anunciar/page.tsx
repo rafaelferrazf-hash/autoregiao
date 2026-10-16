@@ -2,7 +2,7 @@
 import Link from "next/link";
 import Logo from "@/components/Logo";
 import BotoesConta from "@/components/BotoesConta";
-import { PLANOS, DIAS_GRATIS, DIAS_GRATIS_PARTICULAR, AVULSOS, formatarReais } from "@/lib/planos";
+import { PLANOS, TEXTO_SOB_CONSULTA, DIAS_GRATIS, DIAS_GRATIS_PARTICULAR, AVULSOS, formatarReais } from "@/lib/planos";
 import { useEmAppDaLoja } from "@/lib/appLoja";
 import { useState } from "react";
 import Icone, { type NomeIcone } from "@/components/Icone";
@@ -179,6 +179,9 @@ export default function Anunciar() {
               </div>
             ))}
           </div>
+          <p style={{ textAlign: "center", fontSize: 13, color: "#7A7670", marginTop: 20 }}>
+            {TEXTO_SOB_CONSULTA} <a href="mailto:contato@autoregiao.com.br" style={{ color: "#FF6600", fontWeight: 600 }}>contato@autoregiao.com.br</a>
+          </p>
         </div>
       </section>
 

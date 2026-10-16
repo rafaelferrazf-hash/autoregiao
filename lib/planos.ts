@@ -22,19 +22,20 @@ export type PlanoPago = {
 };
 
 // Ordem nas listas (supabase/fase17): Premium > Profissional (e período grátis) > Básico.
-// Preços de lançamento (13/10/2026). Limites também no banco (fase23: limite_anuncios) — manter iguais.
+// Preços revistos em 16/10/2026 (comparados ao CarroSP). Limites também no banco (fase27: limite_anuncios) — manter iguais.
+// Mais de LIMITE_PREMIUM anúncios: preço sob consulta (o Rafael negocia; o admin pode pôr a loja no vitalício/sem limite).
 export const PLANOS: PlanoPago[] = [
   {
-    id: "basico", nome: "Básico", precoMensal: 69, limite: 15, destaque: false,
+    id: "basico", nome: "Básico", precoMensal: 99, limite: 15, destaque: false,
     recursos: ["Até 15 anúncios ativos", "Página da loja com logo, capa e mapa", "Contato direto pelo WhatsApp", "Relatório mensal de visualizações e contatos"],
   },
   {
-    id: "profissional", nome: "Profissional", precoMensal: 129, limite: 40, destaque: true,
+    id: "profissional", nome: "Profissional", precoMensal: 169, limite: 40, destaque: true,
     recursos: ["Até 40 anúncios ativos", "Seus anúncios aparecem antes dos do plano Básico", "Etiqueta “Destaque” nos seus anúncios", "Logo da sua loja nos anúncios", "Página da loja com logo, capa e mapa", "Contato direto pelo WhatsApp", "Relatório mensal de visualizações e contatos"],
   },
   {
-    id: "premium", nome: "Premium", precoMensal: 249, limite: null, destaque: true,
-    recursos: ["Anúncios ilimitados", "Seus anúncios aparecem primeiro na busca", "Vitrine “Ofertas em destaque” no topo da página inicial", "Anúncios com borda laranja, etiqueta “Destaque” e selo “Loja Premium”", "Logo da sua loja nos anúncios", "Página da loja com logo, capa e mapa", "Contato direto pelo WhatsApp", "Relatório mensal de visualizações e contatos"],
+    id: "premium", nome: "Premium", precoMensal: 279, limite: 80, destaque: true,
+    recursos: ["Até 80 anúncios ativos", "Seus anúncios aparecem primeiro na busca", "Vitrine “Ofertas em destaque” no topo da página inicial", "Anúncios com borda laranja, etiqueta “Destaque” e selo “Loja Premium”", "Logo da sua loja nos anúncios", "Página da loja com logo, capa e mapa", "Contato direto pelo WhatsApp", "Relatório mensal de visualizações e contatos"],
   },
 ];
 
@@ -69,6 +70,8 @@ export const AVULSOS = [
 export type IdAvulso = (typeof AVULSOS)[number]["id"];
 
 export const DIAS_GRATIS = 60;
+export const LIMITE_PREMIUM = 80;
+export const TEXTO_SOB_CONSULTA = `Mais de ${LIMITE_PREMIUM} veículos? Fale com a gente: preço sob consulta.`;
 export const DIAS_CARENCIA = 3;
 export const LIMITE_PARTICULAR = 1;
 

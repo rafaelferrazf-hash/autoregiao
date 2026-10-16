@@ -127,8 +127,8 @@ c.append(texto("Mande as fotos e os dados pelo WhatsApp", M + 5, y + 14.5, 3.9, 
 c.append(texto("que nós colocamos os carros no ar.", M + 5, y + 19.5, 3.9, GRA))
 y += 36
 c.append(texto("Depois dos 60 dias grátis", M, y, 7, GRA, EXO)); y += 9
-cols = [("Básico", "R$ 69", "até 15 anúncios", False), ("Profissional", "R$ 129", "até 40 + destaque", True),
-        ("Premium", "R$ 249", "ilimitados + vitrine", False)]
+cols = [("Básico", "R$ 99", "até 15 anúncios", False), ("Profissional", "R$ 169", "até 40 + destaque", True),
+        ("Premium", "R$ 279", "até 80 + vitrine", False)]
 cw = (W - 2 * M - 6) / 3
 for i, (nome, preco, desc, pop) in enumerate(cols):
     x = M + i * (cw + 3)
@@ -138,6 +138,7 @@ for i, (nome, preco, desc, pop) in enumerate(cols):
     c.append(texto(preco, x + cw / 2, y + 15.5, 7.5, cor, EXO, "centro"))
     c.append(texto("/mês · " + desc, x + cw / 2, y + 22, 2.9, cor, JAK, "centro"))
 y += 33
+c.append(texto("Mais de 80 carros? Preço sob consulta.", M, y, 3.9, CIN)); y += 5.5
 c.append(texto("Você só continua se gostar. Cancelar é só não renovar.", M, y, 3.9, CIN)); y = H - SANG - 30
 c.append(f'<line x1="{M}" y1="{y - 6}" x2="{W - M}" y2="{y - 6}" stroke="#DDD" stroke-width="0.3"/>')
 c.append(logo(M, y - 1, 38, "pos"))

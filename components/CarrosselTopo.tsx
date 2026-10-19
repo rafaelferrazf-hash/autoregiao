@@ -41,7 +41,7 @@ export default function CarrosselTopo() {
 
   const temApp = !emApp && (APP_ANDROID.publicado || APP_IPHONE.publicado);
   const slides: Slide[] = [
-    { chave: "carro", foto: "/banners/carro-ideal.jpg", titulo: <>Encontre o carro ideal {destaque("na sua região")}</>, texto: "Carros, motos e utilitários de Teixeira de Freitas e região.", botao: { rotulo: "Buscar veículos", href: "/veiculos" } },
+    { chave: "carro", foto: "/banners/comprar-casal.jpg", titulo: <>Encontre o carro ideal {destaque("na sua região")}</>, texto: "Carros, motos e utilitários de Teixeira de Freitas e região.", botao: { rotulo: "Buscar veículos", href: "/veiculos" } },
     ...banners.map(b => ({
       chave: `banner-${b.id}`, banner: b.id, foto: b.imagem_url,
       titulo: b.destaque && b.titulo.includes(b.destaque)
@@ -51,8 +51,8 @@ export default function CarrosselTopo() {
       botao: { rotulo: b.botao, href: b.link },
     })),
     ...(temApp ? [{ chave: "app", foto: "/banners/app.jpg", largura: "36%", titulo: <>O seu próximo carro {destaque("na palma da mão")}</>, texto: "Baixe o app AutoRegião e receba aviso de carro novo no celular.", lojasDeApps: true }] : []),
-    { chave: "fipe", foto: "/banners/fipe.jpg", largura: "28%", titulo: <>Consulte a {destaque("Tabela FIPE")} de graça</>, texto: "Saiba o preço justo antes de comprar ou vender.", botao: { rotulo: "Consultar FIPE", href: "/tabela-fipe" } },
-    ...(!emApp ? [{ chave: "anuncie", foto: "/banners/anuncie.jpg", largura: "46%", titulo: <>Anuncie sua revenda: {destaque("60 dias grátis")}</>, texto: "Seus carros na vitrine de quem compra na região.", botao: { rotulo: "Quero anunciar", href: "/anunciar" } }] : []),
+    { chave: "fipe", foto: "/banners/fipe-em-casa.jpg", titulo: <>Consulte a {destaque("Tabela FIPE")} de graça</>, texto: "Saiba o preço justo antes de comprar ou vender.", botao: { rotulo: "Consultar FIPE", href: "/tabela-fipe" } },
+    ...(!emApp ? [{ chave: "anuncie", foto: "/banners/anuncie-revendedor.jpg", titulo: <>Anuncie sua revenda: {destaque("60 dias grátis")}</>, texto: "Seus carros na vitrine de quem compra na região.", botao: { rotulo: "Quero anunciar", href: "/anunciar" } }] : []),
   ];
   const total = slides.length;
   const indice = total ? atual % total : 0;
@@ -96,6 +96,7 @@ export default function CarrosselTopo() {
         .carrossel-topo { height: 340px; }
         .carrossel-titulo { font-size: 44px; }
         .carrossel-texto { font-size: 17px; }
+        @media (min-width: 769px) { .carrossel-conteudo { padding-left: 76px !important; padding-right: 76px !important; } }
         .carrossel-seta:hover { background: rgba(255,102,0,0.85) !important; border-color: #FF6600 !important; }
         @media (max-width: 768px) {
           .carrossel-titulo { font-size: 28px; }

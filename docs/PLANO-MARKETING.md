@@ -187,7 +187,11 @@ Regra para telão de trânsito: **sem QR code e sem textos longos** (o motorista
 máximo 7 palavras por tela. 🤖 escrevo os roteiros e faço as imagens de cada tela; a montagem do vídeo
 pode ser feita pela própria empresa do telão (muitas fazem sem custo) ou por um designer.
 
-### 4.4 Gratuitos (fazer todos)
+### 4.4 Gratuitos
+
+> **19/10/2026: o Rafael decidiu NÃO criar Instagram da AutoRegião** (por enquanto). Canais orgânicos: WhatsApp
+> Business (@autoregiao, Status, catálogo), Perfil da Empresa no Google, grupos de compra e venda, lojas parceiras.
+> Anúncios pagos na Meta podem ser feitos pelo próprio WhatsApp Business (Ferramentas → Anúncios).
 
 | Ação | Quem |
 |---|---|

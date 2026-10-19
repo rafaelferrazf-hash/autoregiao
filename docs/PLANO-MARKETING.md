@@ -69,6 +69,10 @@ Sem medir, não dá para saber qual canal trouxe resultado e onde colocar mais d
 
 ## 4. Canais
 
+> **19/10/2026, decisão do Rafael: lojistas SÓ pessoalmente (visita + WhatsApp); a campanha na Meta (Facebook →
+> aparece no Instagram) é SÓ para compradores**, ligada no lançamento (03/11) se a porta de 150 anúncios estiver aberta.
+> Página do Facebook da AutoRegião, conta de anúncios e criativos ficam prontos antes, para só apertar "Publicar".
+
 ### 4.1 Lojistas: corpo a corpo primeiro, tráfego pago como apoio
 
 São no máximo algumas centenas de lojas na região. Para um público tão pequeno, **visita e WhatsApp

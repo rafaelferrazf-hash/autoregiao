@@ -78,6 +78,50 @@ O app não contém anúncios de terceiros (os anúncios de veículos são o cont
 12 ou mais testadores com o app instalado por 14 dias seguidos. Lista de e-mails Gmail dos testadores
 em Testes → Teste fechado → Testadores. Depois: “Solicitar acesso à produção”.
 
+## Pedido de acesso à produção — respostas prontas (preparadas em 19/10/2026)
+Ajustar os trechos entre [colchetes] com o que de fato aconteceu. O Google lê com atenção: respostas
+específicas e honestas passam melhor que textos genéricos.
+
+**Parte 1 — Sobre o teste fechado**
+
+1. *Como você recrutou usuários para o teste fechado?*
+```
+Convidamos amigos, familiares, lojistas de veículos e conhecidos de Teixeira de Freitas (BA) e região, que são o público do app, por mensagem de WhatsApp. Eles entraram no Grupo do Google de testadores e instalaram pelo link de teste da Play Store.
+```
+2. *Foi fácil recrutar testadores?* → escolher **"Neutro"** (ou "Um pouco difícil", se achar mais verdadeiro).
+
+3. *Descreva o engajamento dos testadores durante o teste:*
+```
+[16] pessoas instalaram e pelo menos 12 participaram continuamente por mais de 14 dias. Elas usaram o app para buscar veículos, ver anúncios, testar filtros (marca, ano, preço, cidade), favoritos, "Perto de mim", contato por WhatsApp e a criação de alertas. Lojistas testaram o cadastro da loja e de anúncios com fotos.
+```
+4. *Resuma o feedback recebido e como foi coletado:*
+```
+O feedback veio por WhatsApp e pelo e-mail contato@autoregiao.com.br. Os principais pontos foram: [layout do card de anúncio, busca por ano "de/até", ver a senha ao digitar, localizar loja pelo nome, informações de situação do veículo (IPVA, licenciamento)]. Todos foram ajustados antes do pedido de produção.
+```
+
+**Parte 2 — Sobre o app**
+
+5. *Quem é o público-alvo?*
+```
+Adultos de Teixeira de Freitas (BA) e cidades vizinhas que querem comprar ou vender carros, motos e utilitários, e as lojas de veículos da região que anunciam seu estoque.
+```
+6. *Como o app oferece valor aos usuários?*
+```
+Reúne em um só lugar os veículos à venda nas lojas e por particulares da região, com busca por filtros, comparação com a Tabela FIPE, selo de bom preço, distância até o vendedor e contato direto por WhatsApp. O comprador pode criar alertas para saber quando chega o veículo que procura. Para as lojas, oferece vitrine própria e estatísticas de visualizações e contatos.
+```
+7. *Quantas instalações você espera no primeiro ano?* → **"1.000 – 10.000"** (público regional).
+
+**Parte 3 — Pronto para produção**
+
+8. *Que mudanças você fez com base no teste?*
+```
+Novo layout dos cards de anúncio com preço, km, ano e botão de WhatsApp; filtro de ano "de/até"; botão para mostrar a senha; busca de loja pelo nome; "Perto de mim" com a cidade mais próxima e a distância; situação do veículo (IPVA pago, licenciado, único dono); botão para denunciar anúncio; exclusão de conta dentro do app; correções de layout em telas pequenas.
+```
+9. *Como você decidiu que o app está pronto para produção?*
+```
+Os testadores conseguiram concluir os fluxos principais (buscar, ver anúncio, contatar o vendedor, criar alerta, cadastrar loja e anúncio) sem erros nas últimas versões, e os problemas relatados foram corrigidos. O app também já passa pelas verificações de links do domínio (assetlinks) e abre em tela cheia.
+```
+
 ## Mensagem para os testadores (WhatsApp)
 ```
 Oi! Tudo bem? 😊

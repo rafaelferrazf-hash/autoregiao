@@ -142,7 +142,7 @@ c.append(texto("Mais de 80 carros? Preço sob consulta.", M, y, 3.9, CIN)); y +=
 c.append(texto("Você só continua se gostar. Cancelar é só não renovar.", M, y, 3.9, CIN)); y = H - SANG - 30
 c.append(f'<line x1="{M}" y1="{y - 6}" x2="{W - M}" y2="{y - 6}" stroke="#DDD" stroke-width="0.3"/>')
 c.append(logo(M, y - 1, 38, "pos"))
-c.append(texto("Fale com o Rafael", W - M, y + 5, 4.2, CIN, JAK, "dir"))
+c.append(texto("Fale conosco", W - M, y + 5, 4.2, CIN, JAK, "dir"))
 c.append(texto("WhatsApp " + WHATS, W - M, y + 12, 5.6, GRA, JAKB, "dir"))
 c.append(texto("contato@autoregiao.com.br", W - M, y + 18, 3.9, CIN, JAK, "dir"))
 verso = salvar("verso", "".join(c), BRA)

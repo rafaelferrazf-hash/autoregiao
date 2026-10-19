@@ -79,7 +79,7 @@ você chegar.
 |---|---|---|
 | Lista de lojas | Lojas que anunciam na Mobiauto, OLX, Instagram e as de rua (roteiro 4.1) | já |
 | Visita com material | Folheto A5 com QR code + "Cadastro em 5 minutos, eu te ajudo agora" | 20/10 → 02/11 |
-| **Cadastro feito por você** | Oferecer subir os carros pela loja (roteiro 4.3). É o que mais destrava | sempre |
+| **Ajuda no cadastro** | O lojista cadastra sozinho (decisão 19/10); na visita, acompanhar ele fazendo no celular e tirar dúvidas pelo WhatsApp | sempre |
 | **Tráfego pago "lojistas"** (Meta: Instagram + Facebook) | Anúncio de **mensagem no WhatsApp**: "Quer seus carros no app da região? 60 dias grátis." Público: donos de negócio, interesse em revenda de automóveis, concessionárias, raio de 80 km de Teixeira. Também mostrar para quem segue as lojas da região | 20/10 → 30/11 |
 | Remarketing | Quem visitou /anunciar e não se cadastrou vê o anúncio de novo | depois do M3 |
 | Indicação | Loja que indicar outra que se cadastre ganha +30 dias grátis | a partir de 03/11 |

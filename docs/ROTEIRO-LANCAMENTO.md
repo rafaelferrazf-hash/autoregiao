@@ -175,7 +175,7 @@ Um site de classificados vazio no dia do lançamento passa a impressão de aband
 |---|---|---|---|
 | 4.1 🔴 | Lista das lojas de Teixeira e região (nome, contato, quantos carros têm). Começar pelas que anunciam na Mobiauto / OLX | 👤 | Lista com 30+ lojas |
 | 4.2 🔴 | Visitar ou mandar mensagem: 60 dias grátis + (se decidido) preço de fundador | 👤 · 🤖 escreve a mensagem | 10+ lojas toparam |
-| 4.3 🔴 | **Ajudar a cadastrar**: muitas lojas não vão ter tempo. Oferecer cadastrar os carros por elas (você ou alguém contratado), com as fotos que elas mandarem | 👤 | Anúncios no ar |
+| 4.3 🔴 | **Ajudar a cadastrar** (decisão 19/10: o **lojista cadastra sozinho**; o Rafael só tira dúvidas pelo WhatsApp e, na visita, acompanha o lojista fazendo no celular dele). Texto original: oferecer cadastrar os carros por elas (você ou alguém contratado), com as fotos que elas mandarem | 👤 | Anúncios no ar |
 | 4.4 🟡 | Conferir cada loja (endereço, telefone) e dar o selo **"Loja verificada"** | 👤 no /admin | Selo nas lojas conferidas |
 | 4.5 🟡 | Logo e capa nas páginas das lojas | 👤 · lojistas | Lojas com logo |
 | 4.6 🟢 | 2–3 lojas fecham Premium logo no início, para a vitrine "Ofertas em destaque" ter conteúdo real | 👤 | Vitrine com lojas reais |

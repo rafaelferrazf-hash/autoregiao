@@ -8,6 +8,9 @@ Meta (roteiro, Etapa 4): **10 lojas e 150 anúncios reais até 30/10**.
 Folheto para imprimir: `folheto-lojistas_A5_frente-e-verso_com-sangria-3mm.pdf` (A5, frente e verso, papel couchê
 150–250 g; avisar a gráfica que o arquivo **já tem 3 mm de sangria**). Controle das lojas: `controle-lojas.csv`.
 
+**Decisão do Rafael (19/10/2026): o próprio lojista cadastra a loja e os carros.** Não oferecer cadastrar por ele;
+oferecer **ajuda pelo WhatsApp** se tiver dúvida.
+
 **Regra:** prometer só o que o site faz. Ele **não vende nem financia** carro: só anuncia, e o cliente
 chama a loja direto no WhatsApp.
 
@@ -21,8 +24,7 @@ chama a loja direto no WhatsApp.
 > encontra o estoque da sua loja e chama direto no **seu WhatsApp**, sem intermediário e sem comissão.
 >
 > Estamos no **pré-lançamento**: as lojas que entrarem agora ganham **60 dias grátis**, e eles **só começam a
-> contar no dia do lançamento** (03/11). Sem cartão e sem compromisso.
-> Se você não tiver tempo, **eu mesmo cadastro seus carros**: é só me mandar as fotos.
+> contar no dia do lançamento** (03/11). Sem cartão e sem compromisso. O cadastro leva uns 5 minutos.
 >
 > Posso passar aí uns 5 minutinhos para te mostrar? Ou dá uma olhada: www.autoregiao.com.br
 
@@ -33,8 +35,8 @@ curto** (abaixo). Áudio de 30 segundos com a sua voz passa mais confiança que 
 
 > "Fala, [nome], tudo bem? Rafael aqui. Montei um site e um app de carros só da nossa região, o AutoRegião.
 > A ideia é simples: quem tá procurando carro aqui em Teixeira acha o seu estoque e te chama direto no
-> WhatsApp. As primeiras lojas entram com dois meses grátis, e se você não tiver tempo eu mesmo cadastro
-> os carros pra você. Quando tiver um minutinho eu passo aí pra te mostrar, beleza?"
+> WhatsApp. As primeiras lojas entram com dois meses grátis, e o cadastro é rapidinho, uns 5 minutos.
+> Quando tiver um minutinho eu passo aí pra te mostrar, beleza?"
 
 ## 3. Lembrete (2 dias depois, se não respondeu)
 
@@ -46,14 +48,11 @@ curto** (abaixo). Áudio de 30 segundos com a sua voz passa mais confiança que 
 
 ## 4. Quando a loja disser "sim"
 
-> Show, [nome]! Pra colocar sua loja no ar eu preciso de:
-> 1. **Nome da loja**, endereço e o **WhatsApp** que vai receber os clientes
-> 2. **Logo** da loja (pode ser foto do letreiro) e uma foto da fachada
-> 3. De cada carro: **fotos** (6 a 10, de dia, carro limpo) + **ano, km, preço** e se tem IPVA pago, único dono, laudo
->
-> Pode mandar aos poucos. Eu te aviso quando cada carro entrar no ar. 🚗
+> Show, [nome]! É só entrar em www.autoregiao.com.br/anunciar e tocar em "Começar grátis" (uns 5 minutos).
+> Depois: "Novo anúncio" → escolhe o carro na lista da Tabela FIPE → coloca as fotos (6 a 10, de dia, carro limpo).
+> Coloca também o logo e uma foto da fachada no "Perfil da loja". Qualquer dúvida, me chama aqui. 🚗
 
-Depois de cadastrar, mande o link da página da loja para o lojista. Ele vai querer mostrar para os outros.
+Quando a loja tiver carros no ar, mande o link da página da loja para o lojista. Ele vai querer mostrar para os outros.
 
 ## 5. Roteiro da visita (2 a 5 minutos)
 
@@ -62,9 +61,9 @@ Depois de cadastrar, mande o link da página da loja para o lojista. Ele vai que
    Se a loja dele já estiver cadastrada, mostre **a página da loja dele**, porque isso convence na hora.
 3. **A oferta:** "É pré-lançamento: 60 dias grátis, e eles só começam a contar no dia do lançamento. Sem cartão.
    Se não gostar, é só não continuar."
-4. **Tirar o trabalho dele:** "Se você não tiver tempo, eu cadastro. Me manda as fotos no WhatsApp."
-5. **Fechar com um próximo passo concreto:** "Posso já cadastrar a loja agora com você?" ou "Me manda as
-   fotos de 3 carros hoje que amanhã já estão no ar."
+4. **Mostrar que é fácil:** "O cadastro leva 5 minutos e qualquer dúvida você me chama no WhatsApp."
+5. **Fechar com um próximo passo concreto:** "Vamos fazer o cadastro agora? Eu te mostro no seu celular." (ele mesmo
+   digita; você só acompanha) ou "Cadastra 3 carros hoje e me avisa que eu confiro como ficou."
 6. Deixar o **folheto** e anotar na planilha (`controle-lojas.csv`).
 
 ## 6. Respostas para as perguntas e objeções mais comuns
@@ -73,7 +72,7 @@ Depois de cadastrar, mande o link da página da loja para o lojista. Ele vai que
 |---|---|
 | "Já anuncio na OLX / Mobiauto." | "Ótimo, continua lá. Aqui é mais um lugar, só da região e grátis por 60 dias. O cliente daqui está perto, pode ir na loja." |
 | "Já anuncio no CarroSP." | "Continua lá se quiser. Compare: lá até 17 carros custa R$ 193 por mês. Aqui até 15 é R$ 99, até 40 é R$ 169 e até 80 é R$ 279. E os primeiros 60 dias são grátis." (falar na conversa; **não** colocar o nome do concorrente em folheto ou anúncio) |
-| "Não tenho tempo." | "Por isso eu cadastro para você. Me manda as fotos que eu coloco no ar." |
+| "Não tenho tempo." | "É rapidinho: 5 minutos pra loja e uns 2 por carro, já que a Tabela FIPE preenche marca, modelo e versão. Pode começar com 3 carros." |
 | "Quanto custa depois?" | "A partir de R$ 99 por mês. A maioria das lojas vai para o Profissional, R$ 169, até 40 carros com destaque. Mas você só decide depois dos 60 dias, vendo quantos clientes chamaram." |
 | "Quem vai ver isso?" | "No lançamento, em 03/11, tem telão na Getúlio Vargas, anúncio no Instagram e Facebook da região e app na loja de aplicativos. E todo mês você recebe um relatório com quantas pessoas viram e chamaram." |
 | "E se eu não vender nada?" | "Você não paga nada nos 60 dias. Se não chamar ninguém, você não continua. Sem multa e sem contrato." |
@@ -81,7 +80,7 @@ Depois de cadastrar, mande o link da página da loja para o lojista. Ele vai que
 | "Tem comissão sobre a venda?" | "Não. O cliente fala direto com você, e a venda é toda sua." |
 | "Vocês financiam?" | "Não. O AutoRegião só mostra os carros. Financiamento continua com você." |
 | "Entro depois do lançamento." | "Pode, mas quem entra agora já aparece no primeiro dia da divulgação, e os 60 dias só começam a contar em 03/11. Você não perde nada entrando antes." |
-| "Vou pensar." | "Tranquilo. Posso cadastrar só 3 carros para você ver como fica? Não custa nada." |
+| "Vou pensar." | "Tranquilo. Cadastra só 3 carros pra ver como fica, não custa nada. Qualquer dúvida me chama." |
 
 ## 7. Ordem sugerida de abordagem
 

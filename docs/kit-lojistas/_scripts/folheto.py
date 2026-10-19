@@ -112,7 +112,7 @@ c = []
 c.append(f'<rect x="0" y="0" width="{W}" height="{SANG + 6}" fill="{LAR}"/>')
 y = SANG + 22
 c.append(texto("Como funciona", M, y, 9, GRA, EXO)); y += 11
-passos = [("1", "Cadastre a loja", "em 5 minutos, pelo celular (ou nós fazemos para você)."),
+passos = [("1", "Cadastre a loja", "em 5 minutos, pelo celular ou pelo computador."),
           ("2", "Anuncie seus carros", "com fotos. A Tabela FIPE preenche marca, modelo e versão."),
           ("3", "Receba os clientes", "direto no seu WhatsApp. Sem intermediário, sem comissão.")]
 for n, tit, desc in passos:
@@ -122,9 +122,9 @@ for n, tit, desc in passos:
     c.append(texto(desc, M + 11, y + 4.6, 3.9, CIN)); y += 14
 y += 2
 c.append(f'<rect x="{M}" y="{y}" width="{W - 2 * M}" height="25" rx="3" fill="#FFF0E6"/>')
-c.append(texto("Sem tempo para cadastrar?", M + 5, y + 8, 5, LAR, JAKB))
-c.append(texto("Mande as fotos e os dados pelo WhatsApp", M + 5, y + 14.5, 3.9, GRA))
-c.append(texto("que nós colocamos os carros no ar.", M + 5, y + 19.5, 3.9, GRA))
+c.append(texto("Dúvida no cadastro?", M + 5, y + 8, 5, LAR, JAKB))
+c.append(texto("Chame no WhatsApp que a gente te ajuda", M + 5, y + 14.5, 3.9, GRA))
+c.append(texto("passo a passo.", M + 5, y + 19.5, 3.9, GRA))
 y += 36
 c.append(texto("Depois dos 60 dias grátis", M, y, 7, GRA, EXO)); y += 9
 cols = [("Básico", "R$ 99", "até 15 anúncios", False), ("Profissional", "R$ 169", "até 40 + destaque", True),

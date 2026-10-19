@@ -35,6 +35,7 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
 | ImprovMX | recebe *@autoregiao.com.br → rafaelferrazf05@gmail.com (pega-tudo) | rafaelferrazf05@gmail.com |
 | Gmail | responde como contato@ ("Enviar e-mail como", SMTP Resend) | rafaelferrazf05@gmail.com |
 | Mercado Pago | Checkout Pro dos planos — **PRODUÇÃO na Vercel desde 07/10/2026** (setor "Outros"; webhook de produção em /api/pagamentos/webhook, evento Pagamentos). O `.env.local` continua com a chave de TESTE (vendedor de teste: só paga comprador de teste) | rafaelferrazf@hotmail.com |
+| WhatsApp Business | atendimento AutoRegião: (73) 99820-9698, nome de usuário **@autoregiao** reservado (19/10/2026), categorias Serviço automotivo + Site, saudação/ausência/respostas rápidas (loja, fotos, planos, site, cadastro) e listas configuradas. Imagens de perfil em `docs/marca-whatsapp/` | — |
 | Google Search Console | propriedade de domínio verificada por TXT; sitemap enviado | rafaelferrazf05@gmail.com |
 - **Admin único do site:** rafaelferrazf05@gmail.com (`NEXT_PUBLIC_ADMIN_EMAILS`). Conta de admin é só admin.
 - **Lojista de teste:** rafaelferrazf@hotmail.com → loja "Auto Paulista" (plano vitalício), 2 anúncios (Civic, Onix).

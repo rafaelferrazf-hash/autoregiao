@@ -199,6 +199,8 @@ e lançamento sugerido em 03/11/2026. Seguir e marcar por lá.
    - ✅ 06/10/2026: Painel do Play Console marca "12+ testadores aceitaram" (Rafael diz 16 instalados).
      Falta só "14 dias com 12+ testadores" — previsão ~20/10/2026; o botão "Solicitar a produção" libera sozinho.
      Pedir aos testadores para não desinstalar e abrir o app 2–3x/semana; juntar opiniões para o questionário.
+   - ✅ 20/10/2026 08:38: **pedido de acesso à produção ENVIADO** (14 dias com 12+ testadores cumpridos; respostas em
+     `docs/google-play-ficha.md`). Google responde por e-mail em até ~7 dias. Depois: publicar a versão na faixa Produção.
 1b. **App Store (iPhone)** — decidido em 05/10/2026: mesmo modelo "app que usa o site" (nada de app
    independente). Para passar na revisão da Apple: notificações push (alertas de carro novo), compartilhar nativo,
    tela offline; botão "Excluir minha conta" dentro do app (regra 5.1.1); sem compra de planos dentro do app

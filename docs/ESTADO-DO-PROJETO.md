@@ -242,6 +242,9 @@ e lançamento sugerido em 03/11/2026. Seguir e marcar por lá.
      gerado por usuário e publicidade = Sim, preço Grátis, disponível SÓ no Brasil, lançamento MANUAL) → versão 1.0.0
      (compilação 10) ENVIADA PARA REVISÃO em 14/10/2026 ~15:10. Não mexer na conta revisao@ até a resposta. Depois de
      aprovado: liberar no dia do lançamento e pôr `APP_IPHONE.publicado = true` em `lib/site.ts`.
+     20/10: ainda "Aguardando revisão" (6 dias); contrato de apps gratuitos Ativo; pedida REVISÃO ACELERADA
+     (developer.apple.com/contact/app-store → "request an expedited app review") → Apple ACEITOU ("We'll expedite review").
+     Se for rejeitado, o reenvio volta sozinho para a fila acelerada.
      Próximos (antigo): app no App Store Connect → Codemagic (login GitHub, integração "AutoRegiao" com chave de API) → TestFlight
      no iPhone dele → capturas 6,9" → ficha, privacidade (rótulos) → revisão. Não testado num iPhone ainda.
    - Android 1.0.3 (código 4, abre em `/?origem=app`) gerado e assinado em `autoregiao-android\publicar\` —

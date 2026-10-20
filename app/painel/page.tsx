@@ -68,7 +68,7 @@ export default function Painel() {
     setAcaoEmAndamento(car.id);
     const { error } = await definirAnuncioAtivo(car.id, reativar);
     setAcaoEmAndamento(null);
-    if (error) return alert(mensagemErroAnuncio(error.message) ?? "Não foi possível " + (reativar ? "reativar" : "pausar") + " o anúncio. Tente de novo.");
+    if (error) return alert(mensagemErroAnuncio(error.message, emApp) ?? "Não foi possível " + (reativar ? "reativar" : "pausar") + " o anúncio. Tente de novo.");
     setAnunciosReais(lista => lista.map(a => a.id === car.id ? { ...a, ativo: reativar, status: reativar ? "ativo" : "pausado" } : a));
   };
 
@@ -319,8 +319,8 @@ export default function Painel() {
                     {situacao.tipo === "sem_loja" && "Sua conta ainda não tem uma loja vinculada. Você pode anunciar 1 veículo como particular."}
                     {situacao.tipo === "em_dia" && planoProximo && <>{emTrial ? "Período grátis" : `Plano ${nomePlano}`} até <strong>{planoProximo.em}</strong>. Depois começa o <strong>Plano {planoProximo.nome}</strong> ({planoProximo.limite === null ? "sem limite de anúncios" : `até ${planoProximo.limite} anúncios ativos`}), pago até {dataFim}.</>}
                     {situacao.tipo === "em_dia" && !planoProximo && <>{emTrial ? "Período grátis" : `Plano ${nomePlano}`} termina em <strong style={{ color: "#FF6600" }}>{situacao.diasRestantes} {situacao.diasRestantes === 1 ? "dia" : "dias"}</strong> ({dataFim}).</>}
-                    {situacao.tipo === "carencia" && <>Seu plano <strong>venceu em {dataFim}</strong>. Seus anúncios <strong style={{ color: "#DC2626" }}>saem do site em {situacao.diasAteSairDoAr} {situacao.diasAteSairDoAr === 1 ? "dia" : "dias"}</strong> se o plano não for renovado.</>}
-                    {situacao.tipo === "vencido" && <>Seu plano venceu em {dataFim}. <strong style={{ color: "#DC2626" }}>Seus anúncios estão fora do site</strong> e voltam assim que o plano for renovado.</>}
+                    {situacao.tipo === "carencia" && <>Seu plano <strong>venceu em {dataFim}</strong>. Seus anúncios <strong style={{ color: "#DC2626" }}>saem do site em {situacao.diasAteSairDoAr} {situacao.diasAteSairDoAr === 1 ? "dia" : "dias"}</strong>{emApp ? "." : " se o plano não for renovado."}</>}
+                    {situacao.tipo === "vencido" && <>Seu plano venceu em {dataFim}. <strong style={{ color: "#DC2626" }}>Seus anúncios estão fora do site</strong>{emApp ? "." : " e voltam assim que o plano for renovado."}</>}
                   </div>
                 </div>
                 {situacao.tipo !== "sem_loja" && <Link href="/painel/planos" style={{ padding: "8px 14px", background: "#FF6600", color: "#fff", borderRadius: 8, fontSize: 12.5, fontWeight: 700, textDecoration: "none", whiteSpace: "nowrap" }}>{emApp ? "Ver meu plano" : "Renovar ou trocar plano"}</Link>}

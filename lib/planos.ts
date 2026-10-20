@@ -110,8 +110,14 @@ export function situacaoDoPlano(plano: string | null | undefined, expiraEm: stri
 }
 
 // Erros levantados pelo banco (aplicar_regras_anuncio) em linguagem do lojista.
-export function mensagemErroAnuncio(mensagem: string | undefined): string | null {
+// Dentro dos apps das lojas (emApp) não há convite para comprar nada (regras da Apple/Google: compra só pelo site).
+export function mensagemErroAnuncio(mensagem: string | undefined, emApp = false): string | null {
   if (!mensagem) return null;
+  if (emApp) {
+    if (mensagem.includes("sem_anuncio_particular")) return "Você já usou seu anúncio grátis.";
+    if (mensagem.includes("anuncio_vencido")) return "Este anúncio venceu e não pode ser reativado.";
+    if (mensagem.includes("limite_anuncios")) return "Você atingiu o limite de anúncios ativos do seu plano. Pause um anúncio para ativar outro.";
+  }
   if (mensagem.includes("plano_vencido")) return "O plano da sua loja venceu. Os anúncios voltam a ser publicados quando o plano estiver ativo.";
   if (mensagem.includes("anuncio_vendido")) return "Este anúncio foi marcado como vendido e não volta ao ar. Para anunciar de novo, crie um anúncio novo.";
   if (mensagem.includes("sem_anuncio_particular")) return "Você já usou seu anúncio grátis. Para publicar outro veículo, escolha um anúncio avulso.";

@@ -115,7 +115,7 @@ export default function PortaoParticular({ ativo, onLiberado, children }: { ativ
       {erro && <div style={{ fontSize: 13, color: "#B45309", margin: "0 0 10px" }}>{erro}</div>}
       {emApp ? (
         <p style={{ fontSize: 14, color: "#4A4843", lineHeight: 1.55, margin: 0 }}>
-          Para anunciar outro veículo, acesse <strong>www.autoregiao.com.br</strong> pelo navegador.
+          Cada pessoa tem 1 anúncio grátis. Você pode acompanhar e editar o seu anúncio no painel.
         </p>
       ) : (
         <>

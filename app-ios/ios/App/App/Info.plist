@@ -66,6 +66,12 @@
 	<array>
 		<string>remote-notification</string>
 	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>Usamos a câmera só quando você toca em "Tirar foto", para fotografar o veículo do seu anúncio ou a logo da sua loja.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Usamos suas fotos só quando você escolhe imagens para o anúncio do veículo ou para a logo e a capa da sua loja.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Permite salvar no seu celular as fotos tiradas para o anúncio.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Usamos sua localização só quando você toca em "Perto de mim", para mostrar os veículos da cidade mais próxima. Ela não é guardada.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>

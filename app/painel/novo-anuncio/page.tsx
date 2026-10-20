@@ -5,6 +5,7 @@ import { useState, useRef, useEffect } from "react";
 import { usuarioAtual } from "@/lib/dados/usuario";
 import { buscarLojaDoUsuario } from "@/lib/dados/lojas";
 import { mensagemErroAnuncio } from "@/lib/planos";
+import { detectar as estaNoAppDaLoja } from "@/lib/appLoja";
 import { criarVeiculo, atualizarVeiculo, buscarVeiculoDoDono, enviarFotoVeiculo, apagarFotos } from "@/lib/dados/veiculos";
 import SeletorFipe, { type EscolhaFipe } from "@/components/SeletorFipe";
 import { adivinharCarroceria, CARROCERIAS } from "@/lib/carroceria";
@@ -261,7 +262,7 @@ export default function NovoAnuncio() {
 
     if (error) {
       console.error(error);
-      setErro(mensagemErroAnuncio(error.message) ?? "Erro ao publicar. Tente novamente.");
+      setErro(mensagemErroAnuncio(error.message, estaNoAppDaLoja()) ?? "Erro ao publicar. Tente novamente.");
       return;
     }
 

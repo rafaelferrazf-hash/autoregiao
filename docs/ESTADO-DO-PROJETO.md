@@ -245,6 +245,11 @@ e lançamento sugerido em 03/11/2026. Seguir e marcar por lá.
      20/10: ainda "Aguardando revisão" (6 dias); contrato de apps gratuitos Ativo; pedida REVISÃO ACELERADA
      (developer.apple.com/contact/app-store → "request an expedited app review") → Apple ACEITOU ("We'll expedite review").
      Se for rejeitado, o reenvio volta sozinho para a fila acelerada.
+     20/10 11:01: REJEITADO (4.1b marca; 2.1 conta com plano vencido; 2.1b modelo de negócio; 2.1a fechava em "Tirar foto"
+     no iPad por falta de NSCameraUsageDescription). Corrigido: compilação 11 (câmera/fotos no Info.plist, testada no iPhone),
+     no app sem convite para pagar pelo site, conta `revisao.vencido@autoregiao.com.br` (loja "Demonstração Plano Vencido",
+     vencida em 10/10; `supabase/revisao-apple-conta-vencida.sql`), resposta em `docs/app-store-ficha.md` seção 7.
+     ✅ 20/10: REENVIADO (1.0.0 build 11) → "Aguardando revisão" na fila acelerada.
      Próximos (antigo): app no App Store Connect → Codemagic (login GitHub, integração "AutoRegiao" com chave de API) → TestFlight
      no iPhone dele → capturas 6,9" → ficha, privacidade (rótulos) → revisão. Não testado num iPhone ainda.
    - Android 1.0.3 (código 4, abre em `/?origem=app`) gerado e assinado em `autoregiao-android\publicar\` —

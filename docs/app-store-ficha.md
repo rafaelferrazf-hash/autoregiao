@@ -126,3 +126,29 @@ Responder **"Nenhum" / "Não"** em todos os itens (violência, conteúdo sexual,
 ## 6. Capturas de tela
 
 iPhone **6,9"** (1320 × 2868 px), de 3 a 10 imagens: arquivos em `docs/app-store-capturas/`.
+
+## 7. Resposta à 1ª rejeição (20/10/2026)
+Motivos: 4.1(b) cópia de marca; 2.1 conta demo com plano vencido; 2.1(b) modelo de negócio; 2.1(a) app fechou em "Take Photo" (iPad).
+Correções: compilação 11 com NSCameraUsageDescription/NSPhotoLibraryUsageDescription; no app sem convite para pagar pelo site;
+conta `revisao.vencido@autoregiao.com.br` (loja com plano vencido — `supabase/revisao-apple-conta-vencida.sql`).
+
+Resposta (colar em "Revisão de apps" → responder à mensagem):
+```
+Hello, and thank you for the review.
+
+Guideline 4.1(b) – AutoRegião is my own brand and service. I am Rafael Ferraz Barbosa, the owner of the developer account and the creator of AutoRegião. The domain autoregiao.com.br is registered in my name (public record: https://registro.br/tecnologia/ferramentas/whois/?search=autoregiao.com.br), and the Privacy Policy at https://www.autoregiao.com.br/privacidade identifies me as the party responsible for the service. This is the official app of www.autoregiao.com.br. I can send any additional document if needed.
+
+Guideline 2.1(a) – Fixed. The crash happened because the camera/photo library usage descriptions were missing. Build 11 adds NSCameraUsageDescription and NSPhotoLibraryUsageDescription, and "Take Photo" now works.
+
+Guideline 2.1 – Demo account with an expired plan: revisao.vencido@autoregiao.com.br (password in the App Review Information notes). The original demo account (revisao@autoregiao.com.br) has an active plan. Please note that the app has no purchase flow: it shows no prices, no purchase buttons and no links to buy.
+
+Guideline 2.1(b) – Business model:
+1. Only car dealerships (businesses) that advertise their vehicle inventory pay, plus individuals who want to advertise more than one vehicle (the first listing is free). Buyers never pay anything.
+2. Plans are purchased only on our website, www.autoregiao.com.br (payment by Mercado Pago). They cannot be purchased in the app, and the app does not mention prices or direct users to buy.
+3. A dealership with an active plan can sign in and manage its listings (create, edit, pause, mark as sold). An individual can publish the free listing.
+4. Nothing is sold in the app. The paid service is advertising of physical goods (used cars sold in person by local dealers), bought on our website. The app works as a free companion to this web-based service, with no purchasing and no calls to action for purchases outside the app (Guideline 3.1.3(f)).
+5. No. The app does not sell physical goods or digital content. Vehicles are negotiated directly between buyer and seller, outside the app (WhatsApp or phone).
+
+Thank you!
+Rafael Ferraz Barbosa
+```

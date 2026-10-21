@@ -106,8 +106,8 @@ y = SANG + 80
 for linha in ["Seu próximo carro", "está na região."]:
     c.append(texto(linha, M, y, 12.5, BRA, EXO)); y += 13
 y += 1
-c.append(texto("Carros, motos e utilitários das lojas e de", M, y, 4.4, "#D0D0D0")); y += 5.8
-c.append(texto("particulares de Teixeira de Freitas e região.", M, y, 4.4, "#D0D0D0")); y += 9
+c.append(texto("Carros, motos e utilitários de lojas e", M, y, 4.4, "#D0D0D0")); y += 5.8
+c.append(texto("particulares da sua cidade e região.", M, y, 4.4, "#D0D0D0")); y += 9
 for item in ["Busque por marca, preço, ano e cidade", "Compare o preço com a Tabela FIPE",
              "Selo de \"Bom preço\" abaixo da FIPE", "Fale direto com o vendedor no WhatsApp",
              "Receba aviso quando o seu carro aparecer"]:

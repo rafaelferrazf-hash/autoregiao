@@ -90,7 +90,7 @@ y = SANG + 72
 for linha in ["Seus carros no", "app da região."]:
     c.append(texto(linha, M, y, 13.5, BRA, EXO)); y += 14
 y += 2
-c.append(texto("Quem procura carro em Teixeira e região", M, y, 4.6, "#D0D0D0")); y += 6
+c.append(texto("Quem procura carro na sua cidade e região", M, y, 4.6, "#D0D0D0")); y += 6
 c.append(texto("encontra a sua loja — e chama no seu WhatsApp.", M, y, 4.6, "#D0D0D0")); y += 11
 for item in ["Página da loja com logo, fotos e mapa", "Cliente fala direto com você no WhatsApp",
              "Comparação com a Tabela FIPE em cada carro", "Relatório mensal: quantos viram e chamaram",

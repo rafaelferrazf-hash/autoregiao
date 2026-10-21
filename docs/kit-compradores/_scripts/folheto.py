@@ -1,4 +1,4 @@
-"""Folheto A5 (frente e verso) para COMPRADORES. Uso: python -I folheto.py <pasta_py> <pasta_saida> "<whatsapp>" <foto.jpg> (foto: Pexels 36729855, a mesma de public/banners/comprar-casal.jpg)."""
+"""Folheto A5 (frente e verso) para COMPRADORES. Uso: python -I folheto.py <pasta_py> <pasta_saida> "<whatsapp>" <foto.jpg> (foto atual: Pexels 36729871, casal olhando carro; recorte vertical 0.2)."""
 import sys, os, json
 sys.path.insert(0, sys.argv[1])
 import pymupdf, segno, base64, io
@@ -9,6 +9,7 @@ from fontTools.pens.svgPathPen import SVGPathPen
 from fontTools.pens.transformPen import TransformPen
 
 SAIDA, WHATS, FOTO = sys.argv[2], sys.argv[3], sys.argv[4]
+FOTO_Y = float(sys.argv[5]) if len(sys.argv) > 5 else 0.3  # 0 = mostra o alto da foto, 1 = a parte de baixo
 os.makedirs(SAIDA, exist_ok=True)
 RAIZ = r"C:/Users/rafae/autoregiao"
 LAR, GRA, BRA, CIN = "#FF6600", "#1A1A1A", "#FFFFFF", "#5A5A5A"
@@ -82,13 +83,13 @@ def foto_topo(y_ini, alt):
     px_w = 1800; px_h = round(px_w * (alt - y_ini) / W)
     esc = max(px_w / im.width, px_h / im.height)
     im = im.resize((round(im.width * esc), round(im.height * esc)), Image.LANCZOS)
-    x0 = (im.width - px_w) // 2; y0 = int((im.height - px_h) * 0.22)
+    x0 = (im.width - px_w) // 2; y0 = int((im.height - px_h) * FOTO_Y)
     im = im.crop((x0, y0, x0 + px_w, y0 + px_h))
     escuro = Image.new("RGB", im.size, (26, 26, 26))
     mascara = Image.new("L", im.size)
     for yy in range(px_h):
         t = yy / px_h
-        topo = max(0.0, 1 - t / 0.32); baixo = min(1.0, max(0.0, (t - 0.42) / 0.48)); a = topo * topo * (3 - 2 * topo) + baixo * baixo * (3 - 2 * baixo)
+        topo = max(0.0, 1 - t / 0.16); baixo = min(1.0, max(0.0, (t - 0.62) / 0.36)); a = topo * topo * (3 - 2 * topo) + baixo * baixo * (3 - 2 * baixo)
         mascara.paste(int(255 * min(1, a)), (0, yy, px_w, yy + 1))
     im = Image.composite(escuro, im, mascara)
     buf = io.BytesIO(); im.save(buf, "JPEG", quality=90)
@@ -99,18 +100,16 @@ M = SANG + 10  # margem segura
 
 # ---------------- FRENTE (foto + fundo grafite) ----------------
 c = []
-c.append(foto_topo(SANG + 20, SANG + 82))
+c.append(foto_topo(SANG + 19, SANG + 96))
 c.append(f'<rect x="0" y="{H - 58}" width="{W}" height="58" fill="{LAR}"/>')
-c.append(logo((W - 52) / 2, SANG + 6, 52, "neg"))
-y = SANG + 80
+c.append(logo((W - 52) / 2, SANG + 5, 52, "neg"))
+y = SANG + 93
 for linha in ["Seu próximo carro", "está na região."]:
     c.append(texto(linha, M, y, 12.5, BRA, EXO)); y += 13
 y += 1
-c.append(texto("Carros, motos e utilitários de lojas e", M, y, 4.4, "#D0D0D0")); y += 5.8
-c.append(texto("particulares da sua cidade e região.", M, y, 4.4, "#D0D0D0")); y += 9
+c.append(texto("Carros, motos e utilitários da sua cidade e região.", M, y, 4.4, "#D0D0D0")); y += 8.5
 for item in ["Busque por marca, preço, ano e cidade", "Compare o preço com a Tabela FIPE",
-             "Selo de \"Bom preço\" abaixo da FIPE", "Fale direto com o vendedor no WhatsApp",
-             "Receba aviso quando o seu carro aparecer"]:
+             "Fale direto com o vendedor no WhatsApp", "Receba aviso quando o seu carro aparecer"]:
     c.append(icone_ok(M + 2.6, y - 1.6)); c.append(texto(item, M + 8, y, 4.3, BRA)); y += 6.5
 yb = H - 58
 c.append(texto("BUSQUE GRÁTIS", M, yb + 16, 10.5, GRA, EXO))

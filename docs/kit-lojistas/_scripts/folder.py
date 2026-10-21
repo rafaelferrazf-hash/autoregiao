@@ -139,16 +139,37 @@ def foto(caminho, x, y, w, h, pos_x=0.5, pos_y=0.3, escurecer=None):
     return f'<image x="{x:.2f}" y="{y:.2f}" width="{w:.2f}" height="{h:.2f}" href="data:image/jpeg;base64,{_jpg(im)}"/>'
 
 
-def celular(caminho, x, y, w, ini=0.0, fim=0.5):
-    """Trecho (ini..fim da altura) de uma captura do site dentro de um celular desenhado. Devolve (svg, altura)."""
+def celular(caminho, x, y, w, ini=0.0, fim=1.0):
+    """Captura do site dentro de um celular fino (borda de 0,9 mm, cantos arredondados, ilha da câmera e sombra leve).
+    Devolve (svg, altura total)."""
+    from PIL import ImageDraw
     im = Image.open(caminho).convert("RGB")
     im = im.crop((0, int(im.height * ini), im.width, int(im.height * fim)))
+    # faixa da hora (status bar) em cima, como num iPhone de verdade
+    barra = round(im.width * 0.12)
+    tela = Image.new("RGB", (im.width, im.height + barra), (255, 255, 255))
+    tela.paste(im, (0, barra))
+    im = tela
     h_tela = w * im.height / im.width
-    im = im.resize((640, round(640 * im.height / im.width)), Image.LANCZOS)
-    b = 1.8
-    return (f'<rect x="{x - b:.2f}" y="{y - b * 2.4:.2f}" width="{w + 2 * b:.2f}" height="{h_tela + b * 4.8:.2f}" rx="5" fill="{GRA}"/>'
-            f'<rect x="{x + w / 2 - 4:.2f}" y="{y - b * 1.6:.2f}" width="8" height="1" rx="0.5" fill="#444"/>'
-            f'<image x="{x:.2f}" y="{y:.2f}" width="{w:.2f}" height="{h_tela:.2f}" href="data:image/jpeg;base64,{_jpg(im, 88)}"/>'), h_tela + b * 4.8
+    pw = 720
+    ph = round(pw * im.height / im.width)
+    im = im.resize((pw, ph), Image.LANCZOS)
+    raio_px = round(pw * 0.13)
+    masc = Image.new("L", (pw, ph), 0)
+    ImageDraw.Draw(masc).rounded_rectangle((0, 0, pw - 1, ph - 1), raio_px, fill=255)
+    fundo = Image.new("RGB", (pw, ph), (17, 17, 17))
+    im = Image.composite(im, fundo, masc)
+    b = 0.9
+    r = w * 0.13 + b
+    ilha = (f'<rect x="{x + w / 2 - w * 0.15:.2f}" y="{y + w * 0.022:.2f}" width="{w * 0.3:.2f}" height="{w * 0.075:.2f}" '
+            f'rx="{w * 0.0375:.2f}" fill="#111111"/>'
+            + texto("9:41", x + w * 0.16, y + w * 0.085, w * 0.055, GRA, JAKB, "centro")
+            + f'<rect x="{x + w * 0.76:.2f}" y="{y + w * 0.045:.2f}" width="{w * 0.075:.2f}" height="{w * 0.036:.2f}" rx="{w * 0.01:.2f}" fill="none" stroke="{GRA}" stroke-width="{w * 0.006:.3f}"/>'
+            + f'<rect x="{x + w * 0.765:.2f}" y="{y + w * 0.05:.2f}" width="{w * 0.055:.2f}" height="{w * 0.026:.2f}" rx="{w * 0.006:.2f}" fill="{GRA}"/>')
+    return (f'<rect x="{x - b + 0.7:.2f}" y="{y - b + 1.1:.2f}" width="{w + 2 * b:.2f}" height="{h_tela + 2 * b:.2f}" rx="{r:.2f}" fill="#000000" fill-opacity="0.12"/>'
+            f'<rect x="{x - b:.2f}" y="{y - b:.2f}" width="{w + 2 * b:.2f}" height="{h_tela + 2 * b:.2f}" rx="{r:.2f}" fill="#111111"/>'
+            f'<image x="{x:.2f}" y="{y:.2f}" width="{w:.2f}" height="{h_tela:.2f}" href="data:image/jpeg;base64,{_jpg(im, 90)}"/>'
+            + ilha), h_tela + 2 * b
 
 
 ICONES = os.path.join(RAIZ, "node_modules/@tabler/icons/icons/outline")
@@ -299,8 +320,8 @@ c.append(texto("chega até você", xb, y + 7.8, 7, LAR, EXO))
 y += 15
 wcel = 24
 gap = (Lb - 3 * wcel) / 2
-telas = [("tela-2.png", 0.0, 0.56, "1. Encontra", "na busca"), ("tela-4.png", 0.0, 0.56, "2. Vê o preço", "e a FIPE"),
-         ("tela-5.png", 0.40, 0.96, "3. Chama no", "WhatsApp")]
+telas = [("tela-2.png", 0.0, 1.0, "1. Encontra", "na busca"), ("tela-4.png", 0.0, 1.0, "2. Vê o preço", "e a FIPE"),
+         ("tela-5.png", 0.0, 1.0, "3. Chama no", "WhatsApp")]
 hmax = 0
 for k, (arq, ini, fim, l1, l2) in enumerate(telas):
     svg, hc = celular(os.path.join(TELAS, arq), xb + k * (wcel + gap), y + 4, wcel, ini, fim)
@@ -308,13 +329,13 @@ for k, (arq, ini, fim, l1, l2) in enumerate(telas):
     hmax = max(hmax, hc)
 for k, (arq, ini, fim, l1, l2) in enumerate(telas):
     cx = xb + k * (wcel + gap) + wcel / 2
-    c.append(texto(l1, cx, y + 4 + hmax + 2.5, 3.2, GRA, JAKB, "centro"))
-    c.append(texto(l2, cx, y + 4 + hmax + 6.2, 3.2, CIN, JAK, "centro"))
-y += 4 + hmax + 14
+    c.append(texto(l1, cx, y + 4 + hmax + 4.5, 3.2, GRA, JAKB, "centro"))
+    c.append(texto(l2, cx, y + 4 + hmax + 8.2, 3.2, CIN, JAK, "centro"))
+y += 4 + hmax + 16
 # painel do lojista (ilustração com números de exemplo)
 c.append(texto("E você acompanha tudo no painel", xb, y, 4.4, GRA, JAKB))
 y += 4
-alt_p = 52
+alt_p = 46
 c.append(f'<rect x="{xb}" y="{y}" width="{Lb}" height="{alt_p}" rx="3" fill="{CINZA_CLARO}"/>')
 cards = [("eye", "1.248", "visualizações"), ("brand-whatsapp", "87", "contatos"), ("building-store", "32", "anúncios ativos")]
 cw = (Lb - 8 - 2 * 3) / 3
@@ -332,7 +353,7 @@ dias = ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"]
 base = y + alt_p - 8.5
 bw = (Lb - 22) / 7
 for k, v in enumerate(vals):
-    hb = v / 45 * 11
+    hb = v / 45 * 7.5
     bx = xb + 9 + k * (bw + 0.8)
     c.append(f'<rect x="{bx:.2f}" y="{base - hb:.2f}" width="{bw - 0.8:.2f}" height="{hb:.2f}" rx="0.6" fill="{LAR if k == 5 else "#FFC199"}"/>')
     c.append(texto(dias[k], bx + (bw - 0.8) / 2, base + 3.4, 2.2, CIN, JAK, "centro"))

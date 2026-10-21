@@ -188,7 +188,8 @@ def bolinha(nome, cx, cy, r, fundo=LAR, cor=BRA):
 
 
 TELAS = os.path.join(RAIZ, "docs/app-store-capturas")
-FOTO_CAPA = os.path.join(RAIZ, "docs/kit-lojistas/_scripts/capa-casal-pexels-36729871.jpg")  # mesma foto do folheto de compradores
+FOTO_CAPA = os.environ.get("CAPA") or os.path.join(RAIZ, "docs/kit-lojistas/_scripts/capa-carros.jpg")
+CAPA_X = float(os.environ.get("CAPA_X") or 0.25)
 # Painéis (sem a sangria). Por fora: aba que dobra para dentro (0..97) | contracapa (97..197) | capa (197..297).
 # Por dentro: 1 (0..100) | 2 (100..200) | 3 (200..297). A aba é 3 mm mais estreita para fechar sem amassar.
 S = SANG
@@ -200,9 +201,11 @@ c = []
 # ---------- CAPA (direita): foto inteira com o título por cima ----------
 x0 = S + 197
 LP = 100
-c.append(foto(FOTO_CAPA, x0, 0, LP + S, H - S - 30, 0.62, 0.15,
-              lambda t: max(0.0, 1 - t / 0.2) * 0.95 + min(0.92, max(0.0, (t - 0.42) / 0.2))))
-c.append(logo(x0 + (LP - 50) / 2, S + 7, 50, "neg"))
+# foto de carros ao fundo, escurecida por inteiro (o logo e o título se destacam) e mais escura embaixo
+c.append(f'<rect x="{x0}" y="0" width="{LP + S}" height="{H}" fill="{GRA}"/>')
+c.append(foto(FOTO_CAPA, x0, 0, LP + S, H - S - 66, CAPA_X, 0.62,
+              lambda t: 0.28 * max(0.0, 1 - t / 0.3) + min(1.0, max(0.0, (t - 0.78) / 0.22))))
+c.append(logo(x0 + (LP - 72) / 2, S + 16, 72, "neg"))
 y = H - S - 82
 _pl = largura("PRÉ-LANÇAMENTO", 3.6, JAKB) + 7
 c.append(f'<rect x="{x0 + PM}" y="{y - 13}" width="{_pl}" height="6.4" rx="3.2" fill="{LAR}"/>')

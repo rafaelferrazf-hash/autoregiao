@@ -63,7 +63,8 @@ def qr(x, y, lado, dado):
     m = lado / n
     rects = "".join(f'<rect x="{x + c * m:.3f}" y="{y + r * m:.3f}" width="{m + 0.02:.3f}" height="{m + 0.02:.3f}"/>'
                     for r, linha in enumerate(q.matrix) for c, v in enumerate(linha) if v)
-    return f'<rect x="{x - 2.5}" y="{y - 2.5}" width="{lado + 5}" height="{lado + 5}" rx="2" fill="{BRA}"/><g fill="{GRA}">{rects}</g>'
+    borda = max(2.5, 4 * m)  # zona branca de 4 módulos em volta: os celulares leem com mais facilidade
+    return f'<rect x="{x - borda:.2f}" y="{y - borda:.2f}" width="{lado + 2 * borda:.2f}" height="{lado + 2 * borda:.2f}" rx="2" fill="{BRA}"/><g fill="{GRA}">{rects}</g>'
 
 
 def icone_ok(x, y, cor=LAR):
@@ -158,7 +159,7 @@ c.append(texto("Sua loja também no app", M + 5, y + 9, 5.2, BRA, JAKB))
 c.append(texto("Anuncie e acompanhe pelo celular.", M + 5, y + 15, 3.8, "#D0D0D0"))
 c.append(texto("Aponte a câmera para baixar:", M + 5, y + 20.5, 3.8, "#D0D0D0"))
 c.append(selos(M + 5, y + 23.5, 7))
-c.append(qr(W - M - 5 - 25, y + 4.5, 25, LINK_APP))
+c.append(qr(W - M - 4.5 - 23, y + 5.5, 23, LINK_APP))
 y = H - SANG - 30
 c.append(f'<line x1="{M}" y1="{y - 6}" x2="{W - M}" y2="{y - 6}" stroke="#DDD" stroke-width="0.3"/>')
 c.append(logo(M, y - 1, 38, "pos"))

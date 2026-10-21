@@ -17,6 +17,7 @@ PT = 72 / 25.4
 SANG = 3  # sangria
 W, H = 148 + 2 * SANG, 210 + 2 * SANG  # A5 + sangria
 LINK = "https://www.autoregiao.com.br/?utm_source=folheto&utm_campaign=compradores"
+LINK_APP = "https://www.autoregiao.com.br/app"  # leva à Google Play / App Store conforme o celular (app/app/route.ts)
 
 L = json.load(open(os.path.join(RAIZ, "docs/plotagem-carro/_scripts/logo_camadas.json")))
 
@@ -75,6 +76,21 @@ def salvar(nome, corpo, fundo):
     svg = (f'<svg xmlns="http://www.w3.org/2000/svg" width="{W * PT:.2f}" height="{H * PT:.2f}" viewBox="0 0 {W} {H}">'
            f'<rect width="{W}" height="{H}" fill="{fundo}"/>{corpo}</svg>')
     return pymupdf.open("pdf", pymupdf.open("svg", svg.encode()).convert_to_pdf())
+
+
+def _png(caminho_ou_bytes):
+    return base64.b64encode(caminho_ou_bytes if isinstance(caminho_ou_bytes, bytes) else open(caminho_ou_bytes, "rb").read()).decode()
+
+
+def selos(x, y, alt):
+    """Selos oficiais "Disponível no Google Play" e "App Store" lado a lado, com altura alt (mm)."""
+    gp = Image.open(os.path.join(RAIZ, "public/banners/google-play.png"))
+    # o PNG do Google Play tem margem transparente (~16% em cada lado na altura); compensa para alinhar
+    alt_gp = alt / 0.68; larg_gp = alt_gp * gp.width / gp.height
+    svg = pymupdf.open("svg", open(os.path.join(RAIZ, "public/banners/app-store.svg"), "rb").read())
+    pix = svg[0].get_pixmap(dpi=1200); larg_as = alt * pix.width / pix.height
+    return (f'<image x="{x - larg_gp * 0.06:.2f}" y="{y - (alt_gp - alt) / 2:.2f}" width="{larg_gp:.2f}" height="{alt_gp:.2f}" href="data:image/png;base64,{_png(os.path.join(RAIZ, "public/banners/google-play.png"))}"/>'
+            f'<image x="{x + larg_gp * 0.88 + 2.5:.2f}" y="{y:.2f}" width="{larg_as:.2f}" height="{alt:.2f}" href="data:image/png;base64,{_png(pix.tobytes("png"))}"/>')
 
 
 def foto_topo(y_ini, alt):
@@ -138,7 +154,7 @@ c.append(f'<rect x="{M}" y="{y}" width="{W - 2 * M}" height="25" rx="3" fill="#F
 c.append(texto("Não achou o carro que procura?", M + 5, y + 8, 5, LAR, JAKB))
 c.append(texto("Crie um alerta: a gente avisa quando ele aparecer,", M + 5, y + 14.5, 3.9, GRA))
 c.append(texto("por e-mail ou no app do celular.", M + 5, y + 19.5, 3.9, GRA))
-y += 32
+y += 30
 cw = (W - 2 * M - 4) / 2
 cards = [("Tabela FIPE grátis", ["Consulte o valor de qualquer", "carro ou moto antes de negociar."]),
          ("Vai vender o seu?", ["Pessoa física anuncia", "grátis por 60 dias."])]
@@ -149,8 +165,14 @@ for i, (tit, linhas) in enumerate(cards):
     for k, l in enumerate(linhas):
         c.append(texto(l, x + 5, y + 15 + k * 5, 3.5, CIN))
 y += 38
-c.append(texto("No site e no app AutoRegião para Android e iPhone.", M, y, 4, GRA, JAKB)); y += 5.5
-c.append(texto("O AutoRegião não vende carros: aproxima você de quem vende.", M, y, 3.5, CIN))
+# Caixa "Baixe o app": QR (abre a loja certa do celular) + selos oficiais das lojas.
+y -= 7.5
+c.append(f'<rect x="{M}" y="{y}" width="{W - 2 * M}" height="34" rx="3" fill="{GRA}"/>')
+c.append(texto("Baixe o app AutoRegião", M + 5, y + 9, 5.2, BRA, JAKB))
+c.append(texto("Grátis para Android e iPhone.", M + 5, y + 15, 3.8, "#D0D0D0"))
+c.append(texto("Aponte a câmera para baixar:", M + 5, y + 20.5, 3.8, "#D0D0D0"))
+c.append(selos(M + 5, y + 23.5, 7))
+c.append(qr(W - M - 5 - 25, y + 4.5, 25, LINK_APP))
 y = H - SANG - 30
 c.append(f'<line x1="{M}" y1="{y - 6}" x2="{W - M}" y2="{y - 6}" stroke="#DDD" stroke-width="0.3"/>')
 c.append(logo(M, y - 1, 38, "pos"))

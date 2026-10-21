@@ -7,7 +7,7 @@ export const URL_SITE =
 export const NOME_SITE = "AutoRegião";
 
 // Responsável e contato (Termos de Uso e Política de Privacidade).
-export const RESPONSAVEL = "Rafael Ferraz";
+export const RESPONSAVEL = "Rafael Ferraz Barbosa";
 export const CIDADE_RESPONSAVEL = "Teixeira de Freitas/BA";
 export const EMAIL_CONTATO = "contato@autoregiao.com.br";
 

@@ -1,7 +1,8 @@
 """Folheto A5 (frente e verso) para lojistas. Uso: python -I folheto.py <pasta_py> <pasta_saida> "<whatsapp>"."""
 import sys, os, json
 sys.path.insert(0, sys.argv[1])
-import pymupdf, segno
+import pymupdf, segno, base64
+from PIL import Image
 from fontTools.ttLib import TTFont
 from fontTools.varLib import instancer
 from fontTools.pens.svgPathPen import SVGPathPen
@@ -15,6 +16,7 @@ PT = 72 / 25.4
 SANG = 3  # sangria
 W, H = 148 + 2 * SANG, 210 + 2 * SANG  # A5 + sangria
 LINK = "https://www.autoregiao.com.br/anunciar?utm_source=folheto&utm_campaign=lojistas"
+LINK_APP = "https://www.autoregiao.com.br/app"  # leva à Google Play / App Store conforme o celular (app/app/route.ts)
 
 L = json.load(open(os.path.join(RAIZ, "docs/plotagem-carro/_scripts/logo_camadas.json")))
 
@@ -69,6 +71,21 @@ def icone_ok(x, y, cor=LAR):
             f'<path d="M{x - 1.3} {y} l0.9 0.9 l1.8 -1.9" stroke="{BRA}" stroke-width="0.6" fill="none" stroke-linecap="round"/>')
 
 
+def _png(caminho_ou_bytes):
+    return base64.b64encode(caminho_ou_bytes if isinstance(caminho_ou_bytes, bytes) else open(caminho_ou_bytes, "rb").read()).decode()
+
+
+def selos(x, y, alt):
+    """Selos oficiais "Disponível no Google Play" e "App Store" lado a lado, com altura alt (mm)."""
+    gp = Image.open(os.path.join(RAIZ, "public/banners/google-play.png"))
+    # o PNG do Google Play tem margem transparente (~16% em cada lado na altura); compensa para alinhar
+    alt_gp = alt / 0.68; larg_gp = alt_gp * gp.width / gp.height
+    svg = pymupdf.open("svg", open(os.path.join(RAIZ, "public/banners/app-store.svg"), "rb").read())
+    pix = svg[0].get_pixmap(dpi=1200); larg_as = alt * pix.width / pix.height
+    return (f'<image x="{x - larg_gp * 0.06:.2f}" y="{y - (alt_gp - alt) / 2:.2f}" width="{larg_gp:.2f}" height="{alt_gp:.2f}" href="data:image/png;base64,{_png(os.path.join(RAIZ, "public/banners/google-play.png"))}"/>'
+            f'<image x="{x + larg_gp * 0.88 + 2.5:.2f}" y="{y:.2f}" width="{larg_as:.2f}" height="{alt:.2f}" href="data:image/png;base64,{_png(pix.tobytes("png"))}"/>')
+
+
 def salvar(nome, corpo, fundo):
     svg = (f'<svg xmlns="http://www.w3.org/2000/svg" width="{W * PT:.2f}" height="{H * PT:.2f}" viewBox="0 0 {W} {H}">'
            f'<rect width="{W}" height="{H}" fill="{fundo}"/>{corpo}</svg>')
@@ -120,12 +137,7 @@ for n, tit, desc in passos:
     c.append(texto(n, M + 4, y, 5, BRA, EXO, "centro"))
     c.append(texto(tit, M + 11, y - 1, 5, GRA, JAKB))
     c.append(texto(desc, M + 11, y + 4.6, 3.9, CIN)); y += 14
-y += 2
-c.append(f'<rect x="{M}" y="{y}" width="{W - 2 * M}" height="25" rx="3" fill="#FFF0E6"/>')
-c.append(texto("Dúvida no cadastro?", M + 5, y + 8, 5, LAR, JAKB))
-c.append(texto("Chame no WhatsApp que a gente te ajuda", M + 5, y + 14.5, 3.9, GRA))
-c.append(texto("passo a passo.", M + 5, y + 19.5, 3.9, GRA))
-y += 36
+y += 4
 c.append(texto("Depois dos 60 dias grátis", M, y, 7, GRA, EXO)); y += 9
 cols = [("Básico", "R$ 99", "até 15 anúncios", False), ("Profissional", "R$ 169", "até 40 + destaque", True),
         ("Premium", "R$ 279", "até 80 + vitrine", False)]
@@ -139,10 +151,18 @@ for i, (nome, preco, desc, pop) in enumerate(cols):
     c.append(texto("/mês · " + desc, x + cw / 2, y + 22, 2.9, cor, JAK, "centro"))
 y += 33
 c.append(texto("Mais de 80 carros? Preço sob consulta.", M, y, 3.9, CIN)); y += 5.5
-c.append(texto("Você só continua se gostar. Cancelar é só não renovar.", M, y, 3.9, CIN)); y = H - SANG - 30
+c.append(texto("Você só continua se gostar. Cancelar é só não renovar.", M, y, 3.9, CIN)); y += 6
+# Caixa "Baixe o app": QR (abre a loja certa do celular) + selos oficiais das lojas.
+c.append(f'<rect x="{M}" y="{y}" width="{W - 2 * M}" height="34" rx="3" fill="{GRA}"/>')
+c.append(texto("Sua loja também no app", M + 5, y + 9, 5.2, BRA, JAKB))
+c.append(texto("Anuncie e acompanhe pelo celular.", M + 5, y + 15, 3.8, "#D0D0D0"))
+c.append(texto("Aponte a câmera para baixar:", M + 5, y + 20.5, 3.8, "#D0D0D0"))
+c.append(selos(M + 5, y + 23.5, 7))
+c.append(qr(W - M - 5 - 25, y + 4.5, 25, LINK_APP))
+y = H - SANG - 30
 c.append(f'<line x1="{M}" y1="{y - 6}" x2="{W - M}" y2="{y - 6}" stroke="#DDD" stroke-width="0.3"/>')
 c.append(logo(M, y - 1, 38, "pos"))
-c.append(texto("Fale conosco", W - M, y + 5, 4.2, CIN, JAK, "dir"))
+c.append(texto("Dúvidas? Fale conosco", W - M, y + 5, 4.2, CIN, JAK, "dir"))
 c.append(texto("WhatsApp " + WHATS, W - M, y + 12, 5.6, GRA, JAKB, "dir"))
 c.append(texto("contato@autoregiao.com.br", W - M, y + 18, 3.9, CIN, JAK, "dir"))
 verso = salvar("verso", "".join(c), BRA)

@@ -6,8 +6,11 @@ import { supabase } from "@/lib/supabase";
 import Icone from "@/components/Icone";
 import CampoSenha from "@/components/CampoSenha";
 import { textoOfertaLoja } from "@/lib/lancamento";
+import { useEmAppDaLoja } from "@/lib/appLoja";
 
 export default function Cadastro() {
+  // Dentro dos apps das lojas não há cadastro de loja (Apple 3.1.1): lojista se cadastra pelo site.
+  const emApp = useEmAppDaLoja();
   const [tipo, setTipo] = useState<"comprador" | "lojista" | "particular">("comprador");
   const [form, setForm] = useState({ nome: "", email: "", telefone: "", senha: "", confirmarSenha: "", loja: "", cidade: "" });
   const [erro, setErro] = useState("");
@@ -20,6 +23,7 @@ export default function Cadastro() {
     if (!form.nome || !form.email || !form.senha) return setErro("Preencha todos os campos obrigatórios.");
     if (form.senha.length < 8) return setErro("A senha deve ter pelo menos 8 caracteres.");
     if (form.senha !== form.confirmarSenha) return setErro("As senhas não coincidem.");
+    if (tipo === "lojista" && emApp) return setErro("Escolha o tipo de conta.");
     if (tipo === "lojista" && (!form.loja || !form.cidade)) return setErro("Preencha o nome da loja e a cidade.");
     setCarregando(true);
     const { data, error } = await supabase.auth.signUp({
@@ -111,8 +115,8 @@ export default function Cadastro() {
             {/* TIPO */}
             <div style={{ marginBottom: 20 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#7A7670", letterSpacing: 0.5, textTransform: "uppercase", marginBottom: 8 }}>Tipo de conta</div>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
-                {([["comprador", "buscar", "Comprar"], ["particular", "carro", "Vender"], ["lojista", "loja", "Lojista"]] as const).map(([val, icone, label]) => (
+              <div style={{ display: "grid", gridTemplateColumns: emApp ? "1fr 1fr" : "1fr 1fr 1fr", gap: 8 }}>
+                {([["comprador", "buscar", "Comprar"], ["particular", "carro", "Vender"], ["lojista", "loja", "Lojista"]] as const).filter(([val]) => !(emApp && val === "lojista")).map(([val, icone, label]) => (
                   <button key={val} onClick={() => setTipo(val as "comprador" | "lojista" | "particular")}
                     style={{ padding: "12px", borderRadius: 8, border: "1.5px solid", borderColor: tipo === val ? "#FF6600" : "#E8E6E1", background: tipo === val ? "#FFF5F1" : "#fff", color: tipo === val ? "#FF6600" : "#7A7670", fontWeight: 600, fontSize: 14, cursor: "pointer" }}>
                     <Icone nome={icone} /> {label}

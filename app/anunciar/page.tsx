@@ -120,11 +120,12 @@ export default function Anunciar() {
       {/* NÚMEROS */}
       <section style={{ background: "#fff", padding: "48px 16px", borderBottom: "1px solid #E8E6E1" }}>
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
-          <div className="numeros-grid">
+          <div className="numeros-grid" style={emApp ? { gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))" } : undefined}>
             {[
               ["trofeu", "Lançamento 2026", "Portal de veículos focado na nossa região"],
               ["local", "Teixeira de Freitas", "Cidade sede, com expansão para as cidades vizinhas"],
-              ["presente", `${DIAS_GRATIS} dias grátis`, faseOferta() === "antes" ? "No pré-lançamento: contam só a partir de 03/11" : faseOferta() === "pre" ? "Para lojas cadastradas até 30/11" : "Para lojas novas"],
+              // Oferta para lojas: só no site (nos apps não há cadastro de loja — Apple 3.1.1).
+              ...(emApp ? [] : [["presente", `${DIAS_GRATIS} dias grátis`, faseOferta() === "antes" ? "No pré-lançamento: contam só a partir de 03/11" : faseOferta() === "pre" ? "Para lojas cadastradas até 30/11" : "Para lojas novas"]]),
               ["usuario", "Pessoa física anuncia grátis", `1 anúncio por ${DIAS_GRATIS_PARTICULAR} dias, por CPF`],
             ].map(([icon, title, desc]) => (
               <div key={title} style={{ textAlign: "center", padding: "20px 16px" }}>
@@ -224,7 +225,7 @@ export default function Anunciar() {
             Pronto para vender<br /><span style={{ color: "#FF6600" }}>mais rápido?</span>
           </h2>
           <p style={{ fontSize: 15, color: "rgba(255,255,255,0.6)", marginBottom: 32, lineHeight: 1.6 }}>
-            {oferta.texto}
+            {emApp ? `Pessoa física: o primeiro anúncio é grátis por ${DIAS_GRATIS_PARTICULAR} dias.` : oferta.texto}
           </p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
             <Link href="/cadastro" style={{ padding: "14px 32px", background: "#FF6600", borderRadius: 9, color: "#fff", fontSize: 16, fontWeight: 700, textDecoration: "none" }}>

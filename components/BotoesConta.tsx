@@ -4,10 +4,12 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { ehAdmin } from "@/lib/admin";
 import Icone from "@/components/Icone";
+import { useEmAppDaLoja } from "@/lib/appLoja";
 
 // Botões do topo das páginas públicas: "Entrar / Cadastrar loja" para visitante,
 // "Meu painel" para lojista logado e só "Admin" para a conta de admin.
 export default function BotoesConta({ celular = false }: { celular?: boolean }) {
+  const emApp = useEmAppDaLoja();
   const [conta, setConta] = useState<"carregando" | "visitante" | "lojista" | "admin">("carregando");
 
   useEffect(() => {
@@ -29,7 +31,7 @@ export default function BotoesConta({ celular = false }: { celular?: boolean }) 
     return (
       <>
         <Link href="/login" style={contorno}>Entrar</Link>
-        <Link href="/cadastro" style={cheio}>Cadastrar loja</Link>
+        <Link href="/cadastro" style={cheio}>{emApp ? "Cadastrar" : "Cadastrar loja"}</Link>
       </>
     );
   }

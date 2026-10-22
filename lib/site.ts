@@ -10,6 +10,8 @@ export const NOME_SITE = "AutoRegião";
 export const RESPONSAVEL = "Rafael Ferraz Barbosa";
 export const CIDADE_RESPONSAVEL = "Teixeira de Freitas/BA";
 export const EMAIL_CONTATO = "contato@autoregiao.com.br";
+// WhatsApp de atendimento do AutoRegião.
+export const WHATSAPP_ATENDIMENTO = { texto: "(73) 99820-9698", link: "https://wa.me/5573998209698" };
 
 // Apps nas lojas: o slide "Baixe o app" e os botões só aparecem depois de publicados.
 // Ao aprovar cada um, trocar para true (Android ~20/10; iPhone depois da revisão da Apple).

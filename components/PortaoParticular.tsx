@@ -4,6 +4,7 @@ import { supabase } from "@/lib/supabase";
 import { useEmAppDaLoja } from "@/lib/appLoja";
 import { AVULSOS, DIAS_GRATIS_PARTICULAR, formatarReais, type IdAvulso } from "@/lib/planos";
 import Icone from "@/components/Icone";
+import { WHATSAPP_ATENDIMENTO } from "@/lib/site";
 
 // Antes do cadastro de um anúncio de PESSOA FÍSICA (supabase/fase24):
 //  - ainda não usou o grátis → pede CPF + WhatsApp e libera 1 anúncio grátis de 60 dias;
@@ -79,6 +80,22 @@ export default function PortaoParticular({ ativo, onLiberado, children }: { ativ
 
   if (situacao === "livre") return <>{children}</>;
   if (situacao === "carregando") return <div style={{ padding: 40, textAlign: "center", fontSize: 14, color: "#7A7670" }}>Carregando...</div>;
+
+  // Nos apps das lojas não se cria o primeiro anúncio de pessoa física (Apple 3.1.1); quem já tem liberação passa direto.
+  if (situacao === "gratis" && emApp) {
+    return (
+      <div style={cartao}>
+        <div style={{ color: "#FF6600", marginBottom: 8 }}><Icone nome="carro" tamanho={34} traco={1.6} /></div>
+        <h1 style={{ fontSize: 22, fontWeight: 800, color: "#1A1917", margin: "0 0 6px" }}>Anunciar um veículo</h1>
+        <p style={{ fontSize: 14, color: "#4A4843", lineHeight: 1.55, margin: "0 0 12px" }}>
+          Este recurso não está disponível no app. Dúvidas? Fale com a gente no WhatsApp:
+        </p>
+        <a href={WHATSAPP_ATENDIMENTO.link} target="_blank" rel="noopener noreferrer" style={{ color: "#16A34A", fontWeight: 700, textDecoration: "none", fontSize: 15 }}>
+          <Icone nome="whatsapp" /> {WHATSAPP_ATENDIMENTO.texto}
+        </a>
+      </div>
+    );
+  }
 
   if (situacao === "gratis") {
     return (

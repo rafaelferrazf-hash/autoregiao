@@ -155,13 +155,14 @@ Rafael Ferraz Barbosa
 
 ## 8. Resposta à 2ª rejeição (22/10/2026) — Guideline 3.1.1
 Motivo: o app tinha cadastro de conta para empresas (lojas), visto como acesso a compra externa.
-Correção (só no site, sem nova compilação): dentro dos apps (`useEmAppDaLoja`) o /cadastro mostra só "Comprar" e "Vender"
-(pessoa física), o botão do topo diz "Cadastrar" e a página /anunciar não fala de lojas. Lojas se cadastram só pelo site.
+Correção (só no site, sem nova compilação): dentro dos apps (`useEmAppDaLoja`) o /cadastro é só de COMPRADOR (sem escolher tipo),
+o botão do topo diz "Cadastrar", /anunciar mostra só "Já anuncia? Entrar" + WhatsApp de atendimento (neutro, sem convite
+para pagar) e o PortaoParticular não cria o 1º anúncio no app. Lojas e pessoas físicas se cadastram pelo site.
 Resposta (colar em "Revisão de apps" e reenviar a mesma compilação 11):
 ```
 Hello, and thank you.
 
-Guideline 3.1.1 – Fixed. The business account registration has been removed from the app. Inside the app, sign-up now offers only personal accounts (buyers and individuals selling their own car). Businesses can only register on our website, and the app has no links, buttons or text directing them there. Existing business accounts can still sign in to manage their listings, as allowed by guideline 3.1.3(f).
+Guideline 3.1.1 – Fixed. The business account registration has been removed from the app. Inside the app, sign-up is now only for buyers (personal accounts to save favorites and alerts). Sellers, businesses and individuals, can only register outside the app, and the app has no links, buttons or text directing them there. Existing business accounts can still sign in to manage their listings, as allowed by guideline 3.1.3(f).
 
 The change is already live (the app loads our web content), so the same build 11 can be reviewed again.
 

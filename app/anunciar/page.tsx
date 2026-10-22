@@ -7,6 +7,7 @@ import { useEmAppDaLoja } from "@/lib/appLoja";
 import { useState } from "react";
 import Icone, { type NomeIcone } from "@/components/Icone";
 import { faseOferta, textoOfertaLoja } from "@/lib/lancamento";
+import { WHATSAPP_ATENDIMENTO } from "@/lib/site";
 
 // Itens do menu de navegação (os mesmos das outras páginas).
 const menuItens = [
@@ -74,6 +75,28 @@ export default function Anunciar() {
         )}
       </nav>
 
+      {/* Nos apps das lojas não há cadastro para anunciar (Apple 3.1.1): só o acesso de quem já anuncia. */}
+      {emApp ? (
+        <section style={{ padding: "110px 16px 64px", marginTop: 60, textAlign: "center" }}>
+          <div style={{ maxWidth: 440, margin: "0 auto", background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 14, padding: "32px 24px" }}>
+            <div style={{ color: "#FF6600", marginBottom: 10 }}><Icone nome="loja" tamanho={40} traco={1.5} /></div>
+            <h1 style={{ fontSize: 22, fontWeight: 800, color: "#1A1917", margin: "0 0 8px" }}>Já anuncia no AutoRegião?</h1>
+            <p style={{ fontSize: 14, color: "#7A7670", lineHeight: 1.6, margin: "0 0 22px" }}>
+              Entre na sua conta para cadastrar, editar e acompanhar seus anúncios.
+            </p>
+            <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
+              <Link href="/login" style={{ padding: "12px 26px", background: "#FF6600", borderRadius: 9, color: "#fff", fontSize: 15, fontWeight: 700, textDecoration: "none" }}>Entrar</Link>
+              <Link href="/veiculos" style={{ padding: "12px 26px", border: "1.5px solid #E8E6E1", borderRadius: 9, color: "#1A1917", fontSize: 15, fontWeight: 600, textDecoration: "none" }}>Ver veículos</Link>
+            </div>
+            <p style={{ fontSize: 13, color: "#7A7670", margin: "22px 0 0" }}>
+              Dúvidas? Fale com a gente no WhatsApp{" "}
+              <a href={WHATSAPP_ATENDIMENTO.link} target="_blank" rel="noopener noreferrer" style={{ color: "#16A34A", fontWeight: 700, textDecoration: "none", whiteSpace: "nowrap" }}>
+                <Icone nome="whatsapp" /> {WHATSAPP_ATENDIMENTO.texto}
+              </a>
+            </p>
+          </div>
+        </section>
+      ) : (<>
       {/* HERO */}
       <section style={{ background: "#1A1917", padding: "100px 16px 64px", marginTop: 60 }}>
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
@@ -237,6 +260,8 @@ export default function Anunciar() {
           </div>
         </div>
       </section>
+
+      </>)}
 
       {/* FOOTER */}
       <footer style={{ background: "#111009", padding: "24px 16px", textAlign: "center" }}>

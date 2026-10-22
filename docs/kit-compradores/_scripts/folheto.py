@@ -14,8 +14,11 @@ os.makedirs(SAIDA, exist_ok=True)
 RAIZ = r"C:/Users/rafae/autoregiao"
 LAR, GRA, BRA, CIN = "#FF6600", "#1A1A1A", "#FFFFFF", "#5A5A5A"
 PT = 72 / 25.4
-SANG = 3  # sangria
-W, H = 148 + 2 * SANG, 210 + 2 * SANG  # A5 + sangria
+# FORMATO=zap → padrão da Zap Gráfica: 147×197 mm final, arquivo 150×200 mm (sangria 1,5 mm). Padrão: A5 + 3 mm.
+ZAP = os.environ.get("FORMATO") == "zap"
+SANG = 1.5 if ZAP else 3  # sangria
+W, H = (147 + 2 * SANG, 197 + 2 * SANG) if ZAP else (148 + 2 * SANG, 210 + 2 * SANG)
+SUFIXO = "_150x200mm_Zap_sangria-1,5mm" if ZAP else "_A5_frente-e-verso_com-sangria-3mm"
 LINK = "https://www.autoregiao.com.br/?utm_source=folheto&utm_campaign=compradores"
 LINK_APP = "https://www.autoregiao.com.br/app"  # leva à Google Play / App Store conforme o celular (app/app/route.ts)
 
@@ -117,10 +120,11 @@ M = SANG + 10  # margem segura
 
 # ---------------- FRENTE (foto + fundo grafite) ----------------
 c = []
-c.append(foto_topo(SANG + 19, SANG + 96))
-c.append(f'<rect x="0" y="{H - 58}" width="{W}" height="58" fill="{LAR}"/>')
+c.append(foto_topo(SANG + 17, SANG + (84 if ZAP else 96)))
+FAIXA = 50 if ZAP else 58
+c.append(f'<rect x="0" y="{H - FAIXA}" width="{W}" height="{FAIXA}" fill="{LAR}"/>')
 c.append(logo((W - 52) / 2, SANG + 5, 52, "neg"))
-y = SANG + 93
+y = SANG + (81 if ZAP else 93)
 for linha in ["Seu próximo carro", "está na região."]:
     c.append(texto(linha, M, y, 12.5, BRA, EXO)); y += 13
 y += 1
@@ -128,20 +132,21 @@ c.append(texto("Carros, motos e utilitários da sua cidade e região.", M, y, 4.
 for item in ["Busque por marca, preço, ano e cidade", "Compare o preço com a Tabela FIPE",
              "Fale direto com o vendedor no WhatsApp", "Receba aviso quando o seu carro aparecer"]:
     c.append(icone_ok(M + 2.6, y - 1.6)); c.append(texto(item, M + 8, y, 4.3, BRA)); y += 6.5
-yb = H - 58
-c.append(texto("BUSQUE GRÁTIS", M, yb + 16, 10.5, GRA, EXO))
-c.append(texto("Sem cadastro para procurar.", M, yb + 24, 4.4, GRA, JAKB))
-c.append(texto("Sem taxa para quem compra.", M, yb + 30, 3.9, GRA))
-c.append(texto("Aponte a câmera e veja os carros:", M, yb + 40, 4, GRA))
-c.append(texto("autoregiao.com.br", M, yb + 49.5, 6, GRA, EXO))
-c.append(qr(W - M - 32, yb + 11, 32, LINK))
+yb = H - FAIXA
+k = 0.86 if ZAP else 1.0  # faixa laranja mais baixa no formato Zap
+c.append(texto("BUSQUE GRÁTIS", M, yb + 16 * k, 10.5, GRA, EXO))
+c.append(texto("Sem cadastro para procurar.", M, yb + 24 * k, 4.4, GRA, JAKB))
+c.append(texto("Sem taxa para quem compra.", M, yb + 30 * k, 3.9, GRA))
+c.append(texto("Aponte a câmera e veja os carros:", M, yb + 40 * k, 4, GRA))
+c.append(texto("autoregiao.com.br", M, yb + 49.5 * k, 6, GRA, EXO))
+c.append(qr(W - M - (29 if ZAP else 32), yb + (10 if ZAP else 11), 29 if ZAP else 32, LINK))
 frente = salvar("frente", "".join(c), GRA)
 
 # ---------------- VERSO (fundo branco) ----------------
 c = []
 c.append(f'<rect x="0" y="0" width="{W}" height="{SANG + 6}" fill="{LAR}"/>')
-y = SANG + 22
-c.append(texto("Como encontrar seu carro", M, y, 8.5, GRA, EXO)); y += 11
+y = SANG + (19 if ZAP else 22)
+c.append(texto("Como encontrar seu carro", M, y, 8.5, GRA, EXO)); y += 10 if ZAP else 11
 passos = [("1", "Busque", "por marca, preço, ano e cidade. Ou toque em \"Perto de mim\"."),
           ("2", "Compare", "preço x Tabela FIPE, km, IPVA pago, único dono e mais."),
           ("3", "Chame o vendedor", "direto no WhatsApp. Sem intermediário, sem taxa.")]
@@ -149,13 +154,13 @@ for n, tit, desc in passos:
     c.append(f'<circle cx="{M + 4}" cy="{y - 1.5}" r="4" fill="{LAR}"/>')
     c.append(texto(n, M + 4, y, 5, BRA, EXO, "centro"))
     c.append(texto(tit, M + 11, y - 1, 5, GRA, JAKB))
-    c.append(texto(desc, M + 11, y + 4.6, 3.8, CIN)); y += 14
+    c.append(texto(desc, M + 11, y + 4.6, 3.8, CIN)); y += 12.5 if ZAP else 14
 y += 1
 c.append(f'<rect x="{M}" y="{y}" width="{W - 2 * M}" height="25" rx="3" fill="#FFF0E6"/>')
 c.append(texto("Não achou o carro que procura?", M + 5, y + 8, 5, LAR, JAKB))
 c.append(texto("Crie um alerta: a gente avisa quando ele aparecer,", M + 5, y + 14.5, 3.9, GRA))
 c.append(texto("por e-mail ou no app do celular.", M + 5, y + 19.5, 3.9, GRA))
-y += 30
+y += 28 if ZAP else 30
 cw = (W - 2 * M - 4) / 2
 cards = [("Tabela FIPE grátis", ["Consulte o valor de qualquer", "carro ou moto antes de negociar."]),
          ("Vai vender o seu?", ["Pessoa física anuncia", "grátis por 60 dias."])]
@@ -165,7 +170,7 @@ for i, (tit, linhas) in enumerate(cards):
     c.append(texto(tit, x + 5, y + 8.5, 4.6, GRA, JAKB))
     for k, l in enumerate(linhas):
         c.append(texto(l, x + 5, y + 15 + k * 5, 3.5, CIN))
-y += 38
+y += 35 if ZAP else 38
 # Caixa "Baixe o app": QR (abre a loja certa do celular) + selos oficiais das lojas.
 y -= 7.5
 c.append(f'<rect x="{M}" y="{y}" width="{W - 2 * M}" height="34" rx="3" fill="{GRA}"/>')
@@ -185,7 +190,7 @@ verso = salvar("verso", "".join(c), BRA)
 doc = pymupdf.open()
 doc.insert_pdf(frente); doc.insert_pdf(verso)
 doc.set_metadata({"title": "Folheto compradores AutoRegião", "author": "AutoRegião"})
-doc.save(os.path.join(SAIDA, "folheto-compradores_A5_frente-e-verso_com-sangria-3mm.pdf"), deflate=True)
+doc.save(os.path.join(SAIDA, f"folheto-compradores{SUFIXO}.pdf"), deflate=True)
 for i, pg in enumerate(doc):
-    pg.get_pixmap(dpi=150).save(os.path.join(SAIDA, f"previa-folheto-{'frente' if i == 0 else 'verso'}.png"))
+    pg.get_pixmap(dpi=150).save(os.path.join(SAIDA, f"previa-folheto{'-zap' if ZAP else ''}-{'frente' if i == 0 else 'verso'}.png"))
 print("ok")

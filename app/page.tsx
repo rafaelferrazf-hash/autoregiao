@@ -14,6 +14,7 @@ import { listarVeiculosAtivos, opcoesDeFiltro } from "@/lib/dados/veiculos";
 import { filtrosParaQuery } from "@/lib/busca";
 import type { VeiculoComLoja } from "@/lib/tipos";
 import Icone from "@/components/Icone";
+import ExplorarAtalhos from "@/components/ExplorarAtalhos";
 import { ESTILOS } from "@/lib/estilos";
 import { FAIXAS_PARCELA } from "@/lib/financiamento";
 
@@ -135,24 +136,13 @@ export default function Home() {
 
             {/* EXPLORE: atalhos para as páginas prontas de busca (/carros, /carros/chevrolet...) */}
             {carros.length > 0 && (
-              <div style={{ marginTop: 32 }}>
-                <div style={{ fontSize: 16, fontWeight: 800, color: "#1A1917", marginBottom: 12 }}>Explore</div>
-                {[
-                  ["Tipo", [["Carros", "/carros"], ["Motos", "/motos"], ["Utilitários", "/utilitarios"], ["Abaixo da FIPE", "/carros/abaixo-da-fipe"]]],
-                  ["Estilo", Object.entries(ESTILOS).map(([e, x]) => [x.nome, `/carros/${e}`])],
-                  ["Parcela", FAIXAS_PARCELA.map(p => [`Até R$ ${p.toLocaleString("pt-BR")}/mês`, `/veiculos?parcela_max=${p}`])],
-                  ["Preço", [30, 50, 80, 100, 150].map(n => [`Carros até R$ ${n} mil`, `/carros/ate-${n}-mil`])],
-                  ["Marcas", [...new Set(carros.filter(c => c.marca && c.tipo !== "moto" && c.tipo !== "utilitario").map(c => c.marca!.trim()))]
-                    .sort((a, b) => a.localeCompare(b, "pt-BR")).map(m => [m, `/carros/${slug(m)}`])],
-                ].filter(([, links]) => links.length > 0).map(([titulo, links]) => (
-                  <div key={titulo as string} style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center", marginBottom: 10 }}>
-                    <span style={{ fontSize: 12, color: "#7A7670", minWidth: 52 }}>{titulo as string}</span>
-                    {(links as string[][]).map(([nome, href]) => (
-                      <Link key={href} href={href} style={{ padding: "6px 12px", background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 20, fontSize: 12.5, color: "#1A1917", textDecoration: "none" }}>{nome === "Abaixo da FIPE" && <Icone nome="abaixo" cor="#15803D" style={{ marginRight: 4 }} />}{nome}</Link>
-                    ))}
-                  </div>
-                ))}
-              </div>
+              <ExplorarAtalhos grupos={[
+                { titulo: "Por estilo", links: Object.entries(ESTILOS).map(([e, x]) => [x.nome, `/carros/${e}`] as [string, string]) },
+                { titulo: "Por parcela", links: FAIXAS_PARCELA.map(p => [`R$ ${p.toLocaleString("pt-BR")}/mês`, `/veiculos?parcela_max=${p}`] as [string, string]) },
+                { titulo: "Por preço", links: [30, 50, 80, 100, 150].map(n => [`Até R$ ${n} mil`, `/carros/ate-${n}-mil`] as [string, string]) },
+                { titulo: "Por marca", links: [...new Set(carros.filter(c => c.marca && c.tipo !== "moto" && c.tipo !== "utilitario").map(c => c.marca!.trim()))]
+                  .sort((a, b) => a.localeCompare(b, "pt-BR")).map(m => [m, `/carros/${slug(m)}`] as [string, string]) },
+              ]} />
             )}
         </div>
       </div>

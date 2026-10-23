@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useEmAppDaLoja } from "@/lib/appLoja";
-import { APP_ANDROID, APP_IPHONE } from "@/lib/site";
+import { APP_ANDROID, APP_IPHONE, SLIDE_APP_LIGADO } from "@/lib/site";
 import LogoLoja from "@/components/LogoLoja";
 import { supabase } from "@/lib/supabase";
 import type { BannerPublico } from "@/lib/banners";
@@ -39,7 +39,7 @@ export default function CarrosselTopo() {
     return () => { ativo = false; };
   }, []);
 
-  const temApp = !emApp && (APP_ANDROID.publicado || APP_IPHONE.publicado);
+  const temApp = SLIDE_APP_LIGADO && !emApp && (APP_ANDROID.publicado || APP_IPHONE.publicado);
   const slides: Slide[] = [
     { chave: "carro", foto: "/banners/comprar-casal.jpg", titulo: <>Encontre o carro ideal {destaque("na sua região")}</>, texto: "Carros, motos e utilitários de Teixeira de Freitas e região.", botao: { rotulo: "Buscar veículos", href: "/veiculos" } },
     ...banners.map(b => ({

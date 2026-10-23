@@ -13,7 +13,7 @@ os.makedirs(SAIDA, exist_ok=True)
 RAIZ = r"C:/Users/rafae/autoregiao"
 LAR, GRA, BRA, CIN = "#FF6600", "#1A1A1A", "#FFFFFF", "#5A5A5A"
 PT = 72 / 25.4
-SANG = 3  # sangria
+SANG = float(os.environ.get("SANGRIA") or 3)  # sangria (mm); a gráfica do folder pede 2 mm
 W, H = 297 + 2 * SANG, 210 + 2 * SANG  # A4 deitado + sangria
 LINK = "https://www.autoregiao.com.br/anunciar?utm_source=folder&utm_campaign=lojistas"
 LINK_APP = "https://www.autoregiao.com.br/app"  # leva à Google Play / App Store conforme o celular (app/app/route.ts)
@@ -403,7 +403,7 @@ doc = pymupdf.open()
 doc.insert_pdf(fora)
 doc.insert_pdf(dentro)
 doc.set_metadata({"title": "Folder lojistas AutoRegião", "author": "AutoRegião"})
-doc.save(os.path.join(SAIDA, "folder-lojistas_A4-2-dobras_com-sangria-3mm.pdf"), deflate=True)
+doc.save(os.path.join(SAIDA, f"folder-lojistas_A4-2-dobras_com-sangria-{SANG:g}mm.pdf"), deflate=True)
 for i, pg in enumerate(doc):
-    pg.get_pixmap(dpi=110).save(os.path.join(SAIDA, f"previa-folder-{'fora' if i == 0 else 'dentro'}.png"))
+    pg.get_pixmap(dpi=110).save(os.path.join(SAIDA, f"previa-folder{'' if SANG == 3 else f'-{SANG:g}mm'}-{'fora' if i == 0 else 'dentro'}.png"))
 print("ok")

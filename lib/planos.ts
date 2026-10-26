@@ -26,15 +26,15 @@ export type PlanoPago = {
 // Mais de LIMITE_PREMIUM anúncios: preço sob consulta (o Rafael negocia; o admin pode pôr a loja no vitalício/sem limite).
 export const PLANOS: PlanoPago[] = [
   {
-    id: "basico", nome: "Básico", precoMensal: 99, limite: 15, destaque: false,
+    id: "basico", nome: "Básico", precoMensal: 149, limite: 15, destaque: false,
     recursos: ["Até 15 anúncios ativos", "Página da loja com logo, capa e mapa", "Contato direto pelo WhatsApp", "Relatório mensal de visualizações e contatos"],
   },
   {
-    id: "profissional", nome: "Profissional", precoMensal: 169, limite: 40, destaque: true,
+    id: "profissional", nome: "Profissional", precoMensal: 219, limite: 40, destaque: true,
     recursos: ["Até 40 anúncios ativos", "Seus anúncios aparecem antes dos do plano Básico", "Etiqueta “Destaque” nos seus anúncios", "Logo da sua loja nos anúncios", "Página da loja com logo, capa e mapa", "Contato direto pelo WhatsApp", "Relatório mensal de visualizações e contatos"],
   },
   {
-    id: "premium", nome: "Premium", precoMensal: 279, limite: 80, destaque: true,
+    id: "premium", nome: "Premium", precoMensal: 329, limite: 80, destaque: true,
     recursos: ["Até 80 anúncios ativos", "Seus anúncios aparecem primeiro na busca", "Vitrine “Ofertas em destaque” no topo da página inicial", "Anúncios com borda laranja, etiqueta “Destaque” e selo “Loja Premium”", "Logo da sua loja nos anúncios", "Página da loja com logo, capa e mapa", "Contato direto pelo WhatsApp", "Relatório mensal de visualizações e contatos"],
   },
 ];

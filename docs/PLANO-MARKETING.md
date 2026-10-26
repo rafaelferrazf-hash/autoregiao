@@ -224,8 +224,8 @@ pode ser feita pela própria empresa do telão (muitas fazem sem custo) ou por u
 Sugestão: **Recomendado em novembro** (mês do lançamento), revisar com os números de 30/11 e decidir dezembro.
 Os planos de mídia são pagos direto pelo Rafael (cartão ou Pix nas plataformas); eu não preencho pagamentos.
 
-**Conta que importa:** com 20 lojas no Básico (R$ 99) a receita é ~R$ 1.980/mês; no Profissional
-(R$ 169), ~R$ 3.380 (preços revistos em 16/10). O marketing do lançamento é um **investimento para formar a base**. Dezembro e
+**Conta que importa:** com 20 lojas no Básico (R$ 149) a receita é ~R$ 2.980/mês; no Profissional
+(R$ 219), ~R$ 4.380 (preços revistos em 26/10). O marketing do lançamento é um **investimento para formar a base**. Dezembro e
 janeiro mostram se as lojas pagam depois dos 60 dias grátis (roteiro, Etapa 8).
 
 ---

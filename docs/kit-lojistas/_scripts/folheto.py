@@ -140,8 +140,8 @@ for n, tit, desc in passos:
     c.append(texto(desc, M + 11, y + 4.6, 3.9, CIN)); y += 14
 y += 4
 c.append(texto("Depois dos 60 dias grátis", M, y, 7, GRA, EXO)); y += 9
-cols = [("Básico", "R$ 99", "até 15 anúncios", False), ("Profissional", "R$ 169", "até 40 + destaque", True),
-        ("Premium", "R$ 279", "até 80 + vitrine", False)]
+cols = [("Básico", "R$ 149", "até 15 anúncios", False), ("Profissional", "R$ 219", "até 40 + destaque", True),
+        ("Premium", "R$ 329", "até 80 + vitrine", False)]
 cw = (W - 2 * M - 6) / 3
 for i, (nome, preco, desc, pop) in enumerate(cols):
     x = M + i * (cw + 3)

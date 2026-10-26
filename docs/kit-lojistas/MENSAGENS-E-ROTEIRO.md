@@ -71,9 +71,9 @@ Quando a loja tiver carros no ar, mande o link da página da loja para o lojista
 | Ele diz | Você responde |
 |---|---|
 | "Já anuncio na OLX / Mobiauto." | "Ótimo, continua lá. Aqui é mais um lugar, só da região e grátis por 60 dias. O cliente daqui está perto, pode ir na loja." |
-| "Já anuncio no CarroSP." | "Continua lá se quiser. Compare: lá até 17 carros custa R$ 193 por mês. Aqui até 15 é R$ 99, até 40 é R$ 169 e até 80 é R$ 279. E os primeiros 60 dias são grátis." (falar na conversa; **não** colocar o nome do concorrente em folheto ou anúncio) |
+| "Já anuncio no CarroSP." | "Continua lá se quiser. Compare: lá até 17 carros custa R$ 193 por mês. Aqui até 15 é R$ 149, até 40 é R$ 219 e até 80 é R$ 329. E os primeiros 60 dias são grátis." (falar na conversa; **não** colocar o nome do concorrente em folheto ou anúncio) |
 | "Não tenho tempo." | "É rapidinho: 5 minutos pra loja e uns 2 por carro, já que a Tabela FIPE preenche marca, modelo e versão. Pode começar com 3 carros." |
-| "Quanto custa depois?" | "A partir de R$ 99 por mês. A maioria das lojas vai para o Profissional, R$ 169, até 40 carros com destaque. Mas você só decide depois dos 60 dias, vendo quantos clientes chamaram." |
+| "Quanto custa depois?" | "A partir de R$ 149 por mês. A maioria das lojas vai para o Profissional, R$ 219, até 40 carros com destaque. Mas você só decide depois dos 60 dias, vendo quantos clientes chamaram." |
 | "Quem vai ver isso?" | "No lançamento, em 03/11, tem telão na Getúlio Vargas, anúncio no Instagram e Facebook da região e app na loja de aplicativos. E todo mês você recebe um relatório com quantas pessoas viram e chamaram." |
 | "E se eu não vender nada?" | "Você não paga nada nos 60 dias. Se não chamar ninguém, você não continua. Sem multa e sem contrato." |
 | "Precisa de cartão?" | "Não. Depois, se quiser continuar, paga por Pix ou cartão pelo site." |
@@ -101,8 +101,8 @@ Mande para as outras lojas (prova social):
 
 | CarroSP (por mês) | Por carro | AutoRegião equivalente |
 |---|---|---|
-| até 17 veículos: R$ 193 | R$ 11,35 | Básico, até 15: **R$ 99** (−49%) |
-| até 37 veículos: R$ 243 | R$ 6,57 | Profissional, até 40: **R$ 169** (−30%) |
-| até 57 veículos: R$ 293 | R$ 5,14 | Premium, até 80: **R$ 279** |
-| até 77 veículos: R$ 343 | R$ 4,45 | Premium, até 80: **R$ 279** (−19%) |
+| até 17 veículos: R$ 193 | R$ 11,35 | Básico, até 15: **R$ 149** (−23%) |
+| até 37 veículos: R$ 243 | R$ 6,57 | Profissional, até 40: **R$ 219** (−10%) |
+| até 57 veículos: R$ 293 | R$ 5,14 | Premium, até 80: **R$ 329** (+12%, mas com 80 vagas) |
+| até 77 veículos: R$ 343 | R$ 4,45 | Premium, até 80: **R$ 329** (−4%) |
 | até 97 veículos: R$ 393 | R$ 4,05 | acima de 80: **sob consulta** |

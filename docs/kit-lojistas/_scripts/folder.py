@@ -370,9 +370,9 @@ c.append(texto("Planos", xc, y, 7.6, GRA, EXO))
 y += 6.5
 c.append(texto("Depois dos 60 dias grátis", xc, y, 3.6, CIN, JAK))
 y += 5.5
-planos = [("Básico", "R$ 99", ["Até 15 anúncios ativos", "Página da loja e WhatsApp"], False),
-          ("Profissional", "R$ 169", ["Até 40 anúncios ativos", "Destaque nas buscas", "Logo da loja nos anúncios"], True),
-          ("Premium", "R$ 279", ["Até 80 anúncios ativos", "Primeiro nas buscas", "Vitrine na página inicial", "Selo \"Loja Premium\""], False)]
+planos = [("Básico", "R$ 149", ["Até 15 anúncios ativos", "Página da loja e WhatsApp"], False),
+          ("Profissional", "R$ 219", ["Até 40 anúncios ativos", "Destaque nas buscas", "Logo da loja nos anúncios"], True),
+          ("Premium", "R$ 329", ["Até 80 anúncios ativos", "Primeiro nas buscas", "Vitrine na página inicial", "Selo \"Loja Premium\""], False)]
 for nome, preco, itens, pop in planos:
     alt = 17.5 + 4.4 * len(itens)
     c.append(f'<rect x="{xc}" y="{y}" width="{Lc}" height="{alt}" rx="3" fill="{LAR if pop else CINZA_CLARO}"/>')

@@ -264,6 +264,9 @@ e lançamento sugerido em 03/11/2026. Seguir e marcar por lá.
      Corrigido NO SITE (sem nova compilação): dentro dos apps o /cadastro é só de comprador, /anunciar mostra "Já anuncia?
      Entrar" + WhatsApp de atendimento (texto neutro; NÃO direcionar ao site — proibido), 1º anúncio de pessoa física não é
      criado no app. Resposta = `docs/app-store-ficha.md` seção 8; respondido e reenviado (build 11) em 22/10.
+     27/10: REJEITADO de novo por 3.1.1 (iPad, build 11). Corrigido no site: DENTRO DOS APPS NÃO HÁ CADASTRO NENHUM (nem de
+     comprador — decisão do Rafael: comprador não precisa de conta); só "Entrar". /cadastro no app = "Cadastro indisponível no app".
+     No site normal tudo igual. Resposta = `docs/app-store-ficha.md` seção 9. Logo do topo agora em vetor (`public/marca/logo-horizontal.svg`).
      Próximos (antigo): app no App Store Connect → Codemagic (login GitHub, integração "AutoRegiao" com chave de API) → TestFlight
      no iPhone dele → capturas 6,9" → ficha, privacidade (rótulos) → revisão. Não testado num iPhone ainda.
    - Android 1.0.3 (código 4, abre em `/?origem=app`) gerado e assinado em `autoregiao-android\publicar\` —

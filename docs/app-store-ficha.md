@@ -169,3 +169,22 @@ The change is already live (the app loads our web content), so the same build 11
 Thank you very much,
 Rafael Ferraz Barbosa
 ```
+
+## 9. Resposta à 3ª rejeição (27/10/2026) — Guideline 3.1.1 de novo
+Motivo: a Apple repetiu "account registration feature for businesses" (iPad Air 11", build 11), mesmo com o cadastro
+só de comprador. Correção (só no site): dentro dos apps NÃO EXISTE MAIS CADASTRO nenhum — sem botão "Cadastrar" no topo,
+/login sem aba/links de cadastro, /cadastro mostra "Cadastro indisponível no app" (Ver veículos / Entrar), painel sem a
+frase "anunciar 1 veículo como particular". Para ver veículos não precisa de conta (favoritos e alertas não exigem conta).
+Resposta (colar em "Revisão de apps" e reenviar a mesma compilação 11):
+```
+Hello, and thank you for the feedback.
+
+Guideline 3.1.1 – We have now removed account registration from the app completely. There is no sign-up of any kind inside the app anymore (no business, organization or personal registration): the "Sign up" button, the sign-up tab and links were removed, and the sign-up page shows only "Registration is not available in the app". Browsing vehicles does not require an account.
+
+The app only keeps "Sign in" for people who already have an account, so they can manage the listings they already have, as allowed by guideline 3.1.3(f). The app has no buttons, links or text directing users to register or purchase elsewhere.
+
+The change is already live (the app loads our web content), so the same build 11 can be reviewed again. If the app was already open on the review device, please close and reopen it.
+
+Thank you very much,
+Rafael Ferraz Barbosa
+```

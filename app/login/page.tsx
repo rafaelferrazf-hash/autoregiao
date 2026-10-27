@@ -6,8 +6,11 @@ import { supabase } from "@/lib/supabase";
 import { ehAdmin } from "@/lib/admin";
 import Icone from "@/components/Icone";
 import CampoSenha from "@/components/CampoSenha";
+import { useEmAppDaLoja } from "@/lib/appLoja";
 
 export default function Login() {
+  // Nos apps das lojas não há cadastro (Apple 3.1.1): a tela é só para entrar com uma conta que já existe.
+  const emApp = useEmAppDaLoja();
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [erro, setErro] = useState("");
@@ -55,7 +58,7 @@ export default function Login() {
         <Link href="/" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none" }}>
           <Logo />
         </Link>
-        <div style={{ fontSize: 13, color: "#7A7670" }}>
+        <div style={{ fontSize: 13, color: "#7A7670", display: emApp ? "none" : "block" }}>
           Não tem conta? <Link href="/cadastro" style={{ color: "#FF6600", fontWeight: 600, textDecoration: "none" }}>Cadastre-se grátis</Link>
         </div>
       </nav>
@@ -68,7 +71,7 @@ export default function Login() {
             <h1 style={{ fontSize: 24, fontWeight: 800, color: "#1A1917", marginBottom: 6 }}>Bem-vindo de volta!</h1>
             <p style={{ fontSize: 14, color: "#7A7670", marginBottom: 24, lineHeight: 1.5 }}>Entre na sua conta para gerenciar seus anúncios.</p>
 
-            <div style={{ display: "flex", gap: 0, marginBottom: 24, background: "#F7F6F3", borderRadius: 8, padding: 4 }}>
+            <div style={{ display: emApp ? "none" : "flex", gap: 0, marginBottom: 24, background: "#F7F6F3", borderRadius: 8, padding: 4 }}>
               <button style={{ flex: 1, padding: "9px 0", borderRadius: 6, border: "none", background: "#fff", fontSize: 14, fontWeight: 600, color: "#1A1917", cursor: "pointer", boxShadow: "0 1px 4px rgba(0,0,0,0.08)" }}>Entrar</button>
               <Link href="/cadastro" style={{ flex: 1, padding: "9px 0", borderRadius: 6, background: "transparent", fontSize: 14, fontWeight: 500, color: "#7A7670", textDecoration: "none", textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center" }}>Cadastrar</Link>
             </div>
@@ -96,7 +99,7 @@ export default function Login() {
               </button>
             </div>
 
-            <div style={{ textAlign: "center", fontSize: 13, color: "#7A7670", marginTop: 20 }}>
+            <div style={{ textAlign: "center", fontSize: 13, color: "#7A7670", marginTop: 20, display: emApp ? "none" : "block" }}>
               Ainda não tem conta? <Link href="/cadastro" style={{ color: "#FF6600", fontWeight: 600, textDecoration: "none" }}>Cadastrar agora</Link>
             </div>
           </div>
@@ -116,7 +119,7 @@ export default function Login() {
                   <span style={{ fontSize: 13, color: "rgba(255,255,255,0.7)" }}>{text}</span>
                 </div>
               ))}
-              <div style={{ marginTop: 32, paddingTop: 24, borderTop: "1px solid rgba(255,255,255,0.08)" }}>
+              <div style={{ marginTop: 32, paddingTop: 24, borderTop: "1px solid rgba(255,255,255,0.08)", display: emApp ? "none" : "block" }}>
                 <Link href="/cadastro" style={{ display: "inline-block", padding: "10px 24px", border: "1.5px solid rgba(255,255,255,0.2)", borderRadius: 8, color: "#fff", fontSize: 13, fontWeight: 600, textDecoration: "none" }}>Criar conta grátis →</Link>
               </div>
             </div>

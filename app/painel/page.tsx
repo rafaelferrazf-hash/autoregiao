@@ -316,7 +316,7 @@ export default function Painel() {
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                   <span style={{ display: "flex", color: grave ? "#DC2626" : "#FF6600" }}><Icone nome={grave ? "atencao" : "ampulheta"} tamanho={18} /></span>
                   <div style={{ fontSize: 13, color: "#1A1917", lineHeight: 1.5 }}>
-                    {situacao.tipo === "sem_loja" && "Sua conta ainda não tem uma loja vinculada. Você pode anunciar 1 veículo como particular."}
+                    {situacao.tipo === "sem_loja" && (emApp ? "Sua conta ainda não tem uma loja vinculada." : "Sua conta ainda não tem uma loja vinculada. Você pode anunciar 1 veículo como particular.")}
                     {situacao.tipo === "em_dia" && planoProximo && <>{emTrial ? "Período grátis" : `Plano ${nomePlano}`} até <strong>{planoProximo.em}</strong>. Depois começa o <strong>Plano {planoProximo.nome}</strong> ({planoProximo.limite === null ? "sem limite de anúncios" : `até ${planoProximo.limite} anúncios ativos`}), pago até {dataFim}.</>}
                     {situacao.tipo === "em_dia" && !planoProximo && <>{emTrial ? "Período grátis" : `Plano ${nomePlano}`} termina em <strong style={{ color: "#FF6600" }}>{situacao.diasRestantes} {situacao.diasRestantes === 1 ? "dia" : "dias"}</strong> ({dataFim}).</>}
                     {situacao.tipo === "carencia" && <>Seu plano <strong>venceu em {dataFim}</strong>. Seus anúncios <strong style={{ color: "#DC2626" }}>saem do site em {situacao.diasAteSairDoAr} {situacao.diasAteSairDoAr === 1 ? "dia" : "dias"}</strong>{emApp ? "." : " se o plano não for renovado."}</>}

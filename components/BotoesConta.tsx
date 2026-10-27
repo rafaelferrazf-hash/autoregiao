@@ -6,7 +6,8 @@ import { ehAdmin } from "@/lib/admin";
 import Icone from "@/components/Icone";
 import { useEmAppDaLoja } from "@/lib/appLoja";
 
-// Botões do topo das páginas públicas: "Entrar / Cadastrar loja" para visitante,
+// Botões do topo das páginas públicas: "Entrar / Cadastrar loja" para visitante (nos apps das lojas só "Entrar":
+// não há cadastro dentro do app — Apple 3.1.1),
 // "Meu painel" para lojista logado e só "Admin" para a conta de admin.
 export default function BotoesConta({ celular = false }: { celular?: boolean }) {
   const emApp = useEmAppDaLoja();
@@ -31,7 +32,7 @@ export default function BotoesConta({ celular = false }: { celular?: boolean }) 
     return (
       <>
         <Link href="/login" style={contorno}>Entrar</Link>
-        <Link href="/cadastro" style={cheio}>{emApp ? "Cadastrar" : "Cadastrar loja"}</Link>
+        {!emApp && <Link href="/cadastro" style={cheio}>Cadastrar loja</Link>}
       </>
     );
   }

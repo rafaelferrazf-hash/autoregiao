@@ -153,6 +153,9 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
   "Anúncio flutuante" (`AdminPublicidade`, `AdminFlutuantes`, `/api/admin/flutuantes`). E-mail 3 dias antes de vencer.
   Também: busca de loja por nome em /lojas (`BuscaLojas`), logo do topo 40px.
 
+- 28/10/2026: material impresso EM FABRICAÇÃO: folder dos lojistas (100 un., A4 2 dobras, gráfica do folder) e folheto dos
+  compradores (Zap, 150×200 couchê 115g 4x4, PDF/X-1a). Distribuir só no lançamento. Ao chegar: testar os QR no impresso.
+
 ## Pendências (em ordem sugerida)
 **Roteiro do lançamento (13/10/2026): `docs/ROTEIRO-LANCAMENTO.md`**. Etapas, responsáveis, checagem final em 30/10
 e lançamento sugerido em 03/11/2026. Seguir e marcar por lá.

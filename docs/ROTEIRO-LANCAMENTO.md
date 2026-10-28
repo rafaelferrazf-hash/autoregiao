@@ -259,6 +259,9 @@ anterior em 1 clique (Deployments → versão anterior → "Promote to Productio
 ---
 
 ## Depois do lançamento (não bloqueia)
+- **App Android 1.0.4** (próxima versão): "piscar" branco de ~0,5 s entre a abertura escura e o site (troca para o Chrome;
+  vídeo do Rafael em 28/10). Tentar suavizar ao montar a versão, junto com os avisos do Play Console (SDK 35 ponta a ponta,
+  APIs descontinuadas, orientação em telas grandes). Subir `appVersionCode` para 5 no `gerar.cjs`.
 - Importar o estoque das lojas por planilha (é o que mais trava lojas grandes)
 - Vídeo nos anúncios
 - Logo em vetor por um designer + registro da marca no INPI

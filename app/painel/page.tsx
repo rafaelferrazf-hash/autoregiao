@@ -203,7 +203,7 @@ export default function Painel() {
       {/* SIDEBAR DESKTOP */}
       <aside className="sidebar-desktop" style={{ width: 240, background: "#111009", minHeight: "100vh", position: "fixed", top: 0, left: 0, flexDirection: "column", zIndex: 50 }}>
         <Link href="/" style={{ padding: "18px 20px", borderBottom: "1px solid rgba(255,255,255,0.06)", display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
-          <Logo altura={24} />
+          <Logo altura={24} fundoEscuro />
         </Link>
         <div style={{ padding: "14px 20px", borderBottom: "1px solid rgba(255,255,255,0.06)", display: "flex", alignItems: "center", gap: 10 }}>
           <LogoLoja url={loja?.logo_url} tamanho={40} />

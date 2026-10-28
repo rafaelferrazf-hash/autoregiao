@@ -148,7 +148,7 @@ export default function Admin() {
       {/* NAVBAR */}
       <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, background: "#1A1917", height: 60, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 16px" }}>
         <Link href="/" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none" }}>
-          <Logo altura={26} />
+          <Logo altura={26} fundoEscuro />
           <span style={{ background: "#FF6600", color: "#fff", fontSize: 10, fontWeight: 600, padding: "2px 7px", borderRadius: 4, marginLeft: 4 }}>ADMIN</span>
         </Link>
         <div className="admin-nav-links" style={{ gap: 20, alignItems: "center" }}>

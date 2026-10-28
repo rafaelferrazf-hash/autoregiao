@@ -259,6 +259,14 @@ anterior em 1 clique (Deployments → versão anterior → "Promote to Productio
 ---
 
 ## Depois do lançamento (não bloqueia)
+- **Página "Divulgar" no painel do lojista** (ideia do Rafael, 28/10; fazer nas 2 primeiras semanas após o lançamento, ~2–3 dias):
+  (1) kit da loja gerado na hora (Status/Stories, post quadrado, cartaz A4 com QR — mesmo visual de
+  `docs/kit-lojas-parceiras/_scripts/kit_loja.py`); (2) post de UM veículo (foto, modelo, ano, km, preço, selo FIPE só se for
+  verdade, logo da loja), em pé e quadrado, botões Baixar / Compartilhar / Copiar texto — para TODOS os planos;
+  (3) "Ofertas da semana" (3–4 carros numa arte) com limite por plano: Básico não tem, Profissional (e período grátis)
+  2 por semana, Premium/vitalício 4 por semana (semana de segunda a domingo; baixar de novo a mesma arte não conta).
+  Dentro dos apps: só esconder/desativar quando o plano não tem, SEM convite para assinar (Apple 3.1.1).
+  Anúncio vendido aberto por post antigo → mostrar "Vendido — veja outros carros da loja". Avisar as lojas da novidade.
 - **App Android 1.0.4** (próxima versão): "piscar" branco de ~0,5 s entre a abertura escura e o site (troca para o Chrome;
   vídeo do Rafael em 28/10). Tentar suavizar ao montar a versão, junto com os avisos do Play Console (SDK 35 ponta a ponta,
   APIs descontinuadas, orientação em telas grandes). Subir `appVersionCode` para 5 no `gerar.cjs`.

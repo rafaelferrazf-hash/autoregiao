@@ -259,13 +259,16 @@ anterior em 1 clique (Deployments → versão anterior → "Promote to Productio
 ---
 
 ## Depois do lançamento (não bloqueia)
-- **Página "Divulgar" no painel do lojista** (ideia do Rafael, 28/10; fazer nas 2 primeiras semanas após o lançamento, ~2–3 dias):
+- **Página "Divulgar" no painel do lojista** (ideia do Rafael, 28–29/10; fazer nas 2 primeiras semanas após o lançamento, ~2–3 dias):
   (1) kit da loja gerado na hora (Status/Stories, post quadrado, cartaz A4 com QR — mesmo visual de
-  `docs/kit-lojas-parceiras/_scripts/kit_loja.py`); (2) post de UM veículo (foto, modelo, ano, km, preço, selo FIPE só se for
-  verdade, logo da loja), em pé e quadrado, botões Baixar / Compartilhar / Copiar texto — para TODOS os planos;
-  (3) "Ofertas da semana" (3–4 carros numa arte) com limite por plano: Básico não tem, Profissional (e período grátis)
-  2 por semana, Premium/vitalício 4 por semana (semana de segunda a domingo; baixar de novo a mesma arte não conta).
-  Dentro dos apps: só esconder/desativar quando o plano não tem, SEM convite para assinar (Apple 3.1.1).
+  `docs/kit-lojas-parceiras/_scripts/kit_loja.py`); (2) **post de 1 veículo**: o lojista escolhe o carro e, se quiser, uma
+  FRASE de destaque numa faixa amarela (esboços em `docs/kit-lojas-parceiras/esboco-post-veiculo/`, gerador `post_veiculo.py`),
+  em pé e quadrado, botões Baixar / Compartilhar / Copiar texto. "Ofertas da semana" com 4 carros: DESCARTADO.
+  **Quem tem (decisão do Rafael 29/10):** TODAS as lojas durante os 60 dias de cortesia; depois só **Profissional e Premium**
+  (Básico não tem). Limite semanal: proposto Profissional 2 / Premium 4 posts com frase (confirmar com o Rafael).
+  Frases em LISTA PRONTA (sem texto livre: risco de propaganda enganosa): Oportunidade imperdível, Oferta da semana,
+  Baixou o preço!, Recém-chegado, Pronto para levar; e só quando o anúncio confirma: Aceita troca, Abaixo da FIPE, Único dono.
+  Dentro dos apps: no Básico só esconder, SEM convite para assinar (Apple 3.1.1).
   Anúncio vendido aberto por post antigo → mostrar "Vendido — veja outros carros da loja". Avisar as lojas da novidade.
 - **App Android 1.0.4** (próxima versão): "piscar" branco de ~0,5 s entre a abertura escura e o site (troca para o Chrome;
   vídeo do Rafael em 28/10). Tentar suavizar ao montar a versão, junto com os avisos do Play Console (SDK 35 ponta a ponta,

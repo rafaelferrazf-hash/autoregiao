@@ -13,6 +13,7 @@ import type { BannerPublico } from "@/lib/banners";
 type Slide = {
   chave: string; foto?: string | null; logo?: string | null;
   largura?: string; // fotos em pé (pessoas) ocupam menos largura, para não cortar o rosto e o celular
+  posicao?: string; // parte da foto que fica visível (padrão "center 25%")
   titulo: React.ReactNode; texto: string;
   botao?: { rotulo: string; href: string };
   lojasDeApps?: boolean; // botões Google Play / App Store no lugar do botão
@@ -50,7 +51,7 @@ export default function CarrosselTopo() {
       texto: b.texto ?? "",
       botao: { rotulo: b.botao, href: b.link },
     })),
-    ...(temApp ? [{ chave: "app", foto: "/banners/app-celular-carro.jpg", titulo: <>O seu próximo carro {destaque("na palma da mão")}</>, texto: "Baixe o app AutoRegião e receba aviso de carro novo no celular.", lojasDeApps: true }] : []),
+    ...(temApp ? [{ chave: "app", foto: "/banners/app-motorista.jpg", largura: "100%", posicao: "85% 45%", titulo: <>O seu próximo carro {destaque("na palma da mão")}</>, texto: "Baixe o app AutoRegião e receba aviso de carro novo no celular.", lojasDeApps: true }] : []),
     { chave: "fipe", foto: "/banners/fipe-em-casa.jpg", titulo: <>Consulte a {destaque("Tabela FIPE")} de graça</>, texto: "Saiba o preço justo antes de comprar ou vender.", botao: { rotulo: "Consultar FIPE", href: "/tabela-fipe" } },
     ...(!emApp ? [{ chave: "anuncie", foto: "/banners/anuncie-revendedor.jpg", titulo: <>Anuncie sua revenda: {destaque("60 dias grátis")}</>, texto: "Seus carros na vitrine de quem compra na região.", botao: { rotulo: "Quero anunciar", href: "/anunciar" } }] : []),
   ];
@@ -115,7 +116,7 @@ export default function CarrosselTopo() {
           <div className="carrossel-foto" style={{ position: "absolute", top: 0, right: 0, bottom: 0, width: s.largura ?? "62%", background: "#2A2622" }}>
             {s.foto
               // eslint-disable-next-line @next/next/no-img-element
-              ? <img src={s.foto} alt="" loading={i === 0 ? "eager" : "lazy"} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 25%", display: "block" }} />
+              ? <img src={s.foto} alt="" loading={i === 0 ? "eager" : "lazy"} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: s.posicao ?? "center 25%", display: "block" }} />
               : s.logo && <div style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}><LogoLoja url={s.logo} tamanho={180} raio={90} /></div>}
             {/* Esfuma a borda esquerda da foto no fundo grafite (computador) */}
             <div className="carrossel-esfuma" style={{ position: "absolute", inset: 0, background: "linear-gradient(90deg, #1A1917 0%, rgba(26,25,23,0.7) 15%, rgba(26,25,23,0) 45%)" }} />

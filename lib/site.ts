@@ -18,4 +18,4 @@ export const WHATSAPP_ATENDIMENTO = { texto: "(73) 99820-9698", link: "https://w
 export const APP_ANDROID = { publicado: true, link: "https://play.google.com/store/apps/details?id=br.com.autoregiao.app" };
 // Slide "Baixe o app" no carrossel (foto escolhida pelo Rafael em 29/10: rapaz com o celular no carro).
 export const SLIDE_APP_LIGADO = true;
-export const APP_IPHONE = { publicado: false, link: "https://apps.apple.com/br/app/id6820997830" };
+export const APP_IPHONE = { publicado: true, link: "https://apps.apple.com/br/app/id6820997830" };

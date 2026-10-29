@@ -221,7 +221,7 @@ e lançamento sugerido em 03/11/2026. Seguir e marcar por lá.
      ponta descontinuadas e restrição de orientação/redimensionamento em telas grandes (não bloqueiam).
    - ✅ 23/10/2026: **APP ANDROID PUBLICADO NA PLAY STORE** (Rafael clicou "Publicar 2 mudanças"; página pública confirmada).
      `APP_ANDROID.publicado = true` (QR /app leva Android à Play Store). Slide "Baixe o app" do carrossel desligado
-     (`SLIDE_APP_LIGADO`). 29/10: slide LIGADO com a foto escolhida (opção 1, rapaz com o celular no carro — `public/banners/app-celular-carro.jpg`); botão da App Store aparece quando `APP_IPHONE.publicado = true`.
+     (`SLIDE_APP_LIGADO`). 29/10: slide LIGADO com a imagem enviada pelo Rafael (`public/banners/app-motorista.jpg`, foto em toda a largura) e selo oficial da App Store em português (`public/banners/app-store.svg`).
 1b. **App Store (iPhone)** — decidido em 05/10/2026: mesmo modelo "app que usa o site" (nada de app
    independente). Para passar na revisão da Apple: notificações push (alertas de carro novo), compartilhar nativo,
    tela offline; botão "Excluir minha conta" dentro do app (regra 5.1.1); sem compra de planos dentro do app
@@ -278,8 +278,8 @@ e lançamento sugerido em 03/11/2026. Seguir e marcar por lá.
      27/10: REJEITADO de novo por 3.1.1 (iPad, build 11). Corrigido no site: DENTRO DOS APPS NÃO HÁ CADASTRO NENHUM (nem de
      comprador — decisão do Rafael: comprador não precisa de conta); só "Entrar". /cadastro no app = "Cadastro indisponível no app".
      No site normal tudo igual. Resposta = `docs/app-store-ficha.md` seção 9 + vídeo da tela do iPhone; respondido e reenviado (build 11) em 27/10.
-     ✅ 29/10/2026: **APP iPHONE APROVADO** pela Apple (1.0.0 build 11). Lançamento manual: falta o Rafael clicar em liberar;
-     depois `APP_IPHONE.publicado = true` em `lib/site.ts`. Não mexer nas contas revisao@/revisao.vencido@ (usadas em toda versão nova). Logo do topo agora em vetor (`public/marca/logo-horizontal.svg`).
+     ✅ 29/10/2026: **APP iPHONE APROVADO** pela Apple (1.0.0 build 11), liberado pelo Rafael e NA APP STORE (página pública ok;
+     a API de busca da Apple demora mais para listar). `APP_IPHONE.publicado = true` → slide com os 2 selos e /app leva iPhone à App Store. Não mexer nas contas revisao@/revisao.vencido@ (usadas em toda versão nova). Logo do topo agora em vetor (`public/marca/logo-horizontal.svg`).
      Próximos (antigo): app no App Store Connect → Codemagic (login GitHub, integração "AutoRegiao" com chave de API) → TestFlight
      no iPhone dele → capturas 6,9" → ficha, privacidade (rótulos) → revisão. Não testado num iPhone ainda.
    - Android 1.0.3 (código 4, abre em `/?origem=app`) gerado e assinado em `autoregiao-android\publicar\` —

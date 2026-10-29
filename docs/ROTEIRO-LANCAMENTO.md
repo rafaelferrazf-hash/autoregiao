@@ -265,7 +265,8 @@ anterior em 1 clique (Deployments → versão anterior → "Promote to Productio
   FRASE de destaque numa faixa amarela (esboços em `docs/kit-lojas-parceiras/esboco-post-veiculo/`, gerador `post_veiculo.py`),
   em pé e quadrado, botões Baixar / Compartilhar / Copiar texto. "Ofertas da semana" com 4 carros: DESCARTADO.
   **Quem tem (decisão do Rafael 29/10):** TODAS as lojas durante os 60 dias de cortesia; depois só **Profissional e Premium**
-  (Básico não tem). Limite semanal: proposto Profissional 2 / Premium 4 posts com frase (confirmar com o Rafael).
+  (Básico não tem). Limite semanal (confirmado 29/10): **Profissional 2 / Premium 4 posts com frase por semana** (segunda a domingo; na cortesia vale o
+  limite do Profissional = 2); post sem frase à vontade para quem tem a ferramenta.
   Frases em LISTA PRONTA (sem texto livre: risco de propaganda enganosa): Oportunidade imperdível, Oferta da semana,
   Baixou o preço!, Recém-chegado, Pronto para levar; e só quando o anúncio confirma: Aceita troca, Abaixo da FIPE, Único dono.
   Dentro dos apps: no Básico só esconder, SEM convite para assinar (Apple 3.1.1).

@@ -19,6 +19,7 @@ import type { Loja } from "@/lib/tipos";
 import { ehVitalicio, limiteDoPlano, mensagemErroAnuncio, nomeDoPlano, situacaoDoPlano } from "@/lib/planos";
 import PerfilLoja from "@/components/PerfilLoja";
 import Icone, { type NomeIcone } from "@/components/Icone";
+import { acessoDivulgar } from "@/lib/divulgar";
 
 export default function Painel() {
   // Dentro dos apps das lojas: sem cupom nem compra de plano (ver lib/appLoja.ts).
@@ -143,6 +144,8 @@ export default function Painel() {
   const emTrial = !loja?.plano || loja.plano === "trial";
   const nomePlano = !lojaCarregada ? "…" : !loja ? "Sem loja" : nomeDoPlano(loja.plano);
   const limite = loja ? limiteDoPlano(loja.plano) : 1;
+  // Página "Divulgar": no site aparece para toda loja (quem não tem vê o convite dos planos); nos apps, só para quem tem.
+  const mostrarDivulgar = !!loja && (!emApp || acessoDivulgar(loja.plano, loja.expira_em, agora).liberado);
   const ativos = anunciosReais.filter(a => a.ativo !== false).length;
   const foraDoAr = situacao.tipo === "vencido";
   // Plano menor já pago que começa quando o atual termina (fase15).
@@ -221,7 +224,14 @@ export default function Painel() {
             // ficam escondidas até existirem de verdade.
             { id: "perfil", icon: "loja", label: "Perfil da Loja" },
             ...(loja ? [{ id: "plano", icon: "coroa", label: "Meu plano" }] : []),
+            ...(mostrarDivulgar ? [{ id: "divulgar", icon: "divulgar", label: "Divulgar" }] : []),
           ].map(item => (
+            item.id === "divulgar"
+              ? <Link key={item.id} href="/painel/divulgar" style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 10px", borderRadius: 8, background: "transparent", color: "rgba(255,255,255,0.5)", fontSize: 13.5, fontWeight: 500, textDecoration: "none", width: "100%" }}>
+                  <span style={{ width: 20, display: "flex", justifyContent: "center", flexShrink: 0 }}><Icone nome="divulgar" tamanho={18} /></span>
+                  <span>Divulgar</span>
+                </Link>
+              :
             item.id === "plano"
               ? <Link key={item.id} href="/painel/planos" style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 10px", borderRadius: 8, background: "transparent", color: "rgba(255,255,255,0.5)", fontSize: 13.5, fontWeight: 500, textDecoration: "none", width: "100%" }}>
                   <span style={{ width: 20, display: "flex", justifyContent: "center", flexShrink: 0 }}><Icone nome="coroa" tamanho={18} /></span>
@@ -592,25 +602,26 @@ export default function Painel() {
           { id: "novo", icon: "mais", label: "Novo", link: "/painel/novo-anuncio" },
           { id: "perfil", icon: "loja", label: "Loja" },
           ...(loja ? [{ id: "plano", icon: "coroa", label: "Plano", rota: "/painel/planos" }] : []),
+          ...(mostrarDivulgar ? [{ id: "divulgar", icon: "divulgar", label: "Divulgar", rota: "/painel/divulgar" }] : []),
         ].map(item => (
           "rota" in item && item.rota
-            ? <Link key={item.id} href={item.rota} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2, textDecoration: "none", padding: "4px 12px" }}>
+            ? <Link key={item.id} href={item.rota} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2, textDecoration: "none", padding: "4px 8px" }}>
                 <span style={{ display: "flex", color: "rgba(255,255,255,0.55)" }}><Icone nome={item.icon as NomeIcone} tamanho={22} /></span>
                 <span style={{ fontSize: 10, color: "rgba(255,255,255,0.4)" }}>{item.label}</span>
               </Link>
           : "link" in item && item.link
-            ? <Link key={item.id} href={item.link} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2, textDecoration: "none", padding: "4px 12px" }}>
+            ? <Link key={item.id} href={item.link} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2, textDecoration: "none", padding: "4px 8px" }}>
                 <div style={{ width: 36, height: 36, background: "#FF6600", borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", color: "#fff" }}><Icone nome={item.icon as NomeIcone} tamanho={20} /></div>
                 <span style={{ fontSize: 10, color: "#FF6600", fontWeight: 600 }}>{item.label}</span>
               </Link>
             : <button key={item.id} onClick={() => setAbaAtiva(item.id)}
-                style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2, background: "none", border: "none", cursor: "pointer", padding: "4px 12px", position: "relative" }}>
+                style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2, background: "none", border: "none", cursor: "pointer", padding: "4px 8px", position: "relative" }}>
                 <span style={{ display: "flex", color: abaAtiva === item.id ? "#FF6600" : "rgba(255,255,255,0.55)" }}><Icone nome={item.icon as NomeIcone} tamanho={22} /></span>
                 <span style={{ fontSize: 10, color: abaAtiva === item.id ? "#FF6600" : "rgba(255,255,255,0.4)", fontWeight: abaAtiva === item.id ? 600 : 400 }}>{item.label}</span>
               </button>
         ))}
         {souAdmin && (
-          <Link href="/admin" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2, textDecoration: "none", padding: "4px 12px" }}>
+          <Link href="/admin" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2, textDecoration: "none", padding: "4px 8px" }}>
             <span style={{ display: "flex", color: "rgba(255,255,255,0.55)" }}><Icone nome="escudo" tamanho={22} /></span>
             <span style={{ fontSize: 10, color: "rgba(255,255,255,0.4)" }}>Admin</span>
           </Link>

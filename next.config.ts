@@ -1,6 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Fontes e logo lidos do disco pelas imagens da página "Divulgar" (app/api/divulgar/artes.tsx).
+  outputFileTracingIncludes: {
+    "/api/divulgar/imagem": ["./assets/fontes/**", "./public/marca/logo-horizontal-branco.svg"],
+  },
   async headers() {
     return [
       {

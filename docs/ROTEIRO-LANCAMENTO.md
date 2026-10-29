@@ -259,7 +259,7 @@ anterior em 1 clique (Deployments → versão anterior → "Promote to Productio
 ---
 
 ## Depois do lançamento (não bloqueia)
-- **Página "Divulgar" no painel do lojista** (ideia do Rafael, 28–29/10; ~2–3 dias. **Começar assim que a Apple aprovar o app do iPhone**, mesmo antes de 03/11 —
+- ✅ **FEITO e publicado em 29/10/2026** — **Página "Divulgar" no painel do lojista** (ideia do Rafael, 28–29/10; ~2–3 dias. **Começar assim que a Apple aprovar o app do iPhone**, mesmo antes de 03/11 —
   decisão do Rafael 29/10; até lá, kits gerados à mão por mim para as visitas):
   (1) kit da loja gerado na hora (Status/Stories, post quadrado, cartaz A4 com QR — mesmo visual de
   `docs/kit-lojas-parceiras/_scripts/kit_loja.py`); (2) **post de 1 veículo**: o lojista escolhe o carro e, se quiser, uma

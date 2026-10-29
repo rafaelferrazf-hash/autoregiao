@@ -4,7 +4,7 @@ import {
   IconCopy, IconCrown, IconCurrencyReal, IconDeviceMobile, IconEye, IconEyeOff, IconFlag, IconGasStation, IconGift, IconLink,
   IconLogout, IconManualGearbox, IconMapPin, IconMotorbike, IconNavigation, IconPalette, IconPencil, IconPhone,
   IconPlus, IconRocket, IconSearch, IconShare, IconShieldCheck, IconStar, IconStarFilled, IconTicket, IconTrash,
-  IconTrendingDown, IconTrophy, IconTruck, IconUser, IconUsers, IconX, IconQrcode, IconGauge, IconHourglass, IconInfoCircle, IconPlayerPause, IconPlayerPlay, IconDoor, IconArrowsLeftRight,
+  IconTrendingDown, IconTrophy, IconTruck, IconUser, IconUsers, IconX, IconQrcode, IconGauge, IconHourglass, IconInfoCircle, IconPlayerPause, IconPlayerPlay, IconDoor, IconArrowsLeftRight, IconSpeakerphone, IconDownload,
   type Icon,
 } from "@tabler/icons-react";
 import type { CSSProperties } from "react";
@@ -23,6 +23,7 @@ const ICONES = {
   trofeu: IconTrophy, utilitario: IconTruck, usuario: IconUser, usuarios: IconUsers, fechar: IconX, qrcode: IconQrcode,
   km: IconGauge, ampulheta: IconHourglass, info: IconInfoCircle,
   pausar: IconPlayerPause, reativar: IconPlayerPlay, porta: IconDoor, comparar: IconArrowsLeftRight,
+  divulgar: IconSpeakerphone, baixar: IconDownload,
 } satisfies Record<string, Icon>;
 
 export type NomeIcone = keyof typeof ICONES;

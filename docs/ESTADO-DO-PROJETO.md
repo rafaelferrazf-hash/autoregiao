@@ -56,7 +56,7 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
   `/loja/[id]`, `/favoritos`, `/alerta`, `/anunciar`, `/painel` (+ `/novo-anuncio`, `/planos`), `/admin`,
   `/login`, `/cadastro`, `/recuperar-senha`, `/redefinir-senha`, `/pagamento/retorno`, `/termos`, `/privacidade`, `/offline`.
 - SQL já rodado: `rls-fase0`, `fase1-seguranca`, `fase2`, `fase3`, `fase3-fotos`, `fase4a`, `fase4b`,
-  `fase5-alertas`, `fase6-fipe`, `fase7-filtros`, `fase8-logo-loja`, `fase9-excluir-conta`, `fase10-push`, `fase11-capa-loja`, `fase12-carroceria`, `fase13-demonstracao`, `fase14-demonstracao-privada`, `fase15-planos-agendados-vendido`, `fase16-situacao-veiculo`, `fase17-prioridade-premium`, `fase18-lojas-teste` (30 lojas fictícias, 450 anúncios demo; apagar antes do lançamento — linhas no topo do arquivo), `fase19`+`fase20` (lista `acesso_demonstracao`: e-mails que veem os anúncios demo; mibososantos@gmail.com liberado), `fase21-relatorio-selo` (selo `lojas.verificada` + `relatorios_mensais` + `dados_relatorio_mensal`), `fase22-banners` (banners pagos), `fase23-planos-novos` (limites 15/40/ilimitado), `fase24-particular` (pessoa física: liberações, avulso, expira_em), `fase25-visitas` (contador anônimo de páginas → aba "Visitas" do /admin). **`fase26-pre-lancamento`** (60 dias contam do lançamento 03/11 para quem se cadastra antes; `public.data_lancamento()` + `lib/lancamento.ts`). `fase27-precos-premium-80` (Premium com limite 80; rodada e publicada em 16/10). `fase28-anuncio-flutuante` (anúncio pago flutuante, rodada em 16/10). Modelos de e-mail do Auth: `supabase/emails/`.
+  `fase5-alertas`, `fase6-fipe`, `fase7-filtros`, `fase8-logo-loja`, `fase9-excluir-conta`, `fase10-push`, `fase11-capa-loja`, `fase12-carroceria`, `fase13-demonstracao`, `fase14-demonstracao-privada`, `fase15-planos-agendados-vendido`, `fase16-situacao-veiculo`, `fase17-prioridade-premium`, `fase18-lojas-teste` (30 lojas fictícias, 450 anúncios demo; apagar antes do lançamento — linhas no topo do arquivo), `fase19`+`fase20` (lista `acesso_demonstracao`: e-mails que veem os anúncios demo; mibososantos@gmail.com liberado), `fase21-relatorio-selo` (selo `lojas.verificada` + `relatorios_mensais` + `dados_relatorio_mensal`), `fase22-banners` (banners pagos), `fase23-planos-novos` (limites 15/40/ilimitado), `fase24-particular` (pessoa física: liberações, avulso, expira_em), `fase25-visitas` (contador anônimo de páginas → aba "Visitas" do /admin). **`fase26-pre-lancamento`** (60 dias contam do lançamento 03/11 para quem se cadastra antes; `public.data_lancamento()` + `lib/lancamento.ts`). `fase27-precos-premium-80` (Premium com limite 80; rodada e publicada em 16/10). `fase28-anuncio-flutuante` (anúncio pago flutuante, rodada em 16/10). `fase29-divulgar` (tabela `posts_divulgacao`, limite semanal dos posts com frase; rodada em 29/10). Modelos de e-mail do Auth: `supabase/emails/`.
 
 ## Regras de negócio importantes
 - Planos (`lib/planos.ts`; **26/10/2026: +R$50 em cada → 149/219/329** a pedido do Rafael; limites da fase27): básico R$149/15 anúncios,
@@ -155,6 +155,14 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
 
 - 28/10/2026: material impresso EM FABRICAÇÃO: folder dos lojistas (100 un., A4 2 dobras, gráfica do folder) e folheto dos
   compradores (Zap, 150×200 couchê 115g 4x4, PDF/X-1a). Distribuir só no lançamento. Ao chegar: testar os QR no impresso.
+
+- 29/10/2026: página **"Divulgar"** no painel (`app/painel/divulgar`, `lib/divulgar.ts`, `app/api/divulgar/*`): post de 1 carro
+  (frase opcional de lista pronta numa faixa amarela; Status 1080×1920 e feed 1080×1350) + kit da loja (Status, quadrado,
+  cartaz A4 com QR). Imagens geradas no servidor (`next/og`, fontes TTF em `assets/fontes/`, QR com a lib `qrcode`).
+  Quem tem: período grátis, Profissional, Premium e vitalício; posts com frase por semana: 2 (grátis/Profissional) / 4
+  (Premium/vitalício). Básico: no site vê convite dos planos; nos apps o item nem aparece. iPhone sem menu de compartilhar
+  → imagem abre grande para "tocar e segurar". Falta testar Compartilhar num celular de verdade.
+  AVISO: `npm audit` aponta falhas no Next.js 16.2.7 (inclusive crítica) — atualizar depois do lançamento, com testes.
 
 ## Pendências (em ordem sugerida)
 **Roteiro do lançamento (13/10/2026): `docs/ROTEIRO-LANCAMENTO.md`**. Etapas, responsáveis, checagem final em 30/10

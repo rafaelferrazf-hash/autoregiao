@@ -221,7 +221,7 @@ e lançamento sugerido em 03/11/2026. Seguir e marcar por lá.
      ponta descontinuadas e restrição de orientação/redimensionamento em telas grandes (não bloqueiam).
    - ✅ 23/10/2026: **APP ANDROID PUBLICADO NA PLAY STORE** (Rafael clicou "Publicar 2 mudanças"; página pública confirmada).
      `APP_ANDROID.publicado = true` (QR /app leva Android à Play Store). Slide "Baixe o app" do carrossel desligado
-     (`SLIDE_APP_LIGADO = false` em `lib/site.ts`) até o Rafael escolher a foto nova.
+     (`SLIDE_APP_LIGADO`). 29/10: slide LIGADO com a foto escolhida (opção 1, rapaz com o celular no carro — `public/banners/app-celular-carro.jpg`); botão da App Store aparece quando `APP_IPHONE.publicado = true`.
 1b. **App Store (iPhone)** — decidido em 05/10/2026: mesmo modelo "app que usa o site" (nada de app
    independente). Para passar na revisão da Apple: notificações push (alertas de carro novo), compartilhar nativo,
    tela offline; botão "Excluir minha conta" dentro do app (regra 5.1.1); sem compra de planos dentro do app

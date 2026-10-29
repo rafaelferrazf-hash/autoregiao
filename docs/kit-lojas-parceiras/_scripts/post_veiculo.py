@@ -138,6 +138,8 @@ def salvar(nome, W, H, corpo):
 
 
 V = CARROS[0]
+FRASE = os.environ.get("FRASE", "").upper()  # "post destaque": frase escolhida pelo lojista
+SUF = "-destaque" if FRASE else ""
 FOTOS = [im for im in (imagem(u) for u in V["fotos"][:3]) if im]
 ABAIXO = bool(V["fipe_valor"] and V["preco"] < V["fipe_valor"])
 DETALHES = " · ".join(x for x in [V["ano"], km(V["km"]), V.get("cambio"), V.get("combustivel")] if x)
@@ -161,12 +163,16 @@ c.append(selo_loja(130, 220, 62))
 c.append(texto(LOJA["nome"], 220, 212, 44, BRA, EXO, max_larg=W - 280))
 c.append(texto(LOJA["cidade"] or "", 220, 258, 28, CLARO))
 c.append(foto(FOTOS[0], 0, 330, W, 760, 0))
-if len(FOTOS) > 1:  # miniaturas das outras fotos
+if len(FOTOS) > 1 and not FRASE:  # miniaturas das outras fotos (no destaque a faixa ocupa esse lugar)
     for i, im in enumerate(FOTOS[1:3]):
         c.append(f'<rect x="{W - 60 - 250 - i * 270 - 6}" y="{1090 - 175 - 6}" width="262" height="187" rx="18" fill="{BRA}"/>')
         c.append(foto(im, W - 60 - 250 - i * 270, 1090 - 175, 250, 175, 14))
 if ABAIXO:
     c.append(chip("Abaixo da FIPE", 60, 360, 30, VERDE)[0])
+if FRASE:  # faixa amarela inclinada no pé da foto
+    tam = min(76, 76 * 860 / largura(FRASE, 76, EXO))
+    c.append(f'<g transform="rotate(-4 {W / 2} 1010)"><rect x="-40" y="950" width="{W + 80}" height="120" fill="#FFC400"/>'
+             + texto(FRASE, W / 2, 1010 + tam * 0.36, tam, GRA, EXO, "centro") + '</g>')
 y = 1190
 c.append(texto(f'{V["marca"]} {V["modelo"]}'.upper(), 60, y, 84, BRA, EXO, max_larg=W - 120))
 versao = (V.get("versao") or "").replace(V["modelo"], "", 1).strip()
@@ -181,7 +187,7 @@ c.append(f'<rect x="0" y="{H - 330}" width="{W}" height="330" fill="{LAR}"/>')
 c.append(texto(preco(V["preco"]), 60, H - 205, 110, GRA, EXO))
 c.append(texto("Chame a gente no WhatsApp ou veja no", 60, H - 130, 34, GRA, JAKB))
 c.append(texto("autoregiao.com.br", 60, H - 70, 52, GRA, EXO))
-salvar("post-veiculo-status.jpg", W, H, "".join(c))
+salvar(f"post-veiculo{SUF}-status.jpg", W, H, "".join(c))
 
 # ---------- Feed 1080×1350 ----------
 W, H = 1080, 1350
@@ -193,6 +199,10 @@ c.append(texto(LOJA["cidade"] or "", 165, 110, 25, CLARO))
 c.append(logo(W - 50 - 220, 38, 220))
 if ABAIXO:
     c.append(chip("Abaixo da FIPE", 50, 180, 28, VERDE)[0])
+if FRASE:
+    tam = min(64, 64 * 820 / largura(FRASE, 64, EXO))
+    c.append(f'<g transform="rotate(-4 {W / 2} 740)"><rect x="-40" y="690" width="{W + 80}" height="104" fill="#FFC400"/>'
+             + texto(FRASE, W / 2, 740 + tam * 0.36, tam, GRA, EXO, "centro") + '</g>')
 y = 905
 c.append(texto(f'{V["marca"]} {V["modelo"]}'.upper(), 50, y, 66, BRA, EXO, max_larg=W - 100))
 c.append(texto(DETALHES, 50, y + 56, 30, CLARO, JAK, max_larg=W - 100))
@@ -206,5 +216,5 @@ c.append(f'<rect x="0" y="{H - 200}" width="{W}" height="200" fill="{LAR}"/>')
 c.append(texto(preco(V["preco"]), 50, H - 90, 92, GRA, EXO))
 c.append(texto("Veja no", W - 50, H - 118, 30, GRA, JAKB, "dir"))
 c.append(texto("autoregiao.com.br", W - 50, H - 70, 40, GRA, EXO, "dir"))
-salvar("post-veiculo-feed.jpg", W, H, "".join(c))
+salvar(f"post-veiculo{SUF}-feed.jpg", W, H, "".join(c))
 print("ok", V["marca"], V["modelo"])

@@ -161,7 +161,7 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
   cartaz A4 com QR). Imagens geradas no servidor (`next/og`, fontes TTF em `assets/fontes/`, QR com a lib `qrcode`).
   Quem tem: período grátis, Profissional, Premium e vitalício; posts com frase por semana: 2 (grátis/Profissional) / 4
   (Premium/vitalício). Básico: no site vê convite dos planos; nos apps o item nem aparece. iPhone sem menu de compartilhar
-  → imagem abre grande para "tocar e segurar". Falta testar Compartilhar num celular de verdade.
+  → imagem abre grande para "tocar e segurar". Testado pelo Rafael no Android e no iPhone em 29/10: OK.
   AVISO: `npm audit` aponta falhas no Next.js 16.2.7 (inclusive crítica) — atualizar depois do lançamento, com testes.
 
 ## Pendências (em ordem sugerida)

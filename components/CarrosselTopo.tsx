@@ -53,7 +53,7 @@ export default function CarrosselTopo() {
     })),
     ...(temApp ? [{ chave: "app", foto: "/banners/app-motorista.jpg", largura: "100%", posicao: "85% 45%", titulo: <>O seu próximo carro {destaque("na palma da mão")}</>, texto: "Baixe o app AutoRegião e receba aviso de carro novo no celular.", lojasDeApps: true }] : []),
     { chave: "fipe", foto: "/banners/fipe-sofa.jpg", largura: "100%", posicao: "78% 25%", titulo: <>Consulte a {destaque("Tabela FIPE")} de graça</>, texto: "Saiba o preço justo antes de comprar ou vender.", botao: { rotulo: "Consultar FIPE", href: "/tabela-fipe" } },
-    ...(!emApp ? [{ chave: "anuncie", foto: "/banners/anuncie-revendedor.jpg", titulo: <>Anuncie sua revenda: {destaque("60 dias grátis")}</>, texto: "Seus carros na vitrine de quem compra na região.", botao: { rotulo: "Quero anunciar", href: "/anunciar" } }] : []),
+    ...(!emApp ? [{ chave: "anuncie", foto: "/banners/anuncie-vendedora.jpg", largura: "100%", posicao: "78% 20%", titulo: <>Anuncie sua revenda: {destaque("60 dias grátis")}</>, texto: "Seus carros na vitrine de quem compra na região.", botao: { rotulo: "Quero anunciar", href: "/anunciar" } }] : []),
   ];
   const total = slides.length;
   const indice = total ? atual % total : 0;

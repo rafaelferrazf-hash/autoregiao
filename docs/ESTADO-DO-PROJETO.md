@@ -162,6 +162,8 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
   Quem tem: período grátis, Profissional, Premium e vitalício; posts com frase por semana: 2 (grátis/Profissional) / 4
   (Premium/vitalício). Básico: no site vê convite dos planos; nos apps o item nem aparece. iPhone sem menu de compartilhar
   → imagem abre grande para "tocar e segurar". Testado pelo Rafael no Android e no iPhone em 29/10: OK.
+  30/10: carrossel com as 4 imagens novas do Rafael (`comprar-showroom`, `app-motorista`, `fipe-sofa`, `anuncie-vendedora` em
+  `public/banners/`; campo `posicao` no slide ajusta o recorte; imagens com lado escuro usam `largura: "100%"`).
   AVISO: `npm audit` aponta falhas no Next.js 16.2.7 (inclusive crítica) — atualizar depois do lançamento, com testes.
 
 ## Pendências (em ordem sugerida)

@@ -42,7 +42,7 @@ export default function CarrosselTopo() {
 
   const temApp = SLIDE_APP_LIGADO && !emApp && (APP_ANDROID.publicado || APP_IPHONE.publicado);
   const slides: Slide[] = [
-    { chave: "carro", foto: "/banners/comprar-casal.jpg", titulo: <>Encontre o carro ideal {destaque("na sua região")}</>, texto: "Carros, motos e utilitários de Teixeira de Freitas e região.", botao: { rotulo: "Buscar veículos", href: "/veiculos" } },
+    { chave: "carro", foto: "/banners/comprar-showroom.jpg", posicao: "72% 30%", titulo: <>Encontre o carro ideal {destaque("na sua região")}</>, texto: "Carros, motos e utilitários de Teixeira de Freitas e região.", botao: { rotulo: "Buscar veículos", href: "/veiculos" } },
     ...banners.map(b => ({
       chave: `banner-${b.id}`, banner: b.id, foto: b.imagem_url,
       titulo: b.destaque && b.titulo.includes(b.destaque)

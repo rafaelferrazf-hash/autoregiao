@@ -6,7 +6,7 @@ import { PLANOS, TEXTO_SOB_CONSULTA, DIAS_GRATIS, DIAS_GRATIS_PARTICULAR, AVULSO
 import { useEmAppDaLoja } from "@/lib/appLoja";
 import { useState } from "react";
 import Icone, { type NomeIcone } from "@/components/Icone";
-import { faseOferta, textoOfertaLoja } from "@/lib/lancamento";
+import { textoOfertaLoja } from "@/lib/lancamento";
 import { WHATSAPP_ATENDIMENTO } from "@/lib/site";
 
 // Itens do menu de navegação (os mesmos das outras páginas).
@@ -148,7 +148,7 @@ export default function Anunciar() {
               ["trofeu", "Lançamento 2026", "Portal de veículos focado na nossa região"],
               ["local", "Teixeira de Freitas", "Cidade sede, com expansão para as cidades vizinhas"],
               // Oferta para lojas: só no site (nos apps não há cadastro de loja — Apple 3.1.1).
-              ...(emApp ? [] : [["presente", `${DIAS_GRATIS} dias grátis`, faseOferta() === "antes" ? "No pré-lançamento: contam só a partir de 03/11" : faseOferta() === "pre" ? "Para lojas cadastradas até 30/11" : "Para lojas novas"]]),
+              ...(emApp ? [] : [["presente", `${DIAS_GRATIS} dias grátis`, "A partir do cadastro, sem cartão"]]),
               ["usuario", "Pessoa física anuncia grátis", `1 anúncio por ${DIAS_GRATIS_PARTICULAR} dias, por CPF`],
             ].map(([icon, title, desc]) => (
               <div key={title} style={{ textAlign: "center", padding: "20px 16px" }}>

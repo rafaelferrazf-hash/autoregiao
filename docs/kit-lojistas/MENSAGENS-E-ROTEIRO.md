@@ -1,8 +1,10 @@
 # Kit para falar com as lojas — mensagens e roteiro de visita
 
 Criado em 16/10/2026.
-**Oferta de pré-lançamento (decidida 16/10):** 60 dias grátis para lojas cadastradas **até 30/11**; para quem
-entra antes de 03/11, os 60 dias **só começam a contar no lançamento** (fase26). Não divulgar que depois serão 30.
+**Oferta (decisão do Rafael em 30/10, fase30):** **toda loja nova ganha 60 dias grátis, contados a partir do cadastro**,
+sem prazo para entrar. (A regra antiga do pré-lançamento, "contam só a partir de 03/11, até 30/11", não vale mais;
+o folder impresso ainda traz essa frase, mas quem se cadastra depois de 03/11 já conta do cadastro, então não conflita.)
+Contato com os lojistas a partir de **09/11**.
 
 Meta (roteiro, Etapa 4): **10 lojas e 150 anúncios reais até 30/10**.
 Folheto para imprimir: `folheto-lojistas_A5_frente-e-verso_com-sangria-3mm.pdf` (A5, frente e verso, papel couchê
@@ -23,8 +25,8 @@ chama a loja direto no WhatsApp.
 > Lancei o **AutoRegião**, um site e app só com carros de Teixeira e região. Quem procura carro aqui
 > encontra o estoque da sua loja e chama direto no **seu WhatsApp**, sem intermediário e sem comissão.
 >
-> Estamos no **pré-lançamento**: as lojas que entrarem agora ganham **60 dias grátis**, e eles **só começam a
-> contar no dia do lançamento** (03/11). Sem cartão e sem compromisso. O cadastro leva uns 5 minutos.
+> As lojas que entrarem ganham **60 dias grátis**, contados a partir do cadastro. Sem cartão e sem compromisso.
+> O cadastro leva uns 5 minutos.
 >
 > Posso passar aí uns 5 minutinhos para te mostrar? Ou dá uma olhada: www.autoregiao.com.br
 
@@ -40,9 +42,8 @@ curto** (abaixo). Áudio de 30 segundos com a sua voz passa mais confiança que 
 
 ## 3. Lembrete (2 dias depois, se não respondeu)
 
-> Oi, [nome]! Só reforçando: no pré-lançamento sua loja entra com **60 dias grátis**, contando só a partir
-> do lançamento em **03/11** (vai ter telão na Getúlio Vargas e anúncio no Instagram). A oferta vai até 30/11.
-> Quer que eu já deixe sua loja pronta? Você só me manda as fotos dos carros. 👍
+> Oi, [nome]! Só reforçando: sua loja entra com **60 dias grátis**, contados a partir do cadastro, sem cartão.
+> O cadastro leva uns 5 minutos no **autoregiao.com.br**. Se quiser, eu passo aí e a gente faz junto. 👍
 
 (Se não responder de novo: **visitar**. Não mandar uma terceira mensagem.)
 
@@ -74,12 +75,12 @@ Quando a loja tiver carros no ar, mande o link da página da loja para o lojista
 | "Já anuncio no CarroSP." | "Continua lá se quiser. Compare: lá até 17 carros custa R$ 193 por mês. Aqui até 15 é R$ 149, até 40 é R$ 219 e até 80 é R$ 329. E os primeiros 60 dias são grátis." (falar na conversa; **não** colocar o nome do concorrente em folheto ou anúncio) |
 | "Não tenho tempo." | "É rapidinho: 5 minutos pra loja e uns 2 por carro, já que a Tabela FIPE preenche marca, modelo e versão. Pode começar com 3 carros." |
 | "Quanto custa depois?" | "A partir de R$ 149 por mês. A maioria das lojas vai para o Profissional, R$ 219, até 40 carros com destaque. Mas você só decide depois dos 60 dias, vendo quantos clientes chamaram." |
-| "Quem vai ver isso?" | "No lançamento, em 03/11, tem telão na Getúlio Vargas, anúncio no Instagram e Facebook da região e app na loja de aplicativos. E todo mês você recebe um relatório com quantas pessoas viram e chamaram." |
+| "Quem vai ver isso?" | "Quem procura carro na região, pelo site e pelo app AutoRegião (Google Play e App Store), além da divulgação no WhatsApp e dos folhetos. E todo mês você recebe um relatório com quantas pessoas viram e chamaram." |
 | "E se eu não vender nada?" | "Você não paga nada nos 60 dias. Se não chamar ninguém, você não continua. Sem multa e sem contrato." |
 | "Precisa de cartão?" | "Não. Depois, se quiser continuar, paga por Pix ou cartão pelo site." |
 | "Tem comissão sobre a venda?" | "Não. O cliente fala direto com você, e a venda é toda sua." |
 | "Vocês financiam?" | "Não. O AutoRegião só mostra os carros. Financiamento continua com você." |
-| "Entro depois do lançamento." | "Pode, mas quem entra agora já aparece no primeiro dia da divulgação, e os 60 dias só começam a contar em 03/11. Você não perde nada entrando antes." |
+| "Entro mais pra frente." | "Pode, os 60 dias contam a partir do seu cadastro. Mas quem entra agora já aparece desde o começo da divulgação." |
 | "Vou pensar." | "Tranquilo. Cadastra só 3 carros pra ver como fica, não custa nada. Qualquer dúvida me chama." |
 
 ## 7. Ordem sugerida de abordagem
@@ -94,8 +95,8 @@ Meta diária para chegar em 10 lojas em 2 semanas: **3 contatos novos por dia + 
 ## 8. Quando chegar em 5 lojas
 
 Mande para as outras lojas (prova social):
-> "[nome], a [Loja A], a [Loja B] e a [Loja C] já estão no AutoRegião. No pré-lançamento ainda dá para entrar
-> com os 60 dias grátis contando só a partir de 03/11. Bora colocar a sua também?"
+> "[nome], a [Loja A], a [Loja B] e a [Loja C] já estão no AutoRegião. Sua loja também entra com 60 dias grátis,
+> contados a partir do cadastro. Bora colocar a sua também?"
 
 ## 9. Referência: preços do concorrente CarroSP (informados pelo Rafael em 16/10/2026)
 

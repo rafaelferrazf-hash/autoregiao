@@ -119,28 +119,28 @@ def peca(nome, arq_foto, foco, titulo, sub, itens, faixa_tit, faixa_linhas, roda
     salvar(nome, "".join(c))
 
 
-peca("status-lojistas-1", "public/banners/anuncie-revendedor.jpg", 0.35,
+peca("status-lojistas-1", "docs/divulgacao-whatsapp/_scripts/fotos/anuncie-revendedor.jpg", 0.35,
      ["Seus carros no", "app da região."], "Para lojas e revendas de Teixeira e região.",
      ["Quem procura carro aqui acha a sua loja", "O cliente chama direto no seu WhatsApp",
       "Sem comissão e sem intermediário", "Relatório de visitas e contatos"],
-     "60 DIAS GRÁTIS", ["Pré-lançamento: só contam a partir de 03/11.", "Sem cartão de crédito. Cadastro em 5 minutos."],
+     "60 DIAS GRÁTIS", ["Contados a partir do seu cadastro.", "Sem cartão de crédito. Cadastro em 5 minutos."],
      "autoregiao.com.br/anunciar")
 
 peca("status-lojistas-2", "docs/kit-lojistas/_scripts/capa-carros.jpg", 0.25,
      ["Sua vitrine", "aberta 24 horas."], "O estoque da sua loja no site e no app AutoRegião.",
      ["Página própria da loja, com logo e endereço", "Anúncio com fotos, FIPE e situação do carro",
       "Destaque e vitrine nos planos maiores", "Funciona no celular, sem complicação"],
-     "ENTRE AGORA", ["Lojas cadastradas até 30/11: 60 dias grátis.", "Dúvidas? Chama a gente aqui no WhatsApp."],
+     "ENTRE AGORA", ["Toda loja nova ganha 60 dias grátis.", "Dúvidas? Chama a gente aqui no WhatsApp."],
      "autoregiao.com.br/anunciar")
 
-peca("status-compradores-1", "public/banners/comprar-casal.jpg", 0.3,
+peca("status-compradores-1", "docs/divulgacao-whatsapp/_scripts/fotos/comprar-casal.jpg", 0.3,
      ["Seu próximo carro", "está na região."], "Carros, motos e utilitários da sua cidade e região.",
      ["Busque por marca, preço, ano e cidade", "Compare o preço com a Tabela FIPE",
       "Fale direto com o vendedor no WhatsApp", "Receba aviso quando o seu carro aparecer"],
      "BUSQUE GRÁTIS", ["Sem cadastro e sem taxa para quem compra.", "Também no app para Android e iPhone."],
      "autoregiao.com.br", app=True)
 
-peca("status-compradores-2", "public/banners/fipe-em-casa.jpg", 0.3,
+peca("status-compradores-2", "docs/divulgacao-whatsapp/_scripts/fotos/fipe-em-casa.jpg", 0.3,
      ["Não pague caro.", "Confira a FIPE."], "Consulte a Tabela FIPE grátis no AutoRegião.",
      ["Valor FIPE de carros e motos", "Selo \"Abaixo da FIPE\" nos anúncios",
       "IPVA pago, único dono, revisões em dia", "Contato direto com o vendedor"],

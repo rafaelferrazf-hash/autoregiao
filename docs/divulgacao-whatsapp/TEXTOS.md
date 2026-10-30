@@ -5,8 +5,8 @@ Sem Instagram por enquanto (decisão do Rafael, 19/10 e 28/10).
 
 | Imagem | Para quem | Quando usar |
 |---|---|---|
-| `status-lojistas-1.jpg` (60 dias grátis, contam a partir de 03/11) | lojistas | **até 02/11** (depois do lançamento a frase "só contam a partir de 03/11" perde o sentido) |
-| `status-lojistas-2.jpg` (vitrine 24 horas, cadastro até 30/11) | lojistas | até 30/11 |
+| `status-lojistas-1.jpg` (60 dias grátis, contados a partir do cadastro) | lojistas | a qualquer momento |
+| `status-lojistas-2.jpg` (vitrine 24 horas, toda loja nova ganha 60 dias) | lojistas | a qualquer momento |
 | `status-compradores-1.jpg` (seu próximo carro está na região) | compradores | **só quando o site tiver estoque real** (meta: 10 lojas, 150 anúncios) |
 | `status-compradores-2.jpg` (Tabela FIPE grátis) | compradores | a qualquer momento (a Tabela FIPE funciona mesmo sem anúncios) |
 
@@ -20,11 +20,11 @@ conhece você.
 ## Legendas para o Status (colar junto com a imagem)
 
 **status-lojistas-1**
-> Lojista de Teixeira e região: coloque seus carros no AutoRegião. 60 dias grátis, contando só a partir do
-> lançamento (03/11). Cadastro em 5 minutos: www.autoregiao.com.br/anunciar
+> Lojista de Teixeira e região: coloque seus carros no AutoRegião. 60 dias grátis, contados a partir do seu
+> cadastro. Cadastro em 5 minutos: www.autoregiao.com.br/anunciar
 
 **status-lojistas-2**
-> Sua loja aberta 24 horas no celular de quem procura carro na região. Lojas cadastradas até 30/11 ganham
+> Sua loja aberta 24 horas no celular de quem procura carro na região. Toda loja nova ganha
 > 60 dias grátis. Dúvidas? Me chama aqui. 👉 www.autoregiao.com.br/anunciar
 
 **status-compradores-1**
@@ -53,7 +53,7 @@ conhece você.
 > ✅ Anúncio com fotos, Tabela FIPE e situação do carro (IPVA pago, único dono...)
 > ✅ Relatório de quantas pessoas viram e chamaram
 >
-> 🎁 *Pré-lançamento:* lojas cadastradas até 30/11 ganham *60 dias grátis*, sem cartão de crédito.
+> 🎁 Toda loja nova ganha *60 dias grátis*, sem cartão de crédito.
 >
 > 👉 www.autoregiao.com.br/anunciar
 > Qualquer dúvida, é só me chamar: (73) 99820-9698

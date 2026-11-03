@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Capa Facebook AutoRegião</title>
+<style>
+  /* Capa da página do Facebook: 1640×624 (o Facebook mostra 820×312 no computador e corta as laterais no celular).
+     Tudo o que importa fica na faixa central (x 270–1370), longe da foto de perfil no canto de baixo à esquerda. */
+  @font-face { font-family: Exo2; src: url(../../../assets/fontes/Exo2-ExtraBold.ttf); font-weight: 800; }
+  @font-face { font-family: Jakarta; src: url(../../../assets/fontes/PlusJakartaSans-Medium.ttf); font-weight: 500; }
+  @font-face { font-family: Jakarta; src: url(../../../assets/fontes/PlusJakartaSans-Bold.ttf); font-weight: 700; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { width: 1640px; height: 624px; overflow: hidden; background: #141311; font-family: Jakarta, sans-serif; }
+  .capa { position: relative; width: 1640px; height: 624px; overflow: hidden; }
+  .foto { position: absolute; top: 0; right: 0; width: 1040px; height: 624px;
+          background: url(../../../public/banners/comprar-showroom.jpg) 62% 30% / cover no-repeat; }
+  .esfuma { position: absolute; inset: 0;
+            background: linear-gradient(90deg, #141311 0%, #141311 36%, rgba(20,19,17,0.88) 46%, rgba(20,19,17,0.25) 64%, rgba(20,19,17,0) 78%); }
+  .base { position: absolute; left: 0; right: 0; bottom: 0; height: 10px; background: #FF6600; }
+  .texto { position: absolute; left: 300px; top: 92px; width: 640px; color: #fff; }
+  .logo { height: 54px; display: block; margin-bottom: 30px; }
+  h1 { font-family: Exo2, sans-serif; font-weight: 800; font-size: 58px; line-height: 1.05; letter-spacing: -0.5px; }
+  h1 span { color: #FF7A1F; }
+  .sub { margin-top: 16px; font-size: 22px; color: rgba(255,255,255,0.78); line-height: 1.35; }
+  .itens { display: flex; gap: 10px; margin-top: 24px; flex-wrap: wrap; }
+  .item { display: flex; align-items: center; gap: 8px; padding: 9px 14px; border-radius: 999px;
+          background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); font-size: 17px; font-weight: 700; }
+  .item i { width: 9px; height: 9px; border-radius: 50%; background: #FF6600; display: block; }
+  .rodape { display: flex; align-items: center; gap: 16px; margin-top: 26px; }
+  .site { font-weight: 700; font-size: 22px; color: #fff; background: #FF6600; padding: 10px 18px; border-radius: 10px; }
+  .selo { height: 44px; display: block; }
+</style>
+</head>
+<body>
+  <div class="capa">
+    <div class="foto"></div>
+    <div class="esfuma"></div>
+    <div class="texto">
+      <img class="logo" src="../../../public/marca/logo-horizontal-branco.svg" alt="AutoRegião">
+      <h1>Seu próximo carro<br><span>está na região.</span></h1>
+      <p class="sub">Carros, motos e utilitários de Teixeira de Freitas e região.</p>
+      <div class="itens">
+        <div class="item"><i></i>Lojas da região</div>
+        <div class="item"><i></i>Tabela FIPE grátis</div>
+        <div class="item"><i></i>Direto no WhatsApp</div>
+      </div>
+      <div class="rodape">
+        <div class="site">autoregiao.com.br</div>
+        <img class="selo" style="height:57px;margin:-6.5px -4px" src="../../../public/banners/google-play.png" alt="Google Play">
+        <img class="selo" src="../../../public/banners/app-store.svg" alt="App Store">
+      </div>
+    </div>
+    <div class="base"></div>
+  </div>
+</body>
+</html>

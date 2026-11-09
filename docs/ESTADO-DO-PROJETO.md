@@ -37,6 +37,7 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
 | Mercado Pago | Checkout Pro dos planos — **PRODUÇÃO na Vercel desde 07/10/2026** (setor "Outros"; webhook de produção em /api/pagamentos/webhook, evento Pagamentos). O `.env.local` continua com a chave de TESTE (vendedor de teste: só paga comprador de teste) | rafaelferrazf@hotmail.com |
 | WhatsApp Business | atendimento AutoRegião: (73) 99820-9698, nome de usuário **@autoregiao** reservado (19/10/2026), categorias Serviço automotivo + Site, saudação/ausência/respostas rápidas (loja, fotos, planos, site, cadastro) e listas configuradas. Imagens de perfil em `docs/marca-whatsapp/` | — |
 | Google Search Console | propriedade de domínio verificada por TXT; sitemap enviado | rafaelferrazf05@gmail.com |
+| Facebook + Instagram | Página nova "AutoRegião" (criada em 04/11/2026; categorias Compras e varejo, Site, Serviço automotivo; WhatsApp conectado) + Instagram profissional **@autoregiaooficial** ligado à página. Uso: posts e impulsionamento. Página antiga da revenda NÃO é usada. Capa e 12 posts publicados em 04/11/2026 (artes e legendas em `docs/redes-sociais/posts-iniciais/` e `lote-2/`; Stories e capas dos Destaques em `lote-2/`) | conta pessoal do Rafael no Facebook |
 - **Admin único do site:** rafaelferrazf05@gmail.com (`NEXT_PUBLIC_ADMIN_EMAILS`). Conta de admin é só admin.
 - **Lojista de teste:** rafaelferrazf@hotmail.com → loja "Auto Paulista" (plano vitalício), 2 anúncios (Civic, Onix).
 - 2FA ligado em: Gmail, Registro.br, Vercel, Hotmail, GitHub, Mercado Pago (08/10: chaves de acesso, celular, e-mail,
@@ -169,6 +170,9 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
   `public/banners/`; campo `posicao` no slide ajusta o recorte; imagens com lado escuro usam `largura: "100%"`).
   AVISO: `npm audit` aponta falhas no Next.js 16.2.7 (inclusive crítica) — atualizar depois do lançamento, com testes.
 
+- 05/11/2026: PDF da identidade visual em `docs/identidade-visual/` e camisa para sublimação total em `docs/camisa-sublimacao/` (tamanho M de referência, PDF 1:1 e SVG editável; falta aplicar o molde real; sem CorelDRAW neste computador, então não há .cdr).
+- 09/11/2026: a bolinha do anúncio flutuante passeia pela tela inteira (trecho a cada 7 s) e balança a cada 6 s (pedido do Rafael, ciente do risco nas revisões do Google/Apple); volta ao canto ao abrir o cartão; parada com "reduzir movimento". Logo do flutuante: quadrada, 500×500 px.
+
 ## Pendências (em ordem sugerida)
 **Roteiro do lançamento (13/10/2026): `docs/ROTEIRO-LANCAMENTO.md`**. Etapas, responsáveis, checagem final em 30/10
 e lançamento sugerido em 03/11/2026. Seguir e marcar por lá.
@@ -297,3 +301,4 @@ e lançamento sugerido em 03/11/2026. Seguir e marcar por lá.
 3. ✅ 2FA em todas as contas importantes (Mercado Pago e Supabase em 08/10).
 4. Antes do lançamento: **apagar os 20 anúncios de demonstração** (só a conta da Auto Paulista logada vê — fase14; `delete from public.veiculos where demonstracao = true;` — fotos em `public/demo/`, licença livre Wikimedia, créditos na descrição) e trocar os de teste por reais; revisar textos de /termos e /privacidade.
 5. Futuro: App Store (US$99/ano), notificações push, planos pagos para particulares.
+6. **Redes sociais (assunto guardado pelo Rafael em 04/11/2026, retomar depois):** (a) ele ainda vai publicar os 6 Stories e criar os 4 Destaques pelo celular (arquivos e tabela em `docs/redes-sociais/lote-2/LEGENDAS.md`); (b) mais posts e Stories só DEPOIS que os lojistas entrarem; ritmo sugerido: boas-vindas a cada loja nova, 2–3 carros reais por semana, 3–5 Stories, 1 dica e 1 Reels por semana, sempre com OK do lojista e marcando a loja; até lá, 1 post por semana se a entrada demorar; (c) decidir se volta ao treinamento e às mensagens a promessa simples "post de boas-vindas para cada loja nova"; (d) campanha para lojistas: faltam cidades, verba e a forma de pagamento na conta de anúncios (Rafael cadastra).

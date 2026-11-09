@@ -3,14 +3,44 @@ import { useEffect, useState, useSyncExternalStore } from "react";
 import Icone from "@/components/Icone";
 import type { FlutuantePublico } from "@/lib/banners";
 
-// Anúncio patrocinado flutuante: bolinha com a logo + selo (ex.: "-10%") no canto da tela.
-// Ao tocar, abre um cartão com a oferta e o botão. O "x" do cartão só fecha o cartão;
-// o "x" pequeno da bolinha esconde o anúncio até o dia seguinte (neste aparelho).
+// Anúncio patrocinado flutuante: bolinha com a logo + selo (ex.: "-10%") que passeia pela tela
+// (pedido do Rafael, 09/11/2026) e dá um balanço a cada 6 s. Ao tocar, volta ao canto e abre um cartão
+// com a oferta e o botão. O "x" do cartão só fecha o cartão; o "x" pequeno da bolinha esconde o anúncio
+// até o dia seguinte (neste aparelho). Com "reduzir movimento" ligado no aparelho, fica parada no canto.
 // Dados: tabela anuncios_flutuantes (supabase/fase28); o sorteio e a contagem ficam em ExibirFlutuante.
 export type AnuncioFlutuanteDados = FlutuantePublico;
 
 const CHAVE = "autoregiao:flutuante-fechado";
 const hoje = () => new Date().toLocaleDateString("en-CA", { timeZone: "America/Sao_Paulo" });
+
+const BOLA = 72;
+const MARGEM = 14; // distância do canto (esquerda)
+const BASE = 84; // distância do canto (embaixo), acima da barra do celular
+const TOPO = 90; // não sobe por cima do cabeçalho do site
+const TRAJETO_MS = 7000; // tempo de cada trecho do passeio
+
+const ESTILO = `
+@keyframes ar-flutuante-chama {
+  0%, 82%, 100% { transform: rotate(0deg) scale(1); }
+  85% { transform: rotate(-12deg) scale(1.12); }
+  88% { transform: rotate(12deg) scale(1.12); }
+  91% { transform: rotate(-8deg) scale(1.08); }
+  94% { transform: rotate(5deg) scale(1.04); }
+  97% { transform: rotate(0deg) scale(1); }
+}
+.ar-flutuante-chama { animation: ar-flutuante-chama 6s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .ar-flutuante-chama { animation: none; } }`;
+
+function movimentoReduzido() {
+  try { return window.matchMedia("(prefers-reduced-motion: reduce)").matches; } catch { return false; }
+}
+
+// Ponto aleatório dentro da tela, como deslocamento a partir do canto inferior esquerdo.
+function pontoAleatorio() {
+  const largura = Math.max(0, window.innerWidth - BOLA - MARGEM * 2);
+  const altura = Math.max(0, window.innerHeight - BOLA - BASE - TOPO);
+  return { x: Math.round(Math.random() * largura), y: -Math.round(Math.random() * altura) };
+}
 
 const semAssinatura = () => () => {};
 
@@ -27,9 +57,21 @@ export default function AnuncioFlutuante({ anuncio, aoMostrar, aoAbrir, aoClicar
   const fechado = useSyncExternalStore(semAssinatura, () => fechadoHoje(anuncio.id), () => false);
   const [escondido, setEscondido] = useState(false);
   const [aberto, setAberto] = useState(false);
+  const [posicao, setPosicao] = useState({ x: 0, y: 0 });
   const visivel = !fechado && !escondido;
   useEffect(() => { if (visivel) aoMostrar?.(); }, [visivel, aoMostrar]);
+
+  // Passeio: a cada trecho escolhe um novo ponto; parado enquanto o cartão está aberto.
+  useEffect(() => {
+    if (!visivel || aberto || movimentoReduzido()) return;
+    const anda = () => setPosicao(pontoAleatorio());
+    const primeiro = setTimeout(anda, 1500);
+    const repete = setInterval(anda, TRAJETO_MS);
+    return () => { clearTimeout(primeiro); clearInterval(repete); };
+  }, [visivel, aberto]);
+
   if (!visivel) return null;
+  const desloca = aberto ? { x: 0, y: 0 } : posicao;
 
   const esconderHoje = () => {
     try { localStorage.setItem(CHAVE, `${anuncio.id}|${hoje()}`); } catch {}
@@ -38,7 +80,10 @@ export default function AnuncioFlutuante({ anuncio, aoMostrar, aoAbrir, aoClicar
   const externo = /^https?:\/\//i.test(anuncio.link);
 
   return (
-    <div style={{ position: "fixed", left: 14, bottom: "calc(84px + env(safe-area-inset-bottom, 0px))", zIndex: 55 }}>
+    <div style={{ position: "fixed", left: MARGEM, bottom: `calc(${BASE}px + env(safe-area-inset-bottom, 0px))`, zIndex: 55,
+      transform: `translate(${desloca.x}px, ${desloca.y}px)`,
+      transition: `transform ${aberto ? 600 : TRAJETO_MS}ms ease-in-out` }}>
+      <style>{ESTILO}</style>
       {aberto && (
         <div role="dialog" aria-label={`Patrocinado: ${anuncio.anunciante}`}
           style={{ position: "absolute", left: 0, bottom: 84, width: "min(340px, calc(100vw - 28px))" }}>
@@ -63,7 +108,7 @@ export default function AnuncioFlutuante({ anuncio, aoMostrar, aoAbrir, aoClicar
         </div>
       )}
 
-      <div style={{ position: "relative", width: 72, height: 72 }}>
+      <div className={aberto ? undefined : "ar-flutuante-chama"} style={{ position: "relative", width: BOLA, height: BOLA }}>
         <button type="button" aria-label={`Patrocinado: ${anuncio.anunciante}. Ver oferta`}
           onClick={() => { if (!aberto) aoAbrir?.(); setAberto(a => !a); }}
           style={{ width: 72, height: 72, borderRadius: 36, padding: 0, border: "3px solid #fff", background: "#fff", boxShadow: "0 6px 18px rgba(0,0,0,0.28)", overflow: "hidden", cursor: "pointer", display: "block" }}>

@@ -67,6 +67,26 @@ Quando a loja tiver carros no ar, mande o link da página da loja para o lojista
    digita; você só acompanha) ou "Cadastra 3 carros hoje e me avisa que eu confiro como ficou."
 6. Deixar o **folder** (e um bolinho de panfletos dos compradores) e anotar no **RD Station CRM** (anotação + tarefa).
 
+## 5b. Depois do cadastro: acompanhamento dos 60 dias (no RD Station)
+
+O plano grátis do RD não deixa criar coluna nova, então usamos a coluna **"Proposta enviada"** (= "Cadastrada –
+nos 60 dias grátis") + **tarefas com data**. Assim que a loja se cadastrar, mover o cartão e criar estas 4 tarefas:
+
+| Quando | Tarefa | Para quê |
+|---|---|---|
+| **Dia 3** | "Conferir carros no ar" | Ver se cadastrou carros; se não, ajudar pelo WhatsApp |
+| **Dia 30** | "Mandar relatório do 1º mês" | Mostrar quantas pessoas viram e chamaram no WhatsApp (aba "Relatórios" do /admin) |
+| **Dia 50** | "Visita de renovação" | **Visita presencial 10 dias antes de acabar o grátis**, com o relatório na mão: "Olha quantos clientes chamaram. Vamos continuar?" |
+| **Dia 60** | "Fim do grátis – conferir se pagou" | Ver no /admin se assinou |
+
+**No dia 60:**
+- **Pagou:** no cartão, **"Ganhar" (Vendida)** e escolher o plano (Básico, Profissional ou Premium).
+- **Não pagou:** não marcar como perdida ainda (há 3 dias de carência). Fazer **nova visita** com o relatório de contatos.
+  Se mesmo assim não quiser: **"Perder"** com o motivo certo e tarefa para **daqui a 30 dias**: "Tentar de novo".
+
+Por que no dia 50: depois do dia 60 os anúncios saem do ar e o lojista "esfria". No dia 50 ele ainda está recebendo
+contatos, e a decisão fica mais fácil. O **relatório mensal** é o argumento mais forte.
+
 ## 6. Respostas para as perguntas e objeções mais comuns
 
 | Ele diz | Você responde |

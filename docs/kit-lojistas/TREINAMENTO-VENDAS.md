@@ -1,6 +1,6 @@
 # Treinamento de vendas AutoRegião — como apresentar, convencer e fechar com o lojista
 
-Versão 1 — 30/10/2026. Para o Rafael e para quem for vender o AutoRegião às lojas.
+Versão 2 — 12/11/2026 (controle no RD Station e acompanhamento dos 60 dias). Para o Rafael e para quem for vender o AutoRegião às lojas.
 Objetivo: **nunca perder uma venda por falta de argumento ou por insegurança.**
 
 > Como usar: leia tudo uma vez. Depois treine as partes 5, 6 e 8 em voz alta (de preferência com alguém fazendo
@@ -107,7 +107,8 @@ fecha. Se o dono não estiver, deixe o folder, pegue o WhatsApp dele e marque um
       almoço. Se o lojista estiver atendendo cliente, **espere ou volte**: nunca interrompa uma venda.
 - [ ] **Aparência:** roupa simples e arrumada, camiseta/boné AutoRegião se tiver. Chegue sorrindo, sem pressa.
 - [ ] **Saiba seu objetivo da visita:** (a) cadastrar a loja + 3 carros agora, ou (b) no mínimo marcar dia e hora.
-- [ ] Planilha de controle (`controle-lojas.csv`) para anotar: data, quem atendeu, resposta, próximo passo.
+- [ ] **RD Station CRM** no celular: cada loja é um cartão. Depois de cada conversa, uma **anotação** (o que foi dito)
+  e uma **tarefa** com data e hora (próximo passo).
 
 ---
 
@@ -292,17 +293,23 @@ Peça indicação: *"Qual outra loja aqui você acha que gostaria de conhecer?"*
 
 ## 9. Os 60 dias grátis: como transformar em cliente pagante
 
-O cadastro é só o começo. **Loja que não usa, não paga.** Acompanhe:
+O cadastro é só o começo. **Loja que não usa, não paga.**
+
+**No RD Station:** quando a loja se cadastrar, mova o cartão para **"Proposta enviada"** (= cadastrada, nos 60 dias
+grátis) e crie na hora as tarefas com data marcadas com ★ abaixo. O celular te avisa em cada uma.
 
 | Quando | O que fazer |
 |---|---|
 | **Dia 1** | Mensagem de parabéns com o link da loja (modelo acima). |
-| **Dia 3** | "Conseguiu colocar o resto dos carros?" Se tiver menos de 10, ofereça ajuda presencial. |
+| **Dia 3** ★ | "Conseguiu colocar o resto dos carros?" Se tiver menos de 10, ofereça ajuda presencial. |
 | **Semana 2** | Mostre os números do painel: "Seus carros já tiveram X visualizações." Ensine o **Divulgar**. |
-| **Semana 4** | Relatório do mês (dia 1º): comente os contatos. Pergunte se algum cliente veio pelo AutoRegião. **Anote os casos de sucesso** (com permissão, viram prova social). |
+| **Dia 30** ★ | Relatório do mês (aba "Relatórios" do /admin, botão WhatsApp): comente os contatos. Pergunte se algum cliente veio pelo AutoRegião. **Anote os casos de sucesso** (com permissão, viram prova social). |
 | **Dia 45** | Aviso amigável: "Seus 60 dias terminam em [data]. Vamos ver qual plano faz sentido para o seu estoque?" |
-| **Dia 55** | Conversa de plano: mostre os números e recomende pelo tamanho do estoque (até 15 → Básico; até 40 → Profissional; mais → Premium). Lembre do desconto trimestral/semestral. |
-| **Dia 60+** | Se não pagou: a loja sai do ar, mas a conta continua. "Quando quiser voltar, é só escolher o plano." Volte a falar em 30 dias. |
+| **Dia 50** ★ | **Visita de renovação (presencial)**, 10 dias antes de acabar o grátis, com o relatório na mão: mostre os números e recomende pelo tamanho do estoque (até 15 → Básico; até 40 → Profissional; mais → Premium). Lembre do desconto trimestral/semestral. |
+| **Dia 60** ★ | Conferir no /admin se pagou. **Pagou:** no RD, **"Ganhar"** e escolher o plano. **Não pagou:** há 3 dias de carência; faça **nova visita** com o relatório. Se mesmo assim não quiser: **"Perder"** com o motivo certo e tarefa para **daqui a 30 dias** ("Tentar de novo"). A conta continua: "Quando quiser voltar, é só escolher o plano." |
+
+Por que a visita é no dia 50 e não no 60: depois do dia 60 os anúncios saem do ar e o lojista "esfria". No dia 50
+ele ainda está recebendo contatos, e a decisão fica mais fácil.
 
 **Frase para a conversa de plano:**
 > "Nesses 60 dias seus carros tiveram [X] visualizações e [Y] contatos no WhatsApp. Se uma dessas conversas virou
@@ -330,7 +337,18 @@ O cadastro é só o começo. **Loja que não usa, não paga.** Acompanhe:
 
 ## 11. Suas metas e o seu funil
 
-Acompanhe toda semana na planilha `controle-lojas.csv`:
+Acompanhe toda semana no **RD Station CRM** (quantos cartões em cada coluna):
+
+| Coluna do RD | Para você significa |
+|---|---|
+| Sem contato | A contatar |
+| Contato feito | Mensagem enviada |
+| Identificação do interesse | Visita marcada |
+| Apresentação | Visitou, está pensando |
+| Proposta enviada | Cadastrada (nos 60 dias grátis) |
+| Ganhar / Perder | Pagou o 1º plano / não quis (com motivo) |
+
+Metas:
 
 | Etapa | Meta por semana |
 |---|---|

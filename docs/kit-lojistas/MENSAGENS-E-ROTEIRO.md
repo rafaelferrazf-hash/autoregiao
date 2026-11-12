@@ -58,6 +58,11 @@ curto** (abaixo). Áudio de 30 segundos com a sua voz passa mais confiança que 
 > Depois: "Novo anúncio" → escolhe o carro na lista da Tabela FIPE → coloca as fotos (6 a 10, de dia, carro limpo).
 > Coloca também o logo e uma foto da fachada no "Perfil da loja". Qualquer dúvida, me chama aqui. 🚗
 
+<!-- TELA anunciar.png | 0-600 | autoregiao.com.br/anunciar | 1:92,434,206,51 -->
+<!-- TELA cadastro-lojista.png | 150-1060 | Tipo "Lojista" e os dados da loja | 1:253,220,100,68 -->
+
+Passo a passo completo, com prints: **Apostila 4 — Cadastro da loja e dos veículos**.
+
 Quando a loja tiver carros no ar, mande o link da página da loja para o lojista. Ele vai querer mostrar para os outros.
 
 ## 5. Roteiro da visita (2 a 5 minutos)

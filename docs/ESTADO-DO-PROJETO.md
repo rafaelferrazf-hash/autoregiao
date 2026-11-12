@@ -175,6 +175,10 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
 
 - 12/11/2026: folders dos lojistas e panfletos dos compradores ENTREGUES; carro plotado; uniformes em confecção; QR do impresso
   testados e OK (iPhone e Android). Prospecção de lojistas no RD Station CRM (grátis): 37 lojas importadas. Ainda 0 lojas reais no site.
+  Apostilas de treinamento em PDF (capa + logo no topo de cada página, prints do celular com marcações):
+  1 `kit-lojistas/TREINAMENTO-VENDAS`, 2 `kit-lojistas/MENSAGENS-E-ROTEIRO`, 3 `ROTEIRO-LANCAMENTO`,
+  4 `kit-lojistas/CADASTRO-LOJA-E-VEICULOS` (nova: criar conta, painel, perfil, cadastrar veículo). Prints recortados em
+  `docs/kit-lojistas/prints/` (loja de teste Auto Paulista; refazer com loja real depois do lançamento).
 
 ## Pendências (em ordem sugerida)
 **Roteiro do lançamento (13/10/2026): `docs/ROTEIRO-LANCAMENTO.md`**. Etapas, responsáveis, checagem final em 30/10

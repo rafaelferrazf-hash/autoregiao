@@ -48,6 +48,9 @@ Objetivo: **nunca perder uma venda por falta de argumento ou por insegurança.**
 | **App Android e iPhone** | O comprador baixa o app (Google Play e App Store) e recebe **aviso de carro novo** no celular. |
 | **Ferramentas do comprador** | Busca por marca, preço, ano, cidade, "Perto de mim", busca por valor da parcela, comparar carros, favoritos e alertas. "O comprador fica no site porque é fácil achar carro." |
 
+<!-- TELA anuncio-topo.png | 0-844 | Anúncio: selo de preço e botões WhatsApp e Ligar | 1:30,563,112,30; 2:14,783,150,51 -->
+<!-- TELA loja.png | 0-844 | Página própria da loja | -->
+
 ### Planos (depois dos 60 dias grátis)
 | Plano | Preço | Carros no ar | Diferenciais |
 |---|---|---|---|
@@ -62,6 +65,10 @@ Objetivo: **nunca perder uma venda por falta de argumento ou por insegurança.**
 - Pagamento pelo site: **Pix, cartão ou boleto** (Mercado Pago). Trimestral tem **5% de desconto**, semestral **10%**.
 - Contam só os carros **no ar**. Vendidos e pausados não contam.
 - Pessoa física: 1 anúncio grátis por 60 dias (não é o foco desta venda).
+
+<!-- TELA anunciar.png | 1795-2250 | Básico | -->
+<!-- TELA anunciar.png | 2235-2790 | Profissional (mais popular) | -->
+<!-- TELA anunciar.png | 2795-3335 | Premium | -->
 
 ### Contas rápidas para usar na conversa (decore)
 - Profissional: R$ 219 ÷ 40 carros = **R$ 5,48 por carro por mês** ≈ **R$ 0,18 por carro por dia**.
@@ -146,6 +153,10 @@ Entregue o celular **para ele segurar**. Siga esta ordem:
 5. **Painel** (conta de demonstração) → números de visualizações e contatos + **Divulgar**: gere um post de
    Status na frente dele. *"Você posta isso no seu Status em 10 segundos."* (Esse costuma ser o momento "uau".)
 
+<!-- TELA inicio-logado.png | 0-780 | 1. Página inicial | -->
+<!-- TELA painel-topo.png | 0-844 | 5. Painel com os números | 1:22,72,346,136 -->
+<!-- TELA divulgar.png | 980-1540 | 5. Divulgar: posts prontos | -->
+
 Regra: **mostre só o que conecta com a dor que ele falou.** Não faça tour de tudo.
 
 ### Etapa 4 — Proposta (1 minuto)
@@ -174,6 +185,8 @@ Faça junto, **no celular dele**, pelo navegador (não pelo app):
 5. **3 primeiros carros:** use carros que estão no pátio, tire as fotos na hora se precisar.
 6. Abra a página da loja no ar e mostre para ele: *"Pronto, sua loja está no ar."* Tire um print e mande no
    WhatsApp dele. Esse é o momento de orgulho que ele vai mostrar para os outros.
+
+Passo a passo com prints de todas as telas: **Apostila 4 — Cadastro da loja e dos veículos**.
 
 ### Etapa 7 — Combinar o próximo passo (1 minuto)
 > "Hoje à noite você coloca o resto do estoque? Amanhã eu te mando uma mensagem para ver se ficou tudo certo."

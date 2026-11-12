@@ -173,6 +173,9 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
 - 05/11/2026: PDF da identidade visual em `docs/identidade-visual/` e camisa para sublimação total em `docs/camisa-sublimacao/` (tamanho M de referência, PDF 1:1 e SVG editável; falta aplicar o molde real; sem CorelDRAW neste computador, então não há .cdr).
 - 09/11/2026: a bolinha do anúncio flutuante passeia pela tela inteira (trecho a cada 7 s) e balança a cada 6 s (pedido do Rafael, ciente do risco nas revisões do Google/Apple); volta ao canto ao abrir o cartão; parada com "reduzir movimento". Logo do flutuante: quadrada, 500×500 px.
 
+- 12/11/2026: folders dos lojistas e panfletos dos compradores ENTREGUES; carro plotado; uniformes em confecção; QR do impresso
+  testados e OK (iPhone e Android). Prospecção de lojistas no RD Station CRM (grátis): 37 lojas importadas. Ainda 0 lojas reais no site.
+
 ## Pendências (em ordem sugerida)
 **Roteiro do lançamento (13/10/2026): `docs/ROTEIRO-LANCAMENTO.md`**. Etapas, responsáveis, checagem final em 30/10
 e lançamento sugerido em 03/11/2026. Seguir e marcar por lá.

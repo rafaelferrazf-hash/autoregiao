@@ -10,6 +10,16 @@ Se um item crítico falhar, adia o lançamento (o site continua no ar normalment
 lojistas começa em **09/11**. Oferta: toda loja nova ganha 60 dias grátis contados do cadastro, sem prazo (fase30).
 Onde abaixo aparece "03/11" como dia do lançamento, ler "dia do lançamento (a definir)".
 
+**Situação em 12/11/2026:**
+- ✅ Apps publicados: Android na Play Store (23/10) e iPhone na App Store (29/10).
+- ✅ Material pronto: folders dos lojistas e panfletos dos compradores **chegaram**; carro **plotado** com a marca;
+  uniformes **em confecção**. ✅ QR codes do impresso testados pelo Rafael em 12/11 (folder, panfleto, /app no iPhone e Android).
+- ✅ Prospecção no **RD Station CRM** (RD Vendas, grátis): 37 lojas de Teixeira importadas em "Sem contato";
+  contatos começaram em 09/11.
+- ❌ Lojas reais no site: **0** (as 4 do banco são de teste/revisão + MaisCAr). Anúncios reais: 0. Meta: 10 lojas / 150 anúncios.
+- Pendentes críticos: data do lançamento, contador/MEI (1.5), Resend (2.15), Vercel Pro (2.16), testes 2.5–2.9, cópia do banco (2.18).
+- Preço de fundador (1.3): **descartado** pelo Rafael (26/10).
+
 Legenda: 👤 = Rafael · 🤖 = Claude (no código) · 🔴 = crítico (bloqueia o lançamento) · 🟡 = importante · 🟢 = desejável
 
 ---

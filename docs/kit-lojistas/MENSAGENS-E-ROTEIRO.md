@@ -6,9 +6,9 @@ sem prazo para entrar. (A regra antiga do pré-lançamento, "contam só a partir
 o folder impresso ainda traz essa frase, mas quem se cadastra depois de 03/11 já conta do cadastro, então não conflita.)
 Contato com os lojistas a partir de **09/11**.
 
-Meta (roteiro, Etapa 4): **10 lojas e 150 anúncios reais até 30/10**.
-Folheto para imprimir: `folheto-lojistas_A5_frente-e-verso_com-sangria-3mm.pdf` (A5, frente e verso, papel couchê
-150–250 g; avisar a gráfica que o arquivo **já tem 3 mm de sangria**). Controle das lojas: `controle-lojas.csv`.
+Meta para o lançamento: **10 lojas e 150 anúncios reais** (data do lançamento em aberto).
+Material: **folder dos lojistas** e **panfletos dos compradores** já impressos (QR codes testados em 12/11).
+Controle das lojas: **RD Station CRM** (cada loja é um cartão; anotação + tarefa depois de cada conversa).
 
 **Decisão do Rafael (19/10/2026): o próprio lojista cadastra a loja e os carros.** Não oferecer cadastrar por ele;
 oferecer **ajuda pelo WhatsApp** se tiver dúvida.
@@ -29,6 +29,11 @@ chama a loja direto no WhatsApp.
 > O cadastro leva uns 5 minutos.
 >
 > Posso passar aí uns 5 minutinhos para te mostrar? Ou dá uma olhada: www.autoregiao.com.br
+
+**Se não souber o nome** (no RD está "Nome a confirmar"), comece assim e mantenha o resto igual:
+> Bom dia! Tudo bem? Falo com a **[nome da loja]**? Aqui é o Rafael, de Teixeira.
+
+Quando responderem, pergunte o nome e atualize o contato no cartão do RD.
 
 Dica: mande **em horário calmo** (9h–11h ou 14h–16h, de terça a sexta) e, se puder, **depois mande um áudio
 curto** (abaixo). Áudio de 30 segundos com a sua voz passa mais confiança que texto.

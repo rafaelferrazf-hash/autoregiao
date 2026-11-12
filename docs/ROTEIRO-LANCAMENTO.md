@@ -11,6 +11,7 @@ lojistas começa em **09/11**. Oferta: toda loja nova ganha 60 dias grátis cont
 Onde abaixo aparece "03/11" como dia do lançamento, ler "dia do lançamento (a definir)".
 
 **Situação em 12/11/2026:**
+
 - ✅ Apps publicados: Android na Play Store (23/10) e iPhone na App Store (29/10).
 - ✅ Material pronto: folders dos lojistas e panfletos dos compradores **chegaram**; carro **plotado** com a marca;
   uniformes **em confecção**. ✅ QR codes do impresso testados pelo Rafael em 12/11 (folder, panfleto, /app no iPhone e Android).

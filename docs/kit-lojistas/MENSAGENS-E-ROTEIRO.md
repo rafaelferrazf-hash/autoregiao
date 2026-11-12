@@ -60,12 +60,12 @@ Quando a loja tiver carros no ar, mande o link da página da loja para o lojista
 1. **Abrir com a dor dele** (não com o site): "Hoje, de onde vêm os seus clientes? OLX, Instagram, indicação?"
 2. **Mostrar no celular** (já com o site aberto): busca por cidade → um carro → botão do WhatsApp → página de uma loja.
    Se a loja dele já estiver cadastrada, mostre **a página da loja dele**, porque isso convence na hora.
-3. **A oferta:** "É pré-lançamento: 60 dias grátis, e eles só começam a contar no dia do lançamento. Sem cartão.
+3. **A oferta:** "Sua loja entra com 60 dias grátis, contados a partir do cadastro. Sem cartão.
    Se não gostar, é só não continuar."
 4. **Mostrar que é fácil:** "O cadastro leva 5 minutos e qualquer dúvida você me chama no WhatsApp."
 5. **Fechar com um próximo passo concreto:** "Vamos fazer o cadastro agora? Eu te mostro no seu celular." (ele mesmo
    digita; você só acompanha) ou "Cadastra 3 carros hoje e me avisa que eu confiro como ficou."
-6. Deixar o **folheto** e anotar na planilha (`controle-lojas.csv`).
+6. Deixar o **folder** (e um bolinho de panfletos dos compradores) e anotar no **RD Station CRM** (anotação + tarefa).
 
 ## 6. Respostas para as perguntas e objeções mais comuns
 

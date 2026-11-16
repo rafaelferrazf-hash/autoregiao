@@ -39,7 +39,7 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
 | Google Search Console | propriedade de domínio verificada por TXT; sitemap enviado | rafaelferrazf05@gmail.com |
 | Facebook + Instagram | Página nova "AutoRegião" (criada em 04/11/2026; categorias Compras e varejo, Site, Serviço automotivo; WhatsApp conectado) + Instagram profissional **@autoregiaooficial** ligado à página. Uso: posts e impulsionamento. Página antiga da revenda NÃO é usada. Capa e 12 posts publicados em 04/11/2026 (artes e legendas em `docs/redes-sociais/posts-iniciais/` e `lote-2/`; Stories e capas dos Destaques em `lote-2/`) | conta pessoal do Rafael no Facebook |
 - **Admin único do site:** rafaelferrazf05@gmail.com (`NEXT_PUBLIC_ADMIN_EMAILS`). Conta de admin é só admin.
-- **Lojista de teste:** rafaelferrazf@hotmail.com → loja "Auto Paulista" (plano vitalício), 2 anúncios (Civic, Onix).
+- **Lojista de teste:** rafaelferrazf@hotmail.com → loja "Auto Paulista" (**Premium até 16/05/2027** desde 16/11/2026 — fase33; renovar rodando o SQL de novo), 22 anúncios (todos demonstração). Sem aviso de CNPJ (`LOJAS_SEM_AVISO_CNPJ` em `lib/cnpj.ts`).
 - 2FA ligado em: Gmail, Registro.br, Vercel, Hotmail, GitHub, Mercado Pago (08/10: chaves de acesso, celular, e-mail,
   reconhecimento facial, QR code) e Supabase (08/10: 2 autenticadores — Google Authenticator + app Senhas do iPhone;
   o Supabase NÃO recupera conta sem autenticador).

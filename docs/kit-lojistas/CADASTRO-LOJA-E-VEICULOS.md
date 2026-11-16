@@ -13,22 +13,30 @@ cadastro**: o app só serve para entrar numa conta que já existe.
 
 Peça para o lojista deixar à mão:
 
+- ☐ o **CNPJ da loja** (está no cartão CNPJ, numa nota fiscal ou no contador)
 - ☐ um **e-mail** que ele abre no celular (vai chegar uma confirmação)
 - ☐ o **WhatsApp da loja** (é para onde os clientes vão chamar)
 - ☐ **logo** da loja (imagem quadrada) e uma **foto da fachada** (deitada/horizontal)
 - ☐ **fotos dos carros**: 6 a 10 por carro, de dia, carro limpo
+
+**Conta de loja é só para empresa com CNPJ.** Quem vende carro sem CNPJ (no CPF) não cria loja: anuncia como
+**pessoa física** (tipo **"Vender"**), com 1 anúncio grátis por 60 dias.
 
 ## 1. Criar a conta da loja
 
 **Passo 1.** Abra **www.autoregiao.com.br/anunciar** e toque em **"Criar conta grátis"** (1).
 Quem já tem conta toca em **"Já tenho conta"**.
 
-**Passo 2.** Na tela "Criar conta", toque em **"Lojista"** (1) e preencha os campos (2): nome completo, e-mail,
-WhatsApp, nome da loja, cidade e a **senha (mínimo 8 caracteres), digitada pelo próprio lojista**.
-Toque em **"Criar minha conta"** (3).
+**Passo 2.** Na tela "Criar conta", toque em **"Lojista"** (1) e preencha nome completo, e-mail e WhatsApp (2).
+Digite o **CNPJ da loja** (3): o site confere na Receita Federal, mostra o nome da empresa em verde e já preenche
+o **nome da loja** e a **cidade** (dá para mudar). Por último, a **senha (mínimo 8 caracteres), digitada pelo
+próprio lojista**, e toque em **"Criar minha conta"** (4).
+
+O site **não deixa** criar a loja se o CNPJ estiver errado, se já existir outra loja com ele ou se a empresa
+estiver baixada/inapta na Receita. Cada CNPJ abre **uma** loja só.
 
 <!-- TELA anunciar.png | 0-600 | Passo 1: página "Anunciar" | 1:92,434,206,51 -->
-<!-- TELA cadastro-lojista.png | 150-1060 | Passo 2: escolher "Lojista" e preencher | 1:253,220,100,68; 2:30,300,330,560; 3:37,975,316,52 -->
+<!-- TELA cadastro-lojista.png | 150-1180 | Passo 2: escolher "Lojista" e preencher | 1:253,220,100,68; 2:30,300,330,255; 3:30,565,330,130; 4:37,1104,316,52 -->
 
 **Passo 3. Confirmar o e-mail.** Chega um e-mail do AutoRegião: abra e toque no botão de confirmar.
 Se não chegar em 2 minutos, olhe a pasta **Spam / Lixo eletrônico**.
@@ -62,7 +70,9 @@ Toque em **"Loja"** na barra de baixo. Uma página de loja completa passa confia
 
 1. **Foto de capa:** a fachada da loja, foto **deitada**. Toque em "Trocar foto de capa".
 2. **Logo:** imagem quadrada. Toque em "Trocar imagem".
-3. **Nome da loja, cidade e estado.**
+3. **Nome da loja, cidade e estado.** O **CNPJ** aparece no topo do perfil e não pode ser trocado pelo lojista
+   (para trocar, falar com o AutoRegião). Loja antiga sem CNPJ vê um aviso amarelo: é só digitar e tocar em
+   **"Salvar CNPJ"**.
 4. **WhatsApp** (botão verde dos anúncios) e **Telefone** (botão "Ligar").
 5. **Endereço, horário de atendimento e "Sobre a loja"** (há quanto tempo existe, se financia, se aceita troca).
    O endereço faz aparecer o **mapa** e o botão **"Como chegar"**.
@@ -158,6 +168,10 @@ O plano é pago **pelo site** (no app não aparece): botão **"Plano"** no paine
 |---|---|
 | O e-mail de confirmação não chegou | Esperar 2 minutos e olhar **Spam / Lixo eletrônico**. Conferir se o e-mail foi digitado certo. |
 | Esqueceu a senha | Na tela de entrar: **"Esqueci minha senha"**. Chega um link no e-mail. |
+| Não tem CNPJ | Não dá para criar loja. Cadastrar como **pessoa física** (tipo **"Vender"**): 1 anúncio grátis por 60 dias. |
+| "CNPJ inválido" | Conferir os números no cartão CNPJ ou na nota fiscal. |
+| "Já existe uma loja com este CNPJ" | A loja já tem conta: entrar com o e-mail dela (ou "Esqueci minha senha"). Se não souber, falar com o AutoRegião. |
+| "CNPJ baixado / inapto na Receita" | Só CNPJ **ativo** cria loja. O lojista precisa regularizar com o contador. |
 | Tentou se cadastrar pelo app | No app não tem cadastro. Abrir **www.autoregiao.com.br** no navegador do celular. |
 | O carro não aparece na lista da FIPE | Tocar em **"Não encontrei meu veículo na lista"** e preencher à mão. |
 | A foto não sobe | Usar JPG ou PNG. Se a internet estiver fraca, enviar menos fotos por vez. |

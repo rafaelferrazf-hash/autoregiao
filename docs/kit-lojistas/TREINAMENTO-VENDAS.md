@@ -64,7 +64,8 @@ Objetivo: **nunca perder uma venda por falta de argumento ou por insegurança.**
 - **Sem cartão para começar. Sem fidelidade. Sem multa.** Cancelar = simplesmente não renovar.
 - Pagamento pelo site: **Pix, cartão ou boleto** (Mercado Pago). Trimestral tem **5% de desconto**, semestral **10%**.
 - Contam só os carros **no ar**. Vendidos e pausados não contam.
-- Pessoa física: 1 anúncio grátis por 60 dias (não é o foco desta venda).
+- **Conta de loja só com CNPJ (ativo na Receita).** Cada CNPJ abre uma loja só.
+- Pessoa física (quem vende sem CNPJ): 1 anúncio grátis por 60 dias (não é o foco desta venda).
 
 <!-- TELA anunciar.png | 1795-2250 | Básico | -->
 <!-- TELA anunciar.png | 2235-2790 | Profissional (mais popular) | -->
@@ -113,6 +114,8 @@ fecha. Se o dono não estiver, deixe o folder, pegue o WhatsApp dele e marque um
 - [ ] **Horário bom:** terça a sexta, **9h–11h** ou **14h–16h**. Evite sábado de manhã, fim de mês e horário de
       almoço. Se o lojista estiver atendendo cliente, **espere ou volte**: nunca interrompa uma venda.
 - [ ] **Aparência:** roupa simples e arrumada, camiseta/boné AutoRegião se tiver. Chegue sorrindo, sem pressa.
+- [ ] **Peça para separar o CNPJ da loja** (cartão CNPJ ou nota fiscal) quando marcar a visita: sem ele não dá para
+      criar a loja.
 - [ ] **Saiba seu objetivo da visita:** (a) cadastrar a loja + 3 carros agora, ou (b) no mínimo marcar dia e hora.
 - [ ] **RD Station CRM** no celular: cada loja é um cartão. Depois de cada conversa, uma **anotação** (o que foi dito)
   e uma **tarefa** com data e hora (próximo passo).
@@ -179,7 +182,9 @@ Não pergunte "e aí, o que achou?". Pergunte o próximo passo:
 
 Faça junto, **no celular dele**, pelo navegador (não pelo app):
 1. autoregiao.com.br → **Anunciar** → **Criar conta grátis** → tipo **Lojista**.
-2. Ele preenche nome da loja, e-mail, WhatsApp e **digita a própria senha** (vire o rosto: a senha é dele).
+2. Ele preenche nome, e-mail, WhatsApp e o **CNPJ da loja** (o site confere na Receita e já preenche o nome da
+   loja e a cidade) e **digita a própria senha** (vire o rosto: a senha é dele). Sem CNPJ não tem loja: ele anuncia
+   como pessoa física.
 3. Confirmar o e-mail (ajude a achar na caixa de entrada; se não chegou em 2 minutos, olhar o Spam).
 4. **Perfil da loja:** logo, foto da fachada, endereço.
 5. **3 primeiros carros:** use carros que estão no pátio, tire as fotos na hora se precisar.
@@ -202,6 +207,7 @@ Peça indicação: *"Qual outra loja aqui você acha que gostaria de conhecer?"*
 | Objeção | Resposta |
 |---|---|
 | **"Está caro."** | "Entendo. Mas olha: agora você não paga nada por 60 dias. E depois, no Profissional, dá R$ 5,48 por carro por mês. Quanto você ganha num carro? Uma venda a mais paga o plano por vários meses. E você só decide depois de ver os contatos no relatório." |
+| **"Não tenho CNPJ."** | "Sem problema. Conta de loja é só com CNPJ, mas você pode anunciar como pessoa física: o primeiro carro é grátis por 60 dias. Quando tiver o CNPJ, a gente cria a loja com os 60 dias grátis." |
 | **"Não tenho dinheiro agora."** | "Perfeito, porque agora não precisa. São 60 dias sem pagar nada e sem cartão. Daqui a 2 meses você decide com números na mão." |
 | **"Depois dos 60 dias vocês vão me cobrar sem eu saber?"** | "Não. Não pedimos cartão. Se você não pagar, a loja simplesmente para de aparecer. Não existe cobrança automática nem multa." |
 | **"O Básico de 149 dá?"** | "Se você tem até 15 carros, dá sim. O Profissional compensa quando você quer destaque nas buscas e sua logo nos anúncios — é o que mais chama clique." |

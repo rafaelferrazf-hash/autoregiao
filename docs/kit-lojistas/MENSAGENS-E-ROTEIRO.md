@@ -56,10 +56,11 @@ curto** (abaixo). Áudio de 30 segundos com a sua voz passa mais confiança que 
 
 > Show, [nome]! É só entrar em www.autoregiao.com.br/anunciar e tocar em "Começar grátis" (uns 5 minutos).
 > Depois: "Novo anúncio" → escolhe o carro na lista da Tabela FIPE → coloca as fotos (6 a 10, de dia, carro limpo).
+> Tenha o **CNPJ da loja** à mão: o cadastro pede.
 > Coloca também o logo e uma foto da fachada no "Perfil da loja". Qualquer dúvida, me chama aqui. 🚗
 
 <!-- TELA anunciar.png | 0-600 | autoregiao.com.br/anunciar | 1:92,434,206,51 -->
-<!-- TELA cadastro-lojista.png | 150-1060 | Tipo "Lojista" e os dados da loja | 1:253,220,100,68 -->
+<!-- TELA cadastro-lojista.png | 150-1180 | Tipo "Lojista", dados e CNPJ da loja | 1:253,220,100,68; 2:30,565,330,130 -->
 
 Passo a passo completo, com prints: **Apostila 4 — Cadastro da loja e dos veículos**.
 

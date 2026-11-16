@@ -61,3 +61,11 @@ export async function consultarCnpj(cnpj: string): Promise<DadosCnpj | "nao_enco
     return null;
   }
 }
+
+// Lojas de teste/demonstração que não precisam de CNPJ: o Perfil da Loja não mostra o aviso amarelo.
+// Auto Paulista (demonstrações do Rafael) e as duas lojas usadas pela Apple/Google na revisão dos apps.
+export const LOJAS_SEM_AVISO_CNPJ = [
+  "9c29ad84-1ab6-4e16-8c72-a5916185cabc", // Auto Paulista
+  "973e71c7-537f-404b-95f2-4f256cafdf4d", // Demonstração AutoRegião (revisao@)
+  "bdb9411c-96d5-4a88-99ac-b901c532061d", // Demonstração Plano Vencido (revisao.vencido@)
+];

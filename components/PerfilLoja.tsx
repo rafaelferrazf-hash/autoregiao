@@ -5,7 +5,7 @@ import { atualizarPerfilLoja, enviarCapaLoja, enviarLogoLoja, removerCapaLoja, r
 import LogoLoja from "@/components/LogoLoja";
 import type { Loja } from "@/lib/tipos";
 import Icone from "@/components/Icone";
-import { cnpjValido, formatarCnpj, soDigitosCnpj } from "@/lib/cnpj";
+import { cnpjValido, formatarCnpj, LOJAS_SEM_AVISO_CNPJ, soDigitosCnpj } from "@/lib/cnpj";
 
 const UFS = ["AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"];
 
@@ -193,7 +193,7 @@ export default function PerfilLoja({ loja, onSalvo }: { loja: Loja | null; onSal
           {avisoLogo && <div style={{ fontSize: 12, marginTop: 6, color: avisoLogo.ok ? "#15803D" : "#B91C1C" }}>{avisoLogo.ok && <><Icone nome="ok" />{" "}</>}{avisoLogo.texto}</div>}
         </div>
 
-        <div>
+        {(loja.cnpj || !LOJAS_SEM_AVISO_CNPJ.includes(loja.id)) && <div>
           <label style={rotulo}>CNPJ</label>
           {loja.cnpj ? (
             <>
@@ -220,7 +220,7 @@ export default function PerfilLoja({ loja, onSalvo }: { loja: Loja | null; onSal
             </>
           )}
           {avisoCnpj && <div style={{ fontSize: 12, marginTop: 6, color: avisoCnpj.ok ? "#15803D" : "#B91C1C" }}><Icone nome={avisoCnpj.ok ? "ok" : "atencao"} />{" "}{avisoCnpj.texto}</div>}
-        </div>
+        </div>}
 
         <div>
           <label style={rotulo}>Nome da loja *</label>

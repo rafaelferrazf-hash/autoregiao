@@ -81,6 +81,9 @@ export type Loja = {
   plano: string | null;
   demonstracao?: boolean | null;     // loja fictícia de teste (fase18)
   verificada?: boolean | null;       // selo "Loja verificada" (fase21, só o admin marca)
+  cnpj?: string | null;              // 14 dígitos (fase32; só o servidor grava)
+  razao_social?: string | null;      // da consulta da Receita (fase32)
+  cnpj_situacao?: string | null;     // "ATIVA", "BAIXADA"... (fase32)
   ativo: boolean | null;
   expira_em: string | null;
   criado_em: string | null;

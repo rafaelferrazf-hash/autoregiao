@@ -5,6 +5,7 @@ import { atualizarPerfilLoja, enviarCapaLoja, enviarLogoLoja, removerCapaLoja, r
 import LogoLoja from "@/components/LogoLoja";
 import type { Loja } from "@/lib/tipos";
 import Icone from "@/components/Icone";
+import { cnpjValido, formatarCnpj, soDigitosCnpj } from "@/lib/cnpj";
 
 const UFS = ["AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"];
 
@@ -27,6 +28,9 @@ export default function PerfilLoja({ loja, onSalvo }: { loja: Loja | null; onSal
   const [avisoLogo, setAvisoLogo] = useState<{ ok: boolean; texto: string } | null>(null);
   const [enviandoCapa, setEnviandoCapa] = useState(false);
   const [avisoCapa, setAvisoCapa] = useState<{ ok: boolean; texto: string } | null>(null);
+  const [cnpjNovo, setCnpjNovo] = useState("");
+  const [salvandoCnpj, setSalvandoCnpj] = useState(false);
+  const [avisoCnpj, setAvisoCnpj] = useState<{ ok: boolean; texto: string } | null>(null);
 
   if (!loja) {
     return (
@@ -53,6 +57,23 @@ export default function PerfilLoja({ loja, onSalvo }: { loja: Loja | null; onSal
     if (error || !atualizada) return setMensagem({ ok: false, texto: "Não foi possível salvar. Tente de novo." });
     onSalvo(atualizada);
     setMensagem({ ok: true, texto: "Perfil salvo! As mudanças já aparecem na página da sua loja." });
+  }
+
+  // CNPJ: loja antiga sem CNPJ informa uma vez; o servidor confere na Receita e grava (fase32).
+  async function salvarCnpj() {
+    if (!cnpjValido(cnpjNovo)) return setAvisoCnpj({ ok: false, texto: "CNPJ inválido. Confira os números." });
+    setSalvandoCnpj(true); setAvisoCnpj(null);
+    try {
+      const r = await fetch("/api/conta/cnpj", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ cnpj: cnpjNovo }) });
+      const j = await r.json();
+      if (!r.ok || !j.loja) return setAvisoCnpj({ ok: false, texto: j.erro || "Não foi possível salvar. Tente de novo." });
+      onSalvo(j.loja as Loja);
+      setAvisoCnpj({ ok: true, texto: "CNPJ salvo!" });
+    } catch {
+      setAvisoCnpj({ ok: false, texto: "Sem conexão. Tente de novo." });
+    } finally {
+      setSalvandoCnpj(false);
+    }
   }
 
   // Logo/foto: salva na hora (não depende do botão "Salvar perfil").
@@ -170,6 +191,35 @@ export default function PerfilLoja({ loja, onSalvo }: { loja: Loja | null; onSal
           </div>
           <div style={ajuda}>Aparece na página da sua loja e nos seus anúncios. De preferência quadrado.</div>
           {avisoLogo && <div style={{ fontSize: 12, marginTop: 6, color: avisoLogo.ok ? "#15803D" : "#B91C1C" }}>{avisoLogo.ok && <><Icone nome="ok" />{" "}</>}{avisoLogo.texto}</div>}
+        </div>
+
+        <div>
+          <label style={rotulo}>CNPJ</label>
+          {loja.cnpj ? (
+            <>
+              <div style={{ ...campo, background: "#F0EFEB", color: "#1A1917" }}>{formatarCnpj(loja.cnpj)}</div>
+              <div style={ajuda}>
+                {loja.razao_social ? <>{loja.razao_social}{loja.cnpj_situacao ? ` · ${loja.cnpj_situacao.toLowerCase()} na Receita` : ""}. </> : null}
+                Para trocar o CNPJ, fale com o AutoRegião.
+              </div>
+            </>
+          ) : (
+            <>
+              <div style={{ background: "#FFF8E1", border: "1.5px solid #FDE68A", borderRadius: 8, padding: "10px 12px", fontSize: 13, color: "#92400E", marginBottom: 8 }}>
+                <Icone nome="atencao" /> Informe o CNPJ da loja. Conta de loja é só para empresa com CNPJ.
+              </div>
+              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                <input inputMode="numeric" placeholder="00.000.000/0000-00" value={formatarCnpj(cnpjNovo)}
+                  onChange={e => { setCnpjNovo(soDigitosCnpj(e.target.value)); setAvisoCnpj(null); }}
+                  style={{ ...campo, flex: "1 1 200px", width: "auto" }} />
+                <button type="button" onClick={salvarCnpj} disabled={salvandoCnpj}
+                  style={{ padding: "11px 18px", background: "#FF6600", color: "#fff", border: "none", borderRadius: 8, fontSize: 14, fontWeight: 700, cursor: salvandoCnpj ? "wait" : "pointer", opacity: salvandoCnpj ? 0.7 : 1 }}>
+                  {salvandoCnpj ? "Conferindo..." : "Salvar CNPJ"}
+                </button>
+              </div>
+            </>
+          )}
+          {avisoCnpj && <div style={{ fontSize: 12, marginTop: 6, color: avisoCnpj.ok ? "#15803D" : "#B91C1C" }}><Icone nome={avisoCnpj.ok ? "ok" : "atencao"} />{" "}{avisoCnpj.texto}</div>}
         </div>
 
         <div>

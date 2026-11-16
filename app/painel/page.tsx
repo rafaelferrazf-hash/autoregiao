@@ -52,6 +52,12 @@ export default function Painel() {
       setLoja(loja);
       setLojaCarregada(true);
 
+      // Loja nova: completa o nome da empresa e a situação na Receita a partir do CNPJ do cadastro (fase32).
+      if (loja?.cnpj && !loja.razao_social) {
+        fetch("/api/conta/cnpj", { method: "POST" }).then(r => r.json())
+          .then(j => { if (j.loja) setLoja(j.loja); }).catch(() => {});
+      }
+
       // Anúncios pelo usuario_id OU loja_id
       const { veiculos } = await listarVeiculosDoUsuario(user.id, loja?.id);
       setAnunciosReais(veiculos);

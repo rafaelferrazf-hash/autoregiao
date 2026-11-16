@@ -15,6 +15,7 @@ import {
 import { formatarPreco } from "@/lib/formatar";
 import Icone, { type NomeIcone } from "@/components/Icone";
 import AdminPublicidade from "@/components/AdminPublicidade";
+import { formatarCnpj } from "@/lib/cnpj";
 import AdminVisitas from "@/components/AdminVisitas";
 
 const ABAS = ["Resumo", "Visitas", "Lojas", "Relatórios", "Banners", "Anúncios", "Usuários"] as const;
@@ -297,6 +298,11 @@ export default function Admin() {
                         <td style={td}>
                           <Link href={`/loja/${loja.id}`} style={{ fontWeight: 600, color: "#1A1917", textDecoration: "none" }}>{loja.nome}</Link>
                           <div style={{ fontSize: 11, color: "#7A7670" }}><Icone nome="local" /> {loja.cidade || "—"}</div>
+                          {!loja.teste && (
+                            <div style={{ fontSize: 11, color: loja.cnpj ? (loja.cnpj_situacao && loja.cnpj_situacao !== "ATIVA" ? "#B91C1C" : "#7A7670") : "#B45309" }}>
+                              {loja.cnpj ? <>CNPJ {formatarCnpj(loja.cnpj)}{loja.cnpj_situacao && loja.cnpj_situacao !== "ATIVA" ? ` · ${loja.cnpj_situacao}` : ""}{loja.razao_social ? <> · {loja.razao_social}</> : null}</> : "Sem CNPJ"}
+                            </div>
+                          )}
                         </td>
                         <td style={td}>{loja.plano}</td>
                         <td style={td}>{loja.veiculos}</td>

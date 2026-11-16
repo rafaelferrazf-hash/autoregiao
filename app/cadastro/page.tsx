@@ -7,22 +7,67 @@ import Icone from "@/components/Icone";
 import CampoSenha from "@/components/CampoSenha";
 import { textoOfertaLoja } from "@/lib/lancamento";
 import { useEmAppDaLoja } from "@/lib/appLoja";
+import { cnpjValido, formatarCnpj, soDigitosCnpj } from "@/lib/cnpj";
+
+type ConferenciaCnpj = { estado: "vazio" | "conferindo" | "ok" | "erro"; texto?: string };
+
+// "TEIXEIRA DE FREITAS" -> "Teixeira de Freitas"
+function nomeProprio(v: string) {
+  return v.toLowerCase().replace(/(^|\s)(\S)/g, (_, e, l) => e + l.toUpperCase())
+    .replace(/ (De|Da|Do|Das|Dos|E) /g, m => m.toLowerCase());
+}
 
 export default function Cadastro() {
   // Dentro dos apps das lojas não há cadastro (Apple 3.1.1): só quem já tem conta entra no app.
   const emApp = useEmAppDaLoja();
   const [tipo, setTipo] = useState<"comprador" | "lojista" | "particular">("comprador");
-  const [form, setForm] = useState({ nome: "", email: "", telefone: "", senha: "", confirmarSenha: "", loja: "", cidade: "" });
+  const [form, setForm] = useState({ nome: "", email: "", telefone: "", senha: "", confirmarSenha: "", loja: "", cidade: "", cnpj: "" });
+  const [conferencia, setConferencia] = useState<ConferenciaCnpj>({ estado: "vazio" });
   const [erro, setErro] = useState("");
   const [sucesso, setSucesso] = useState(false);
   const [carregando, setCarregando] = useState(false);
   const [menuAberto, setMenuAberto] = useState(false);
+
+  // Confere o CNPJ (dígitos, se já tem loja com ele e a situação na Receita). Devolve true se pode seguir.
+  async function conferirCnpj(): Promise<boolean> {
+    const c = soDigitosCnpj(form.cnpj);
+    if (!c) { setConferencia({ estado: "erro", texto: "Informe o CNPJ da loja." }); return false; }
+    if (!cnpjValido(c)) { setConferencia({ estado: "erro", texto: "CNPJ inválido. Confira os números." }); return false; }
+    setConferencia({ estado: "conferindo" });
+    try {
+      const r = await fetch(`/api/cnpj/verificar?cnpj=${c}`);
+      const j = await r.json();
+      if (!j.valido) { setConferencia({ estado: "erro", texto: "CNPJ inválido. Confira os números." }); return false; }
+      if (j.ja_cadastrado) { setConferencia({ estado: "erro", texto: "Já existe uma loja com este CNPJ. Se ela é sua, entre com o e-mail dela ou fale com o AutoRegião." }); return false; }
+      const rec = j.receita as { razao_social: string | null; nome_fantasia: string | null; situacao: string | null; municipio: string | null } | null;
+      if (rec?.situacao && rec.situacao !== "ATIVA") { setConferencia({ estado: "erro", texto: `Este CNPJ está "${rec.situacao}" na Receita Federal. Só é possível usar CNPJ ativo.` }); return false; }
+      if (rec) {
+        setForm(f => ({
+          ...f,
+          loja: f.loja || nomeProprio(rec.nome_fantasia || rec.razao_social || ""),
+          cidade: f.cidade || nomeProprio(rec.municipio || ""),
+        }));
+      }
+      setConferencia({ estado: "ok", texto: rec?.razao_social ? `${rec.razao_social} · ativa na Receita` : "CNPJ válido. Confira se os números estão certos." });
+      return true;
+    } catch {
+      // Sem internet ou consulta fora do ar: o número é válido; o banco confere de novo ao criar a conta.
+      setConferencia({ estado: "ok", texto: "CNPJ válido" });
+      return true;
+    }
+  }
 
   async function handleSubmit() {
     setErro("");
     if (!form.nome || !form.email || !form.senha) return setErro("Preencha todos os campos obrigatórios.");
     if (form.senha.length < 8) return setErro("A senha deve ter pelo menos 8 caracteres.");
     if (form.senha !== form.confirmarSenha) return setErro("As senhas não coincidem.");
+    if (tipo === "lojista") {
+      setCarregando(true);
+      const cnpjOk = await conferirCnpj();
+      setCarregando(false);
+      if (!cnpjOk) return setErro("Confira o CNPJ da loja.");
+    }
     if (tipo === "lojista" && (!form.loja || !form.cidade)) return setErro("Preencha o nome da loja e a cidade.");
     setCarregando(true);
     const { data, error } = await supabase.auth.signUp({
@@ -35,7 +80,7 @@ export default function Cadastro() {
           nome: form.nome,
           telefone: form.telefone,
           tipo,
-          ...(tipo === "lojista" ? { loja: form.loja, cidade: form.cidade } : {}),
+          ...(tipo === "lojista" ? { loja: form.loja, cidade: form.cidade, cnpj: soDigitosCnpj(form.cnpj) } : {}),
         },
       },
     });
@@ -43,6 +88,8 @@ export default function Cadastro() {
       setCarregando(false);
       if (error.message.includes("already registered")) return setErro("Este e-mail já está cadastrado. Tente entrar com ele.");
       if (error.message.toLowerCase().includes("rate limit")) return setErro("Muitos cadastros seguidos. Aguarde alguns minutos e tente de novo.");
+      // A loja é criada pelo banco; ele recusa CNPJ inválido ou já usado (supabase/fase32).
+      if (tipo === "lojista" && error.message.toLowerCase().includes("database error")) return setErro("Não foi possível criar a loja com este CNPJ. Confira o número ou fale com o AutoRegião.");
       return setErro("Erro ao criar conta. Tente novamente.");
     }
     setCarregando(false);
@@ -161,6 +208,23 @@ export default function Cadastro() {
 
             {tipo === "lojista" && (
               <>
+                <div style={{ marginBottom: 14 }}>
+                  <div style={{ fontSize: 12, fontWeight: 500, color: "#1A1917", marginBottom: 5 }}>CNPJ da loja <span style={{ color: "#FF6600" }}>*</span></div>
+                  <input inputMode="numeric" placeholder="00.000.000/0000-00" value={formatarCnpj(form.cnpj)}
+                    onChange={e => { setForm({ ...form, cnpj: soDigitosCnpj(e.target.value) }); setConferencia({ estado: "vazio" }); }}
+                    onBlur={() => { if (soDigitosCnpj(form.cnpj).length === 14) conferirCnpj(); }}
+                    style={{ width: "100%", padding: "12px 14px", border: "1.5px solid", borderColor: conferencia.estado === "erro" ? "#FCA5A5" : conferencia.estado === "ok" ? "#6EE7B7" : "#E8E6E1", borderRadius: 8, fontSize: 15, color: "#1A1917", background: "#F7F6F3", outline: "none", boxSizing: "border-box" }} />
+                  {conferencia.estado === "conferindo" && <div style={{ fontSize: 12, color: "#7A7670", marginTop: 5 }}>Conferindo o CNPJ...</div>}
+                  {conferencia.estado === "ok" && <div style={{ fontSize: 12, color: "#15803D", marginTop: 5 }}><Icone nome="ok" /> {conferencia.texto}</div>}
+                  {conferencia.estado === "erro" && <div style={{ fontSize: 12, color: "#B91C1C", marginTop: 5 }}><Icone nome="atencao" /> {conferencia.texto}</div>}
+                  <div style={{ fontSize: 12, color: "#7A7670", marginTop: 6, lineHeight: 1.5 }}>
+                    Conta de loja é só para empresa com CNPJ. Não tem CNPJ?{" "}
+                    <button type="button" onClick={() => { setTipo("particular"); setErro(""); }}
+                      style={{ background: "none", border: "none", padding: 0, color: "#FF6600", fontWeight: 600, fontSize: 12, cursor: "pointer", textDecoration: "underline" }}>
+                      Anuncie como pessoa física
+                    </button>
+                  </div>
+                </div>
                 <div style={{ marginBottom: 14 }}>
                   <div style={{ fontSize: 12, fontWeight: 500, color: "#1A1917", marginBottom: 5 }}>Nome da loja <span style={{ color: "#FF6600" }}>*</span></div>
                   <input placeholder="Ex: Auto Paulista" value={form.loja} onChange={e => setForm({ ...form, loja: e.target.value })}

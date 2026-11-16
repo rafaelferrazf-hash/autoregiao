@@ -15,7 +15,7 @@ export async function GET() {
   const dias = (n: number) => new Date(agora - n * 86_400_000).toISOString();
 
   const [lojasRes, veiculosRes, usuariosRes, visRes, contRes, pagRes] = await Promise.all([
-    admin.from("lojas").select("id, nome, cidade, plano, expira_em, criado_em, ativo, usuario_id, verificada, demonstracao").order("criado_em", { ascending: false }),
+    admin.from("lojas").select("id, nome, cidade, plano, expira_em, criado_em, ativo, usuario_id, verificada, demonstracao, cnpj, razao_social, cnpj_situacao").order("criado_em", { ascending: false }),
     admin.from("veiculos").select("id, nome, preco, status, ativo, loja_id, criado_em, lojas(nome)").order("criado_em", { ascending: false }),
     admin.auth.admin.listUsers({ perPage: 1000 }),
     admin.from("eventos_veiculo").select("id", { count: "exact", head: true }).eq("tipo", "visualizacao").gte("criado_em", dias(30)),
@@ -51,6 +51,9 @@ export async function GET() {
       ativo: l.ativo !== false,
       verificada: !!l.verificada,
       teste: !!l.demonstracao,
+      cnpj: l.cnpj as string | null,
+      razao_social: l.razao_social as string | null,
+      cnpj_situacao: l.cnpj_situacao as string | null,
       vencimento: ehVitalicio(l.plano) ? "Nunca"
         : !l.expira_em ? "—"
         : vencida ? `Venceu ${new Date(l.expira_em).toLocaleDateString("pt-BR")}`

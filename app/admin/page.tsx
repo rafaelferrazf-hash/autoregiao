@@ -17,6 +17,7 @@ import Icone, { type NomeIcone } from "@/components/Icone";
 import AdminPublicidade from "@/components/AdminPublicidade";
 import { formatarCnpj } from "@/lib/cnpj";
 import AdminVisitas from "@/components/AdminVisitas";
+import AdminRepasse from "@/components/AdminRepasse";
 
 const ABAS = ["Resumo", "Visitas", "Lojas", "Relatórios", "Banners", "Anúncios", "Usuários"] as const;
 type Aba = (typeof ABAS)[number];
@@ -274,6 +275,7 @@ export default function Admin() {
         )}
 
         {/* ===================== LOJAS ===================== */}
+        {aba === "Lojas" && <AdminRepasse />}
         {aba === "Lojas" && (
           <div style={cartao}>
             <div style={{ ...tituloCartao, display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, flexWrap: "wrap" }}>

@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 import { ehAdmin } from "@/lib/admin";
 
-// Barra /painel e /admin no servidor, antes de a página carregar.
+// Barra /painel, /admin e /repasse no servidor, antes de a página carregar.
 // Também renova os cookies de sessão do Supabase quando o token está para expirar.
 export async function proxy(request: NextRequest) {
   let response = NextResponse.next({ request });
@@ -52,5 +52,5 @@ function redirecionarMantendoCookies(url: URL, origem: NextResponse) {
 }
 
 export const config = {
-  matcher: ["/painel/:path*", "/admin/:path*"],
+  matcher: ["/painel/:path*", "/admin/:path*", "/repasse/:path*"],
 };

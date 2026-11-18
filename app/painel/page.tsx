@@ -37,6 +37,8 @@ export default function Painel() {
   const [stats, setStats] = useState<EstatisticasPainel | null>(null);
   // Hora lida uma vez ao abrir o painel (cálculo de dias restantes e "há X min").
   const [agora] = useState(() => Date.now());
+  // Repasse entre lojistas (fase34): link só para quem tem acesso (o Rafael libera no /admin).
+  const [verRepasse, setVerRepasse] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -51,6 +53,7 @@ export default function Painel() {
       if (loja?.id) setLojaId(loja.id);
       setLoja(loja);
       setLojaCarregada(true);
+      fetch("/api/repasse/acesso").then(r => r.json()).then(a => setVerRepasse(!!a.pode)).catch(() => {});
 
       // Loja nova: completa o nome da empresa e a situação na Receita a partir do CNPJ do cadastro (fase32).
       if (loja?.cnpj && !loja.razao_social) {
@@ -231,7 +234,14 @@ export default function Painel() {
             { id: "perfil", icon: "loja", label: "Perfil da Loja" },
             ...(loja ? [{ id: "plano", icon: "coroa", label: "Meu plano" }] : []),
             ...(mostrarDivulgar ? [{ id: "divulgar", icon: "divulgar", label: "Divulgar" }] : []),
+            ...(verRepasse ? [{ id: "repasse", icon: "repasse", label: "Repasse" }] : []),
           ].map(item => (
+            item.id === "repasse"
+              ? <Link key={item.id} href="/repasse" style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 10px", borderRadius: 8, background: "transparent", color: "rgba(255,255,255,0.5)", fontSize: 13.5, fontWeight: 500, textDecoration: "none", width: "100%" }}>
+                  <span style={{ width: 20, display: "flex", justifyContent: "center", flexShrink: 0 }}><Icone nome="repasse" tamanho={18} /></span>
+                  <span>Repasse</span>
+                </Link>
+              :
             item.id === "divulgar"
               ? <Link key={item.id} href="/painel/divulgar" style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 10px", borderRadius: 8, background: "transparent", color: "rgba(255,255,255,0.5)", fontSize: 13.5, fontWeight: 500, textDecoration: "none", width: "100%" }}>
                   <span style={{ width: 20, display: "flex", justifyContent: "center", flexShrink: 0 }}><Icone nome="divulgar" tamanho={18} /></span>
@@ -356,6 +366,16 @@ export default function Painel() {
           )}
 
           {/* STATS */}
+          {abaAtiva === "dashboard" && verRepasse && (
+            <Link href="/repasse" style={{ display: "flex", alignItems: "center", gap: 12, background: "#1A1A1A", borderRadius: 12, padding: "14px 16px", textDecoration: "none", marginBottom: 16 }}>
+              <span style={{ width: 40, height: 40, borderRadius: 10, background: "#FF6600", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}><Icone nome="repasse" tamanho={22} /></span>
+              <span style={{ flex: 1, minWidth: 0 }}>
+                <span style={{ display: "block", color: "#fff", fontWeight: 700, fontSize: 14.5 }}>Repasse entre lojistas</span>
+                <span style={{ display: "block", color: "rgba(255,255,255,0.6)", fontSize: 12.5 }}>Compre e ofereça carros de troca para outras lojas</span>
+              </span>
+              <span style={{ color: "#FF6600", fontWeight: 700, fontSize: 18 }}>›</span>
+            </Link>
+          )}
           {abaAtiva === "dashboard" && loja && <RelatorioPainel lojaId={loja.id} />}
           <div className="stats-grid" style={{ marginBottom: 16 }}>
             {[

@@ -109,6 +109,15 @@ export default function Termos() {
         <li>O conteúdo do banner é de responsabilidade do anunciante. O AutoRegião não endossa os produtos ou serviços
           anunciados e pode recusar ou retirar banners que descumpram estes Termos.</li>
       </ul>
+      <h3>5.5 Repasse entre lojistas</h3>
+      <ul>
+        <li>O <strong>Repasse</strong> é uma área restrita onde lojas cadastradas, com CNPJ e plano em dia, oferecem veículos
+          umas às outras. Não aparece para os compradores do site e não conta no limite de anúncios do plano.</li>
+        <li>As informações do veículo, inclusive o estado e os reparos necessários, são de responsabilidade da loja que o
+          ofereceu. A negociação é feita diretamente entre as lojas; o AutoRegião não participa, não intermedeia pagamentos e
+          não garante o veículo.</li>
+        <li>O AutoRegião pode abrir, fechar ou limitar o Repasse e retirar ofertas que descumpram estes Termos.</li>
+      </ul>
 
       <h2>6. Responsabilidades</h2>
       <p>

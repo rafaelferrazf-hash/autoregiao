@@ -5,6 +5,7 @@ import {
   IconLogout, IconManualGearbox, IconMapPin, IconMotorbike, IconNavigation, IconPalette, IconPencil, IconPhone,
   IconPlus, IconRocket, IconSearch, IconShare, IconShieldCheck, IconStar, IconStarFilled, IconTicket, IconTrash,
   IconTrendingDown, IconTrophy, IconTruck, IconUser, IconUsers, IconX, IconQrcode, IconGauge, IconHourglass, IconInfoCircle, IconPlayerPause, IconPlayerPlay, IconDoor, IconArrowsLeftRight, IconSpeakerphone, IconDownload,
+  IconArrowsExchange, IconTool, IconLock,
   type Icon,
 } from "@tabler/icons-react";
 import type { CSSProperties } from "react";
@@ -24,6 +25,7 @@ const ICONES = {
   km: IconGauge, ampulheta: IconHourglass, info: IconInfoCircle,
   pausar: IconPlayerPause, reativar: IconPlayerPlay, porta: IconDoor, comparar: IconArrowsLeftRight,
   divulgar: IconSpeakerphone, baixar: IconDownload,
+  repasse: IconArrowsExchange, ferramenta: IconTool, cadeado: IconLock,
 } satisfies Record<string, Icon>;
 
 export type NomeIcone = keyof typeof ICONES;

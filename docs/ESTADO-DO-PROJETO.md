@@ -188,8 +188,9 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
   Termos 5.5. Negociação direta entre as lojas (o site não intermedeia).
 - 20/11/2026: apostilas 1, 2 e 4 com **Sumário + Apresentação** depois da capa, SEM número de página (a numeração do conteúdo
   já impresso não mudou). Textos das apresentações em `docs/kit-lojistas/APRESENTACAO-*.md`; folhas avulsas para imprimir
-  frente e verso em `*_FOLHA-sumario-e-apresentacao_frente-e-verso.pdf`. Gerador (`apostila.py`, na pasta temporária da conversa)
-  aceita `--sumario` e `--apresentacao=<md>`.
+  frente e verso em `*_FOLHA-sumario-e-apresentacao_frente-e-verso.pdf`. Gerador em `docs/kit-lojistas/_scripts/apostila/`
+  (LEIA-ME com os comandos; aceita `--sumario` e `--apresentacao=<md>`). Apostila 3 (`docs/ROTEIRO-LANCAMENTO`) reescrita
+  com a situação de 20/11 e calendário relativo ao "Dia L" (data em aberto). Foto do grupo de WhatsApp: `docs/marca-whatsapp/grupo-capa-*.png`.
 
 ## Pendências (em ordem sugerida)
 **Roteiro do lançamento (13/10/2026): `docs/ROTEIRO-LANCAMENTO.md`**. Etapas, responsáveis, checagem final em 30/10

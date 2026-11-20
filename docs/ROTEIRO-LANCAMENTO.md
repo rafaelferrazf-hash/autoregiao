@@ -1,238 +1,185 @@
 # AutoRegião — roteiro do lançamento
 
-Criado em 13/10/2026. Este é o roteiro único até o lançamento oficial. Cada etapa tem **quem faz**,
-**como saber que está pronta** e **o que fazer se der errado**. Marcar ✅ ao concluir e anotar a data.
+Criado em 13/10/2026 · **atualizado em 20/11/2026**. Este é o roteiro único até o lançamento oficial. Cada item tem
+**quem faz** e **como saber que está pronto**. Marcar ✅ ao concluir e anotar a data.
 
 **Regra de ouro:** só lança quando **todos** os itens da "Checagem final" (Etapa 6) estiverem ✅.
 Se um item crítico falhar, adia o lançamento (o site continua no ar normalmente, só não divulgamos).
 
-**30/10/2026: data do lançamento EM ABERTO** (o Rafael ainda não decidiu; 03/11 não vale mais). Contato com os
-lojistas começa em **09/11**. Oferta: toda loja nova ganha 60 dias grátis contados do cadastro, sem prazo (fase30).
-Onde abaixo aparece "03/11" como dia do lançamento, ler "dia do lançamento (a definir)".
+**Data do lançamento: EM ABERTO** (decisão do Rafael). Este roteiro usa dias relativos: **"Dia L"** é o dia do
+lançamento, **"L-7"** é uma semana antes, **"L+30"** é um mês depois.
 
-**Situação em 12/11/2026:**
+**Data fixada:** ____ / ____ / ________
 
-- ✅ Apps publicados: Android na Play Store (23/10) e iPhone na App Store (29/10).
-- ✅ Material pronto: folders dos lojistas e panfletos dos compradores **chegaram**; carro **plotado** com a marca;
-  uniformes **em confecção**. ✅ QR codes do impresso testados pelo Rafael em 12/11 (folder, panfleto, /app no iPhone e Android).
-- ✅ Prospecção no **RD Station CRM** (RD Vendas, grátis): 37 lojas de Teixeira importadas em "Sem contato";
-  contatos começaram em 09/11.
-- ❌ Lojas reais no site: **0** (as 4 do banco são de teste/revisão + MaisCAr). Anúncios reais: 0. Meta: 10 lojas / 150 anúncios.
-- Pendentes críticos: data do lançamento, contador/MEI (1.5), Resend (2.15), Vercel Pro (2.16), testes 2.5–2.9, cópia do banco (2.18).
-- Preço de fundador (1.3): **descartado** pelo Rafael (26/10).
+## Situação em 20/11/2026
+
+**Pronto:**
+
+- ✅ **Apps publicados:** Android na Google Play (23/10) e iPhone na App Store (29/10). Link único `autoregiao.com.br/app`.
+- ✅ **Planos definidos (26/10):** Básico R$149/15 anúncios, Profissional R$219/40 (mais popular), Premium R$329/80.
+  Preço de fundador **descartado**. Pagamento real por Pix já testado (07/10).
+- ✅ **Oferta:** toda loja nova ganha **60 dias grátis contados do cadastro**, sem prazo para entrar (30/10).
+- ✅ **Loja só com CNPJ (16/11):** o cadastro de lojista confere o CNPJ na Receita. Quem vende sem CNPJ anuncia como
+  pessoa física (1 anúncio grátis; depois avulso R$19,90/30 dias ou R$29,90/60 dias).
+- ✅ **Site público "limpo" (16/11):** os 472 anúncios de demonstração só aparecem para a Auto Paulista, o admin e a
+  conta de revisão. O público vê o site vazio até as lojas reais entrarem.
+- ✅ **Ferramentas para as lojas:** página "Divulgar" (posts prontos, 29/10) e **Repasse entre lojistas** (18/11,
+  pronto mas **fechado**, abre no Admin → Lojas quando o Rafael decidir).
+- ✅ **Material:** folders dos lojistas e panfletos dos compradores entregues (QR testados em 12/11); carro plotado;
+  uniformes em confecção; apostilas 1, 2 e 4 com Sumário e Apresentação (20/11); grupo de WhatsApp com foto.
+- ✅ **Redes:** página do Facebook e Instagram @autoregiaooficial com capa e 12 posts (04/11).
+- ✅ **Prospecção:** 37 lojas de Teixeira no RD Station CRM; contatos desde 09/11.
+
+**Falta (crítico):**
+
+- ❌ **Lojas reais no site: 0** (as 4 do banco são de teste/revisão). Anúncios reais: 0. Meta: 10 lojas e 150 anúncios.
+- ❌ Data do lançamento · contador/MEI (1.5) · Resend (2.15) · Vercel Pro (2.16) · testes 2.5–2.9 (2.6 agora com CNPJ)
+  · cópia do banco (2.18).
 
 Legenda: 👤 = Rafael · 🤖 = Claude (no código) · 🔴 = crítico (bloqueia o lançamento) · 🟡 = importante · 🟢 = desejável
 
 ---
 
-## Calendário sugerido
+## Calendário (a partir da data escolhida)
 
-| Período | Etapa |
+| Quando | Etapa |
 |---|---|
-| 13/10 – 17/10 | Etapa 1: decisões de negócio (planos, data, nome fiscal) |
-| 13/10 – 24/10 | Etapa 2: site pronto (textos legais, ajustes, testes completos) |
-| 20/10 – 31/10 | Etapa 3: apps nas lojas (Google Play produção + App Store) |
-| 13/10 – 31/10 | Etapa 4: lojas reais cadastradas (**o mais importante**) |
-| 27/10 – 31/10 | Etapa 5: divulgação preparada |
-| **sex 30/10** | **Etapa 6: checagem final — decide se lança** |
-| **ter 03/11** | **Etapa 7: dia do lançamento** |
-| 03/11 – 03/12 | Etapa 8: acompanhamento dos primeiros 30 dias |
+| **Agora até L-7** | Etapa 4: lojas reais cadastradas (**o mais importante**) · Etapa 1: pendências de negócio |
+| L-14 a L-7 | Etapa 2: testes completos do site e serviços pagos |
+| L-7 a L-3 | Etapa 5: divulgação preparada |
+| **L-3** | **Etapa 6: checagem final — decide se lança** |
+| **Dia L** (de preferência terça) | **Etapa 7: dia do lançamento** |
+| L a L+30 | Etapa 8: acompanhamento dos primeiros 30 dias |
+| ~60 dias depois de cada cadastro | Fim do período grátis de cada loja (ver Etapa 8) |
 
-Por que terça 03/11: dá folga para a revisão da Google (até 7 dias depois de pedir a produção, por volta
-de 20/10) e da Apple (1 a 3 dias). Terça é melhor que sexta: se algo quebrar, há a semana inteira para corrigir.
+Por que terça: se algo quebrar, há a semana inteira para corrigir.
 
 ---
 
-## Etapa 1 — Decisões de negócio (13/10 – 17/10)
+## Etapa 1 — Decisões de negócio
 
-| # | Item | Quem | Pronto quando |
+| # | Item | Quem | Situação |
 |---|---|---|---|
-| 1.1 🔴 | **Valores dos planos.** Hoje no código, ainda não publicados: Básico R$69/15, Profissional R$129/40, Premium R$249/ilimitado. Decidir se fica assim, se muda, ou se vai com 2 planos | 👤 decide · 🤖 ajusta | ✅ 13/10: 69/129/249, 3 planos |
-| 1.2 🔴 | Rodar `supabase/fase23-planos-novos.sql` (limites no banco) e só **depois** publicar o código | 👤 SQL · 🤖 publica | ✅ 13/10 (fase23 rodada e publicada) |
-| 1.3 🟡 | **"Preço de fundador"**: as primeiras lojas pagam o valor de lançamento enquanto se mantiverem assinantes? Decidir sim ou não e por quanto tempo | 👤 | Regra escrita aqui |
-| 1.4 🟡 | Período grátis de 60 dias: manter para todas as lojas que entrarem no lançamento? | 👤 | ✅ 30/10: **toda loja nova ganha 60 dias contados do cadastro, sem prazo** (fase30, `lib/lancamento.ts`; substitui a regra de pré-lançamento de 16/10) |
-| 1.5 🔴 | **Parte fiscal:** você vende planos como pessoa física (CPF). Conversar com um contador sobre abrir um MEI/CNPJ e emitir nota fiscal. Não sou contador, então essa conversa é com ele | 👤 | Conversa com o contador feita, decisão anotada |
-| 1.6 🟡 | Confirmar a **data do lançamento** (03/11 cancelado em 30/10; nova data em aberto) | 👤 | Data fixada |
+| 1.1 🔴 | Valores dos planos | 👤 | ✅ 26/10: 149/219/329 (limites 15/40/80) |
+| 1.2 🔴 | SQL dos planos rodado e código publicado | 👤 · 🤖 | ✅ fase23 + fase27 |
+| 1.3 🟡 | Preço de fundador | 👤 | ✅ descartado (26/10) |
+| 1.4 🟡 | Período grátis | 👤 | ✅ 60 dias do cadastro, sem prazo (30/10) |
+| 1.5 🔴 | **Parte fiscal:** os planos são vendidos no CPF. Conversar com um contador sobre MEI/CNPJ e nota fiscal | 👤 | ⏳ pendente |
+| 1.6 🔴 | **Fixar a data do lançamento** (depois de ter as lojas da Etapa 4) | 👤 | ⏳ em aberto |
+| 1.7 🟡 | Decidir **quando abrir o Repasse** para os lojistas (pode ser no lançamento ou depois, quando houver lojas) | 👤 | ⏳ |
 
 ---
 
-## Etapa 2 — Site pronto (13/10 – 24/10)
+## Etapa 2 — Site pronto
 
 ### 2A. Textos e regras
-| # | Item | Quem | Pronto quando |
+| # | Item | Quem | Situação |
 |---|---|---|---|
-| 2.1 🔴 | Revisar **/termos**: planos, preços, período grátis, carência de 3 dias, cancelamento, reembolso, responsabilidade pelo anúncio (o site não vende carro, só anuncia) | 🤖 rascunha · 👤 aprova | ✅ 14/10 (d4628e2) |
-| 2.2 🔴 | Revisar **/privacidade** (LGPD): quais dados guardamos, para quê, Resend, Mercado Pago, localização (só na memória), excluir conta | 🤖 · 👤 | ✅ 14/10 (d4628e2) |
-| 2.3 🟡 | Se abrir CNPJ (1.5): colocar razão social e CNPJ no rodapé e nos termos | 🤖 | Rodapé atualizado |
-| 2.4 🟡 | Revisar os textos de /anunciar e /painel/planos com os valores finais | 🤖 · 👤 | Aprovado |
+| 2.1 🔴 | /termos (planos, grátis, carência, reembolso, Repasse 5.5) | 🤖 · 👤 | ✅ 14/10, Repasse em 18/11 |
+| 2.2 🔴 | /privacidade (LGPD) | 🤖 · 👤 | ✅ 14/10 |
+| 2.3 🟡 | Se abrir CNPJ (1.5): razão social e CNPJ no rodapé e nos termos | 🤖 | ⏳ depende do 1.5 |
+| 2.4 🟡 | Textos de /anunciar e /painel/planos com os valores finais | 🤖 · 👤 | ✅ |
 
-### 2B. Teste completo do site (roteiro de testes)
-Fazer **no celular e no computador**, com contas de teste. Anotar o que falhar e corrigir antes de seguir.
-
+### 2B. Teste completo do site (fazer no celular e no computador)
 | # | Fluxo | Pronto quando |
 |---|---|---|
 | 2.5 🔴 | Comprador: página inicial → busca → filtros → anúncio → WhatsApp / Ligar | Tudo abre, o WhatsApp abre com a mensagem pronta |
-| 2.6 🔴 | Lojista novo: cadastro → e-mail de confirmação chega (Gmail **e** Hotmail/Outlook) → login → perfil da loja (logo, capa, endereço) → 1º anúncio com fotos e FIPE | Anúncio aparece na busca e na página da loja |
-| 2.7 🔴 | Particular: cadastro → 1 anúncio grátis → tenta o 2º → é bloqueado com mensagem clara | OK |
-| 2.8 🔴 | **Pagamento real** de um plano por Pix e por cartão (valor novo) → plano aplicado sozinho → e-mails do lojista e do admin chegam | Plano muda no painel em até 1 minuto |
+| 2.6 🔴 | Lojista novo **com CNPJ**: cadastro → CNPJ conferido → e-mail de confirmação chega (Gmail **e** Hotmail) → login → perfil (logo, capa, endereço) → 1º anúncio com fotos e FIPE | Anúncio aparece na busca e na página da loja |
+| 2.7 🔴 | Particular (CPF): cadastro → 1 anúncio grátis → tenta o 2º → vê a opção de anúncio avulso | OK |
+| 2.8 🔴 | Pagamento real de um plano por Pix **e** por cartão → plano aplicado sozinho → e-mails do lojista e do admin chegam | Plano muda no painel em até 1 minuto |
 | 2.9 🔴 | Esqueci a senha → e-mail → redefinir → entra | OK |
-| 2.10 🟡 | Alerta de carro: criar → confirmar pelo e-mail → no dia seguinte chega o aviso | OK |
-| 2.11 🟡 | Marcar como vendido, pausar, reativar, limite do plano | OK |
+| 2.10 🟡 | Alerta de carro: criar → confirmar pelo e-mail → aviso chega | OK |
+| 2.11 🟡 | Vendido, pausar, reativar, limite do plano | OK |
 | 2.12 🟡 | Excluir conta (loja de teste sem pagamento) | Conta some |
-| 2.13 🟡 | Admin: Lojas, Verificar selo, Banners, Relatórios | OK |
-| 2.14 🟢 | Favoritos, comparar, Perto de mim, Tabela FIPE | OK |
+| 2.13 🟡 | Admin: Lojas (CNPJ, selo), Banners, Relatórios, Visitas | OK |
+| 2.14 🟢 | Favoritos, comparar, Perto de mim, Tabela FIPE, Divulgar, Repasse (com a Auto Paulista) | OK |
 
-### 2C. Limites dos serviços grátis (risco técnico principal)
-| # | Item | Quem | Pronto quando |
+> **Não criar contas de teste no site de verdade sem combinar:** o CNPJ fica preso à loja criada. Usar a Auto Paulista
+> para testar o painel e um CNPJ real de uma loja parceira (com autorização dela) só para o teste 2.6.
+
+### 2C. Serviços (risco técnico principal)
+| # | Item | Quem | Situação |
 |---|---|---|---|
-| 2.15 🔴 | **Resend grátis = 100 e-mails por dia / 3.000 por mês.** No lançamento (cadastros + confirmações + alertas) isso pode estourar e os e-mails de login deixam de chegar. Decidir: passar para o plano pago (~US$20/mês) **antes** do dia, ou acompanhar de perto | 👤 decide · 🤖 confere o uso | Decisão tomada; se pago, plano ativo |
-| 2.16 🔴 | **Vercel Pro** (US$20/mês): o plano grátis não permite uso comercial | 👤 | Vercel mostra "Pro" (fazer na semana do lançamento) |
-| 2.17 🟡 | Supabase grátis: 500 MB banco, 1 GB fotos, 5 GB tráfego. Olhar o Usage antes e 1x por semana no 1º mês. O Pro custa US$25/mês: passar quando qualquer número chegar a ~70% | 👤 olha · 🤖 orienta | Print do Usage conferido |
-| 2.18 🟡 | **Cópia do banco** antes de apagar os dados de teste (o Supabase grátis não guarda backup). Eu preparo o passo a passo para exportar | 🤖 · 👤 | Arquivo da cópia guardado no Drive |
-| 2.19 🟢 | Google Search Console: sem erros graves; sitemap lido | 👤 print · 🤖 analisa | OK |
+| 2.15 🔴 | **Resend grátis = 100 e-mails/dia, 3.000/mês.** No lançamento pode estourar e os e-mails de login param. Decidir: plano pago (~US$20/mês) **antes** do Dia L, ou acompanhar de perto | 👤 decide · 🤖 confere o uso | ⏳ |
+| 2.16 🔴 | **Vercel Pro** (US$20/mês): o grátis não permite uso comercial | 👤 | ⏳ fazer em L-7 |
+| 2.17 🟡 | Supabase grátis (500 MB banco, 1 GB fotos, 5 GB tráfego): olhar o Usage 1x por semana no 1º mês; Pro (US$25) quando algo chegar a ~70% | 👤 · 🤖 | ⏳ |
+| 2.18 🔴 | **Cópia do banco** antes de apagar os dados de teste (o grátis não guarda backup) | 🤖 · 👤 | ⏳ |
+| 2.19 🟢 | Google Search Console sem erros graves | 👤 · 🤖 | ⏳ |
+| 2.20 🟢 | Atualizar o Next.js (o `npm audit` aponta falhas) — **depois** do lançamento, com testes | 🤖 | depois |
 
 ---
 
-## Etapa 3 — Apps nas lojas (20/10 – 31/10)
+## Etapa 3 — Apps
 
-### Google Play
-| # | Item | Quem | Pronto quando |
+✅ **Android** na Google Play desde 23/10 e ✅ **iPhone** na App Store desde 29/10. Os apps mostram o site: o que muda
+no site chega nos apps na hora, sem revisão.
+
+| # | Item | Quem | Quando |
 |---|---|---|---|
-| 3.1 🔴 | Completar os 14 dias com 12+ testadores (~20/10). Pedir aos testadores para **não desinstalarem** | 👤 | Botão "Solicitar a produção" liberado |
-| 3.2 🔴 | Responder o questionário da produção (opiniões dos testadores, o que mudou) | 🤖 escreve · 👤 envia | Pedido enviado |
-| 3.3 🔴 | Depois da aprovação: conferir que o app abre o site sem a barra do navegador (assetlinks.json) | 👤 testa · 🤖 corrige | Abre em tela cheia |
-| 3.4 🟡 | Refazer as 5 capturas de tela com **anúncios reais** (depois da Etapa 4) | 🤖 · 👤 | Fichas atualizadas |
+| 3.1 🟡 | **Contas do revisor** `revisao@` e `revisao.vencido@`: **não apagar nem mexer**. A Apple e a Google entram com elas em toda versão nova | 👤 | sempre |
+| 3.2 🟡 | Capturas de tela com **anúncios reais** nas duas lojas (nova versão do app) | 🤖 · 👤 | depois da Etapa 4 |
+| 3.3 🟡 | Pedir às lojas parceiras e testadores uma **avaliação sincera** (pedir pode; brinde em troca de nota ou avaliação falsa é proibido) | 👤 | 1ª semana depois do Dia L |
+| 3.4 🟡 | Responder todas as avaliações (App Store Connect e Play Console) | 👤 · 🤖 escreve | sempre |
+| 3.5 🟢 | Android 1.0.4: suavizar o "piscar" branco na abertura + avisos do Play Console | 🤖 | depois |
+| 3.6 🔴 | Renovar o Apple Developer (US$99/ano) — se vencer, o app sai da loja | 👤 | até 09/10/2027 |
 
-**Plano B:** se a Google recusar ou atrasar, **lança só com o site** (e o iPhone, se estiver pronto).
-O app entra depois, com um segundo aviso de divulgação. O site já funciona instalado pelo navegador (PWA).
-
-### App Store (iPhone): plano do lançamento do app
-Ficha e respostas da revisão: `docs/app-store-ficha.md`. App: id 6820997830, versão 1.0.0 (compilação 10),
-só Brasil, **liberação manual**.
-
-| # | Item | Quem | Pronto quando |
-|---|---|---|---|
-| 3.5 🔴 | Testar no TestFlight: login, anúncio, fotos, WhatsApp, notificação de alerta, excluir conta, planos escondidos | 👤 testa | ✅ 14/10 (compilação 10) |
-| 3.6 🔴 | Capturas de tela 6,9" e ficha (descrição, palavras-chave, suporte, privacidade) | 🤖 prepara · 👤 envia | ✅ 14/10 |
-| 3.7 🔴 | Rótulos de privacidade ("Privacidade do app") e conta demo para o revisor | 🤖 · 👤 | ✅ 14/10 |
-| 3.8 🔴 | Enviar para a revisão (submit) | 👤 | ✅ enviado 14/10 ~15:10 → ⏳ aguardando resposta |
-
-#### Fase A: enquanto a Apple revisa (agora, normalmente 1 a 3 dias)
-- **Congelar o app:** nada de nova montagem no Codemagic nem de mexer na versão 1.0.0. Uma compilação nova
-  volta para o fim da fila de revisão. **O site pode mudar à vontade**, porque o app mostra o site.
-- **Não mexer na conta `revisao@`** (senha, loja, anúncios): o revisor entra com ela.
-- O e-mail da Apple chega no **rafaelferrazf@hotmail.com**. Status no App Store Connect → Apps → AutoRegião:
-  "Aguardando revisão" → "Em revisão" → **"Aguardando liberação do desenvolvedor"** (= aprovado).
-- 🤖 Preparar já, para usar quando o app for liberado:
-  - [ ] Selos **em português** ("Baixar na App Store" / "Disponível no Google Play"; o atual está em inglês).
-    Os oficiais vêm das páginas de marketing da Apple e da Google. 👤 baixa, 🤖 coloca no site
-  - [ ] Link único **autoregiao.com.br/app**: abre a App Store no iPhone, a Google Play no Android e a página
-    inicial no computador. Serve para o QR code dos panfletos, adesivos das lojas e Instagram
-  - [ ] Faixa do Safari "Abrir no app / Obter" (Smart App Banner da Apple) para quem visita o site pelo iPhone
-  - [ ] Tudo isso fica **desligado** até a Fase C (chave `APP_IPHONE.publicado` em `lib/site.ts`)
-
-#### Se a Apple recusar ("Rejected")
-Não é o fim: responder na **Central de Resoluções** (App Store Connect → o app → mensagem da Apple) e reenviar.
-Cada nova rodada leva mais ~1–2 dias. 👤 manda print da mensagem (sem dados pessoais), 🤖 escreve a resposta
-em inglês e faz a correção. Motivos mais prováveis para um app como o nosso:
-
-| Regra da Apple | O que alegam | Nossa resposta já pronta |
-|---|---|---|
-| 4.2 Funcionalidade mínima | "É só um site dentro de um app" | Recursos do aparelho: notificações de alerta, compartilhar nativo, localização "Perto de mim", tela sem conexão. Explicar com prints |
-| 1.2 Conteúdo de usuários | Faltam meios de denunciar ou **bloquear** usuários | Denunciar ✅ (af25b47). Se pedirem "bloquear": fazer "Ocultar anúncios deste vendedor" (~1 dia de trabalho) |
-| 2.1 Informação incompleta | Não conseguiram entrar na conta demo | Conferir a conta `revisao@` e responder |
-| 5.1.1 Excluir conta | Não acharam o botão | Explicar o caminho (já está nas observações) |
-| 3.1.1 Pagamentos | Viram preço de plano | Os planos ficam escondidos no app. Achar a tela que escapou e corrigir **no site** (sem nova montagem) |
-
-#### Fase B: aprovado, aguardando o lançamento
-- O app **fica parado** em "Aguardando liberação do desenvolvedor" até você apertar o botão. Só não enviar
-  outra versão nesse meio-tempo, porque ela substitui a aprovada.
-- **Quando liberar:** a Apple diz que a liberação pode levar **até 24 horas** para aparecer na loja.
-  Por isso **liberar na segunda 02/11 de manhã**, um dia antes do lançamento.
-  Nada de mal acontece se alguém achar o app antes: ele mostra o mesmo site que já está no ar.
-- Como liberar: App Store Connect → Apps → AutoRegião → versão 1.0.0 → botão **"Liberar esta versão"**.
-- Depois de liberar (segunda à tarde), 👤 testa:
-  1. Abrir `https://apps.apple.com/br/app/id6820997830` no iPhone: a página da loja aparece
-  2. Apagar a versão do TestFlight e **instalar pela App Store**
-  3. Abrir, entrar na conta, ver um anúncio, tocar no WhatsApp, criar um "Avisar neste celular"
-  4. Procurar "AutoRegião" na busca da App Store (o nome pode levar alguns dias para aparecer na busca;
-     o link direto funciona antes)
-
-#### Fase C: dia do lançamento (terça 03/11), parte do iPhone
-- 🤖 Ligar `APP_IPHONE.publicado = true` (slide "Baixe o app" no carrossel, selos, /app, faixa do Safari) e publicar
-- Divulgar com o link `autoregiao.com.br/app` (serve para iPhone e Android)
-- Se o Android ainda não estiver aprovado: ligar só o iPhone. O `/app` manda o Android para o site
-
-#### Fase D: depois do lançamento
-| Quando | O quê | Quem |
-|---|---|---|
-| 1ª semana | Pedir aos testadores e às lojas parceiras uma **avaliação sincera** na App Store (pedir pode; oferecer brinde em troca de nota ou escrever avaliação falsa é proibido pela Apple) | 👤 |
-| Sempre | Responder todas as avaliações em App Store Connect → Avaliações | 👤 · 🤖 escreve |
-| Quando tiver anúncios reais | **Versão 1.0.1**: capturas com anúncios reais e tirar das observações a frase "alguns anúncios são de demonstração". As capturas só mudam enviando uma versão nova (o "Texto promocional" muda a qualquer hora) | 🤖 · 👤 |
-| Sempre | Mudanças **só no site** chegam no app na hora, sem revisão. Mudanças **do app** (permissões, abertura, faixa) = nova montagem + nova revisão | — |
-| 09/10/2027 | Renovação do Apple Developer (US$ 99/ano, cartão no nome dele). Se vencer, o app sai da loja | 👤 |
-
-**Plano B:** igual ao da Google. Lança sem o app do iPhone e anuncia quando for aprovado.
-
-### Quando os apps forem aprovados
-| 3.9 🟡 | Ligar o slide e os botões "Baixe o app" (`APP_ANDROID/APP_IPHONE.publicado = true` em `lib/site.ts`) | 🤖 | Slide aparece no carrossel |
-|---|---|---|---|
-| 3.10 🟡 | Conta do revisor `revisao@` / loja "Demonstração AutoRegião": **não apagar**. A Apple e a Google revisam **toda versão nova** e entram com ela. Tirar os anúncios dela da vista do público (deixar só para a própria conta) em vez de desativar | 🤖 · 👤 | Público não vê a loja; revisor ainda entra |
+> Dentro dos apps não há cadastro nem compra de planos (regra da Apple). Lojista se cadastra e assina **pelo site**.
 
 ---
 
-## Etapa 4 — Lojas e anúncios reais (13/10 – 31/10) — **o mais importante**
+## Etapa 4 — Lojas e anúncios reais — **o mais importante**
 
 Um site de classificados vazio no dia do lançamento passa a impressão de abandonado, e o comprador não volta.
 **Meta mínima para lançar: 10 lojas reais e 150 anúncios reais com fotos.** Meta boa: 20 lojas e 300 anúncios.
 
-| # | Item | Quem | Pronto quando |
+| # | Item | Quem | Situação |
 |---|---|---|---|
-| 4.1 🔴 | Lista das lojas de Teixeira e região (nome, contato, quantos carros têm). Começar pelas que anunciam na Mobiauto / OLX | 👤 | Lista com 30+ lojas |
-| 4.2 🔴 | Visitar ou mandar mensagem: 60 dias grátis + (se decidido) preço de fundador | 👤 · 🤖 escreve a mensagem | 10+ lojas toparam |
-| 4.3 🔴 | **Ajudar a cadastrar** (decisão 19/10: o **lojista cadastra sozinho**; o Rafael só tira dúvidas pelo WhatsApp e, na visita, acompanha o lojista fazendo no celular dele). Texto original: oferecer cadastrar os carros por elas (você ou alguém contratado), com as fotos que elas mandarem | 👤 | Anúncios no ar |
-| 4.4 🟡 | Conferir cada loja (endereço, telefone) e dar o selo **"Loja verificada"** | 👤 no /admin | Selo nas lojas conferidas |
-| 4.5 🟡 | Logo e capa nas páginas das lojas | 👤 · lojistas | Lojas com logo |
-| 4.6 🟢 | 2–3 lojas fecham Premium logo no início, para a vitrine "Ofertas em destaque" ter conteúdo real | 👤 | Vitrine com lojas reais |
+| 4.1 🔴 | Lista das lojas de Teixeira e região | 👤 | ✅ 37 lojas no RD Station |
+| 4.2 🔴 | Contato e visita: 60 dias grátis contados do cadastro (Apostilas 1 e 2) | 👤 | ⏳ desde 09/11 |
+| 4.3 🔴 | **Cadastro:** o **lojista cadastra sozinho**, no celular dele, com o CNPJ da loja; o Rafael acompanha e tira dúvidas (Apostila 4) | 👤 | ⏳ 0 de 10 |
+| 4.4 🟡 | Conferir cada loja (endereço, telefone, CNPJ) e dar o selo **"Loja verificada"** no /admin | 👤 | ⏳ |
+| 4.5 🟡 | Logo e capa nas páginas das lojas | 👤 · lojistas | ⏳ |
+| 4.6 🟢 | 2–3 lojas no Premium para a vitrine "Ofertas em destaque" ter conteúdo real | 👤 | ⏳ |
+| 4.7 🟢 | Post de boas-vindas no Instagram para cada loja nova (com o OK dela) | 👤 · 🤖 arte | ⏳ |
 
-> Os anúncios demo e as lojas de teste só aparecem para as contas liberadas. As lojas reais já aparecem
-> para todo mundo assim que entram, então dá para cadastrar com calma antes do dia.
+> As lojas reais aparecem para todo mundo assim que entram, e os anúncios de demonstração continuam escondidos do
+> público. Dá para cadastrar com calma antes do Dia L.
 
 ---
 
-## Etapa 5 — Divulgação preparada (27/10 – 31/10)
+## Etapa 5 — Divulgação preparada (L-7 a L-3)
 
-**Plano completo (tráfego pago para lojistas e compradores, telões, orçamento, calendário): `docs/PLANO-MARKETING.md`.**
+**Plano completo (tráfego pago, telões, orçamento): `docs/PLANO-MARKETING.md`.**
 
-| # | Item | Quem | Pronto quando |
+| # | Item | Quem | Situação |
 |---|---|---|---|
-| 5.1 🟡 | Instagram da AutoRegião (perfil, bio com o link, 6–9 posts prontos para a semana) | 👤 · 🤖 textos | Perfil pronto |
-| 5.2 🟡 | **Perfil da Empresa no Google** (Google Maps) | 👤 | Perfil verificado |
-| 5.3 🟡 | Mensagem de WhatsApp para status e grupos da região (texto + imagem) | 🤖 texto · 👤 envia | Pronta |
-| 5.4 🟡 | Kit para as lojas divulgarem ("Nossos carros também estão no AutoRegião" + link da página da loja) | 🤖 | Kit enviado às lojas |
-| 5.5 🟢 | Rádio, jornal ou blog local, influenciador de carros da região | 👤 | Contato feito |
-| 5.6 🟢 | Banners pagos do carrossel: oferecer as 4 vagas a despachantes, financeiras, oficinas, seguros | 👤 | 1+ vaga vendida |
+| 5.1 🟡 | Instagram e Facebook (perfil, bio com link, posts) | 👤 · 🤖 | ✅ 04/11; posts da semana do lançamento ⏳ |
+| 5.2 🟡 | **Perfil da Empresa no Google** (Google Maps) | 👤 | ⏳ |
+| 5.3 🟡 | Mensagem de WhatsApp para Status e grupos da região (texto + imagem) | 🤖 · 👤 envia | ⏳ |
+| 5.4 🟡 | Lojas divulgam que estão no AutoRegião (página "Divulgar" no painel) | lojistas | pronto no site |
+| 5.5 🟢 | Rádio, jornal, blog local, influenciador de carros | 👤 | ⏳ |
+| 5.6 🟢 | Vender as vagas de banner do carrossel e do anúncio flutuante (despachantes, financeiras, oficinas, seguros) | 👤 | ⏳ |
+| 5.7 🟢 | Campanha paga para lojistas e compradores (definir cidades, verba e forma de pagamento) | 👤 | ⏳ |
+| 5.8 🟢 | Distribuir os panfletos dos compradores (só a partir do Dia L) | 👤 | ⏳ |
 
 ---
 
-## Etapa 6 — Checagem final ("vai ou não vai") — sexta 30/10
+## Etapa 6 — Checagem final ("vai ou não vai") — L-3
 
-Lança na terça **só se todos os 🔴 estiverem ✅**:
+Lança no Dia L **só se todos estiverem ✅**:
 
-- [ ] Planos finais publicados e o SQL da fase23 rodado (1.1, 1.2)
-- [ ] Termos e privacidade aprovados (2.1, 2.2)
+- [ ] Data fixada (1.6) e decisão fiscal tomada (1.5)
 - [ ] Roteiro de testes 2.5 a 2.9 passou no celular e no computador
-- [ ] Pagamento real com o valor novo funcionou (2.8)
-- [ ] Decisão sobre o Resend tomada (2.15)
-- [ ] 10+ lojas reais e 150+ anúncios reais no ar (Etapa 4)
+- [ ] Pagamento real por Pix **e** cartão funcionou (2.8)
+- [ ] Resend decidido (2.15) e Vercel Pro ativo (2.16)
+- [ ] **10+ lojas reais e 150+ anúncios reais no ar** (Etapa 4)
 - [ ] Cópia do banco feita (2.18)
-- [ ] Apps: aprovados **ou** plano B aceito (lançar só com o site)
 
-Se faltar algum: nova data, uma semana depois. Sem pressa, porque **lançar quebrado custa mais que atrasar**.
+Se faltar algum: nova data, uma semana depois. **Lançar quebrado custa mais que atrasar.**
 
 ---
 
-## Etapa 7 — Dia do lançamento (terça 03/11)
+## Etapa 7 — Dia do lançamento
 
 Fazer **de manhã cedo**, nesta ordem (cerca de 1 hora). Eu acompanho cada passo com você.
 
@@ -240,19 +187,17 @@ Fazer **de manhã cedo**, nesta ordem (cerca de 1 hora). Eu acompanho cada passo
 |---|---|---|
 | 1 | Vercel Pro ativo (2.16) e Resend no plano decidido (2.15) | 👤 |
 | 2 | Cópia do banco do dia (mesmo passo do 2.18) | 👤 |
-| 3 | Antes de apagar: conferir se os anúncios da loja do revisor (`revisao@`) estão marcados como demonstração. Se estiverem, guardar uns 3 para o revisor das próximas versões (3.10) |
-| 3b | **Apagar os dados de teste** no SQL Editor (as lojas fictícias e os 450 + 20 anúncios demo): <br>`delete from public.veiculos where demonstracao = true;`<br>`delete from public.lojas where demonstracao = true;` | 👤 |
-| 4 | Decidir o que fazer com a loja de teste "Auto Paulista" (Civic e Onix de teste): apagar os 2 anúncios ou desativar a loja | 👤 · 🤖 |
-| 5 | Esvaziar a lista `acesso_demonstracao` e tirar as fotos demo do site (`public/demo/`), se não forem mais usadas | 🤖 SQL e código · 👤 roda |
-| 6 | Conferir **sem login** e numa aba anônima: página inicial, busca, uma loja, um anúncio. Não pode aparecer nada de teste | 🤖 · 👤 |
-| 6b | ~~Publicar de novo por causa do texto da oferta~~ — não precisa mais (30/10: oferta sem data) | — |
-| 7 | Ligar os botões dos apps aprovados (3.9). O iPhone já foi liberado na App Store na segunda 02/11 (Etapa 3, Fase B) | 🤖 |
-| 8 | Fazer 1 cadastro de teste com um e-mail novo e confirmar que o e-mail chega. Depois apagar a conta | 👤 |
-| 9 | **Divulgar**: Instagram, WhatsApp, lojas parceiras compartilham | 👤 |
-| 10 | Ficar de olho a tarde toda: e-mails de "Nova assinatura", mensagens no contato@, erros | 👤 · 🤖 |
+| 3 | Decidir o que fica para o revisor da Apple/Google: a loja "Demonstração AutoRegião" (`revisao@`) precisa de uns 3 anúncios, visíveis só para ela | 👤 · 🤖 |
+| 4 | **Apagar os dados de demonstração** (SQL que eu preparo e você roda): os 472 anúncios demo, as 30 lojas fictícias, a lista `acesso_demonstracao` e as fotos de `public/demo/` | 🤖 prepara · 👤 roda |
+| 5 | Decidir o que fazer com a **Auto Paulista** (loja de teste, Premium até 05/2027): manter só para demonstração nas visitas, sem anúncios públicos, ou desativar | 👤 |
+| 6 | Conferir **sem login**, numa aba anônima: página inicial, busca, uma loja, um anúncio. Não pode aparecer nada de teste | 🤖 · 👤 |
+| 7 | Fazer 1 cadastro de **comprador/particular** com um e-mail novo e confirmar que o e-mail chega; depois excluir a conta | 👤 |
+| 8 | Se decidido (1.7): **abrir o Repasse** no Admin → Lojas | 👤 |
+| 9 | **Divulgar:** Instagram, Facebook, WhatsApp, lojas parceiras compartilham, panfletos | 👤 |
+| 10 | Ficar de olho a tarde toda: e-mails de "Nova assinatura", contato@, WhatsApp, erros | 👤 · 🤖 |
 
-**Se algo quebrar no dia:** mandar print para o Claude. Para erro no site, a Vercel volta a versão
-anterior em 1 clique (Deployments → versão anterior → "Promote to Production"). Eu te guio.
+**Se algo quebrar no dia:** mandar print para o Claude. Para erro no site, a Vercel volta a versão anterior em 1 clique
+(Deployments → versão anterior → "Promote to Production"). Eu te guio.
 
 ---
 
@@ -260,41 +205,25 @@ anterior em 1 clique (Deployments → versão anterior → "Promote to Productio
 
 | Quando | O que olhar | Quem |
 |---|---|---|
-| Todo dia, 1ª semana | Mensagens no contato@, WhatsApp das lojas, e-mails de assinatura | 👤 |
+| Todo dia, 1ª semana | Mensagens no contato@ e no WhatsApp, e-mails de assinatura | 👤 |
 | 2x por semana | Uso do Resend e do Supabase (prints para mim) | 👤 · 🤖 |
 | Semanal | Lojas sem anúncio novo há 7 dias: ligar e ajudar | 👤 |
 | Semanal | Avaliações nas lojas de apps: responder todas | 👤 |
-| Dia 01/12 | 1º relatório mensal real enviado às lojas (aba Relatórios no /admin) | 👤 · cron |
-| Dia 30 | Balanço: visitas, contatos por WhatsApp, lojas, assinaturas → ajustar preços e divulgação | 👤 · 🤖 |
-| **~02/01/2027** | **Fim dos 60 dias grátis** das lojas do lançamento. Uma semana antes, ligar para cada uma com o relatório de contatos | 👤 |
+| Dia 1º de cada mês | Relatório mensal enviado às lojas (aba Relatórios no /admin) | 👤 · cron |
+| L+30 | Balanço: visitas, contatos por WhatsApp, lojas, assinaturas → ajustar preços e divulgação | 👤 · 🤖 |
+| **~53 dias depois do cadastro de cada loja** | Uma semana antes do fim dos 60 dias grátis, ligar com o relatório de contatos e oferecer o plano | 👤 |
 
-> Em dezembro/janeiro, ao fim dos 60 dias grátis, sabemos se as lojas pagam.
-> O relatório mensal com os contatos recebidos é o principal argumento de venda.
+> O relatório mensal com os contatos recebidos é o principal argumento para a loja continuar pagando.
+> Lembrete do RD Station: registrar cada loja e a data do cadastro para saber quando termina o período grátis.
 
 ---
 
 ## Depois do lançamento (não bloqueia)
-- ✅ **FEITO e publicado em 29/10/2026** — **Página "Divulgar" no painel do lojista** (ideia do Rafael, 28–29/10; ~2–3 dias. **Começar assim que a Apple aprovar o app do iPhone**, mesmo antes de 03/11 —
-  decisão do Rafael 29/10; até lá, kits gerados à mão por mim para as visitas):
-  (1) kit da loja gerado na hora (Status/Stories, post quadrado, cartaz A4 com QR — mesmo visual de
-  `docs/kit-lojas-parceiras/_scripts/kit_loja.py`); (2) **post de 1 veículo**: o lojista escolhe o carro e, se quiser, uma
-  FRASE de destaque numa faixa amarela (esboços em `docs/kit-lojas-parceiras/esboco-post-veiculo/`, gerador `post_veiculo.py`),
-  em pé e quadrado, botões Baixar / Compartilhar / Copiar texto. "Ofertas da semana" com 4 carros: DESCARTADO.
-  **Quem tem (decisão do Rafael 29/10):** TODAS as lojas durante os 60 dias de cortesia; depois só **Profissional e Premium**
-  (Básico não tem). Limite semanal (confirmado 29/10): **Profissional 2 / Premium 4 posts com frase por semana** (segunda a domingo; na cortesia vale o
-  limite do Profissional = 2); post sem frase à vontade para quem tem a ferramenta.
-  Frases em LISTA PRONTA (sem texto livre: risco de propaganda enganosa): Oportunidade imperdível, Oferta da semana,
-  Baixou o preço!, Recém-chegado, Pronto para levar; e só quando o anúncio confirma: Aceita troca, Abaixo da FIPE, Único dono.
-  Dentro dos apps: no Básico só esconder, SEM convite para assinar (Apple 3.1.1).
-  Anúncio vendido aberto por post antigo → mostrar "Vendido — veja outros carros da loja". Avisar as lojas da novidade.
-- **App Android 1.0.4** (próxima versão): "piscar" branco de ~0,5 s entre a abertura escura e o site (troca para o Chrome;
-  vídeo do Rafael em 28/10). Tentar suavizar ao montar a versão, junto com os avisos do Play Console (SDK 35 ponta a ponta,
-  APIs descontinuadas, orientação em telas grandes). Subir `appVersionCode` para 5 no `gerar.cjs`.
+- Refazer os prints das apostilas com a Auto Paulista em Premium (e depois com uma loja real)
+- Atualizar o Next.js (falhas do `npm audit`), com testes
 - Importar o estoque das lojas por planilha (é o que mais trava lojas grandes)
 - Vídeo nos anúncios
 - Logo em vetor por um designer + registro da marca no INPI
-- Planos pagos para particulares
+- Planos pagos para particulares (hoje: avulso)
 - Limpeza de fotos de vendidos (quando o Storage passar de ~50%)
-- Publicidade por cidade/região (quando o site crescer para outras regiões): no cadastro do banner e do anúncio
-  flutuante, escolher em quais cidades aparece (ou "todas"); usar a cidade escolhida na busca ou a do "Perto de mim"
-  (sem guardar localização); quem não informou cidade vê os de "todas". Hoje todos veem os mesmos anúncios.
+- Publicidade por cidade/região, quando o site crescer para outras cidades

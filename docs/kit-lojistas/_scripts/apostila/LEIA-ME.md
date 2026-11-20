@@ -20,8 +20,9 @@ página), e o conteúdo com o logo no topo e "página X de Y" no rodapé.
 python -I apostila.py <libs> ../../TREINAMENTO-VENDAS.md ../../TREINAMENTO-VENDAS.pdf 1 "Treinamento de vendas" "Como apresentar, convencer e fechar com o lojista" --sumario --apresentacao=../../APRESENTACAO-TREINAMENTO.md
 python -I apostila.py <libs> ../../MENSAGENS-E-ROTEIRO.md ../../MENSAGENS-E-ROTEIRO.pdf 2 "Mensagens e roteiro de visita" "O que falar no WhatsApp e na loja" --sumario --apresentacao=../../APRESENTACAO-MENSAGENS.md
 python -I apostila.py <libs> ../../CADASTRO-LOJA-E-VEICULOS.md ../../CADASTRO-LOJA-E-VEICULOS.pdf 4 "Cadastro da loja e dos veículos" "Passo a passo, com prints, para o lojista criar a conta e anunciar os carros" --sumario --apresentacao=../../APRESENTACAO-CADASTRO.md
+python -I apostila.py <libs> ../../../ROTEIRO-LANCAMENTO.md ../../../ROTEIRO-LANCAMENTO.pdf 3 "Roteiro do lançamento" "Etapas, responsáveis e checagem final" --sumario
 ```
-A Apostila 3 (`docs/ROTEIRO-LANCAMENTO.md`) foi gerada sem Sumário/Apresentação.
+A Apostila 3 tem Sumário, mas não tem Apresentação (é o plano interno do Rafael).
 
 ## Folha avulsa (Sumário + Apresentação, frente e verso)
 São as páginas 2 e 3 do PDF. Separar com pymupdf:

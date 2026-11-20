@@ -56,9 +56,9 @@ def ok(x, y):
 
 
 PLANOS = [
-    ("1-basico", "BÁSICO", "99", "até 15 carros", ["Página da loja com logo e mapa", "Contato direto no WhatsApp", "Relatório mensal de contatos"], False),
-    ("2-profissional", "PROFISSIONAL", "169", "até 40 carros", ["Etiqueta “Destaque” nos anúncios", "Logo da loja nos anúncios", "Aparece antes do plano Básico"], True),
-    ("3-premium", "PREMIUM", "279", "até 80 carros", ["Primeiro na busca", "Vitrine na página inicial", "Selo “Loja Premium”"], False),
+    ("1-basico", "BÁSICO", "149", "até 15 carros", ["Página da loja com logo e mapa", "Contato direto no WhatsApp", "Relatório mensal de contatos"], False),
+    ("2-profissional", "PROFISSIONAL", "219", "até 40 carros", ["Etiqueta “Destaque” nos anúncios", "Logo da loja nos anúncios", "Aparece antes do plano Básico"], True),
+    ("3-premium", "PREMIUM", "329", "até 80 carros", ["Primeiro na busca", "Vitrine na página inicial", "Selo “Loja Premium”"], False),
 ]
 M = 90
 for arq, nome, preco, limite, itens, popular in PLANOS:

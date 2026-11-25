@@ -1,7 +1,7 @@
 # AutoRegião — estado do projeto
 
 Leia isto no começo de cada conversa. Atualize ao terminar uma etapa (seção "Histórico" e "Pendências").
-Última atualização: 01/10/2026.
+Última atualização: 25/11/2026.
 
 ## O que é
 Classificados de veículos (carros, motos, utilitários) de lojas e particulares de uma região.
@@ -191,6 +191,11 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
   frente e verso em `*_FOLHA-sumario-e-apresentacao_frente-e-verso.pdf`. Gerador em `docs/kit-lojistas/_scripts/apostila/`
   (LEIA-ME com os comandos; aceita `--sumario` e `--apresentacao=<md>`). Apostila 3 (`docs/ROTEIRO-LANCAMENTO`) reescrita
   com a situação de 20/11 e calendário relativo ao "Dia L" (data em aberto). Foto do grupo de WhatsApp: `docs/marca-whatsapp/grupo-capa-*.png`.
+
+- 23–25/11/2026: WhatsApp de pessoa física: resposta rápida **/particular** e 2 imagens do Catálogo (avulso 30 dias R$19,90 /
+  60 dias R$29,90; `catalogo.py`, margem 160 para o catálogo não cortar). Pagamento continua SÓ no site (decisão do Rafael).
+  **24/11: início das visitas aos lojistas.** Questionário das visitas no Google Forms "Visita a lojistas - AutoRegião"
+  (conta Google do admin, RESTRITO, respostas numa planilha do Google; links na memória da conversa, não no repositório).
 
 ## Pendências (em ordem sugerida)
 **Roteiro do lançamento (13/10/2026): `docs/ROTEIRO-LANCAMENTO.md`**. Etapas, responsáveis, checagem final em 30/10

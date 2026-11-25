@@ -60,7 +60,7 @@ PLANOS = [
     ("2-profissional", "PROFISSIONAL", "219", "até 40 carros", ["Etiqueta “Destaque” nos anúncios", "Logo da loja nos anúncios", "Aparece antes do plano Básico"], True),
     ("3-premium", "PREMIUM", "329", "até 80 carros", ["Primeiro na busca", "Vitrine na página inicial", "Selo “Loja Premium”"], False),
 ]
-M = 90
+M = 160  # margem larga: a tela de detalhes do catálogo do WhatsApp corta ~10% de cada lado
 for arq, nome, preco, limite, itens, popular in PLANOS:
     c = [f'<rect width="{LADO}" height="{LADO}" fill="{GRA}"/>']
     c.append(f'<rect x="0" y="0" width="{LADO}" height="14" fill="{LAR}"/>')
@@ -83,6 +83,36 @@ for arq, nome, preco, limite, itens, popular in PLANOS:
     # faixa inferior
     c.append(f'<rect x="0" y="{LADO - 120}" width="{LADO}" height="120" fill="{LAR}"/>')
     c.append(texto("60 DIAS GRÁTIS", M, LADO - 48, 50, GRA, EXO))
+    c.append(texto("autoregiao.com.br", LADO - M, LADO - 50, 32, GRA, JAKB, "dir"))
+    svg = (f'<svg xmlns="http://www.w3.org/2000/svg" width="{LADO}" height="{LADO}" viewBox="0 0 {LADO} {LADO}">'
+           + "".join(c) + "</svg>")
+    pymupdf.open("svg", svg.encode())[0].get_pixmap(dpi=72, alpha=False).save(os.path.join(SAIDA, f"catalogo-{arq}.png"))
+
+# Pessoa física: anúncio avulso (lib/planos.ts → AVULSOS). Pago no site, por Pix ou cartão.
+AVULSOS = [
+    ("4-avulso-30", "30 DIAS", "19", ",90", False),
+    ("5-avulso-60", "60 DIAS", "29", ",90", True),
+]
+for arq, dias, reais, cent, vantajoso in AVULSOS:
+    c = [f'<rect width="{LADO}" height="{LADO}" fill="{GRA}"/>']
+    c.append(f'<rect x="0" y="0" width="{LADO}" height="14" fill="{LAR}"/>')
+    c.append(logo(M - 6, 70, 300))
+    if vantajoso:
+        w = largura("MAIS VANTAJOSO", 30, JAKB) + 56
+        c.append(f'<rect x="{LADO - M - w}" y="92" width="{w}" height="60" rx="30" fill="{LAR}"/>')
+        c.append(texto("MAIS VANTAJOSO", LADO - M - w / 2, 133, 30, BRA, JAKB, "centro"))
+    c.append(texto("ANÚNCIO AVULSO · PESSOA FÍSICA", M, 330, 32, CIN, JAKB))
+    c.append(texto(dias, M, 425, 96, LAR if vantajoso else BRA, EXO))
+    c.append(texto("R$", M, 560, 48, BRA, EXO))
+    wr = largura(reais, 150, EXO)
+    c.append(texto(reais, M + 78, 590, 150, BRA, EXO))
+    c.append(texto(cent, M + 82 + wr, 590, 64, BRA, EXO))
+    c.append(texto("1 veículo · paga uma vez só", M, 650, 40, BRA, JAKB))
+    y = 745
+    for it in [f"No site e no app por {dias.lower()}", "Contato direto no seu WhatsApp", "Pix ou cartão, sem mensalidade"]:
+        c.append(ok(M + 17, y - 13)); c.append(texto(it, M + 52, y, 34, BRA, JAK)); y += 62
+    c.append(f'<rect x="0" y="{LADO - 120}" width="{LADO}" height="120" fill="{LAR}"/>')
+    c.append(texto("1º ANÚNCIO GRÁTIS", M, LADO - 50, 44, GRA, EXO))
     c.append(texto("autoregiao.com.br", LADO - M, LADO - 50, 32, GRA, JAKB, "dir"))
     svg = (f'<svg xmlns="http://www.w3.org/2000/svg" width="{LADO}" height="{LADO}" viewBox="0 0 {LADO} {LADO}">'
            + "".join(c) + "</svg>")

@@ -3,7 +3,8 @@
 Onde mudar: WhatsApp Business → **Ferramentas comerciais** → **Respostas rápidas** → toque na resposta → apague o
 texto antigo → cole o novo → **Salvar**. O atalho é o que você digita depois da barra (ex.: `/planos`).
 
-Preços e regras conferidos com o site: planos 149/219/329, 60 dias grátis contados do cadastro, loja só com CNPJ.
+Preços e regras conferidos com o site: planos 149/219/329, 60 dias grátis contados do cadastro, loja só com CNPJ;
+pessoa física: 1º anúncio grátis (60 dias), depois avulso R$ 19,90 (30 dias) ou R$ 29,90 (60 dias), pago no site.
 
 ---
 
@@ -75,4 +76,25 @@ O site já diminui o tamanho das fotos sozinho, pode mandar direto da câmera �
 📱 App para Android e iPhone: www.autoregiao.com.br/app
 
 Lá você encontra carros, motos e utilitários das lojas e vendedores da nossa região, com comparação com a Tabela FIPE. O contato é direto com o vendedor pelo WhatsApp. 🚗
+```
+
+## /particular (pessoa física, 23/11/2026)
+
+```
+*Quer vender seu carro sem ser loja?* 🚗
+
+🎁 O *1º anúncio é grátis* por 60 dias (1 por CPF).
+Depois, para anunciar outro veículo:
+▫️ *Anúncio avulso 30 dias* – R$ 19,90
+▫️ *Anúncio avulso 60 dias* – R$ 29,90
+Paga uma vez só, por Pix ou cartão, direto no site. Sem mensalidade.
+
+*Como anunciar:*
+1️⃣ Acesse www.autoregiao.com.br/cadastro pelo navegador do celular ou computador
+2️⃣ Em "Tipo de conta", escolha *Vender* e preencha nome, e-mail, WhatsApp e senha
+3️⃣ Confirme pelo e-mail que vai chegar e entre na sua conta
+4️⃣ Toque em *Novo anúncio*, informe CPF e WhatsApp e cadastre o veículo com as fotos
+(Se já usou o anúncio grátis, o site mostra os avulsos para pagar ali mesmo.)
+
+🔒 Seu CPF não aparece no site. Qualquer dúvida, é só me chamar aqui!
 ```

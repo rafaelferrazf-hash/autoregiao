@@ -19,6 +19,7 @@ import type { Loja } from "@/lib/tipos";
 import { ehVitalicio, limiteDoPlano, mensagemErroAnuncio, nomeDoPlano, situacaoDoPlano } from "@/lib/planos";
 import PerfilLoja from "@/components/PerfilLoja";
 import Icone, { type NomeIcone } from "@/components/Icone";
+import { DIAS_DESFAZER_VENDA, dentroDoPrazoDesfazer } from "@/lib/desfazerVenda";
 import { acessoDivulgar } from "@/lib/divulgar";
 
 export default function Painel() {
@@ -83,12 +84,25 @@ export default function Painel() {
   };
 
   const finalizar = async (car: Anuncio) => {
-    if (!window.confirm(`Marcar "${car.nome}" como VENDIDO?\n\nEle sai do site e fica no painel como "Vendido", com as visualizações e contatos que teve. Não conta no limite do plano e não volta mais ao ar.`)) return;
+    if (!window.confirm(`Marcar "${car.nome}" como VENDIDO?\n\nEle sai do site e fica no painel como "Vendido", com as visualizações e contatos que teve. Não conta no limite do plano. Se foi engano, dá para desfazer em até ${DIAS_DESFAZER_VENDA} dias na lista de vendidos.`)) return;
     setAcaoEmAndamento(car.id);
     const { error } = await marcarVendido(car.id);
     setAcaoEmAndamento(null);
     if (error) return alert("Não foi possível marcar como vendido. Tente de novo.");
-    setAnunciosReais(lista => lista.map(a => a.id === car.id ? { ...a, ativo: false, status: "vendido" } : a));
+    setAnunciosReais(lista => lista.map(a => a.id === car.id ? { ...a, ativo: false, status: "vendido", vendido_em: new Date().toISOString() } : a));
+  };
+
+  // Marcado como vendido por engano: volta PAUSADO (a rota usa o servidor; reativar confere o limite do plano).
+  const desfazerVenda = async (car: Anuncio) => {
+    if (!window.confirm(`Desfazer a venda de "${car.nome}"?\n\nEle volta para "Ativos e pausados" como PAUSADO. Para pôr no site de novo, toque em Reativar (vale o limite do seu plano).`)) return;
+    setAcaoEmAndamento(car.id);
+    const resposta = await fetch("/api/veiculos/desfazer-venda", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: car.id }) }).catch(() => null);
+    setAcaoEmAndamento(null);
+    if (!resposta?.ok) {
+      const corpo = await resposta?.json().catch(() => null);
+      return alert(corpo?.erro ?? "Não foi possível desfazer a venda. Tente de novo.");
+    }
+    setAnunciosReais(lista => lista.map(a => a.id === car.id ? { ...a, ativo: false, status: "pausado", vendido_em: null } : a));
   };
 
   const excluir = async (car: Anuncio) => {
@@ -469,6 +483,7 @@ export default function Painel() {
                               <Link href={`/painel/novo-anuncio?editar=${car.id}`} title="Editar" style={{ width: 28, height: 28, borderRadius: 6, border: "1.5px solid #E8E6E1", background: "#F7F6F3", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: 12, textDecoration: "none", color: "#1A1917" }}><Icone nome="editar" tamanho={15} /></Link>
                               {car.status !== "vendido" && !(car.ativo === false && semVaga) && <button title={car.ativo === false ? "Reativar" : "Pausar"} disabled={acaoEmAndamento === car.id} onClick={() => alternarPausa(car)} style={{ width: 28, height: 28, borderRadius: 6, border: "1.5px solid #E8E6E1", background: "#F7F6F3", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: 12, opacity: acaoEmAndamento === car.id ? 0.5 : 1 }}><Icone nome={car.ativo === false ? "reativar" : "pausar"} tamanho={15} /></button>}
                               {car.status !== "vendido" && <button title="Marcar como vendido" disabled={acaoEmAndamento === car.id} onClick={() => finalizar(car)} style={{ width: 28, height: 28, borderRadius: 6, border: "1.5px solid #E8E6E1", background: "#F7F6F3", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: "#16A34A" }}><Icone nome="ok" tamanho={15} /></button>}
+                              {car.status === "vendido" && dentroDoPrazoDesfazer(car.vendido_em) && <button title="Desfazer venda" disabled={acaoEmAndamento === car.id} onClick={() => desfazerVenda(car)} style={{ height: 28, padding: "0 9px", borderRadius: 6, border: "1.5px solid #E8E6E1", background: "#F7F6F3", display: "flex", alignItems: "center", gap: 4, cursor: "pointer", fontSize: 11.5, fontWeight: 600, color: "#1A1917", whiteSpace: "nowrap", opacity: acaoEmAndamento === car.id ? 0.5 : 1 }}><Icone nome="reativar" tamanho={14} /> Desfazer venda</button>}
                               <button title="Excluir" disabled={acaoEmAndamento === car.id} onClick={() => excluir(car)} style={{ width: 28, height: 28, borderRadius: 6, border: "1.5px solid #E8E6E1", background: "#F7F6F3", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: 12, opacity: acaoEmAndamento === car.id ? 0.5 : 1 , color: "#DC2626" }}><Icone nome="lixeira" tamanho={15} /></button>
                             </div>
                           </td>
@@ -507,6 +522,7 @@ export default function Painel() {
                               <Link href={`/painel/novo-anuncio?editar=${car.id}`} title="Editar" style={botao}><Icone nome="editar" tamanho={17} /></Link>
                               {car.status !== "vendido" && !(car.ativo === false && semVaga) && <button title={car.ativo === false ? "Reativar" : "Pausar"} disabled={acaoEmAndamento === car.id} onClick={() => alternarPausa(car)} style={botao}><Icone nome={car.ativo === false ? "reativar" : "pausar"} tamanho={17} /></button>}
                               {car.status !== "vendido" && <button title="Marcar como vendido" disabled={acaoEmAndamento === car.id} onClick={() => finalizar(car)} style={{ ...botao, color: "#16A34A" }}><Icone nome="ok" tamanho={17} /></button>}
+                              {car.status === "vendido" && dentroDoPrazoDesfazer(car.vendido_em) && <button title="Desfazer venda" disabled={acaoEmAndamento === car.id} onClick={() => desfazerVenda(car)} style={{ ...botao, width: "auto", padding: "0 10px", gap: 5, fontSize: 12.5, fontWeight: 600, color: "#1A1917", whiteSpace: "nowrap" }}><Icone nome="reativar" tamanho={16} /> Desfazer venda</button>}
                               <button title="Excluir" disabled={acaoEmAndamento === car.id} onClick={() => excluir(car)} style={{ ...botao, color: "#DC2626" }}><Icone nome="lixeira" tamanho={17} /></button>
                             </div>
                           </div>

@@ -119,7 +119,7 @@ export function mensagemErroAnuncio(mensagem: string | undefined, emApp = false)
     if (mensagem.includes("limite_anuncios")) return "Você atingiu o limite de anúncios ativos do seu plano. Pause um anúncio para ativar outro.";
   }
   if (mensagem.includes("plano_vencido")) return "O plano da sua loja venceu. Os anúncios voltam a ser publicados quando o plano estiver ativo.";
-  if (mensagem.includes("anuncio_vendido")) return "Este anúncio foi marcado como vendido e não volta ao ar. Para anunciar de novo, crie um anúncio novo.";
+  if (mensagem.includes("anuncio_vendido")) return "Este anúncio está marcado como vendido. Se foi engano, use \"Desfazer venda\" na lista de vendidos do painel (até 7 dias).";
   if (mensagem.includes("sem_anuncio_particular")) return "Você já usou seu anúncio grátis. Para publicar outro veículo, escolha um anúncio avulso.";
   if (mensagem.includes("anuncio_vencido")) return "Este anúncio venceu. Para voltar ao ar, publique um anúncio avulso.";
   if (mensagem.includes("limite_anuncios")) return "Você atingiu o limite de anúncios ativos do seu plano. Pause um anúncio ou escolha um plano maior.";

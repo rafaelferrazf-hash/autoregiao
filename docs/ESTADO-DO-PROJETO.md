@@ -1,7 +1,7 @@
 # AutoRegião — estado do projeto
 
 Leia isto no começo de cada conversa. Atualize ao terminar uma etapa (seção "Histórico" e "Pendências").
-Última atualização: 25/11/2026.
+Última atualização: 26/11/2026.
 
 ## O que é
 Classificados de veículos (carros, motos, utilitários) de lojas e particulares de uma região.
@@ -81,7 +81,10 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
 - (06/10) Plano MENOR pago com o atual em dia (ex.: Básico no período grátis) começa quando o atual termina
   (`lojas.plano_proximo/_em`, virado pelo cron); maior vale na hora; dias sempre somados. Troca de plano com
   mais anúncios ativos que o limite pausa TODOS e o lojista reativa até o limite (os demais: vendido/excluir).
-  "Marcar como vendido" (`status = 'vendido'`, `vendido_em`): sai do ar para sempre, não conta no limite.
+  "Marcar como vendido" (`status = 'vendido'`, `vendido_em`): sai do ar, não conta no limite.
+  (26/11) **"Desfazer venda"** (clique por engano): lojista até 7 dias (`lib/desfazerVenda.ts`), admin sempre;
+  rota `/api/veiculos/desfazer-venda` (service_role, o trigger da fase15 barra o lojista direto); volta PAUSADO
+  (reativar confere o limite). Relatórios mensais já gravados NÃO mudam (decisão do Rafael).
 - Fotos (06/10): reduzidas no aparelho antes do envio (2048 px, JPEG 88%) + versão do card "-card.jpg" (800 px, 85%)
   usada nos cards (`components/FotoCard`, volta para a grande se não existir). Painel com aba "Vendidos".
   Limites grátis: Supabase 1 GB fotos / 5 GB tráfego por mês / 500 MB banco (olhar em Usage 1x por mês);
@@ -196,6 +199,9 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
   60 dias R$29,90; `catalogo.py`, margem 160 para o catálogo não cortar). Pagamento continua SÓ no site (decisão do Rafael).
   **24/11: início das visitas aos lojistas.** Questionário das visitas no Google Forms "Visita a lojistas - AutoRegião"
   (conta Google do admin, RESTRITO, respostas numa planilha do Google; links na memória da conversa, não no repositório).
+
+- 26/11/2026: lojista da WL Veículos marcou uma Hilux como vendida sem querer → botão **"Desfazer venda"** no painel
+  (aba Vendidos), prazo de 7 dias para o lojista, admin sempre; carro volta pausado; relatórios gravados intocados.
 
 ## Pendências (em ordem sugerida)
 **Roteiro do lançamento (13/10/2026): `docs/ROTEIRO-LANCAMENTO.md`**. Etapas, responsáveis, checagem final em 30/10

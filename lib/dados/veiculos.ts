@@ -116,10 +116,10 @@ export async function listarVeiculosDoUsuario(usuarioId: string, lojaId?: string
   const filtro = `usuario_id.eq.${usuarioId}${lojaId ? `,loja_id.eq.${lojaId}` : ""}`;
   const { data, error } = await supabase
     .from("veiculos")
-    .select("id, nome, ano, km, preco, status, ativo, fotos, destaque, fipe_valor, fipe_ano, expira_em")
+    .select("id, nome, ano, km, preco, status, ativo, fotos, destaque, fipe_valor, fipe_ano, expira_em, vendido_em")
     .or(filtro)
     .order("criado_em", { ascending: false });
-  type Resumo = Pick<Veiculo, "id" | "nome" | "ano" | "km" | "preco" | "status" | "ativo" | "fotos" | "destaque" | "fipe_valor" | "fipe_ano" | "expira_em">;
+  type Resumo = Pick<Veiculo, "id" | "nome" | "ano" | "km" | "preco" | "status" | "ativo" | "fotos" | "destaque" | "fipe_valor" | "fipe_ano" | "expira_em" | "vendido_em">;
   return { veiculos: (data ?? []) as Resumo[], error };
 }
 
@@ -139,7 +139,7 @@ export async function atualizarVeiculo(id: string, dados: Partial<NovoVeiculo>) 
 }
 
 // Pausar tira o anúncio do site sem apagar; reativar devolve.
-// "Finalizar": vendido. O banco tira do ar e não deixa voltar (supabase/fase15).
+// "Finalizar": vendido. O banco tira do ar; só o servidor desfaz (/api/veiculos/desfazer-venda).
 export async function marcarVendido(id: string) {
   return supabase.from("veiculos").update({ status: "vendido", ativo: false }).eq("id", id).select("id").single();
 }

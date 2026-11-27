@@ -26,7 +26,7 @@ Crie um alerta para a busca que você quer (por exemplo, “Hilux até R$ 200 mi
 Salve os anúncios de que gostou com um toque e compare depois.
 
 📸 FOTOS E DETALHES
-Galeria de fotos (arraste para o lado para ver a próxima), opcionais, descrição, simulador de financiamento e veículos parecidos.
+Galeria de fotos (arraste para o lado para ver a próxima), opcionais, descrição, botão para pedir a simulação do financiamento à loja e veículos parecidos.
 
 🏪 PARA LOJAS E VENDEDORES
 Cadastre sua loja, anuncie seus veículos e acompanhe visualizações e contatos no painel. Planos para lojas com destaque nos resultados. Particulares anunciam 1 veículo grátis.

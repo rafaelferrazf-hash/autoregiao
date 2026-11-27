@@ -11,7 +11,6 @@ import { linkDoVeiculo } from "@/lib/linkVeiculo";
 import BotaoWhatsAppCard from "@/components/BotaoWhatsAppCard";
 import DistanciaCidade from "@/components/DistanciaCidade";
 import SeloVerificada from "@/components/SeloVerificada";
-import { ENTRADA_PADRAO, parcelaMensal } from "@/lib/financiamento";
 
 export type DadosCartao = Pick<Veiculo, "id" | "nome" | "ano" | "km" | "preco" | "fotos" | "destaque">
   & Partial<Pick<Veiculo, "combustivel" | "cidade" | "fipe_valor" | "condicoes" | "marca" | "modelo" | "versao" | "telefone" | "prioridade">>
@@ -90,7 +89,6 @@ export default function CartaoVeiculo({ car, mostrarLoja = true, largura }: { ca
             <div style={{ textAlign: "right", marginLeft: "auto" }}>
               <SeloPreco v={car} />
               <div style={{ fontSize: 19, fontWeight: 800, color: "#1A1917", lineHeight: 1.1, marginTop: 4, whiteSpace: "nowrap" }}>{formatarPreco(car.preco)}</div>
-              {!!car.preco && <div style={{ fontSize: 11, color: "#7A7670", marginTop: 2, whiteSpace: "nowrap" }}>ou ≈ R$ {parcelaMensal(car.preco * (1 - ENTRADA_PADRAO)).toLocaleString("pt-BR")}/mês</div>}
             </div>
           </div>
 

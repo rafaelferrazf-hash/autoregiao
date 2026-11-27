@@ -14,7 +14,6 @@ import { lerFiltros, filtrosParaQuery, temFiltroAtivo, paraNumero, type Filtros,
 import type { VeiculoComLoja } from "@/lib/tipos";
 import Icone from "@/components/Icone";
 import { CARROCERIAS, TODAS_CARROCERIAS } from "@/lib/carroceria";
-import { FAIXAS_PARCELA } from "@/lib/financiamento";
 import { CONDICOES } from "@/lib/situacaoVeiculo";
 
 type Opcoes = Awaited<ReturnType<typeof opcoesDeFiltro>>;
@@ -104,13 +103,6 @@ function Veiculos() {
           <input inputMode="numeric" placeholder="Mín" value={rascunho.preco_min ?? ""} onChange={e => mudaNumero("preco_min", e.target.value)} style={{ ...estiloSelect, padding: "8px 10px", boxSizing: "border-box" }} />
           <input inputMode="numeric" placeholder="Máx" value={rascunho.preco_max ?? ""} onChange={e => mudaNumero("preco_max", e.target.value)} style={{ ...estiloSelect, padding: "8px 10px", boxSizing: "border-box" }} />
         </div>
-      </div>
-      <div style={{ marginBottom: 16 }}>
-        <div style={estiloTitulo}>Parcela até (estimada)</div>
-        <select value={rascunho.parcela_max ?? ""} onChange={e => mudaNumero("parcela_max", e.target.value)} style={estiloSelect}>
-          <option value="">Qualquer parcela</option>
-          {FAIXAS_PARCELA.map(p => <option key={p} value={p}>Até R$ {p.toLocaleString("pt-BR")}/mês</option>)}
-        </select>
       </div>
       <div style={{ marginBottom: 16 }}>
         <div style={estiloTitulo}>Situação do veículo</div>

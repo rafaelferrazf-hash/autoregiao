@@ -112,7 +112,7 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
 - 08/10/2026 (Mobiauto — concorrente com ~62 usados em Teixeira): selo "Super preço" (≥10% abaixo da FIPE) /
   "Bom preço" (`lib/precoFipe.ts`, `SeloPreco` no CartaoVeiculo); "Situação do veículo" (`veiculos.condicoes`,
   `lib/situacaoVeiculo.ts`: IPVA pago, licenciado, único dono, revisões em dia, laudo, garantia — cadastro, selo,
-  filtro ?cond=); busca por parcela (`lib/financiamento.ts`, ?parcela_max=, "ou cerca de R$ X/mês" no anúncio);
+  filtro ?cond=); busca por parcela (REMOVIDA em 26/11/2026 — ver Histórico);
   estilos (`lib/estilos.ts`: /carros/primeiro-carro, familia, economicos, trabalho, 4x4). Tabela FIPE pública
   (`/tabela-fipe` com `components/ConsultaFipe`, `/tabela-fipe/[carros|motos]/[marca]` com os modelos; no sitemap;
   API Parallelum ~1000/dia → listas em cache 7 dias, valor 1 dia; NÃO criar página por modelo/ano com valor).
@@ -202,6 +202,13 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
 
 - 26/11/2026: lojista da WL Veículos marcou uma Hilux como vendida sem querer → botão **"Desfazer venda"** no painel
   (aba Vendidos), prazo de 7 dias para o lojista, admin sempre; carro volta pausado; relatórios gravados intocados.
+- 26/11/2026: **estimativa de parcela REMOVIDA do site** (decisão do Rafael: número não é real). Saíram o "ou ≈ R$/mês" do card
+  e do anúncio, o simulador (entrada/prazo/1,49%), a linha da comparação, o filtro "Parcela até" e os atalhos "Por parcela" da
+  inicial; `lib/financiamento.ts` apagado; `?parcela_max=` antigo é ignorado. No anúncio de LOJA (particular não) ficou o cartão
+  "Quer financiar este veículo?" com o botão **"Fazer simulação do financiamento"** → WhatsApp da loja com mensagem de interesse em
+  financiar (conta como contato de WhatsApp). Termos 1 ajustado. Fichas: tirada "Busca por valor de parcela estimada" do
+  `docs/app-store-ficha.md` — **a descrição publicada na App Store ainda cita isso: trocar na próxima versão do app** (Google Play:
+  atualizar o texto da ficha no Play Console). PLANO-MARKETING ainda cita "busca pela parcela" (ideia antiga, não usar).
 
 ## Pendências (em ordem sugerida)
 **Roteiro do lançamento (13/10/2026): `docs/ROTEIRO-LANCAMENTO.md`**. Etapas, responsáveis, checagem final em 30/10

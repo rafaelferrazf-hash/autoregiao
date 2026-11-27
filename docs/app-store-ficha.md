@@ -30,7 +30,6 @@ O AutoRegião reúne os carros, motos e utilitários à venda em Teixeira de Fre
 BUSQUE DO SEU JEITO
 • Filtros por marca, modelo, cidade, ano (de/até), preço, quilometragem, câmbio, combustível e tipo de carroceria
 • "Perto de mim": mostra os veículos da cidade mais próxima e a distância de cada um
-• Busca por valor de parcela estimada
 • Situação do veículo: IPVA pago, licenciado, único dono, revisões em dia, laudo e garantia
 
 SAIBA SE O PREÇO É JUSTO

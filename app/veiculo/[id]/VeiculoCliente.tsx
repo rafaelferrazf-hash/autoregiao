@@ -18,7 +18,6 @@ import { registrarEvento } from "@/lib/dados/eventos";
 import type { VeiculoComLoja } from "@/lib/tipos";
 import Icone, { type NomeIcone } from "@/components/Icone";
 import { caminhoDoVeiculo, linkMesmoModelo } from "@/lib/caminhoVeiculo";
-import { ENTRADA_PADRAO, parcelaMensal } from "@/lib/financiamento";
 import { linkDoVeiculo } from "@/lib/linkVeiculo";
 
 // O anúncio vem pronto do servidor (page.tsx); aqui ficam as partes interativas.
@@ -26,8 +25,6 @@ export default function Veiculo({ inicial }: { inicial: VeiculoComLoja }) {
   const veiculo = inicial;
   const [fotoAtiva, setFotoAtiva] = useState(0);
   const [lightbox, setLightbox] = useState(false);
-  const [entrada, setEntrada] = useState(() => Math.round((inicial.preco ?? 0) * 0.2).toString());
-  const [prazo, setPrazo] = useState("60");
   const [menuAberto, setMenuAberto] = useState(false);
   const [semelhantes, setSemelhantes] = useState<VeiculoComLoja[]>([]);
 
@@ -163,10 +160,6 @@ export default function Veiculo({ inicial }: { inicial: VeiculoComLoja }) {
       <DenunciarAnuncio veiculoId={veiculo.id} />
     </div>
   );
-
-  const parcela = entrada && prazo
-    ? Math.round(((veiculo?.preco || 0) - Number(entrada)) * (0.0149 / (1 - Math.pow(1.0149, -Number(prazo)))))
-    : 0;
 
   return (
     <main style={{ background: "#F7F6F3", minHeight: "100vh" }}>
@@ -358,7 +351,6 @@ export default function Veiculo({ inicial }: { inicial: VeiculoComLoja }) {
                     </div>
                   )}
                   {veiculo.aceita_troca && <div style={{ fontSize: 12, color: "#16A34A", marginTop: 6, fontWeight: 500 }}><Icone nome="ok" /> Aceita troca</div>}
-                  {!!veiculo.preco && <div style={{ fontSize: 12, color: "#7A7670", marginTop: 6 }}>ou cerca de <strong style={{ color: "#1A1917" }}>R$ {parcelaMensal(veiculo.preco * (1 - ENTRADA_PADRAO)).toLocaleString("pt-BR")}/mês</strong> (entrada de 20% + 60x, simulação)</div>}
                 </div>
                 {mesmoModelo && (
                   <Link href={mesmoModelo} style={{ fontSize: 12.5, color: "#FF6600", fontWeight: 600, textDecoration: "none" }}>
@@ -427,37 +419,15 @@ export default function Veiculo({ inicial }: { inicial: VeiculoComLoja }) {
               </div>
             )}
 
-            {/* SIMULADOR */}
-            <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, overflow: "hidden" }}>
-              <div style={{ padding: "14px 18px", borderBottom: "1px solid #E8E6E1", fontSize: 14, fontWeight: 700, color: "#1A1917" }}><Icone nome="real" cor="#FF6600" /> Simular financiamento</div>
-              <div style={{ padding: "16px 18px" }}>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
-                  <div>
-                    <div style={{ fontSize: 10.5, fontWeight: 500, color: "#7A7670", textTransform: "uppercase", marginBottom: 5 }}>Valor de entrada</div>
-                    <input type="number" value={entrada} onChange={e => setEntrada(e.target.value)} style={{ width: "100%", padding: "10px 12px", border: "1.5px solid #E8E6E1", borderRadius: 7, fontSize: 14, color: "#1A1917", background: "#F7F6F3", outline: "none", boxSizing: "border-box" }} />
-                  </div>
-                  <div>
-                    <div style={{ fontSize: 10.5, fontWeight: 500, color: "#7A7670", textTransform: "uppercase", marginBottom: 5 }}>Prazo</div>
-                    <select value={prazo} onChange={e => setPrazo(e.target.value)} style={{ width: "100%", padding: "10px 12px", border: "1.5px solid #E8E6E1", borderRadius: 7, fontSize: 14, color: "#1A1917", background: "#F7F6F3", outline: "none", boxSizing: "border-box" }}>
-                      <option value="60">60 meses</option>
-                      <option value="48">48 meses</option>
-                      <option value="36">36 meses</option>
-                      <option value="24">24 meses</option>
-                    </select>
-                  </div>
-                </div>
-                <div style={{ background: "#F7F6F3", border: "1.5px solid #E8E6E1", borderRadius: 10, padding: "14px 16px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                  <div>
-                    <div style={{ fontSize: 12, color: "#7A7670" }}>Parcela estimada</div>
-                    <div style={{ fontSize: 10.5, color: "#7A7670", marginTop: 2 }}>Taxa aprox. 1,49% a.m. · {prazo}x</div>
-                  </div>
-                  <div style={{ fontSize: 22, fontWeight: 800, color: "#FF6600" }}>
-                    {parcela > 0 ? `R$ ${parcela.toLocaleString("pt-BR")}` : "---"}
-                  </div>
-                </div>
-                <button onClick={() => abrirWhatsApp(`Olá! Vi o anúncio do ${veiculo.nome} por ${formatarPreco(veiculo.preco)} no AutoRegião e gostaria de uma simulação de financiamento.`)} style={{ width: "100%", marginTop: 12, padding: 10, background: "#1A1917", color: "#fff", border: "none", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>Solicitar financiamento →</button>
+            {/* FINANCIAMENTO (26/11/2026): sem conta de parcela no site — a simulação real é feita pela loja no WhatsApp.
+                Só para anúncio de loja (particular não financia). Conta como contato de WhatsApp. */}
+            {veiculo.loja_id && (
+              <div style={{ background: "#fff", border: "1.5px solid #E8E6E1", borderRadius: 12, padding: "16px 18px" }}>
+                <div style={{ fontSize: 14, fontWeight: 700, color: "#1A1917", display: "flex", alignItems: "center", gap: 6 }}><Icone nome="real" cor="#FF6600" /> Quer financiar este veículo?</div>
+                <div style={{ fontSize: 12.5, color: "#7A7670", marginTop: 6, lineHeight: 1.45 }}>A loja faz a simulação com a entrada e o prazo que você preferir, direto pelo WhatsApp.</div>
+                <button onClick={() => abrirWhatsApp(`Olá! Vi o ${veiculo.nome}${veiculo.ano ? ` ${veiculo.ano}` : ""} por ${formatarPreco(veiculo.preco)} no AutoRegião e tenho interesse em FINANCIAR. Pode fazer uma simulação para mim?`)} className="toque-facil" style={{ width: "100%", marginTop: 12, padding: 12, background: "#1A1917", color: "#fff", border: "none", borderRadius: 9, fontSize: 14, fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 7 }}><Icone nome="whatsapp" /> Fazer simulação do financiamento</button>
               </div>
-            </div>
+            )}
             {/* No celular a coluna da direita some: mapa e segurança aparecem aqui. */}
             <div className="so-celular" style={{ flexDirection: "column", gap: 12, marginTop: 16 }}>
               {veiculo.loja_id && veiculo.lojas && (

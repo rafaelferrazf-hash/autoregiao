@@ -29,8 +29,8 @@ export default function Termos() {
       </p>
       <p>
         Recursos de apoio exibidos no site têm caráter apenas informativo: os selos &quot;Bom preço&quot; e &quot;Super preço&quot;
-        comparam o preço anunciado com a Tabela FIPE do mês; a &quot;parcela estimada&quot; é uma simulação e <strong>não é
-        oferta de crédito</strong>; e a distância &quot;a X km&quot; é aproximada, calculada entre cidades.
+        comparam o preço anunciado com a Tabela FIPE do mês; o botão &quot;Simular financiamento&quot; apenas abre a conversa
+        com o anunciante — o AutoRegião <strong>não oferece nem intermedeia crédito</strong>; e a distância &quot;a X km&quot; é aproximada, calculada entre cidades.
       </p>
 
       <h2>2. Cadastro e conta</h2>

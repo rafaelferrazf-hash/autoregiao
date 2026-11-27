@@ -46,7 +46,7 @@ Objetivo: **nunca perder uma venda por falta de argumento ou por insegurança.**
 | **Marcar como vendido** | Sai do ar, libera a vaga e vai para a aba "Vendidos". |
 | **Selo "Loja verificada"** | Selo de confiança para lojas conferidas pessoalmente por nós. |
 | **App Android e iPhone** | O comprador baixa o app (Google Play e App Store) e recebe **aviso de carro novo** no celular. |
-| **Ferramentas do comprador** | Busca por marca, preço, ano, cidade, "Perto de mim", busca por valor da parcela, comparar carros, favoritos e alertas. "O comprador fica no site porque é fácil achar carro." |
+| **Ferramentas do comprador** | Busca por marca, preço, ano, cidade, "Perto de mim", comparar carros, favoritos e alertas. "O comprador fica no site porque é fácil achar carro." |
 
 <!-- TELA anuncio-topo.png | 0-844 | Anúncio: selo de preço e botões WhatsApp e Ligar | 1:30,563,112,30; 2:14,783,150,51 -->
 <!-- TELA loja.png | 0-844 | Página própria da loja | -->

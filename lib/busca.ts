@@ -1,5 +1,4 @@
 import { ESTILOS, ehEstilo, type Estilo } from "@/lib/estilos";
-import { precoMaximoPelaParcela } from "@/lib/financiamento";
 import { condicaoDoSlug, slugDaCondicao } from "@/lib/situacaoVeiculo";
 // Filtros da busca de veículos. Ficam na URL (?marca=Honda&preco_max=90000) para a busca
 // poder ser compartilhada e para o botão "voltar" do navegador funcionar.
@@ -24,7 +23,6 @@ export type Filtros = {
   ordem?: Ordem;
   abaixo_fipe?: boolean;       // só anúncios abaixo da Tabela FIPE (?abaixo_fipe=1)
   anunciante?: Anunciante;     // loja ou particular (?anunciante=loja)
-  parcela_max?: number;        // "busca por parcela": parcela estimada até X por mês (lib/financiamento.ts)
   estilo?: Estilo;             // primeiro-carro, familia, economicos, trabalho, 4x4 (lib/estilos.ts)
   condicoes?: string[];        // situação do veículo, todas exigidas (?cond=ipva-pago,unico-dono)
 };
@@ -32,7 +30,7 @@ export type Filtros = {
 const ORDENS: Ordem[] = ["recentes", "menor_preco", "maior_preco", "menor_km"];
 const TIPOS: TipoVeiculo[] = ["carro", "moto", "utilitario"];
 const TEXTOS = ["q", "marca", "cidade", "cambio", "combustivel", "carroceria"] as const;
-const NUMEROS = ["ano_min", "ano_max", "preco_min", "preco_max", "km_max", "parcela_max"] as const;
+const NUMEROS = ["ano_min", "ano_max", "preco_min", "preco_max", "km_max"] as const; // ?parcela_max= (busca por parcela, removida em 26/11/2026) é ignorado
 
 // "R$ 90.000" / "90000" / "90.000,00" → 90000 (centavos descartados). Vazio ou inválido → undefined.
 export function paraNumero(v: string | null | undefined): number | undefined {
@@ -129,7 +127,6 @@ export function aplicarFiltros<Q extends ConsultaFiltravel<Q>>(consulta: Q, f: F
   if (f.preco_min) consulta = consulta.gte("preco", f.preco_min);
   if (f.preco_max) consulta = consulta.lte("preco", f.preco_max);
   if (f.km_max) consulta = consulta.lte("km_num", f.km_max);
-  if (f.parcela_max) consulta = consulta.lte("preco", precoMaximoPelaParcela(f.parcela_max));
   if (f.condicoes?.length) consulta = consulta.contains("condicoes", f.condicoes);
   if (f.estilo === "primeiro-carro") consulta = consulta.eq("carroceria", "Hatch").lte("preco", 60000);
   if (f.estilo === "familia") consulta = consulta.in("carroceria", ["SUV", "Sedã", "Minivan", "Perua"]);
@@ -162,7 +159,6 @@ export function descreverFiltros(f: Filtros): string {
   else if (f.ano_min) partes.push(`${f.ano_min} ou mais novo`);
   else if (f.ano_max) partes.push(`até ${f.ano_max}`);
   if (f.km_max) partes.push(`até ${milhar(f.km_max)} km`);
-  if (f.parcela_max) partes.push(`parcela até R$ ${milhar(f.parcela_max)}/mês`);
   if (f.condicoes?.length) partes.push(f.condicoes.join(", "));
   if (f.cambio) partes.push(`câmbio ${f.cambio.toLowerCase()}`);
   if (f.combustivel) partes.push(f.combustivel);

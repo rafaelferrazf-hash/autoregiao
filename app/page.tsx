@@ -16,7 +16,6 @@ import type { VeiculoComLoja } from "@/lib/tipos";
 import Icone from "@/components/Icone";
 import ExplorarAtalhos from "@/components/ExplorarAtalhos";
 import { ESTILOS } from "@/lib/estilos";
-import { FAIXAS_PARCELA } from "@/lib/financiamento";
 
 const MAX_HOME = 8;
 
@@ -138,7 +137,6 @@ export default function Home() {
             {carros.length > 0 && (
               <ExplorarAtalhos grupos={[
                 { titulo: "Por estilo", links: Object.entries(ESTILOS).map(([e, x]) => [x.nome, `/carros/${e}`] as [string, string]) },
-                { titulo: "Por parcela", links: FAIXAS_PARCELA.map(p => [`R$ ${p.toLocaleString("pt-BR")}/mês`, `/veiculos?parcela_max=${p}`] as [string, string]) },
                 { titulo: "Por preço", links: [30, 50, 80, 100, 150].map(n => [`Até R$ ${n} mil`, `/carros/ate-${n}-mil`] as [string, string]) },
                 { titulo: "Por marca", links: [...new Set(carros.filter(c => c.marca && c.tipo !== "moto" && c.tipo !== "utilitario").map(c => c.marca!.trim()))]
                   .sort((a, b) => a.localeCompare(b, "pt-BR")).map(m => [m, `/carros/${slug(m)}`] as [string, string]) },

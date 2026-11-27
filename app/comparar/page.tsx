@@ -8,7 +8,6 @@ import { SeloPreco } from "@/components/CartaoVeiculo";
 import { alternarComparar, limparComparar, useComparar } from "@/lib/comparar";
 import { buscarVeiculosPorIds } from "@/lib/dados/veiculos";
 import { formatarKm, formatarPreco } from "@/lib/formatar";
-import { ENTRADA_PADRAO, parcelaMensal } from "@/lib/financiamento";
 import { linkDoVeiculo } from "@/lib/linkVeiculo";
 import type { VeiculoComLoja } from "@/lib/tipos";
 
@@ -41,7 +40,6 @@ export default function Comparar() {
   const linhas: { rotulo: string; valor: (c: VeiculoComLoja) => React.ReactNode }[] = [
     { rotulo: "Preço", valor: c => <span style={{ fontSize: 16, fontWeight: 800, ...destaque(c.preco === precoMelhor) }}>{formatarPreco(c.preco)}</span> },
     { rotulo: "Tabela FIPE", valor: c => <SeloPreco v={c} /> },
-    { rotulo: "Parcela (simulação)", valor: c => (c.preco ? `≈ R$ ${parcelaMensal(c.preco * (1 - ENTRADA_PADRAO)).toLocaleString("pt-BR")}/mês` : "—") },
     { rotulo: "Ano", valor: c => <span style={destaque(num(c.ano) === anoMelhor)}>{c.ano ?? "—"}</span> },
     { rotulo: "Quilometragem", valor: c => <span style={destaque(num(c.km) === kmMelhor)}>{formatarKm(c.km) || "—"}</span> },
     { rotulo: "Câmbio", valor: c => c.cambio || "—" },

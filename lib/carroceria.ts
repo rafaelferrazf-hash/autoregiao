@@ -6,13 +6,17 @@ export const CARROCERIAS = {
   utilitario: ["Picape", "Van", "Furgão", "Caminhão"],
 } as const;
 
+// Nome mostrado nas escolhas: aqui na região "caminhonete"/"camionete" é picape (Hilux, S10, Strada...).
+// O valor gravado continua "Picape" — um nome só para a busca não se dividir em duas categorias.
+export const rotuloCarroceria = (c: string) => (c === "Picape" ? "Picape / Caminhonete" : c);
+
 export const TODAS_CARROCERIAS = [...new Set([...CARROCERIAS.carro, ...CARROCERIAS.utilitario])];
 
 // Endereço das vitrines: /carros/suv, /carros/seda, /utilitarios/van...
 export const slugCarroceria = (c: string) => c.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 export const carroceriaDoSlug = (s: string) => TODAS_CARROCERIAS.find(c => slugCarroceria(c) === s) ?? null;
 export const pluralCarroceria = (c: string) =>
-  ({ Hatch: "Hatches", Sedã: "Sedãs", SUV: "SUVs", Picape: "Picapes", Minivan: "Minivans", Perua: "Peruas", Cupê: "Cupês",
+  ({ Hatch: "Hatches", Sedã: "Sedãs", SUV: "SUVs", Picape: "Picapes e caminhonetes", Minivan: "Minivans", Perua: "Peruas", Cupê: "Cupês",
      Conversível: "Conversíveis", Van: "Vans", Furgão: "Furgões", Caminhão: "Caminhões" } as Record<string, string>)[c] ?? c;
 
 const PICAPES = /\b(hilux|s10|s-10|strada|toro|ranger|saveiro|montana|amarok|frontier|l200|l-200|triton|maverick|rampage|oroch|f-?250|f-?1000|ram|tacoma|titano|tundra|silverado|d-?20|courier|hoggar)\b/;

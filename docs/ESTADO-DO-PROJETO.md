@@ -210,6 +210,10 @@ estiver funcionando perfeitamente** (inclusive pagamentos reais e app na Google 
   `docs/app-store-ficha.md` — **a descrição publicada na App Store ainda cita isso: trocar na próxima versão do app** (Google Play:
   atualizar o texto da ficha no Play Console). PLANO-MARKETING ainda cita "busca pela parcela" (ideia antiga, não usar).
 
+- 26/11/2026 (pedido do Rafael no cadastro): carroceria "Picape" aparece como **"Picape / Caminhonete"** (`rotuloCarroceria`;
+  valor gravado continua "Picape" para a busca não se dividir; vitrine "Picapes e caminhonetes à venda"). Cores: lista maior
+  (`lib/cores.ts`, 22 cores) + **"Outra cor (digitar)"** (até 30 letras; anúncio antigo com cor fora da lista abre no campo de texto).
+
 ## Pendências (em ordem sugerida)
 **Roteiro do lançamento (13/10/2026): `docs/ROTEIRO-LANCAMENTO.md`**. Etapas, responsáveis, checagem final em 30/10
 e lançamento sugerido em 03/11/2026. Seguir e marcar por lá.

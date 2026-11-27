@@ -13,7 +13,7 @@ import CriarAlerta from "@/components/CriarAlerta";
 import { lerFiltros, filtrosParaQuery, temFiltroAtivo, paraNumero, type Filtros, type Ordem, type TipoVeiculo } from "@/lib/busca";
 import type { VeiculoComLoja } from "@/lib/tipos";
 import Icone from "@/components/Icone";
-import { CARROCERIAS, TODAS_CARROCERIAS } from "@/lib/carroceria";
+import { CARROCERIAS, TODAS_CARROCERIAS, rotuloCarroceria } from "@/lib/carroceria";
 import { CONDICOES } from "@/lib/situacaoVeiculo";
 
 type Opcoes = Awaited<ReturnType<typeof opcoesDeFiltro>>;
@@ -86,7 +86,7 @@ function Veiculos() {
           <div style={estiloTitulo}>{titulo}</div>
           <select value={(rascunho[campo] as string) ?? ""} onChange={e => muda(campo, e.target.value)} style={estiloSelect}>
             <option value="">{vazio}</option>
-            {lista.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+            {lista.map(opt => <option key={opt} value={opt}>{campo === "carroceria" ? rotuloCarroceria(opt) : opt}</option>)}
           </select>
         </div>
       ))}

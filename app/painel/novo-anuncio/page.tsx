@@ -8,7 +8,8 @@ import { mensagemErroAnuncio } from "@/lib/planos";
 import { detectar as estaNoAppDaLoja } from "@/lib/appLoja";
 import { criarVeiculo, atualizarVeiculo, buscarVeiculoDoDono, enviarFotoVeiculo, apagarFotos } from "@/lib/dados/veiculos";
 import SeletorFipe, { type EscolhaFipe } from "@/components/SeletorFipe";
-import { adivinharCarroceria, CARROCERIAS } from "@/lib/carroceria";
+import { adivinharCarroceria, CARROCERIAS, rotuloCarroceria } from "@/lib/carroceria";
+import { CORES, COR_MAX } from "@/lib/cores";
 import { CONDICOES } from "@/lib/situacaoVeiculo";
 import { formatarPreco, lerPreco } from "@/lib/formatar";
 import { lerAnoFipe, modeloBase } from "@/lib/nomesVeiculo";
@@ -45,6 +46,7 @@ export default function NovoAnuncio() {
   const [erro, setErro] = useState("");
   const [carregando, setCarregando] = useState(false);
   const [fotos, setFotos] = useState<FotoPreview[]>([]);
+  const [corOutra, setCorOutra] = useState(false);
   const [uploadando, setUploadando] = useState(false);
   const inputFotoRef = useRef<HTMLInputElement>(null);
 
@@ -104,6 +106,7 @@ export default function NovoAnuncio() {
         return;
       }
       setEditandoId(v.id);
+      setCorOutra(!!v.cor && !CORES.includes(v.cor));
       setForm({
         tipo: v.tipo || "carro",
         marca: v.marca || "", modelo: v.modelo || "", versao: v.versao || "",
@@ -230,7 +233,7 @@ export default function NovoAnuncio() {
       km: soNumero(form.km)?.toString() ?? null,
       cambio: form.cambio,
       combustivel: form.combustivel,
-      cor: form.cor,
+      cor: form.cor.trim(),
       portas: form.portas,
       carroceria: form.tipo === "moto" ? null : form.carroceria || null,
       preco: lerPreco(form.preco),
@@ -393,7 +396,7 @@ export default function NovoAnuncio() {
                       {CARROCERIAS[form.tipo === "utilitario" ? "utilitario" : "carro"].map(c => (
                         <button key={c} type="button" onClick={() => set("carroceria", c)}
                           style={{ padding: "7px 12px", borderRadius: 20, border: "1.5px solid", borderColor: form.carroceria === c ? "#FF6600" : "#E8E6E1", background: form.carroceria === c ? "#FFF5F1" : "#fff", color: form.carroceria === c ? "#FF6600" : "#1A1917", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
-                          {c}
+                          {rotuloCarroceria(c)}
                         </button>
                       ))}
                     </div>
@@ -428,10 +431,13 @@ export default function NovoAnuncio() {
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
                   <div>
                     <label style={labelStyle}>Cor</label>
-                    <select value={form.cor} onChange={e => set("cor", e.target.value)} style={inputStyle}>
+                    {/* Cor fora da lista (ou anúncio antigo com cor digitada) → campo de texto. */}
+                    <select value={corOutra ? "__outra" : form.cor} onChange={e => { const v = e.target.value; setCorOutra(v === "__outra"); set("cor", v === "__outra" ? (CORES.includes(form.cor) ? "" : form.cor) : v); }} style={inputStyle}>
                       <option value="">Selecione</option>
-                      {["Branco", "Prata", "Preto", "Cinza", "Vermelho", "Azul", "Verde", "Amarelo", "Laranja", "Marrom"].map(c => <option key={c}>{c}</option>)}
+                      {CORES.map(c => <option key={c}>{c}</option>)}
+                      <option value="__outra">Outra cor (digitar)</option>
                     </select>
+                    {corOutra && <input autoFocus placeholder="Digite a cor. Ex: Azul Topázio" maxLength={COR_MAX} value={form.cor} onChange={e => set("cor", e.target.value)} style={{ ...inputStyle, marginTop: 8 }} />}
                   </div>
                   <div>
                     <label style={labelStyle}>Preço <span style={{ color: "#FF6600" }}>*</span></label>

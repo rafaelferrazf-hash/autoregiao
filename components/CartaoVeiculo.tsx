@@ -6,6 +6,7 @@ import type { Veiculo } from "@/lib/tipos";
 import Icone from "@/components/Icone";
 import { seloDePreco } from "@/lib/precoFipe";
 import GaleriaCard from "@/components/GaleriaCard";
+import PincaFoto from "@/components/PincaFoto";
 import BotaoComparar from "@/components/BotaoComparar";
 import { linkDoVeiculo } from "@/lib/linkVeiculo";
 import BotaoWhatsAppCard from "@/components/BotaoWhatsAppCard";
@@ -61,7 +62,7 @@ export default function CartaoVeiculo({ car, mostrarLoja = true, largura }: { ca
         {/* FOTO */}
         <div style={{ position: "relative", aspectRatio: "4 / 3", width: "100%", background: "#F7F6F3" }}>
           {car.fotos && car.fotos.length > 0
-            ? <GaleriaCard fotos={car.fotos} alt={car.nome ?? "Veículo"} />
+            ? <PincaFoto><GaleriaCard fotos={car.fotos} alt={car.nome ?? "Veículo"} /></PincaFoto>
             : <Image src="/sem-foto.png" alt={car.nome ?? "Veículo"} fill style={{ objectFit: "cover" }} sizes="(max-width: 480px) 100vw, (max-width: 768px) 50vw, 33vw" />}
           <BotaoComparar id={car.id} />
           <BotaoFavorito id={car.id} />

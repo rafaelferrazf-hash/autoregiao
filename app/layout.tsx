@@ -8,6 +8,7 @@ import ContadorVisitas from "@/components/ContadorVisitas";
 import ExibirFlutuante from "@/components/ExibirFlutuante";
 import { Suspense } from "react";
 import BarraComparar from "@/components/BarraComparar";
+import VoltarDeslizando from "@/components/VoltarDeslizando";
 
 // Fonte única do site (títulos, preços e textos), servida pelo próprio site.
 const fonte = Plus_Jakarta_Sans({
@@ -62,6 +63,7 @@ export default function RootLayout({
         <Suspense fallback={null}><ContadorVisitas /></Suspense>
         <ExibirFlutuante />
         <BarraComparar />
+        <VoltarDeslizando />
       </body>
     </html>
   );

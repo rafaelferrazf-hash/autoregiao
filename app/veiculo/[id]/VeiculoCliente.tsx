@@ -78,6 +78,73 @@ export default function Veiculo({ inicial }: { inicial: VeiculoComLoja }) {
     return true;
   }
 
+  // Zoom na foto ampliada: pinça com dois dedos, toque duplo (ou duplo clique) e arrastar a foto ampliada.
+  // O zoom vale só para a foto em que foi feito: trocar de foto ou fechar volta ao normal.
+  const [zoomBruto, setZoom] = useState({ s: 1, x: 0, y: 0, foto: -1 });
+  const zoom = lightbox && zoomBruto.foto === fotoAtiva ? zoomBruto : { s: 1, x: 0, y: 0, foto: fotoAtiva };
+  const gesto = useRef<{ tipo: "pinca" | "mover"; d0: number; s0: number; px: number; py: number; x0: number; y0: number } | null>(null);
+  const ultimoToque = useRef(0);
+  const [comGesto, setComGesto] = useState(false); // sem animação enquanto os dedos mexem na foto
+  const distancia = (t: React.TouchList) => Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
+  const limitar = (s: number, x: number, y: number) => {
+    const mx = (window.innerWidth * (s - 1)) / 2, my = (window.innerHeight * (s - 1)) / 2;
+    return { s, x: Math.max(-mx, Math.min(mx, x)), y: Math.max(-my, Math.min(my, y)), foto: fotoAtiva };
+  };
+  function alternarZoom() {
+    setZoom(zoom.s > 1 ? { s: 1, x: 0, y: 0, foto: fotoAtiva } : { s: 2.5, x: 0, y: 0, foto: fotoAtiva });
+  }
+  function zoomTocar(e: React.TouchEvent) {
+    if (e.touches.length === 2) {
+      setComGesto(true);
+      gesto.current = { tipo: "pinca", d0: distancia(e.touches), s0: zoom.s, px: 0, py: 0, x0: zoom.x, y0: zoom.y };
+      toque.current = null;
+      arrastou.current = true;
+    } else if (e.touches.length === 1 && zoom.s > 1) {
+      setComGesto(true);
+      gesto.current = { tipo: "mover", d0: 0, s0: zoom.s, px: e.touches[0].clientX, py: e.touches[0].clientY, x0: zoom.x, y0: zoom.y };
+      toque.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+      arrastou.current = false;
+    } else {
+      aoTocar(e);
+    }
+  }
+  function zoomMover(e: React.TouchEvent) {
+    const g = gesto.current;
+    if (!g) return;
+    if (g.tipo === "pinca" && e.touches.length === 2) {
+      const s = Math.max(1, Math.min(4, (g.s0 * distancia(e.touches)) / g.d0));
+      setZoom(limitar(s, g.x0, g.y0));
+    } else if (g.tipo === "mover" && e.touches.length === 1) {
+      const dx = e.touches[0].clientX - g.px, dy = e.touches[0].clientY - g.py;
+      if (Math.abs(dx) + Math.abs(dy) > 6) arrastou.current = true;
+      setZoom(limitar(g.s0, g.x0 + dx, g.y0 + dy));
+    }
+  }
+  function zoomSoltar(e: React.TouchEvent) {
+    if (gesto.current) {
+      if (e.touches.length === 0) {
+        gesto.current = null;
+        setComGesto(false);
+        if (zoom.s < 1.05) setZoom({ s: 1, x: 0, y: 0, foto: fotoAtiva });
+      }
+      if (arrastou.current) { toque.current = null; return; }
+    }
+    // Toque duplo: amplia (ou volta ao normal).
+    const t = e.changedTouches[0];
+    const parado = toque.current && Math.abs(t.clientX - toque.current.x) < 10 && Math.abs(t.clientY - toque.current.y) < 10;
+    const agora = Date.now();
+    if (parado && agora - ultimoToque.current < 300) {
+      ultimoToque.current = 0;
+      toque.current = null;
+      arrastou.current = true; // não fecha a foto
+      alternarZoom();
+      return;
+    }
+    if (parado) ultimoToque.current = agora;
+    if (zoom.s > 1) { toque.current = null; return; } // com zoom, arrastar move a foto (não troca)
+    aoSoltar(e);
+  }
+
   // Fechar lightbox com ESC e navegar com setas
   useEffect(() => {
     if (!lightbox) return;
@@ -206,9 +273,10 @@ export default function Veiculo({ inicial }: { inicial: VeiculoComLoja }) {
       {lightbox && (
         <div
           onClick={() => { if (!ignorarSeArrastou()) setLightbox(false); }}
-          onTouchStart={aoTocar}
-          onTouchEnd={aoSoltar}
-          style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center", touchAction: "pan-y" }}
+          onTouchStart={zoomTocar}
+          onTouchMove={zoomMover}
+          onTouchEnd={zoomSoltar}
+          style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center", touchAction: "none", overflow: "hidden" }}
         >
           {/* Botão fechar */}
           <button
@@ -234,7 +302,9 @@ export default function Veiculo({ inicial }: { inicial: VeiculoComLoja }) {
             src={fotos[fotoAtiva]}
             alt="Foto ampliada"
             onClick={e => e.stopPropagation()}
-            style={{ maxWidth: "90vw", maxHeight: "85vh", objectFit: "contain", borderRadius: 8 }}
+            onDoubleClick={e => { e.stopPropagation(); alternarZoom(); }}
+            draggable={false}
+            style={{ maxWidth: "90vw", maxHeight: "85vh", objectFit: "contain", borderRadius: 8, transform: `translate(${zoom.x}px, ${zoom.y}px) scale(${zoom.s})`, transition: comGesto ? "none" : "transform 0.2s ease", cursor: zoom.s > 1 ? "zoom-out" : "zoom-in", userSelect: "none" }}
           />
 
           {/* Seta direita */}
